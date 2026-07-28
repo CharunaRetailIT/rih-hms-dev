@@ -1,0 +1,670 @@
+﻿
+@model RIT.HMS.Domain.Transactions.RequestNoteAccptanceHeader
+@{
+    ViewBag.Title = "Request Notes Acceptance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+
+<div class="container body" novalidate>
+    <div class="main_container">
+
+        @using (Html.BeginForm("", "RequestNote", FormMethod.Post, new {id="AcceptRequestNotes", @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Request Note Acceptance</strong> @ViewBag.Code saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Please enter Request details !.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Request Note Acceptance</strong> @ViewBag.Code save failed..
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-info alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Request Note Acceptance</strong> @ViewBag.Code Rejected successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "5")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Request Note Acceptance</strong> @ViewBag.Code Canceled successfully.
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Request Note Acceptance</h2>
+                                    <br />                               
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <div class="form-horizontal col-md-12 trn-header">
+                                        <br />
+                                        <div class="form-horizontal col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Doc # <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                    @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                    @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Request Type<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.RequestType, new { @class = "form-control", @readonly = true})
+                                                    @Html.ValidationMessageFor(model => model.RequestType, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    From Location <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <select id="FromLocationId_" class="form-control" name="FromLocationId"></select>
+                                                    @Html.ValidationMessageFor(model => model.FromLocationId, "", new { @class = "text-danger" })
+                                                    @Html.HiddenFor(model => model.FromLocationId)
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    From Department <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <select id="FromDepartmentId" class="form-control" name="FromDepartmentId"></select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Request Note <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <select id="RequestNoteId" class="form-control" name="RequestNoteId"></select>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                        <div class="form-horizontal col-md-6">
+                                            <br /><br />
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Remark<span class="required"></span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                    @Html.TextAreaFor(model => model.Remark, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div><br />
+                                    <div class="trn-detail col-md-12">
+                                        <br />
+                                        <div class="form-group">
+                                            <hr />
+                                            <div class="text-info"><b>Items</b></div>
+
+                                            @*<table id="tblTOGs" class="table table table-bordered">*@
+                                            <table id="tblTOGs" class="mstable">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="display:none">Product Id</th>
+                                                        <th style='width:25%'>Product</th>
+                                                        <th style="display:none">Item Id</th>
+                                                        <th style='width:25%'>Item</th>
+                                                        <th>Request Quantity</th>
+                                                        <th>Issue Qty</th>
+                                                        <th>Cost Price</th>
+                                                        <th style="display: none;">Selling Price</th>
+                                                        <th>Requested By</th>
+                                                        <th>Serving Unit</th>
+                                                        <th style="display: none;">Serving Unit Id</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="togitems">
+                                                 @*@if (Model.AcceptanceDetail != null)
+                                                {
+                                                    foreach (var requestdetail in Model.AcceptanceDetail)
+                                                    {
+
+                                                        <tr>
+                                                            <td>@requestdetail.ProductId</td>
+                                                            <td>@requestdetail.ProductName</td>
+                                                            <td>@requestdetail.RequestQty</td>
+                                                            <td>@requestdetail.UOM</td>
+                                                            <td>@requestdetail.CostPrice</td>
+                                                            <td>@requestdetail.SellingPrice</td>
+                                                        </tr>
+
+                                                    }
+                                                }*@
+                                                </tbody>
+                                            </table>
+                                            <hr />
+                                            <div id="summary" class="col-lg-12">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-5 col-sm-6">
+                                                            Total Cost Price <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input id="TotCostPrice" style="text-align:right;" name="TotCostPrice" type="number" readonly="readonly" value="0.00" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="pull-left">
+                                                <input type="button" class="btnallClear" value="Clear" onclick="location.href='@Url.Action("AcceptRequestNote", null, new { })'" />
+                                            </div>
+                                            <div id="RequestStatus2">
+                                                <button type="submit" formaction="Reject" id="ButtonReject" class="btn btnallTemporary pull-left">Request Reject</button>
+                                                <button type="submit" formaction="Cancel" id="ButtonCancel" class="btn btnallClear pull-left">Request Cancel</button>
+                                                <button type="submit" formaction="AcceptRequestNote" id="ButtonAcceptRequestNote" class="btnallSubmit btn pull-left">Request Approve</button>
+                                                <button type="submit" formaction="ForcefullyClose" id="ButtonForcefullyClose"  class="btnallClear btn pull-left">ForcefullyClose</button>
+                                                
+                                            </div>
+                                            <div id="RequestStatus4">
+                                                <button type="submit" formaction="ReOpen" id="ButtonReOpen" class="btn btnallView pull-left">Request Re-Open</button>
+                                            </div>
+                                            <div id="RequestStatus6">
+                                                <button type="submit" formaction="AcceptRequestNote" id="ButtonAcceptRequestNote" class="btnallSubmit btn pull-left">Request Approve</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="se-pre-con"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#ButtonReject').on('click',
+            function (event) {
+                $('#ButtonReject').text('Processing...');
+                $('#ButtonReject').prop('disabled', true);
+                $('#AcceptRequestNotes').attr('action', 'Reject');
+                $('#AcceptRequestNotes').submit();
+            });
+
+        // -------------------------------------------------------
+        $('#ButtonCancel').on('click',
+            function (event) {
+                $('#ButtonCancel').text('Processing...');
+                $('#ButtonCancel').prop('disabled', true);
+                $('#AcceptRequestNotes').attr('action', 'Cancel');
+                $('#AcceptRequestNotes').submit();
+            });
+        //---------------------------------------------------------
+        $('#ButtonAcceptRequestNote').on('click',
+           function (event) {
+               $('#ButtonAcceptRequestNote').text('Processing...');
+               $('#ButtonAcceptRequestNote').prop('disabled', true);
+               $('#AcceptRequestNotes').attr('action', 'AcceptRequestNote');
+               $('#AcceptRequestNotes').submit();
+           });
+        //---------------------------------------------------------
+        $('#ButtonForcefullyClose').on('click',
+           function (event) {
+               $('#ButtonForcefullyClose').text('Processing...');
+               $('#ButtonForcefullyClose').prop('disabled', true);
+               $('#AcceptRequestNotes').attr('action', 'ForcefullyClose');
+               $('#AcceptRequestNotes').submit();
+           });
+        //---------------------------------------------------------
+        $('#ButtonReOpen').on('click',
+           function (event) {
+               $('#ButtonReOpen').text('Processing...');
+               $('#ButtonReOpen').prop('disabled', true);
+               $('#AcceptRequestNotes').attr('action', 'ReOpen');
+               $('#AcceptRequestNotes').submit();
+           });
+        //---------------------------------------------------------
+        $('#ButtonAcceptRequestNote').on('click',
+           function (event) {
+               $('#ButtonAcceptRequestNote').text('Processing...');
+               $('#ButtonAcceptRequestNote').prop('disabled', true);
+               $('#AcceptRequestNotes').attr('action', 'AcceptRequestNote');
+               $('#AcceptRequestNotes').submit();
+           });
+
+    });
+</script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#FromLocationId_");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.locationId') {
+            $('#FromLocationId_').val(@ViewBag.locationId).trigger("change");
+            document.getElementById("FromLocationId_").disabled = true;
+            document.getElementById("FromLocationId").value = @ViewBag.locationId;
+        } else {
+            $('#FromLocationId_').val(0).trigger("change");
+            $("#FromLocationId").val('0');
+        }
+    });
+
+    $.getJSON("@Url.Action("GetLocWiseDept", "RequestNote")", { locid: @ViewBag.locationId },
+    function (data) {
+
+        var FromDepartmentId = $("#FromDepartmentId");
+        FromDepartmentId.empty();
+        FromDepartmentId.append("<option value='0'>-- Select a department --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            FromDepartmentId.append($('<option />', { value: optionaldata.InterDepartmentId }).html(optionaldata.InterDepartmentName));
+        });
+
+        if ('@ViewBag.FromDepartmentId') {
+            $('#FromDepartmentId').val(@ViewBag.FromDepartmentId).trigger("change");
+        } else {
+            $('#FromDepartmentId').val(0).trigger("change");
+        }
+    });
+
+</script>
+<script>
+
+    $('#FromLocationId_').change(function () {
+        var frmlocid = this.value;
+
+        $.getJSON("@Url.Action("GetLocWiseDept", "RequestNote")", { locid: frmlocid },
+          function (data) {
+
+              var FromDepartmentId = $("#FromDepartmentId");
+              FromDepartmentId.empty();
+              FromDepartmentId.append("<option value='0'>-- Select a department --</option>");
+
+              $.each(JSON.parse(data), function (index, optionaldata) {
+                  FromDepartmentId.append($('<option />', { value: optionaldata.InterDepartmentId }).html(optionaldata.InterDepartmentName));
+
+              });
+
+              if ('@ViewBag.FromDepartmentId') {
+                  $('#FromDepartmentId').val(@ViewBag.FromDepartmentId).trigger("change");
+              } else {
+                  $('#FromDepartmentId').val(0).trigger("change");
+              }
+          });
+    });
+</script>
+<script>
+
+    $('#FromDepartmentId').change(function () {
+        var frmdeptid = this.value;
+
+        $.getJSON("@Url.Action("GetDeptWiseRequests", "RequestNote")", { deptid: frmdeptid, locid: $('#FromLocationId').val() },
+          function (data) {
+
+              var RequestNoteId = $("#RequestNoteId");
+              RequestNoteId.empty();
+              RequestNoteId.append("<option value='0'>-- Select a Request --</option>");
+
+              $.each(JSON.parse(data), function (index, optionaldata) {
+                  RequestNoteId.append($('<option />', { value: optionaldata.RequestnoteHeaderId }).html(optionaldata.DocumentNo));
+              });
+
+              if ('@ViewBag.RequestNoteId') {
+                  $('#RequestNoteId').val(@ViewBag.RequestNoteId).trigger("change");
+              } else {
+                  $('#RequestNoteId').val(0).trigger("change");
+              }
+          });
+    });
+
+    $.getJSON("@Url.Action("GetDeptWiseRequests", "RequestNote")", { deptid: @ViewBag.FromDepartmentId, locid: @ViewBag.locationId },
+    function (data) {
+
+        var RequestNoteId = $("#RequestNoteId");
+        RequestNoteId.empty();
+        RequestNoteId.append("<option value='0'>-- Select a Request --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            RequestNoteId.append($('<option />', { value: optionaldata.RequestnoteHeaderId }).html(optionaldata.DocumentNo));
+        });
+
+        if ('@ViewBag.RequestNoteId') {
+            $('#RequestNoteId').val(@ViewBag.RequestNoteId).trigger("change");
+            document.getElementById('DocumentNo').value(@ViewBag.RequestNoteId);
+        } else {
+            $('#RequestNoteId').val(0).trigger("change");
+        }
+    });
+
+</script>
+
+<script>
+    $('#RequestNoteId').on("change", function ()
+    {
+        var requestid = this.value;
+        document.getElementById('DocumentNo').value = $("#RequestNoteId option:selected").text();
+
+        $.ajax({
+            url: "@Url.Action("GetRequestData", "RequestNote")",
+            data:{ id: requestid},
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+
+                $("#togitems tr").remove();
+                $.each(data, function (i, item)
+                {
+                    @{
+                        Model.AcceptanceDetail.Add(new RIT.HMS.Domain.Transactions.RequestNoteAcceptanceDetail());
+                    }
+                    $("#RequestType").val(item.RequestType);
+                    
+                    var unitindex = $("#togitems").children("tr").length;
+                   // var unitindex = item.ProductId
+                    var unitindexCell = "<td style='display:none'><input name='AcceptanceDetail.Index' type='hidden' value='" + unitindex + "' /></td>";
+
+                    var unitPIdCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductId' class='form-control' name='AcceptanceDetail[" +
+                        unitindex + "].ProductId' type='text' readonly value='" + item.ProductId + "' /></td>";
+
+                    var unitPDescCell = "<td style='width:25%' id='AcceptanceDetail" + unitindex + "_ProductName'   name='AcceptanceDetail[" +
+                        unitindex + "].ProductName'> " + item.ProductName + " (" + item.ProductQuantity + ")" + "</td>";
+
+                    var unitPQtyCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductQty'  class='form-control' type='text'  name='AcceptanceDetail[" +
+                        unitindex + "].ProductQty'  readonly value='" + item.ProductQuantity + "' /></td>";
+
+                    var unitIdCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_MaterialId' class='form-control' name='AcceptanceDetail[" +
+                        unitindex + "].MaterialId' type='text' readonly value='" + item.MaterialId + "' /></td>";
+
+                    var unitDescCell = "<td style='width:25%'><input id='AcceptanceDetail" + unitindex + "_MaterialName' class='form-control' name='AcceptanceDetail[" +
+                        unitindex + "].MaterialName' readonly value = '" + item.MaterialName + "'/></td>";
+
+                    var unitQtyCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_MaterialQty'  class='form-control' type='hidden'  name='AcceptanceDetail[" +
+                        unitindex + "].MaterialQty'  readonly value='" + item.MaterialQuantity.toFixed(2) + "' /></td>";
+
+                    var unitUOMCell = "<td ><input id='AcceptanceDetail" + unitindex + "_UOM'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].UOM'  readonly value='" + item.MaterialQuantity.toFixed(2) + '' + item.MaterialUOMName + "' /></td>";
+
+                    //var unitIssueQtyCell = "<td ><input id='AcceptanceDetail" + unitindex + "_IssueQty0'  class='form-control'   name='AcceptanceDetail[" +
+                    //   unitindex + "].IssueQty0' type='text' min='0' onkeypress='return isNumber(event)' onfocusout = 'return TableIssueQty(this)' value='" + item.MaterialQuantity + "' /></td>";
+
+                    var unitIssueQtyCell = "<td ><input id='AcceptanceDetail" + unitindex + "_IssueQty0'  class='form-control'   name='AcceptanceDetail[" +
+                       unitindex + "].IssueQty0' type='text' min='0' onkeypress='return isNumber(event)' onkeyup = 'return TableIssueQty(this)' value='" + item.MaterialQuantity.toFixed(2) + "' /></td>";
+
+                    var unitSellingPriceCell = "<td style='display: none;'><input id='AcceptanceDetail" + unitindex + "_SellingPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].SellingPrice' type='text' readonly value='" + item.MaterialCostPrice.toFixed(2) + "' /></td>";
+
+                    var unitCostPriceCell = "<td><input id='AcceptanceDetail" + unitindex + "_CostPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].CostPrice' type='text' readonly value='" + item.MaterialCostPrice.toFixed(2) + "' /></td>";
+
+                    var prdSellingPriceCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductSellingPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ProductSellingPrice' type='text' readonly value='" + item.ProductSellingPrice + "' /></td>";
+
+                    var prdCostPriceCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductCostPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ProductCostPrice' type='text' readonly value='" + item.ProductCostPrice.toFixed(2) + "' /></td>";
+
+                    var unitRemoveCell = "<td><input id='btnRemoveReceipeItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                        unitindex + ");' /></td>";
+
+                    var unitIssueQtyCell_ = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_IssueQty'  class='form-control'   name='AcceptanceDetail[" +
+                        unitindex + "].IssueQty' type='hidden' value='" + item.MaterialQuantity + "' /></td>";
+
+                    var unitIssueQtyCell_1 = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_IssueQty1'  class='form-control'   name='AcceptanceDetail[" +
+                        unitindex + "].IssueQty1' type='hidden' value='" + item.MaterialQuantity + "' /></td>";
+
+                    var unitrequestedByCell = "<td><input id='AcceptanceDetail" + unitindex + "_RequestedBy'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].RequestedBy' type='text' readonly value='"+ item.RequestedBy + "' /></td>";
+
+                    var unitServingUnitCell = "<td><input id='AcceptanceDetail" + unitindex + "_ServingUnit'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ServingUnit' type='text' readonly value='"+ item.ServingUnit + "' /></td>";
+
+                    var unitServingUnitIdCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ServingUnitId'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ServingUnitId' type='text' readonly value='"+ item.ServingUnitId + "' /></td>";
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                        unitPIdCell +
+                        unitPDescCell +
+                        unitPQtyCell +
+
+                        unitIdCell +
+                        unitDescCell +
+                        unitQtyCell +
+                        unitUOMCell +
+                        unitIssueQtyCell +
+
+                        unitCostPriceCell +
+                        unitSellingPriceCell +
+                        prdSellingPriceCell +
+                        prdCostPriceCell +
+
+                        unitrequestedByCell+
+                        unitServingUnitCell+
+                        unitServingUnitIdCell+
+
+                        unitRemoveCell +
+                        unitIssueQtyCell_ +
+                        unitIssueQtyCell_1+
+                       
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                    document.getElementById('Remark').value = item.Remark;
+                    if (item.DocumentStatus==2 || item.DocumentStatus==5 || item.DocumentStatus==6) {
+                        $('#RequestStatus2').show();
+                    }
+                })
+               SummerizeTable();
+                TableSummery();
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+    });
+</script>
+
+<script>
+    function removeUnitRow(id) {
+
+        if (confirm("Do you want to delete? ")) {
+            var controlToBeRemoved = "#trreceipeitem" + id;
+            $(controlToBeRemoved).remove();
+            TableSummery();
+        }
+    }
+</script>
+
+<script>
+    function SummerizeTable()
+    {
+        var table = document.getElementById("togitems");
+        $(table).each(function () {
+            $(table).find('td').each(function () {
+                var $this = $(this);
+
+              //  var col = $this.index();
+                var col =2;
+                var html = $this.html();
+                var row = $(this).parent()[0].rowIndex;
+                var span = 1;
+                var cell_above = $($this.parent().prev().children()[col]);
+
+                while (cell_above.html() === html) {
+                    span += 1;
+                    cell_above_old = cell_above;
+                    cell_above = $(cell_above.parent().prev().children()[col]);
+                }
+                if (span > 1) {
+
+                    $(cell_above_old).attr('rowspan', span);
+                    $this.hide();
+                }
+            });
+        });
+    }
+
+    function TableSummery()
+    {
+        var tabletorem = document.getElementById("togitems");
+
+        var totcp = 0.0;
+
+        for (var r = 0, n = tabletorem.rows.length; r < n; r++)
+        {
+            var cpcell = tabletorem.rows[r].cells[9].innerHTML;
+            var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+            totcp += Number(cpvalue);
+        }
+        document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+    }
+
+    function TableIssueQty(oTextBox)
+    {
+        debugger;
+
+        var tabletorem = document.getElementById("togitems");
+
+        var totcp = 0.0;
+
+        for (var r = 0, n = tabletorem.rows.length; r < n; r++)
+        {
+            var index = tabletorem.rows[r].cells[0].innerHTML;
+            var indexvalue = index.match(/value="(\d+(\.\d)*)/i)[1];
+
+            var qty_cell = tabletorem.rows[r].cells[6].innerHTML;
+            var qty_value = parseFloat(qty_cell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+            var qtycell = tabletorem.rows[r].cells[8].innerHTML;
+            var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+            var strQty = "AcceptanceDetail" + indexvalue + "_IssueQty0";
+
+            var upcell = tabletorem.rows[r].cells[10].innerHTML;
+            var upvalue = parseFloat(upcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+            var cpcell = tabletorem.rows[r].cells[9].innerHTML;
+            var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+            var issueQty = document.getElementById("AcceptanceDetail" + indexvalue + "_IssueQty1").value;
+            //var qty=document.getElementById("AcceptanceDetail" + indexvalue + "_IssueQty0").value;
+            //if(Number(issueQty)<Number(qty))
+            //{
+            //    alert("Can not increse the Issue Quantity");
+            //    document.getElementById("AcceptanceDetail" + indexvalue + "_IssueQty0").value=issueQty;
+            //    return;
+            //}
+
+            debugger;
+            if (oTextBox.id == strQty) 
+            {
+                if (oTextBox.value <=issueQty) 
+                {
+                    qtyvalue = oTextBox.value;
+                    var cp_value = ((upvalue / qty_value) * qtyvalue).toFixed(2);
+                    document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value = cp_value.toString();
+             
+                    document.getElementById('AcceptanceDetail' + indexvalue + '_IssueQty').value = qtyvalue;
+
+                    //totcp = Number(cp_value) - Number(upvalue);
+                  //  totcp += Number(cp_value)+Number(cpvalue);
+                }
+                else {
+                    //document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value ="0.00";
+                    document.getElementById('AcceptanceDetail' + indexvalue + '_IssueQty0').value = issueQty;
+
+                    qtyvalue = oTextBox.value;
+                    var cp_value = ((upvalue / qty_value) * qtyvalue).toFixed(2);
+                    document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value = cp_value.toString();
+             
+                    document.getElementById('AcceptanceDetail' + indexvalue + '_IssueQty').value = qtyvalue;
+
+                    alert("Can not increse the Issue Quantity");
+                }
+            }
+            totcp += Number(document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value);
+                //+Number(cpvalue);
+        }
+      //  totcp += Number(document.getElementById("TotCostPrice").value);
+        document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+    }
+</script>
+
+<script>
+    window.onload = function () {
+        $('#RequestStatus2').hide();
+        $('#RequestStatus4').hide();
+        $('#RequestStatus6').hide();
+    }
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>

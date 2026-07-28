@@ -1,0 +1,168 @@
+﻿@model RIT.HMS.Domain.InvPriceLevel
+@{
+    ViewBag.Title = "Price Level";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewBag.Message != null)
+{
+    <script>
+
+        $(document).ready(function () {
+
+            alert('@ViewBag.ErrorMessage');
+
+        });
+
+    </script>
+
+}
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "PriceLevel", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Price Levels</strong> @ViewBag.LocCode Updated successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button> 
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            @*<strong>Kitchen</strong> @ViewBag.LocCode already exists.*@
+                        </div>
+                    }
+
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Only One Head Office Can be Create</strong>
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    @*<h2>Kitchens</h2>*@
+                                    <h2>Price Levels - Edit</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Price Level Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.PriceLevelCode,
+                                                   new
+                                                   {
+                                                       @class = "form-control",
+                                                       MaxLength = 5,
+                                                       Placeholder = "Code",
+                                                       @readonly = true
+                                                   })
+                                                @Html.ValidationMessageFor(model => model.PriceLevelCode, "", new { @class = "text-danger" })
+
+                                            </div>
+                                            <font color="red" class="col-md-5">
+                                                <label id="validatecode" name="validatecode" style="font:small-caption"></label>
+                                            </font>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Price Level Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.PriceLevelName, new { @class = "form-control", MaxLength = 50, Placeholder = "Price Level Name" })
+                                                @Html.ValidationMessageFor(model => model.PriceLevelName, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Delete</label>
+                                            <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                @Html.CheckBoxFor(model => model.IsDelete)
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                         
+
+                                        <br />
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+                                            <div class="btn btn-primary pl_add btn-small pull-right">
+                                                @Html.ActionLink("Clear", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-right">
+                                                @Html.ActionLink("View All", "ViewPriceLevel", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Submit</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+ 
+

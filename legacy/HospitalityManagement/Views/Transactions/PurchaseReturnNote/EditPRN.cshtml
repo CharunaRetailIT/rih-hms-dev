@@ -1,0 +1,2035 @@
+﻿@model RIT.HMS.Domain.Transactions.PurchaseHeader
+@{
+    ViewBag.Title = "EditPRN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+@if (ViewBag.Message != null)
+{
+    <script>
+        $(document).ready(function () {
+            alert('@ViewBag.ErrorMessage');
+        });
+    </script>
+}
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "PurchaseReturnNote", FormMethod.Post,
+         new { id="EditPRN", @class = "form-horizontal", @enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.CreatedDate);
+            @Html.HiddenFor(model => model.CreatedUser);
+            @Html.HiddenFor(model => model.GRNId)
+            @Html.HiddenFor(model => model.PurchaseHeaderId);
+            @Html.HiddenFor(model => model.LocationId);
+            @Html.HiddenFor(model => model.CostCentreID);
+            @Html.HiddenFor(model => model.DocumentStatus);
+            @Html.HiddenFor(model => model.IsTempPRN);
+            @Html.HiddenFor(model => model.CompanyID);
+            @Html.HiddenFor(model => model.LocationId);
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>PRN</strong> @ViewBag.PRNCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>PRN</strong> @ViewBag.PRNCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>PRN</strong> must have atleast one Product.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Selected month is not open for this Location</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "5")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Please enter the reject reason !</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "6")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Please enter the cancel reason !</strong>
+                        </div>
+                    }
+                    <div class="actionBar">
+                        <div class="msgBox">
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-info pull-left" value=" Reset " onclick="location.href='@Url.Action("Edit", null, new { id = Model.PurchaseHeaderId })'" />
+                            </div>
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-primary pull-left" value="New PRN" onclick="location.href='@Url.Action("CreatePRN", null, new { })'" />
+                            </div>
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-info pull-left" value="View PRN(s)" onclick="location.href='@Url.Action("ViewAllPRN", null, new { })'" />
+                            </div>
+                            @if (Model.IsTempPRN && Model.DocumentNo.Contains("T"))
+                            {
+                                <button type="submit" formaction="/PurchaseReturnNote/Edit" id="ButtonSubmitPRN" class="btn btn-success pull-left">Submit PRN</button>
+                                <button type="submit" formaction="/PurchaseReturnNote/TempEdit" id="ButtonTempEdit" class="btn btn-warning pull-left">Temporary Save PRN</button>
+                                <button type="submit" formaction="/PurchaseReturnNote/Cancel" id="ButtonCancel" class="btn btn-danger pull-left">Cancel</button>
+                            }
+
+                            @if (Convert.ToBoolean(Session["APPPRN"]) == true)
+                            {
+                                if (Model.DocumentStatus == 2 || Model.DocumentStatus == 6)
+                                {
+                                    <button type="submit" formaction="/PurchaseReturnNote/Approve" id="ButtonApprove" class="btn btn-success pull-left">Approve</button>
+                                    <button type="submit" formaction="/PurchaseReturnNote/Reject" id="ButtonReject" class="btn btn-danger pull-left">Reject</button>
+                                    <button type="submit" formaction="/PurchaseReturnNote/Cancel" id="ButtonCancel" class="btn btn-danger pull-left">Cancel</button>
+                                    <button type="submit" formaction="/PurchaseReturnNote/ForcefullyClose" id="ButtonForcefullyClose" class="btn btn-danger pull-left">Forcefully Close</button>
+
+
+                                }
+                                if (Model.DocumentStatus == 4 || Model.DocumentStatus == 5)
+                                {
+                                    <button type="submit" formaction="/PurchaseReturnNote/ReOpene" id="ButtonReOpene" class="btn btn-success pull-left">Re Open</button>
+                                }
+                            }
+                            
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Purchase Return Note</h2>
+                                    <h4 class="small">@Model.DocState </h4> 
+                                    <br />
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>General</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small>Items</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-3">
+                                                    <span class="step_no">3</span>
+                                                    <span class="step_descr">
+                                                        Step 3<br />
+                                                        <small>Prices</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-4">
+                                                    <span class="step_no">4</span>
+                                                    <span class="step_descr">
+                                                        Step 4<br />
+                                                        <small>Details</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12 trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Doc # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                            @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Mode <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.PRNType, "Manual", new { @id = "Manual", @checked = true })
+                                                                Manual
+
+                                                            </div> <div class="clearfix"></div>
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.PRNType, "GRNBased", new { @id = "Auto" })
+                                                                GRN based
+
+                                                            </div>
+                                                            @*<div class="clearfix"></div>
+                                                                <div class="pull-left">
+                                                                    @Html.RadioButtonFor(m => m.PRNType, "RequestNoteBased", new { @id = "Request" })
+                                                                    Request Note Based
+
+                                                                </div>*@
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Supplier <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="SupplierId" class="form-control" name="SupplierId"></select>
+                                                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            GRN # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="GRNIdg" name="GRNIdg" class="form-control"></select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Supplier Invoice No <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            @*@Html.TextBoxFor(model => model.SupplierInvoiceNo, new { type = "text", @class = "form-control", MaxLength = 20 })
+                                                                @Html.ValidationMessageFor(model => model.SupplierInvoiceNo, "", new { @class = "text-danger" })*@
+
+                                                            @Html.TextBoxFor(model => model.SupplierInvoiceNo, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           min = 0,
+                                                           MaxLength = 20,
+                                                           oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.SupplierInvoiceNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="GRNLocationId" class="form-control" name="GRNLocationId"></select>
+                                                            @Html.ValidationMessageFor(model => model.GRNLocationId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-horizontal col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Currency  <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="CurrencyId" class="form-control" name="CurrencyId"></select>
+                                                            @Html.ValidationMessageFor(model => model.CurrencyID, "", new { @class = "text-danger" })
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display:none">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Currency Rate <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-3 col-sm-6">
+                                                            @Html.TextBoxFor(model => model.CurrencyRate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           min = 0,
+                                                           MaxLength = 5,
+                                                           Type = "number",
+                                                           decimals = "4",
+                                                           step = "any",
+                                                           oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.CurrencyRate, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Method <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="PaymentMethodId" class="form-control" name="PaymentMethodId"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentMethodId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Term <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="PaymentTermId" class="form-control" name="PaymentTermId"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentTermID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            PRN Date <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+
+                                                            @Html.TextBoxFor(model => model.GRNDate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           @Type = "date",
+                                                           @Value = Model.GRNDate.ToString("yyyy-MM-dd"),
+                                                           Placeholder = "Expected Date"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.GRNDate, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Event<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="EventId" class="form-control" Name="EventId"></select>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div> <br />
+                                        <div id="step-2">
+                                            <div class="trn-detail col-md-12">
+                                                <br />
+                                                <div class="form-group">
+
+                                                    <div id="buttons">
+                                                        <table id="buttons2" class="table table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:10%">
+                                                                        Item/Material
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DropDownList("ItemId", (IEnumerable<SelectListItem>)Session["AllItemsToPRN"], new
+                                                                        {
+                                                                            @class = "form-control select2",
+                                                                            @style = "width:80%"
+                                                                        })
+                                                                        @*<select id="ItemId" class="form-control select2" style="width:80%" name="ItemId"></select>*@
+                                                                    </td>
+                                                                    <td style="width:10%">
+                                                                        Quantity
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <input id="RecQty" name="RecQty" type="number" value="0"  min="0"
+                                                                               step="any" onkeypress="return event.charCode >= 46"
+                                                                               onkeyup="checkProductQuantity()"
+                                                                               class="form-control col-md-2 col-xs-6">
+
+                                                                        <font color="red">
+                                                                            <label id="validateqty" name="validateqty" style="font:small-caption"></label>
+                                                                        </font>
+
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="button" id="btnAddTOGItem" class="btn btn-round btn-info" value="+" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="btnAddRequestItems"></div>
+                                                    <div id="btnAddReOrderItems">
+                                                    </div>
+                                                    <div class="text-info"><b>Purchase Returns</b></div>
+                                                    <table id="tblRecepies" class="table table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display:none">Item Id</th>
+                                                                <th>Item</th>
+                                                                <th>Quantity</th>
+                                                                <th>Free Qty</th>
+                                                                <th>Discount</th>
+                                                                <th>Cost Value</th>
+                                                                <th style="display:none">Selling Value</th>
+
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="grnitems">
+                                                            @if (Model.GRNDetail != null)
+                                                        {
+                                                            foreach (var grnDetail in Model.GRNDetail)
+                                                            {
+                                                                    <tr>
+                                                                        <td style='display:none'><input name='GRNDetail.Index' type='hidden' value=@grnDetail.ProductID /></td>
+                                                                        <td style='display:none'><input id='GRNDetail[@grnDetail.ProductID]_ProductID' class='form-control' name='GRNDetail[@grnDetail.ProductID].ProductID' type='text' readonly value=@grnDetail.ProductID /></td>
+                                                                        <td id='GRNDetail[@grnDetail.ProductID]_ProductName' name='GRNDetail[@grnDetail.ProductID].ProductName'>@grnDetail.ProductName</td>
+                                                                        <td style='display:none'><input id='GRNDetail[@grnDetail.ProductID]_GRNQuantity' class='form-control' name='GRNDetail[@grnDetail.ProductID].GRNQuantity' type='number' readonly value=@Convert.ToDecimal(grnDetail.OrderQty) /></td>
+                                                                        <td><input id='GRNDetail[@grnDetail.ProductID]_OrderQty' class='form-control' name='GRNDetail[@grnDetail.ProductID].OrderQty' type='number' readonly value=@Convert.ToDecimal(grnDetail.OrderQty) /></td>
+                                                                        <td><input id='GRNDetail[@grnDetail.ProductID]_FreeQty' class='form-control' name='GRNDetail[@grnDetail.ProductID].FreeQty' type='number' value=@Convert.ToDecimal(grnDetail.FreeQty) /></td>
+                                                                        <td><input id='GRNDetail[@grnDetail.ProductID]_Discount' class='form-control' name='GRNDetail[@grnDetail.ProductID].Discount' type='number' readonly value=@Convert.ToDecimal(grnDetail.Discount) />Discount Type=@grnDetail.DiscountType</td>
+                                                                        @*<td><input id='GRNDetail[@grnDetail.ProductID]_Discount' class='form-control' name='GRNDetail[@grnDetail.ProductID].Discount' type='number' readonly onkeyup='itemDiscount(@grnDetail.ProductID)' value=@Convert.ToDecimal(grnDetail.Discount) />Discount Type=@grnDetail.DiscountType</td>*@
+                                                                        <td><input id='GRNDetail[@grnDetail.ProductID]_CostPrice' class='form-control' name='GRNDetail[@grnDetail.ProductID].CostPrice' type='text' readonly value=@grnDetail.CostPrice /></td>
+                                                                        <td style="display:none"><input id='GRNDetail[@grnDetail.ProductID]_SellingPrice' class='form-control' name='GRNDetail[@grnDetail.ProductID].SellingPrice' type='text' readonly value=@grnDetail.SellingPrice /></td>
+                                                                        <td style='display:none'> <input id='GRNDetail[@grnDetail.ProductID]_SellingPriceHidden' class='form-control' name='GRNDetail[@grnDetail.ProductID].SellingPriceHidden' type='text' readonly value=@grnDetail.SellingPrice /></td>
+                                                                        <td style='display:none'><input id='GRNDetail[@grnDetail.ProductID]_DiscountType' class='form-control' name='GRNDetail[@grnDetail.ProductID].DiscountType' type='text' readonly value=@grnDetail.DiscountType /></td>
+                                                                        <td>
+                                                                            <input id='btnAddPRNItem' type='button' value='-' class='btn btn-round btn-info' onclick='removeGRNRow(this);' />
+                                                                        </td>
+                                                                    </tr>
+                                                            }
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                               
+                                                <div id="summary" class="col-lg-12">
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group" style="display:none">
+                                                            <label class="control-label col-md-5 col-sm-6">
+                                                                Total Selling Price <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-7 col-sm-6">
+                                                                @Html.TextBoxFor(model => model.TotSellingPrice, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.TotSellingPrice, "", new { @class = "text-danger" })
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-5 col-sm-6">
+                                                                Total Cost Price <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-7 col-sm-6">
+                                                                @Html.TextBoxFor(model => model.TotCostPrice, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.TotCostPrice, "", new { @class = "text-danger" })
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-5 col-sm-6">
+                                                                Total Discounts <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-7 col-sm-6">
+                                                                @Html.TextBoxFor(model => model.TotDiscounts, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.TotDiscounts, "", new { @class = "text-danger" })
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div> <br />
+                                        <div class="trn-footer col-md-12">
+                                            <br />
+                                            <div id="step-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Gross Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.GrossAmount, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                            @Html.ValidationMessageFor(model => model.GrossAmount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Discount Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.DiscountAmount, new
+                                                           {
+                                                               @class = "form-control",
+                                                               min = 0,
+                                                               MaxLength = 10,
+                                                               Type = "number",
+                                                               decimals = "4",
+                                                               step = "any",
+                                                               onkeyup = "checkdiscounts()",
+                                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                           })
+                                                            @Html.ValidationMessageFor(model => model.DiscountAmount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Discount Percentage<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.DiscountPercentage, new
+                                                           {
+                                                               @class = "form-control",
+                                                               min = 0,
+                                                               MaxLength = 10,
+                                                               Type = "number",
+                                                               decimals = "4",
+                                                               step = "any",
+                                                               onkeyup = "checkdiscountpercentage()",
+                                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                           })
+                                                            @Html.ValidationMessageFor(model => model.DiscountPercentage, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Other Chargers<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.OtherChargers, new
+                                                           {
+                                                               @class = "form-control",
+                                                               min = 0,
+                                                               MaxLength = 10,
+                                                               Type = "number",
+                                                               decimals = "4",
+                                                               step = "any",
+                                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);",
+                                                               onkeyup = "checkOtherChargers()"
+                                                           })
+                                                            @Html.ValidationMessageFor(model => model.OtherChargers, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Total Tax Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.TotalTax, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Gross Amount" })
+                                                            @Html.ValidationMessageFor(model => model.TotalTax, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Net Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.NetAmount, new { type = "number", @class = "form-control", @readonly = true })
+                                                            @Html.ValidationMessageFor(model => model.NetAmount, "", new { @class = "text-danger" })
+                                                            <input data-val="true" id="NetAmountHidden" name="NetAmountHidden" type="hidden" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div id="step-4">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Ref No<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.ReferenceNo, new { type = "text", @class = "form-control", MaxLength = 20 })
+                                                            @Html.ValidationMessageFor(model => model.ReferenceNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Remark<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+
+                                                            @Html.TextAreaFor(model => model.Remark, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        @if (Model.DocumentStatus != 1)
+                                                        {
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Reason for Reject<span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                @Html.TextAreaFor(model => model.RejectReason, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                                @Html.ValidationMessageFor(model => model.RejectReason, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    <div class="form-group">
+                                                        @if (Model.DocumentStatus != 1 || Model.IsTempPRN)
+                                                        {
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Reason for Cancel<span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                @Html.TextAreaFor(model => model.CancelReason, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                                @Html.ValidationMessageFor(model => model.CancelReason, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-info pull-left" value=" Reset " onclick="location.href='@Url.Action("Edit", null, new { })'" />
+                                            </div>
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-primary pull-left" value="New PRN" onclick="location.href='@Url.Action("CreatePRN", null, new { })'" />
+                                            </div>
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-info pull-left" value="View PRN(s)" onclick="location.href='@Url.Action("ViewAllPRN", null, new { })'" />
+                                            </div>
+                                            @if (Model.IsTempPRN && Model.DocumentNo.Contains("T"))
+                                            {
+                                                <button type="submit" formaction="/PurchaseReturnNote/Edit" id="ButtonSubmitPRNB" class="btn btn-success pull-left">Submit PRN</button>
+                                                <button type="submit" formaction="/PurchaseReturnNote/TempEdit" id="ButtonTempEditB" class="btn btn-warning pull-left">Temporary Save PRN</button>
+                                                <button type="submit" formaction="/PurchaseReturnNote/Cancel" id="ButtonCancelB" class="btn btn-danger pull-left">Cancel</button>
+                                            }
+
+                                            @if (Convert.ToBoolean(Session["APPPRN"]) == true)
+                                            {
+                                                if (Model.DocumentStatus == 2 || Model.DocumentStatus == 6)
+                                                {
+                                                    <button type="submit" formaction="/PurchaseReturnNote/Approve" id="ButtonApproveB" class="btn btn-success pull-left">Approve</button>
+                                                    <button type="submit" formaction="/PurchaseReturnNote/Reject" id="ButtonRejectB" class="btn btn-danger pull-left">Reject</button>
+                                                    <button type="submit" formaction="/PurchaseReturnNote/Cancel" id="ButtonCancelB" class="btn btn-danger pull-left">Cancel</button>
+                                                    <button type="submit" formaction="/PurchaseReturnNote/ForcefullyClose" id="ButtonForcefullyCloseB" class="btn btn-danger pull-left">Forcefully Close</button>
+                                                }
+                                                if (Model.DocumentStatus == 4 || Model.DocumentStatus == 5)
+                                                {
+                                                    <button type="submit" formaction="/PurchaseReturnNote/ReOpene" id="ButtonReOpeneB" class="btn btn-success pull-left">Re Open</button>
+                                                }
+                                            }
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="se-pre-con"></div>
+                            <div id='myModal' class='modal'>
+                                <div class="col-md-12">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div id='myModalContent'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#ButtonSubmitPRN').on('click',
+            function (event) {
+                $('#ButtonSubmitPRN').text('Processing...');
+                $('#ButtonSubmitPRN').prop('disabled', true);
+                $('#ButtonSubmitPRNB').text('Processing...');
+                $('#ButtonSubmitPRNB').prop('disabled', true);
+                $('#GRNLocationId').removeAttr('disabled');
+                $('#EditPRN').submit();
+            });s
+        $('#ButtonSubmitPRNB').on('click',
+           function (event) {
+               $('#ButtonSubmitPRN').text('Processing...');
+               $('#ButtonSubmitPRN').prop('disabled', true);
+               $('#ButtonSubmitPRNB').text('Processing...');
+               $('#ButtonSubmitPRNB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').submit();
+           });
+        // -------------------------------------------------------
+        $('#ButtonTempEdit').on('click',
+            function (event) {
+                $('#ButtonTempEdit').text('Processing...');
+                $('#ButtonTempEdit').prop('disabled', true);
+                $('#ButtonTempEditB').text('Processing...');
+                $('#ButtonTempEditB').prop('disabled', true);
+                $('#GRNLocationId').removeAttr('disabled');
+                $('#EditPRN').attr('action', '/PurchaseReturnNote/TempEdit');
+                $('#EditPRN').submit();
+            });
+        $('#ButtonTempEditB').on('click',
+           function (event) {
+               $('#ButtonTempEdit').text('Processing...');
+               $('#ButtonTempEdit').prop('disabled', true);
+               $('#ButtonTempEditB').text('Processing...');
+               $('#ButtonTempEditB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/TempEdit');
+               $('#EditPRN').submit();
+           });
+        //--------------------------------------------------------------------------
+        $('#ButtonCancel').on('click',
+           function (event) {
+               $('#ButtonCancel').text('Processing...');
+               $('#ButtonCancel').prop('disabled', true);
+               $('#ButtonCancelB').text('Processing...');
+               $('#ButtonCancelB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/Cancel');
+               $('#EditPRN').submit();
+           });
+        $('#ButtonCancelB').on('click',
+           function (event) {
+               $('#ButtonCancel').text('Processing...');
+               $('#ButtonCancel').prop('disabled', true);
+               $('#ButtonCancelB').text('Processing...');
+               $('#ButtonCancelB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/Cancel');
+               $('#EditPRN').submit();
+           });
+        //-----------------------------------------------------------------
+        $('#ButtonApprove').on('click',
+          function (event) {
+              $('#ButtonApprove').text('Processing...');
+              $('#ButtonApprove').prop('disabled', true);
+              $('#ButtonApproveB').text('Processing...');
+              $('#ButtonApproveB').prop('disabled', true);
+              $('#GRNLocationId').removeAttr('disabled');
+              $('#EditPRN').attr('action', '/PurchaseReturnNote/Approve');
+              $('#EditPRN').submit();
+          });
+        $('#ButtonApproveB').on('click',
+           function (event) {
+               $('#ButtonApprove').text('Processing...');
+               $('#ButtonApprove').prop('disabled', true);
+               $('#ButtonApproveB').text('Processing...');
+               $('#ButtonApproveB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/Approve');
+               $('#EditPRN').submit();
+           });
+        //-----------------------------------------------------------------------       
+        $('#ButtonReject').on('click',
+          function (event) {
+              $('#ButtonReject').text('Processing...');
+              $('#ButtonReject').prop('disabled', true);
+              $('#ButtonRejectB').text('Processing...');
+              $('#ButtonRejectB').prop('disabled', true);
+              $('#GRNLocationId').removeAttr('disabled');
+              $('#EditPRN').attr('action', '/PurchaseReturnNote/Reject');
+              $('#EditPRN').submit();
+          });
+        $('#ButtonRejectB').on('click',
+           function (event) {
+               $('#ButtonReject').text('Processing...');
+               $('#ButtonReject').prop('disabled', true);
+               $('#ButtonRejectB').text('Processing...');
+               $('#ButtonRejectB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/Reject');
+               $('#EditPRN').submit();
+           });
+        //-----------------------------------------------------------------------       
+        $('#ButtonCancel').on('click',
+          function (event) {
+              $('#ButtonCancel').text('Processing...');
+              $('#ButtonCancel').prop('disabled', true);
+              $('#ButtonCancelB').text('Processing...');
+              $('#ButtonCancelB').prop('disabled', true);
+              $('#GRNLocationId').removeAttr('disabled');
+              $('#EditPRN').attr('action', '/PurchaseReturnNote/Cancel');
+              $('#EditPRN').submit();
+          });
+        $('#ButtonCancelB').on('click',
+           function (event) {
+               $('#ButtonCancel').text('Processing...');
+               $('#ButtonCancel').prop('disabled', true);
+               $('#ButtonCancelB').text('Processing...');
+               $('#ButtonCancelB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/Cancel');
+               $('#EditPRN').submit();
+           });
+        //-----------------------------------------------------------------------       
+        $('#ButtonForcefullyClose').on('click',
+          function (event) {
+              $('#ButtonForcefullyClose').text('Processing...');
+              $('#ButtonForcefullyClose').prop('disabled', true);
+              $('#ButtonForcefullyCloseB').text('Processing...');
+              $('#ButtonForcefullyCloseB').prop('disabled', true);
+              $('#GRNLocationId').removeAttr('disabled');
+              $('#EditPRN').attr('action', '/PurchaseReturnNote/ForcefullyClose');
+              $('#EditPRN').submit();
+          });
+        $('#ButtonForcefullyCloseB').on('click',
+           function (event) {
+               $('#ButtonForcefullyClose').text('Processing...');
+               $('#ButtonForcefullyClose').prop('disabled', true);
+               $('#ButtonForcefullyCloseB').text('Processing...');
+               $('#ButtonForcefullyCloseB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/ForcefullyClose');
+               $('#EditPRN').submit();
+           });
+        //-----------------------------------------------------------------------       
+        $('#ButtonReOpene').on('click',
+          function (event) {
+              $('#ButtonReOpene').text('Processing...');
+              $('#ButtonReOpene').prop('disabled', true);
+              $('#ButtonReOpeneB').text('Processing...');
+              $('#ButtonReOpeneB').prop('disabled', true);
+              $('#GRNLocationId').removeAttr('disabled');
+              $('#EditPRN').attr('action', '/PurchaseReturnNote/ReOpene');
+              $('#EditPRN').submit();
+          });
+        $('#ButtonReOpeneB').on('click',
+           function (event) {
+               $('#ButtonReOpene').text('Processing...');
+               $('#ButtonReOpene').prop('disabled', true);
+               $('#ButtonReOpeneB').text('Processing...');
+               $('#ButtonReOpeneB').prop('disabled', true);
+               $('#GRNLocationId').removeAttr('disabled');
+               $('#EditPRN').attr('action', '/PurchaseReturnNote/ReOpene');
+               $('#EditPRN').submit();
+           });
+    });
+</script>
+
+
+<script>
+   // $(document).ready(function SwitchWizard ()
+  //  {
+        debugger;
+      //  alert('@Convert.ToBoolean(Session["POWizadUI"])');
+    if('@Convert.ToBoolean(Session["POWizadUI"])'=='False')
+    {
+            //debugger;
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+       }
+   // });
+</script>
+
+<script>
+   // debugger;
+
+    $(document).ready(function() {
+
+        EnableDisable();
+
+    });
+
+    $('input[type=radio][name=PRNType]').change(function()
+    {
+
+        if (this.value == 'Manual')
+        {
+            EnableDisable();
+        }
+        else if (this.value == 'POBased')
+        {
+            EnableDisable();
+
+        }
+    });
+</script>
+
+<script>
+    if('@Model.PRNType'=="Manual")
+    {
+        document.getElementById('Manual').checked=true;
+        $('#GRNIdg').prop('disabled', 'disabled');
+        // alert("Manual");
+    }else if('@Model.PRNType'=="GRNBased")
+    {
+        document.getElementById('Auto').checked=true;
+        $('#GRNIdg').prop('disabled', false);
+        //alert("PO Based");
+    }
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetEvents", "PO")", function (data) {
+
+        debugger;
+
+        var EventId = $("#EventId");
+
+        EventId.empty();
+        EventId.append("<option value='0'>-- Select an Event --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            EventId.append($('<option />', { value: optionaldata.EventId }).html(optionaldata.EventName));
+
+        });
+
+        if ('@ViewBag.EventId') {
+            $('#EventId').val(@ViewBag.EventId).trigger("change");
+        } else {
+            $('#EventId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    debugger;
+   
+    if(@ViewBag.PurchaseHeaderId!=null){
+       
+        var TeamDetailPostBackURL = '/PurchaseReturnNote/Print';
+      
+      //  $(function () {
+           // debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": @Model.PurchaseHeaderId,"printstatus":1 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+      //  });
+       
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+
+    }
+</script>
+
+<script>
+
+    var TeamDetailPostBackURL = '/PurchaseReturnNote/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id,"printstatus":1 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        //$("#closebtn").on('click',function(){
+        //    $('#myModal').modal('hide');
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    function checkProductQuantity()
+    {
+        debugger;
+        document.getElementById('validateqty').innerHTML = '';
+
+        if ($("#GRNLocationId").val() == 0 || $("#GRNLocationId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select a Location';
+
+            return;
+        }
+
+
+
+        if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select an Item';
+            return;
+        }
+
+        //if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+        //    document.getElementById('validateqty').innerHTML = 'Quantity can not be 0 or empty';
+        //    return;
+
+        //} else
+        //{
+        //    document.getElementById('validateqty').innerHTML = '';
+        //}
+
+        $.ajax({
+            url: "@Url.Action("VaidateQuantityForReturn", "PO")",
+            data: { id: $("#ItemId").val(), polocid: $("#GRNLocationId").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                debugger;
+                data = resp;
+                if($("#RecQty").val()=="0"){
+                    document.getElementById('validateqty').innerHTML = 'available stock is ' + resp;
+                    document.getElementById('RecQty').value = '0';
+                }else{
+                    if (resp < $("#RecQty").val()) {
+                        document.getElementById('validateqty').innerHTML = 'available stock is ' + resp;
+                        document.getElementById('RecQty').value = '0';
+                    } else
+                    {
+                        document.getElementById('validateqty').innerHTML = '';
+                    }
+                }
+
+            }
+        });
+
+
+    }
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetCurrenciesForTransactions", "Currency")", function (data) {
+
+        var currencyId = $("#CurrencyId");
+
+        currencyId.empty();
+        currencyId.append("<option value='0'>-- Select Currency Type --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            currencyId.append($('<option />', { value: optionaldata.CurrencyId }).html(optionaldata.CurrencyDescription));
+
+        });
+
+        if ('@ViewBag.CurrencyId') {
+            $('#CurrencyId').val(@ViewBag.CurrencyId).trigger("change");
+        } else {
+            $('#CurrencyId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetSuppliers", "Supplier")", function (data) {
+
+        var supplierId = $("#SupplierId");
+        supplierId.empty();
+        supplierId.append("<option value='0'>-- Select a Supplier --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            supplierId.append($('<option />', { value: optionaldata.SupplierID }).html(optionaldata.SupplierName));
+
+        });
+
+        if ('@ViewBag.SupplierId') {
+            $('#SupplierId').val(@ViewBag.SupplierId).trigger("change");
+        } else {
+            $('#SupplierId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetSupplierWiseApprivedGRNsForPRN", "GRN")", { supplierid: @Model.SupplierID },
+           function (data)
+           {
+               debugger;
+               var itemId = $("#GRNIdg");
+               itemId.empty();
+               itemId.append("<option value='0'>-- Select a GRN --</option>");
+               $.each(JSON.parse(data), function (index, optionaldata)
+               {
+                   itemId.append($('<option />', { value: optionaldata.PurchaseHeaderId }).html(optionaldata.DocumentNo));
+
+               });
+               debugger;
+               if ('@ViewBag.GRNId') 
+               {
+                   $('#GRNIdg').val(@ViewBag.GRNId).trigger("change");
+               } else 
+               {
+                   $('#GRNIdg').val(0).trigger("change");
+               }
+
+           });
+</script>
+
+<script>
+    $("#SupplierId").change(function ()
+    {
+       // alert("aaa");
+        var supplierid = this.value;
+
+       $.getJSON("@Url.Action("GetSupplierWiseApprivedGRNsForPRN", "GRN")", { supplierid: supplierid },
+       function (data)
+       {
+           var itemId = $("#GRNIdg");
+           itemId.empty();
+           itemId.append("<option value='0'>-- Select a GRN --</option>");
+           $.each(JSON.parse(data), function (index, optionaldata)
+           {
+               itemId.append($('<option />', { value: optionaldata.PurchaseHeaderId }).html(optionaldata.DocumentNo));
+
+           });
+
+           @*if ('@Model.GRNId') {
+               $('#GRNIdg').val(@Model.GRNId).trigger("change");
+           } else {
+               $('#GRNIdg').val(0).trigger("change");
+           }*@
+
+       });
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#GRNLocationId");
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.locationId') {
+            $('#GRNLocationId').val(@ViewBag.locationId).trigger("change");
+        } else {
+            $('#GRNLocationId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePaymentTerms", "GRN")", function (data) {
+
+        var paymentTermId = $("#PaymentTermId");
+
+
+        paymentTermId.empty();
+        paymentTermId.append("<option value='0'>-- Select a Payment Term --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            paymentTermId.append($('<option />', { value: optionaldata.PaymenttermId }).html(optionaldata.PaymentTermName));
+
+        });
+
+        if ('@ViewBag.PaymentTermId') {
+            $('#PaymentTermId').val(@ViewBag.PaymentTermId).trigger("change");
+        } else {
+            $('#PaymentTermId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePaytmentMethods", "PO")", function (data) {
+
+        var paymentMethodsId = $("#PaymentMethodId");
+
+
+        paymentMethodsId.empty();
+        paymentMethodsId.append("<option value='0'>-- Select a Payment Method --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            paymentMethodsId.append($('<option />', { value: optionaldata.PaymentMethodId }).html(optionaldata.PaymentMethodName));
+
+        });
+
+        if ('@ViewBag.paymentMethodsId') {
+            $('#PaymentMethodId').val(@ViewBag.paymentMethodsId).trigger("change");
+        } else {
+            $('#PaymentMethodId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+@*<script>
+        $.getJSON("@Url.Action("GetActiveGRNs", "GRN")", function (data) {
+
+            var ddGRNId = $("#GRNIdg");
+            ddGRNId.empty();
+            ddGRNId.append("<option value='0'>-- Select a GRN--</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                ddGRNId.append($('<option />', { value: optionaldata.PurchaseHeaderId }).html(optionaldata.DocumentNo));
+
+            });
+
+        });
+
+
+    </script>*@
+
+<script type="text/javascript">
+    $("body").on("click", "#btnAddPRNItem", function ()
+    {
+        if ($("#GRNIdg").val() == 0 || $("#GRNIdg").val() == null) {
+            alert("Select a GRN !");
+            return;
+        }
+
+        var DocumentID = $("#GRNIdg").val();
+        var DocumentNo = $("#GRNIdg option:selected").text();
+
+        $.ajax({
+
+            url: "@Url.Action("GetDataTest", "PurchaseReturnNote")",
+            data: { id: $("#GRNIdg").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+
+                debugger;
+                data = resp;
+
+                $("#grnitems tr").remove();
+
+                $.each(data, function (i, item)
+                {
+
+                     @{
+                         Model.GRNDetail.Add(new RIT.HMS.Domain.Transactions.PurchaseDetail());
+                      }
+
+                    if(item.OrderQty > item.CurrnetStock)
+                    {
+                        var r = confirm("Current Stock of "+item.ProductName+" is "+item.CurrnetStock+". Do you wan to add?");
+                        if (r == false)
+                        {
+                            return;
+                        }
+                    }
+
+                    //  var unitindex = $("#grnitems").children("tr").length;
+                    var unitindex=item.ProductID ;
+                    var unitindexCell = "<td style='display:none'><input name='GRNDetail.Index' type='hidden' value='" +
+                        unitindex + "' /></td>";
+
+                    var unitIdCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_ProductID' class='form-control' name='GRNDetail[" +
+                        unitindex + "].ProductID' type='text' readonly value='" + item.ProductID + "' /></td>";
+
+                    //var unitDescCell = "<td><input id='GRNDetail[" + unitindex + "]_ProductName'  class='form-control'  name='GRNDetail[" +
+                    //    unitindex + "].ProductName' type='text' readonly value='" + item.ProductName + "' /></td>";
+
+                    var unitDescCell = "<td id='GRNDetail[" + unitindex + "]_ProductName'    name='GRNDetail[" +
+                        unitindex + "].ProductName' type='text'> " + (item.ProductCode + " - " + item.ProductName) + "</td>";
+
+                    var unitGRNQtyCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_GRNQuantity'  class='form-control' name='GRNDetail[" +
+                        unitindex + "].GRNQuantity' type='number' readonly value='" + item.OrderQty + "' /></td>";
+
+                    var unitQtyCell = "<td><input id='GRNDetail[" + unitindex + "]_OrderQty'  class='form-control' name='GRNDetail[" +
+                        unitindex + "].OrderQty' type='number' readonly value='" + item.OrderQty + "' /></td>";
+
+                    var unitFreeQtyCell = "<td><input id='GRNDetail[" + unitindex + "]_FreeQty'  class='form-control'  name='GRNDetail[" +
+                        unitindex + "].FreeQty' type='number'  min='0' value='" + item.FreeQty + "'  oninput='javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);' /></td>";
+
+                    //var unitDiscountCell = "<td><input id='GRNDetail[" + unitindex + "]_Discount'  class='form-control'  name='GRNDetail[" +
+                    //    unitindex + "].Discount' type='number' readonly value='" + item.Discount + "'  onkeyup='itemDiscount(" + unitindex + ")'  oninput='javascript: if (this.value.length >10) this.value = this.value.slice(0, 10);' /></td>";
+
+                    var unitDiscountCell = "<td><input id='GRNDetail[" + unitindex + "]_Discount'  class='form-control'  name='GRNDetail[" +
+                       unitindex + "].Discount' type='number' readonly value='" + item.Discount + "'  oninput='javascript: if (this.value.length >10) this.value = this.value.slice(0, 10);' /></td>";
+
+
+                    var unitSellingPriceCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_SellingPrice' readonly class='form-control'  name='GRNDetail[" +
+                        unitindex + "].SellingPrice' type='text' readonly value='" + item.SellingPrice + "' /></td>";
+
+                    var unitCostPriceCell = "<td><input id='GRNDetail[" + unitindex + "]_CostPrice' readonly class='form-control'  name='GRNDetail[" +
+                        unitindex + "].CostPrice' type='text' readonly value='" + item.CostPrice + "' /></td>";
+
+                    var unitSellingPriceHiddenCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_SellingPriceHidden'  class='form-control'  name='GRNDetail[" +
+                        unitindex + "].SellingPriceHidden' type='number' value='" + item.SellingPrice + "' /></td>";
+
+                    var unitDiscountTypeHiddenCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_DiscountType'  class='form-control'  name='GRNDetail[" +
+                       unitindex + "].DiscountType' type='text' value='" + item.DiscountType + "' /></td>";
+
+
+                    var unitRemoveCell = "<td><input id='btnAddPRNItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                        unitindex + ");' /></td>";
+
+                    if(item.OrderQty > item.CurrnetStock)
+                    {
+                        var newUnitRow = "<tr style='background-color:#f7b1b0' id='trGRNItem" + unitindex + "'>" +
+                       unitindexCell +
+                       unitIdCell +
+                       unitDescCell +
+                       unitQtyCell +
+                       unitFreeQtyCell +
+                       unitDiscountCell +
+                       unitCostPriceCell +
+                       unitSellingPriceCell +
+                       unitSellingPriceHiddenCell+
+                       unitDiscountTypeHiddenCell+
+                       unitRemoveCell + "</tr>";
+                        // document.getElementById('trGRNItem' + unitindex + '').bgColor = '#f7b1b0';
+                    }else
+                    {
+
+                        var newUnitRow = "<tr id='trGRNItem" + unitindex + "'>" +
+                       unitindexCell +
+                       unitIdCell +
+                       unitDescCell +
+                       unitQtyCell +
+                       unitFreeQtyCell +
+                       unitDiscountCell +
+                       unitCostPriceCell +
+                       unitSellingPriceCell +
+                       unitSellingPriceHiddenCell+
+                       unitDiscountTypeHiddenCell+
+                       unitRemoveCell + "</tr>";
+                        // document.getElementById('trGRNItem' + unitindex + '').bgColor = '#f7b1b0';
+
+                    }
+
+                    $("#grnitems").append(newUnitRow);
+
+
+
+                });
+
+                var table = document.getElementById("grnitems");
+                calcTotal(table);
+
+
+
+
+                @*@{
+                         Model.GRNDetail.Add(new HospitalityManagement.Models.Transactions.PurchaseDetail());
+                     }
+
+                    var unitindex = $("#grnitems").children("tr").length;
+                    var unitindexCell = "<td style='display:none'><input name='GRNDetail.Index' type='hidden' value='" + unitindex + "' /></td>";
+                    var unitIdCell = "<td><input id='GRNDetail" + unitindex + "_ProductID' class='form-control' name='GRNDetail[" + unitindex + "].ProductID' type='text' readonly value='" + data.ProductID + "' /></td>";
+                    var unitDescCell = "<td><input id='GRNDetail" + unitindex + "_ProductName'  class='form-control'  name='GRNDetail[" + unitindex + "].ProductName' type='text' readonly value='" + data.ProductName + "' /></td>";
+                    var unitQtyCell = "<td><input id='GRNDetail" + unitindex + "_OrderQty'  class='form-control'  name='GRNDetail[" + unitindex + "].OrderQty' type='number' readonly value='" + data.OrderQty + "' /></td>";
+                    var unitFreeQtyCell = "<td><input id='GRNDetail" + unitindex + "_FreeQty'  class='form-control'  name='GRNDetail[" + unitindex + "].FreeQty' type='number' value='" + data.FreeQty + "' /></td>";
+                    var unitDiscountCell = "<td><input id='GRNDetail" + unitindex + "_Discount'  class='form-control'  name='GRNDetail[" + unitindex + "].Discount' type='number' value='" + data.Discount + "' /></td>";
+                    var unitSellingPriceCell = "<td><input id='GRNDetail" + unitindex + "_SellingPrice'  class='form-control'  name='GRNDetail[" + unitindex + "].SellingPrice' type='text' readonly value='" + data.SellingPrice + "' /></td>";
+                    var unitCostPriceCell = "<td><input id='GRNDetail" + unitindex + "_CostPrice'  class='form-control'  name='GRNDetail[" + unitindex + "].CostPrice' type='text' readonly value='" + data.CostPrice + "' /></td>";
+                    var unitRemoveCell = "<td><input id='btnAddGRNItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" + unitindex + ");' /></td>";
+
+                    var newUnitRow = "<tr id='trGRNItem" + unitindex + "'>" +
+                    unitindexCell + unitIdCell + unitDescCell + unitQtyCell + unitFreeQtyCell + unitDiscountCell + unitSellingPriceCell + unitCostPriceCell + unitRemoveCell + "</tr>";
+                    $("#grnitems").append(newUnitRow);
+
+
+                    var table = document.getElementById("grnitems");
+
+                    var totsp = 0.0;
+                    var totcp = 0.0;
+                    var totdis = 0.0;
+                    var tottax = 0.0;
+
+                    for (var r = 0, n = table.rows.length; r < n; r++) {
+                        var spcell = table.rows[r].cells[7].innerHTML;
+                        //alert(spcell);
+                        var regex = /value="(\d+(\.\d)*)/i;
+                        var spvalue = spcell.match(regex)[1];
+
+                        // alert((spvalue));
+                        totsp += Number(spvalue);
+
+                        var cpcell = table.rows[r].cells[6].innerHTML;
+                        var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                        totcp += Number(cpvalue);
+                    }
+                        document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+                        document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+                        document.getElementById("GrossAmount").value = parseFloat(
+                        Number(document.getElementById("TotSellingPrice").value) ).toFixed(2);
+
+                        document.getElementById("NetAmount").value = parseFloat((tottax +
+                        Number(document.getElementById("TotSellingPrice").value))).toFixed(2);
+                        document.getElementById("NetAmountHidden").value = parseFloat(document.getElementById("NetAmount").value).toFixed(2);*@
+
+
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+
+        } );
+
+    });
+
+    function removeUnitRow(id) {
+
+        if (confirm("Do you want to delete? "))
+        {
+
+            var controlToBeRemoved = "#trGRNItem" + id;
+            $(controlToBeRemoved).remove();
+
+            var table = document.getElementById("grnitems");
+            var totsp = 0.0;
+            var totcp = 0.0;
+            var totdis = 0.0;
+            var tottax = 0.0;
+            var regex = /value="(\d+(\.\d)*)/i;
+            var rowproductid=0;
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+
+                rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+                var spvalue=document.getElementById('GRNDetail[' + rowproductid + ']_SellingPrice').value;
+                totsp += Number(spvalue);
+                var cpvalue=document.getElementById('GRNDetail[' + rowproductid + ']_CostPrice').value;
+                totcp += Number(cpvalue);
+
+                var disval=document.getElementById('GRNDetail[' + rowproductid + ']_Discount').value;
+                totdis += Number(disval);
+
+
+            }
+            document.getElementById("TotDiscounts").value = parseFloat(totdis).toFixed(2);
+            document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+            document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+            document.getElementById("GrossAmount").value = parseFloat(
+                Number(document.getElementById("TotSellingPrice").value)
+            ).toFixed(2);
+
+            document.getElementById("NetAmount").value = parseFloat((tottax +
+                    Number(document.getElementById("TotSellingPrice").value))
+            ).toFixed(2);
+            document.getElementById("NetAmountHidden").value = parseFloat(document.getElementById("NetAmount").value).toFixed(2);
+        }
+    }
+
+
+</script>
+
+<script>
+    function calcTotal(table) {
+        debugger;
+
+        var totsp = 0.0;
+        var totcp = 0.0;
+        var totdis = 0.0;
+        var tottax = 0.0;
+        var regex = /value="(\d+(\.\d)*)/i;
+        var rowproductid=0;
+
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+
+            rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+            var spvalue=document.getElementById('GRNDetail[' + rowproductid + ']_SellingPrice').value;
+            totsp += Number(spvalue);
+
+            var cpvalue=document.getElementById('GRNDetail[' + rowproductid + ']_CostPrice').value;
+            totcp += Number(cpvalue);
+
+            var disval=document.getElementById('GRNDetail[' + rowproductid + ']_Discount').value;
+            totdis += Number(disval);
+
+
+        }
+        document.getElementById("TotDiscounts").value = parseFloat(totdis).toFixed(2);
+        document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+        document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+        document.getElementById("GrossAmount").value = parseFloat(
+            Number(document.getElementById("TotSellingPrice").value)
+        ).toFixed(2);
+
+        //document.getElementById("NetAmount").value = parseFloat((tottax +
+        //        Number(document.getElementById("TotSellingPrice").value))
+        //).toFixed(2);
+
+        document.getElementById("NetAmount").value = parseFloat((tottax +
+              Number(document.getElementById("TotCostPrice").value) - 
+              Number(document.getElementById("DiscountAmount").value) +
+              Number(document.getElementById("TotalTax").value) 
+              )).toFixed(2);
+
+        document.getElementById("NetAmountHidden").value = parseFloat(document.getElementById("NetAmount").value).toFixed(2);
+    }
+</script>
+
+<script type="text/javascript">
+
+    function removeGRNRow(button)
+    {
+        debugger;
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? ")) {
+
+            var table = $("#grnitems")[0];
+            table.deleteRow(row[0].rowIndex - 1);
+            var tabletorem = document.getElementById("grnitems");
+
+            calcTotal(tabletorem);
+
+        }
+
+    };
+</script>
+
+<script>
+
+    $('#GRNLocationId').change(function () {
+        var frmlocid = this.value;
+
+        //  GetLocationWiseProduct
+        $.getJSON("@Url.Action("GetLocationProducts", "PO")", { locid: $('#GRNLocationId').val() },
+        function (data) {
+            var itemId = $("#ItemId");
+            itemId.empty();
+            itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName + "(" + optionaldata.UOMDesc + ")"));
+
+            });
+
+            if ('@ViewBag.itemIdselect') {
+                $('#itemIdselect').val(@ViewBag.itemIdselect).trigger("change");
+            } else {
+                $('#itemIdselect').val(0).trigger("change");
+            }
+        });
+    })
+
+
+    $.getJSON("@Url.Action("GetLocationProducts", "PO")", { locid: @ViewBag.locationId },
+    function (data) {
+        var itemId = $("#ItemId");
+        itemId.empty();
+        itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName + "(" + optionaldata.UOMDesc + ")"));
+
+        });
+
+        if ('@ViewBag.itemIdselect') {
+            $('#itemIdselect').val(@ViewBag.itemIdselect).trigger("change");
+        } else {
+            $('#itemIdselect').val(0).trigger("change");
+        }
+    });
+
+
+    $(document).ready(function(){
+        $("#ItemId").change(function(){
+            checkProductQuantity();
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    document.getElementById('NetAmountHidden').value = @ViewBag.InitNetAmount;
+    function checkOtherChargers()
+    {
+
+        var otherchargers = document.getElementById('OtherChargers').value;
+
+        if (otherchargers != 0) {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(otherchargers));
+        } else{
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(otherchargers));
+        }
+        SetNetAmount();
+    }
+</script>
+
+<script>
+    function SetNetAmount() {
+        debugger;
+
+        var totalLineDis = document.getElementById('TotDiscounts').value;
+        var grossAmount = document.getElementById('GrossAmount').value;
+        var disAmount = document.getElementById('DiscountAmount').value;
+        var disPer = document.getElementById('DiscountPercentage').value;
+        var otherCharges = document.getElementById('OtherChargers').value;
+        var totalTax = document.getElementById('TotalTax').value;
+        var netAmount = document.getElementById('NetAmount').value;
+        var netDiscount = 0;
+        var net = 0;
+
+        if(disAmount > 0)
+        {
+            netDiscount = 0;
+            netDiscount = disAmount;
+            // alert("netDiscount" + netDiscount)
+        }
+        else if(disPer > 0)
+        {
+            netDiscount = 0;
+            netDiscount = (Number(grossAmount) * Number(disPer))/100;
+        }
+        //- (Number(totalLineDis) //kapila 7/6/2020 remomoved
+        net = Number(grossAmount)  - Number(netDiscount) + (Number(otherCharges) + Number(totalTax));
+        document.getElementById('NetAmount').value = parseFloat(net).toFixed(2);
+    }
+</script>
+
+<script>
+    function itemDiscount(i)
+    {
+        debugger;
+        // alert(i);
+        var dp;
+
+        if (document.getElementById('GRNDetail[' + i + ']_Discount').value != "" || 
+            document.getElementById('GRNDetail[' + i + ']_Discount').value != 0) 
+        {
+
+            dp = (document.getElementById('GRNDetail[' + i + ']_SellingPriceHidden').value) -(document.getElementById('GRNDetail[' + i + ']_Discount').value);
+
+            document.getElementById('GRNDetail[' + i + ']_SellingPrice').value = dp;
+
+        }
+        else
+        {
+            document.getElementById('GRNDetail[' + i + ']_SellingPrice').value = document.getElementById('GRNDetail[' + i + ']_SellingPriceHidden').value;
+            //document.getElementById('GRNDetail' + i + '_Discount').value = 0;
+        }
+
+        //   alert(1);
+
+        var table = document.getElementById("grnitems");
+        document.getElementById('TotSellingPrice').value = 0;
+        document.getElementById('TotDiscounts').value = 0;
+
+        var regex = /value="(\d+(\.\d)*)/i;
+        var rowproductid=0;
+
+        for (var r = 0, n = table.rows.length; r < n; r++)
+        {
+
+            rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+            var val1 = Number(document.getElementById('TotSellingPrice').value);
+            var val2 = Number(document.getElementById('GRNDetail[' + rowproductid + ']_SellingPrice').value);
+
+            var val3 = Number(document.getElementById('TotDiscounts').value);
+            var val4 = Number(document.getElementById('GRNDetail[' + rowproductid + ']_Discount').value);
+
+            document.getElementById('TotSellingPrice').value = parseFloat(val1 + val2).toFixed(2);
+            document.getElementById('TotDiscounts').value = parseFloat(val3 + val4).toFixed(2);
+        }
+
+    }
+</script>
+
+@*PRN Item Handling*@
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddTOGItem",
+        function () {
+
+            //  alert(111);
+
+            if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+                alert("Select a product !");
+                return;
+            }
+            if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+
+            if ($("#GRNLocationId").val() == 0 || $("#GRNLocationId").val() == null) {
+                alert("Select a From location!");
+                return;
+            }
+
+
+
+            var itemId = $("#ItemId").val();
+            var itemDesc = $("#ItemId option:selected").text().split('(')[0];
+
+
+            $.ajax({
+                url: "@Url.Action("GetProductData", "TOG")",
+                data: {
+                    id: $("#ItemId").val(), qty: $("#RecQty").val(), frmlocid: $("#GRNLocationId").val(), tolocid: $("#GRNLocationId").val(),
+                    fromlocname: $("#GRNLocationId option:selected").text(), tolocname: $("#GRNLocationId option:selected").text()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+
+                    if (data.ItemId == "0") {
+                        alert("Item : " + itemDesc + " not exists at Location: " + $("#ToLocationId option:selected").text());
+                        return;
+                    }
+                    if (data.Qty > data.CrrQty) {
+                        alert("Item : " + itemDesc + " no enough stock. available stock is: " + data.CrrQty);
+                        return;
+                    }
+
+                    @{
+                        Model.GRNDetail.Add(new RIT.HMS.Domain.Transactions.PurchaseDetail());
+                    }
+
+                    var table = document.getElementById("grnitems");
+                    var hasitem = '0';
+
+                    // checking already exists
+                    for (var r = 0, n = table.rows.length; r < n; r++) {
+
+                        var itemidcell = table.rows[r].cells[1].innerHTML;
+                        var regex = /value="(\d+(\.\d)*)/i;
+                        var itemidex = itemidcell.match(regex)[1];
+                        if (itemidex == itemId) {
+                            hasitem = '1';
+                        }
+
+                    }
+
+
+
+                    if (hasitem == '0') {
+                        // alert(data.ProductID);
+
+                        //  var unitindex = $("#grnitems").children("tr").length;
+                        var unitindex=data.ItemId;
+
+                        var unitindexCell = "<td style='display:none'><input name='GRNDetail.Index' type='hidden' value='" +
+                            unitindex + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_ProductID' class='form-control' name='GRNDetail[" +
+                            unitindex + "].ProductID' type='text' readonly value='" + data.ItemId + "' /></td>";
+
+                        var unitDescCell = "<td id='GRNDetail[" + unitindex + "]_ProductName'   name='PODetail[" +
+                             unitindex + "].ProductName' type='text'>" + itemDesc + "</td>";
+
+                        var unitQtyCell = "<td><input id='GRNDetail[" + unitindex + "]_OrderQty'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].OrderQty' type='number' readonly value='" + data.Qty + "'  /></td>";
+
+                        var unitFreeQtyCell = "<td><input id='GRNDetail[" + unitindex + "]_FreeQty'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].FreeQty' type='number' min='0' value='0' oninput='javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);' /></td>";
+
+                        //var unitDiscountCell = "<td><input id='GRNDetail[" + unitindex + "]_Discount'  class='form-control'  name='GRNDetail[" +
+                        //    unitindex + "].Discount' type='number' value='0' readonly  onkeyup='itemDiscount(" + unitindex + ")'/></td>";
+
+                        var unitDiscountCell = "<td><input id='GRNDetail[" + unitindex + "]_Discount'  class='form-control'  name='GRNDetail[" +
+                           unitindex + "].Discount' type='number' value='0' readonly /></td>";
+
+                        var unitSellingPriceCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_SellingPrice'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].SellingPrice' type='text' readonly value='" + data.SellingPrice + "' /></td>";
+
+                        var unitCostPriceCell = "<td><input id='GRNDetail[" + unitindex + "]_CostPrice'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].CostPrice' type='text' readonly value='" + data.CostPrice + "' /></td>";
+
+                        var unitSellingPriceHiddenCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_SellingPriceHidden'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].SellingPriceHidden' type='text' value='" + data.SellingPrice + "' /></td>";
+
+                        var unitDiscountTypeHiddenCell = "<td style='display:none'><input id='GRNDetail[" + unitindex + "]_DiscountType'  class='form-control'  name='GRNDetail[" +
+                                           unitindex + "].DiscountType' type='text' value='" + data.DiscountType + "' /></td>";
+
+                        var unitRemoveCell = "<td><input id='btnAddPRNItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trGRNItem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+                            unitQtyCell +
+                            unitFreeQtyCell +
+                            unitDiscountCell +
+                            unitCostPriceCell +
+                            unitSellingPriceCell +
+                            unitSellingPriceHiddenCell +
+                            unitDiscountTypeHiddenCell +
+                            unitRemoveCell + "</tr>";
+
+                        $("#grnitems").append(newUnitRow);
+
+                    }
+
+
+                    else if (hasitem == '1')
+                    {
+                        if (confirm("Do you want to Override item? "))
+                        {
+                            // itemOverride(newoddrUnitRow, itemId);
+
+
+                            var orrtable = document.getElementById("grnitems");
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var indexval;
+                            var xxx;
+
+                            for (var r = 0, n = orrtable.rows.length; r < n; r++) {
+                                var idcell = orrtable.rows[r].cells[1].innerHTML;
+                                var idval = idcell.match(regex)[1];
+                                if (idval == itemId) {
+
+                                    var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                                    indexval = indexcell.match(regex)[1];
+                                    var xxx = orrtable.rows[r].rowIndex;
+                                }
+
+                            }
+
+                            document.getElementById('GRNDetail[' + indexval + ']_OrderQty').value=data.Qty;
+                            document.getElementById('GRNDetail[' + indexval + ']_FreeQty').value=0;
+                            document.getElementById('GRNDetail[' + indexval + ']_SellingPrice').value=data.SellingPrice;
+                            document.getElementById('GRNDetail[' + indexval + ']_CostPrice').value=data.CostPrice;
+                            document.getElementById('GRNDetail[' + indexval + ']_SellingPriceHidden').value=data.SellingPrice;
+
+                        }
+
+                    }
+
+                    var table = document.getElementById("grnitems");
+
+                    var totsp = 0.0;
+                    var totcp = 0.0;
+                    var totqty = 0;
+                    var totdis=0;
+
+                    var regex = /value="(\d+(\.\d)*)/i;
+                    var rowproductid=0;
+
+
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+                        rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+
+                        var spvalue=document.getElementById('GRNDetail[' + rowproductid + ']_SellingPrice').value;
+                        totsp += Number(spvalue);
+                        var cpvalue=document.getElementById('GRNDetail[' + rowproductid + ']_CostPrice').value;
+                        totcp += Number(cpvalue);
+                        var qtyvalue=document.getElementById('GRNDetail[' + rowproductid + ']_OrderQty').value;
+                        totqty += Number(qtyvalue);
+                        var disvalue=document.getElementById('GRNDetail[' + rowproductid + ']_Discount').value;
+                        totdis += Number(disvalue);
+                    }
+                    document.getElementById("TotDiscounts").value = parseFloat(totdis).toFixed(2);
+                    document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+                    document.getElementById("TotCostPrice").value = totcp;
+
+                    document.getElementById("GrossAmount").value = parseFloat(
+                        Number(document.getElementById("TotCostPrice").value)
+                    ).toFixed(2);
+
+                    document.getElementById("NetAmount").value = parseFloat((
+                            Number(document.getElementById("TotCostPrice").value))
+                    ).toFixed(2);
+
+                    SetNetAmount();  //kapila 9/6/2020
+
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+
+
+</script>
+
+<script type="text/javascript">
+    function checkdiscounts() {
+
+        var discountamount = document.getElementById('DiscountAmount').value;
+        if(Number(discountamount)>Number(document.getElementById('NetAmountHidden').value))
+        {
+            alert("Invalid Discount Amount!");
+            document.getElementById('DiscountAmount').value="0";
+            document.getElementById('NetAmount').value=document.getElementById('NetAmountHidden').value;
+            return;
+        }
+        if(discountamount != null)
+        {
+            if (discountamount != 0) {
+                document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) -
+                                                                Number(discountamount));
+            } else {
+                document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                                Number(discountamount));
+            }
+
+            //Added by pavithra
+            if(document.getElementById('DiscountAmount').value > 0)
+            {
+                document.getElementById('DiscountPercentage').value = 0;
+            }
+            else if(document.getElementById('DiscountPercentage').value > 0)
+            {
+                document.getElementById('DiscountAmount').value = 0;
+            }
+
+            SetNetAmount();
+        }
+
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    function checkdiscountpercentage() {
+
+        var discountpercentage = document.getElementById('DiscountPercentage').value;
+        var tempDis = 0;
+        tempDis = ((Number(document.getElementById('GrossAmount').value) * Number(discountpercentage).toFixed(3))/100);
+        var nt=Number(document.getElementById('NetAmount').value);
+
+        if(parseFloat(Number(document.getElementById('GrossAmount').value)) < parseFloat(tempDis))
+        {
+            alert("Invalid Discount Percentage!");
+            document.getElementById('DiscountPercentage').value="0";
+            document.getElementById('NetAmount').value=document.getElementById('NetAmountHidden').value;
+
+            return;
+        }
+        if( discountpercentage != null)
+        {
+            if (discountpercentage != 0) {
+                tempDis = ((Number(document.getElementById('GrossAmount').value) * Number(discountpercentage))/100);
+                document.getElementById('NetAmount').value = Number(document.getElementById('GrossAmount').value) - tempDis;
+            }
+            else
+            {
+                document.getElementById('NetAmount').value = (Number(document.getElementById('GrossAmount').value));
+            }
+
+            if(document.getElementById('DiscountAmount').value > 0)
+            {
+                document.getElementById('DiscountPercentage').value = 0;
+            }
+            else if(document.getElementById('DiscountPercentage').value > 0)
+            {
+                document.getElementById('DiscountAmount').value = 0;
+            }
+
+            SetNetAmount();
+        }
+
+
+    }
+</script>

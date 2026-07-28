@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F9F53F23-9794-456A-ABB6-914A53931655}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RIT.HMS.HMSOrderTaker.BLL</RootNamespace>
+    <AssemblyName>RIT.HMS.HMSOrderTaker.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>E:\HMS Source Versions\v 18\HMSAllStarSvn\HospitalityManagement\bin\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auth\BLL_Auth.cs" />
+    <Compile Include="Masters\BLL_Categories.cs" />
+    <Compile Include="Masters\BLL_Department.cs" />
+    <Compile Include="Masters\BLL_Locations.cs" />
+    <Compile Include="Masters\BLL_Product.cs" />
+    <Compile Include="Masters\BLL_Tables.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="svcTabOrderDetails.cs" />
+    <Compile Include="svcTabOrderHeader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RIT.HMS.HMSOrderTaker.Data\RIT.HMS.HMSOrderTaker.Data.csproj">
+      <Project>{97b38837-4e8c-448e-8656-6b0f8474d37c}</Project>
+      <Name>RIT.HMS.HMSOrderTaker.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RIT.HMS.HMSOrderTaker.Domain\RIT.HMS.HMSOrderTaker.Domain.csproj">
+      <Project>{c4c005fb-f167-4686-9a55-ad4a29b80c05}</Project>
+      <Name>RIT.HMS.HMSOrderTaker.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

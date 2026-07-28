@@ -1,0 +1,791 @@
+﻿@model RIT.HMS.Domain.Transactions.StockAdjustmentHeader
+@{
+    
+    ViewBag.Title = "Stock Adjustment Header";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+
+<div class="container body" novalidate>
+    <div class="main_container">
+
+        @using (Html.BeginForm(null, "StockAdjustment", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(model=>model.CompanyID)
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Stock Adjustment</strong> @ViewBag.PCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Stock Adjustment</strong> @ViewBag.PCode Temporary saved.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Stock Adjustment</strong> @ViewBag.PCode save failed..
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Selected month is not open for this Location</strong>
+                        </div>
+                    }
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Stock Adjustment</h2>
+                                    <br />                                   
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small></small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small></small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12 trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-10">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Doc # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                            @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="StockLocationId" class="form-control" name="StockLocationId"></select>
+                                                            @Html.ValidationMessageFor(model => model.StockLocationId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Note <span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-9 col-sm-6 col-xs-12">
+
+                                                            @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", MaxLength = 200, Placeholder = "Note",style="resize:none" })
+                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-2" style="height: 300px;">
+                                            <div class="col-md-12 trn-detail">
+                                                <br />
+
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="Add" name="BaseType" value="Add" checked /> Add
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="Reduce" name="BaseType" value="Reduce" />Reduce
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="radio" id="Override" name="BaseType" value="Override" />Override
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div><br />
+
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-10">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2 col-sm-6">
+                                                                    Reason<span class="required"></span>
+                                                                </label>
+                                                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                                                    <select id="TypeId" class="form-control pull-left" style="width:100%" name="TypeId"></select>
+                                                                    @Html.ValidationMessageFor(model => model.BaseType, "", new { @class = "text-danger" })
+                                                                </div>                                                   
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">
+                                                                    Date <span class="required"></span>
+                                                                </label>
+                                                                <div class="col-md-2 col-sm-6 col-xs-12">
+                                                                    @Html.TextBoxFor(model => model.CreatedDate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",                                                      
+                                                           @Type = "date",
+                                                           @Value = Model.CreatedDate.ToString("yyyy-MM-dd"),
+                                                           Placeholder = "Expected Date"
+                                                       })
+                                                                </div>
+                                                                </div>
+
+
+                                                            </div>
+                                                        <div class="col-md-2 pull-left">
+
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+
+                                                        <div class="col-md-10">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2 col-sm-6">
+                                                                    Product<span class="required"></span>
+                                                                </label>
+                                                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                                                @Html.DropDownList("ProductId", (IEnumerable<SelectListItem>)Session["Products"], new
+                                                                {
+                                                                    @class = "form-control select2",
+                                                                    @style = "width:100%"
+                                                                })
+
+
+                                                                    @*<select id="ProductId" class="form-control select2" style="width:100%" name="ProductId"></select>*@
+                                                                </div>
+                                                                <label class="control-label col-md-2">
+                                                                    Quantity<span class="required"></span>
+                                                                </label>
+                                                                <div class="col-md-2 col-sm-6 col-xs-12">
+                                                                    <input id="ProductQty" name="ProductQty" type="text" min='0' , onkeypress="validateInputForNumbers(event)" class="form-control col-md-2 col-xs-6">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 pull-left">
+                                                            <input type="button" id="btnAddAdjustment" class="btn btn-round btn-info pull-left" value="+" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <br />
+                                                    <div class="clearfix"></div>
+                                                    <div class="text-info"><b>Products</b></div>
+                                                    <div class="text-info">@Html.ValidationMessageFor(model => model.StockAdjDetail, "", new { @class = "text-danger pull-left" })</div>
+
+                                                    <table id="tblRecepies" class="mstable">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th style='display:none'>Material Id</th>
+                                                                <th style="width:30%">Material</th>
+                                                                <th>Current Stock</th>
+                                                                <th>Adjusted Stock</th>
+                                                                <th>New Stock</th>
+                                                                <th>Type</th>
+                                                                <th>Reason</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="receipeitems">
+                                                           
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="btnallClear btn pull-left">                                               
+                                                @Html.ActionLink("Clear", "Index", null, new
+                                               {
+                                                   @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode','Lucida Grande', Sans-Serif;text-decoration: none"
+                                               })
+                                            </div>                                          
+                                            <button type="submit" id="1" formaction="SubmitAdjustment" class="btnallSubmit btn pull-left">Submit Adjustment</button>                                       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="se-pre-con"></div>
+                        <div id='myModal' class='modal'>
+                            <div class="col-md-12">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div id='myModalContent'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function SwitchWizard ()
+    {
+        if('@Convert.ToBoolean(Session["POWizadUI"])'=='False'){
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+        }
+    });
+</script>
+
+<script>
+    if(@ViewBag.HeaderId!=null){
+
+        var TeamDetailPostBackURL = '/StockAdjustment/Print';
+
+        $(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id":@ViewBag.HeaderId,"printstatus":1 },
+                datatype: "json",
+                success: function (data) {
+
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function ()
+        {
+            $('#myModal').modal('hide');
+        });
+    }
+</script> 
+
+<script>
+    function validateInputForNumbers(evt) {
+        var theEvent = evt || window.event;
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+</script>
+<script>
+    $('input[type=radio][name=BaseType]').change(function()
+    {
+        var typeId = this.value
+            debugger;
+            $.ajax({
+                url: "@Url.Action("GetAdjustmentTypesByBaseType", "StockAdjustment")",
+                data: {
+                BType: typeId
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                var TypeId = $("#TypeId");
+                TypeId.empty();
+                TypeId.append("<option value='0'>-- Reason --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    TypeId.append($('<option />', { value: optionaldata.AdjustmentTypeId }).html(optionaldata.Type));
+
+                });
+            }
+        });
+    });
+</script>
+<script>
+
+        var typeId = this.value
+            debugger;
+            $.ajax({
+                url: "@Url.Action("GetAdjustmentTypesByBaseType", "StockAdjustment")",
+                data: {
+                BType: "Add"
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                var TypeId = $("#TypeId");
+                TypeId.empty();
+                TypeId.append("<option value='0'>-- Reason --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    TypeId.append($('<option />', { value: optionaldata.AdjustmentTypeId }).html(optionaldata.Type));
+
+                });
+            }
+        });
+
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#StockLocationId");
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.StockLocationId') {
+            $('#StockLocationId').val(@ViewBag.StockLocationId).trigger("change");
+        } else {
+            $('#StockLocationId').val(0).trigger("change");
+        }
+    });
+
+    @*var allactiveproducts = @Html.Raw(Json.Encode(ViewBag.productdata));*@
+
+    //var itemID = $("#ProductId");
+    //itemID.empty();
+    //itemID.append("<option value='0'>-- Select a Product --</option>");
+    //$.each(allactiveproducts, function (index, optionaldata) {
+    //    itemID.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+
+    //});
+
+    @*$("#TypeId").change(
+     function () {
+         if(document.getElementById("TypeId").value != 0)
+         {
+             var typeId =document.getElementById("TypeId")
+             debugger;
+             $.ajax({
+                 url: "@Url.Action("GetAdjustmentTypesByBaseType", "StockAdjustment")",
+                 data: {
+                     Id: typeId
+                 },
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+
+                     if (data.BaseType == "Override") {
+                         $("#Override").prop("checked", true);
+                     }
+                     else if(data.BaseType == "Reduce"){
+                         $("#Reduce").prop("checked", true);
+                     }
+                     else {
+                         $("#Add").prop("checked", true);
+                     }
+
+                     document.getElementById("TypeId").disabled = true;
+                 }
+             });
+         }
+     });*@
+</script>
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddAdjustment",
+        function () {
+
+            if ($("#StockLocationId").val() == 0 || $("#StockLocationId").val() == null) {
+                alert("Select a  location!");
+                return;
+            }
+
+            if ($("#TypeId").val() == 0 || $("#TypeId").val() == null) {
+                alert("Select the reason!");
+                return;
+            }
+
+            if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                alert("Select a Product!");
+                return;
+            }
+
+            if (document.getElementById('Add').checked) {
+                rate_value = document.getElementById('Add').value;
+            } else if (document.getElementById('Reduce').checked) {
+                rate_value = document.getElementById('Reduce').value;
+            } else if (document.getElementById('Override').checked) {
+                rate_value = document.getElementById('Override').value;
+            }
+
+            var stock = $("#ProductQty").val();
+            var locname = $("#StockLocationId option:selected").text();
+
+            var Type = $("#TypeId option:selected").text();
+            var itemId = $("#ProductId").val();
+
+            $.ajax({
+                url: "@Url.Action("GetAdjustmentData", "StockAdjustment")",
+                data: {
+                    productid: $("#ProductId").val(),
+                    locid: $("#StockLocationId").val(),
+                    adjStock: $("#ProductQty").val(),
+                    type: rate_value
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    var tableStockAdj = document.getElementById("receipeitems");
+                    var hasitem = '0';
+                    // checking already exists
+                    for (var r = 0, n = tableStockAdj.rows.length; r < n; r++) {
+                        var itemidcell = tableStockAdj.rows[r].cells[1].innerHTML;
+                        var regex = /value="(\d+(\.\d)*)/i;
+                        var itemidex = itemidcell.match(regex)[1];
+                        if (itemidex == itemId) {
+                            hasitem = '1';
+                        }
+                    }
+                    if (hasitem == '0') {
+                        var unitindex = $("#receipeitems").children("tr").length;
+                        var unitindexCell = "<td style='display:none'><input name='StockAdjDetail.Index' type='hidden' value='" +
+                            unitindex + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='StockAdjDetail" + unitindex + "_ProductId' class='form-control' name='StockAdjDetail[" +
+                            unitindex + "].ProductId' type='text' readonly value='" + $("#ProductId").val() + "' /></td>";
+
+                        var unitDescCell = "<td><input id='StockAdjDetail" + unitindex + "_ProductName'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].ProductName' type='text' readonly value='" + $("#ProductId option:selected").text().split('(')[0] + "' /></td>";
+
+                        var unitCStockCell = "<td><input id='StockAdjDetail" + unitindex + "_CurrentStock'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].CurrentStock'  readonly value='" + data.CurrentStock + "' /></td>";
+
+                        var unitAStockCell = "<td><input id='StockAdjDetail" + unitindex + "_AdjustStock'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].AdjustStock' type='text' readonly value='" + data.AdjustStock + "' /></td>";
+
+                        var unitNewStockCell = "<td><input id='StockAdjDetail" + unitindex + "_NewStock'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].NewStock' type='text' readonly value='" + data.NewStock + "' /></td>";
+
+                        var unitTypeCell = "<td><input id='StockAdjDetail" + unitindex + "_BaseType'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].BaseType' type='text' readonly value='" + rate_value + "' /></td>";
+
+                        var unitReasonCell = "<td><input id='StockAdjDetail" + unitindex + "_Reason'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].Reason' type='text' readonly value='" + Type + "' /></td>";
+
+                        var unitCPCell = "<td style='display:none'><input id='StockAdjDetail" + unitindex + "_CostPrice'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].CostPrice' type='hidden' readonly value='" + data.CostPrice + "' /></td>";
+
+                        var unitSPCell = "<td style='display:none'><input id='StockAdjDetail" + unitindex + "_SellingPrice'  class='form-control'  name='StockAdjDetail[" +
+                            unitindex + "].SellingPrice'  type='hidden' readonly value='" + data.SellingPrice + "' /></td>";
+
+                        var unitRemoveCell = "<td><input id='btnRemoveReceipeItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+                            unitCStockCell +
+                            unitAStockCell +
+                            unitNewStockCell +
+                            unitTypeCell +
+                            unitReasonCell +
+                            unitCPCell +
+                            unitSPCell +
+                            unitRemoveCell + "</tr>";
+
+                        $("#receipeitems").append(newUnitRow);
+
+                        $("#ProductQty").val('');
+                        //});
+
+                        var table = document.getElementById("receipeitems");
+
+                        var totsp = 0.0;
+                        var totcp = 0.0;
+                        var totqty = 0;
+
+                        for (var r = 0, n = table.rows.length; r < n; r++) {
+                            var spcell = table.rows[r].cells[5].innerHTML;
+                            //alert(spcell);
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var spvalue = spcell.match(regex)[1];
+
+                            // alert((spvalue));
+                            totsp += Number(spvalue);
+
+                            var cpcell = table.rows[r].cells[4].innerHTML;
+                            var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                            totcp += Number(cpvalue);
+
+                            var qtycell = table.rows[r].cells[3].innerHTML;
+                            var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                            totqty += Number(qtyvalue);
+                        }
+                        document.getElementById("StockLocationId").disabled = true;
+                        //document.getElementById("ProductSellingPrice").value = parseFloat(totsp).toFixed(2);
+                        //document.getElementById("ProductCostPrice").value = parseFloat(totcp).toFixed(2);
+                        // document.getElementById("TotQty").value = parseFloat(totqty).toFixed(2);
+                    }
+                    else if (hasitem == '1') {
+                        if (confirm("Do you want to Override item? ")) {
+                            var orrtable = document.getElementById("receipeitems");
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var indexval;
+
+                            for (var r = 0, n = orrtable.rows.length; r < n; r++) {
+                                var idcell = orrtable.rows[r].cells[1].innerHTML;
+                                var idval = idcell.match(regex)[1];
+                                if (idval == itemId) {
+
+                                    var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                                    indexval = indexcell.match(regex)[1];
+                                }
+                            }
+
+                            var table = $("#receipeitems")[0];
+                            table.deleteRow(indexval);
+
+                            var unitindex = $("#receipeitems").children("tr").length;
+                            var unitindexCell = "<td style='display:none'><input name='StockAdjDetail.Index' type='hidden' value='" +
+                                unitindex + "' /></td>";
+
+                            var unitIdCell = "<td style='display:none'><input id='StockAdjDetail" + unitindex + "_ProductId' class='form-control' name='StockAdjDetail[" +
+                                unitindex + "].ProductId' type='text' readonly value='" + $("#ProductId").val() + "' /></td>";
+
+                            var unitDescCell = "<td><input id='StockAdjDetail" + unitindex + "_ProductName'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].ProductName' type='text' readonly value='" + $("#ProductId option:selected").text().split('(')[0] + "' /></td>";
+
+                            var unitCStockCell = "<td><input id='StockAdjDetail" + unitindex + "_CurrentStock'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].CurrentStock'  readonly value='" + data.CurrentStock + "' /></td>";
+
+                            var unitAStockCell = "<td><input id='StockAdjDetail" + unitindex + "_AdjustStock'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].AdjustStock' type='text' readonly value='" + data.AdjustStock + "' /></td>";
+
+                            var unitNewStockCell = "<td><input id='StockAdjDetail" + unitindex + "_NewStock'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].NewStock' type='text' readonly value='" + data.NewStock + "' /></td>";
+
+                            var unitTypeCell = "<td><input id='StockAdjDetail" + unitindex + "_BaseType'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].BaseType' type='text' readonly value='" + rate_value + "' /></td>";
+
+                            var unitReasonCell = "<td><input id='StockAdjDetail" + unitindex + "_Reason'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].Reason' type='text' readonly value='" + Type + "' /></td>";
+
+                            var unitCPCell = "<td style='display:none'><input id='StockAdjDetail" + unitindex + "_CostPrice'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].CostPrice' type='hidden' readonly value='" + data.CostPrice + "' /></td>";
+
+                            var unitSPCell = "<td style='display:none'><input id='StockAdjDetail" + unitindex + "_SellingPrice'  class='form-control'  name='StockAdjDetail[" +
+                                unitindex + "].SellingPrice'  type='hidden' readonly value='" + data.SellingPrice + "' /></td>";
+
+                            var unitRemoveCell = "<td><input id='btnRemoveReceipeItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                unitindex + ");' /></td>";
+
+                            var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                                unitindexCell +
+                                unitIdCell +
+                                unitDescCell +
+                                unitCStockCell +
+                                unitAStockCell +
+                                unitNewStockCell +
+                                unitTypeCell +
+                                unitReasonCell +
+                                unitCPCell +
+                                unitSPCell +
+                                unitRemoveCell + "</tr>";
+
+                            $("#receipeitems").append(newUnitRow);
+
+                            $("#ProductQty").val('');
+                            //});
+
+                            var table = document.getElementById("receipeitems");
+
+                            var totsp = 0.0;
+                            var totcp = 0.0;
+                            var totqty = 0;
+
+                            for (var r = 0, n = table.rows.length; r < n; r++) {
+                                var spcell = table.rows[r].cells[5].innerHTML;
+                                //alert(spcell);
+                                var regex = /value="(\d+(\.\d)*)/i;
+                                var spvalue = spcell.match(regex)[1];
+
+                                // alert((spvalue));
+                                totsp += Number(spvalue);
+
+                                var cpcell = table.rows[r].cells[4].innerHTML;
+                                var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                                totcp += Number(cpvalue);
+
+                                var qtycell = table.rows[r].cells[3].innerHTML;
+                                var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                                totqty += Number(qtyvalue);
+                            }
+                            //document.getElementById("ProductSellingPrice").value = parseFloat(totsp).toFixed(2);
+                            //document.getElementById("ProductCostPrice").value = parseFloat(totcp).toFixed(2);
+                        }
+                    }
+                    var myJsVariable = '@ViewBag.BDSA'
+                 
+
+                    $('#TypeId').change(function() {
+
+                        var TypeID = this.value;
+                        // alert(TypeID);      
+                        if (TypeID == 5 && myJsVariable == 'True' ) {
+                            $('#CreatedDate').prop('disabled', false);
+                            $('#Add').prop('disabled', true);
+                            $('#Override').prop('disabled', true);
+                            $('#TypeId').prop('disabled', true);
+                        }
+                        else
+                        {
+                            document.getElementById("TypeId").disabled = false;
+                            $("#Add").prop("checked", true);
+                            $('#ProductId').val(0);
+                            $('#ProductId').select2().trigger('change');
+                            $('#TypeId').val(0);
+
+                        }
+       
+                    });
+
+
+
+
+
+
+
+                    //document.getElementById("TypeId").disabled = false;
+                    //$("#Add").prop("checked", true);
+                    //$('#ProductId').val(0);
+                    //$('#ProductId').select2().trigger('change');
+                    //$('#TypeId').val(0);
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+    function removeUnitRow(id) {
+
+        if (confirm("Do you want to delete? ")) {
+            var controlToBeRemoved = "#trreceipeitem" + id;
+            $(controlToBeRemoved).remove();
+
+            var table = document.getElementById("receipeitems");
+
+            var totsp = 0;
+            var totcp = 0;
+            var totdis = 0;
+            var tottax = 0;
+            var totqty = 0;
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+                var spcell = table.rows[r].cells[5].innerHTML;
+                var spvalue = parseFloat(spcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+                totsp = totsp + Number(spvalue);
+
+                var cpcell = table.rows[r].cells[4].innerHTML;
+                var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                totcp += Number(cpvalue);
+
+                var qtycell = table.rows[r].cells[3].innerHTML;
+                var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                totqty += Number(qtyvalue);
+            }
+            document.getElementById("ProductSellingPrice").value = totsp;
+            document.getElementById("ProductCostPrice").value = totcp;
+        }
+    }
+</script>
+<script>
+    $(this).submit(function() {
+
+        $('#StockLocationId').removeAttr('disabled');
+    });
+</script>
+
+<script>
+    var myJsVariable = '@ViewBag.BDSA'
+    $( document ).ready(function() {
+        // alert(myJsVariable);
+      
+            $('#CreatedDate').prop('disabled', true);
+        
+    });
+
+    $('#TypeId').change(function() {
+
+        var TypeID = this.value;
+        // alert(TypeID);      
+        if (TypeID == 5 && myJsVariable == 'True' ) {
+            $('#CreatedDate').prop('disabled', false);
+            $('#Add').prop('disabled', true);
+            $('#Override').prop('disabled', true);
+            $('#TypeId').prop('disabled', true);
+        }
+       
+    });
+
+ 
+
+
+</script>
+
+
+
+

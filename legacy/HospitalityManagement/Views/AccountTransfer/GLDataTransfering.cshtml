@@ -1,0 +1,367 @@
+﻿
+@model RIT.HMS.Domain.Transactions.AccountDataTransfer
+@{
+    ViewBag.Title = "GLDataTransfering";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Promotions.css" rel="stylesheet" />
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body">
+    <div class="main_container">
+
+
+        @using (Html.BeginForm("GLDataTransfering", "AccountTransfer", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Promotion</strong> @ViewBag.PromotionCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Promotion</strong> @ViewBag.PromotionCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Promotion code already exists.</strong>
+                        </div>
+                    }
+                    @if (@ViewBag.ShowAlert == 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Select Transaction Type!</strong>
+                        </div>
+                    }
+                    @if (@ViewBag.ShowAlertDate == 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Invalid Date Format!</strong>
+                        </div>
+                    }
+                    @if (@ViewBag.ShowAlertWrongDatePeriod == 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Invalid Date Range!</strong>
+                        </div>
+                    }
+                    @if (@ViewBag.ShowStatusMsg == 1)
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Account Process completed....!</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.ShowStatusMsg == 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Account Process not completed....!</strong>
+                        </div>
+                    }
+
+                    @if (@ViewBag.ShowMsgAccLink == 1)
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GL Transferring Process completed....!</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.ShowMsgAccLink == 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GL Transferring Process not completed.</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.ShowMsgAccLink == 2)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GL Transferring Process not completed...</strong>
+                        </div>
+                    }
+
+
+
+
+
+                    <div class="actionBar">
+                        <div class="msgBox">
+                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                @Html.ActionLink("Clear", "Index", null, new
+                           {
+                               @style = "font-size: 12px;color:white;" +
+                                                                "font-family: 'Lucida Sans Unicode', " +
+                                                                "'Lucida Grande', Sans-Serif;text-decoration: none"
+                           })
+                            </div>
+                            @*<button type="submit" formaction="CreatePromotion"  class="btn btn-success pull-left">  Submit  </button>*@
+                            <button type="submit" formaction="ProcessTransaction" style="font-size: 14px;font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Sans-Serif';" id="ButtonProcTran" class="btn btn-success pull-left">Process Transaction</button>
+                            <button type="submit" formaction="AccountLink" style="font-size: 14px;font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Sans-Serif';" id="ButtonAccLink" class="btn btn-success pull-left">Account Link</button>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>GL Data Transferring</h2>
+                                    <br />
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        @*<ul class="wizard_steps" id="wizardsteps">
+                                                <li>
+                                                    <a href="#step-1">
+                                                        <span class="step_no">1</span>
+                                                        <span class="step_descr">
+                                                            Step 1<br />
+                                                            <small></small>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#step-2">
+                                                        <span class="step_no">2</span>
+                                                        <span class="step_descr">
+                                                            Step 2<br />
+                                                            <small></small>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>*@
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12  trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Transaction Date<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.StartDate, new { @id = "Transaction Date", @class = "form-control pull-left", Type = "date", Placeholder = "Select Date" })
+                                                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                @*<div class="form-horizontal col-md-6">
+
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Date To <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.EndDate, new { @id = "DateTo", @class = "form-control pull-left", Type = "date", Placeholder = "Date To" })
+                                                            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>*@
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>  <br />
+                                        <div id="step-2">
+                                            <div class="col-md-12 trn-detail">
+                                                <br />
+                                                @*Data grid area*@
+                                                <div class="form-group">
+                                                    <div id="buttons">
+                                                        <table id="buttons" class="table table table-striped" style="background-color:#f5f5f5">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr></tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="btnAddReOrderItems">
+
+                                                    </div>
+                                                    <div id="btnAddRequestItems">
+
+                                                    </div>
+                                                    <br /><div class="text-info"><b>Transaction Types</b></div>
+                                                    <br />
+                                                    <div>
+                                                        <table id="tblRecepies" class="mstable" style="width:70%">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th style="display:none">Types Id</th>
+                                                                    <th style="display:none"></th>
+                                                                    <th>Transaction Type</th>
+                                                                    @* <th><input id='CheckBoxHeader' style="width:20%" name='CheckBoxHeader' type='checkbox' value='false' class='check-box' onclick='CheckBoxHeaderSelection(this.checked)' /></th>*@
+                                                                    <th>Selection</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="TranTypeID">
+                                                                <tr>
+                                                                    <td id="TrnTypSalesID" style="width:80%">Main Transaction</td>
+                                                                    @*<td><input id='btnSelectRows'  style="width:20%" name='btnSelectRows' type='checkbox' value='false' class='check-box' onclick='CheckedWithTranType(1,this.checked)' /></td>*@
+                                                                    <td>@Html.CheckBoxFor(model => model.IsValueApply, new { id = "btnSelectRows", name = "btnSelectRows", style = "width:20%", onclick = "CheckedWithTranType(1,this.checked)" })</td>
+
+
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td id="TrnTypSalesReturnsID" style="width:80%">Paid i / Paid Out</td>
+                                                                    @*                                                         <td><input id='btnSelectRows' style="width:20%" name='btnSelectRows' type='checkbox' value='false' class='check-box' onclick='CheckedWithTranType(2, this.checked)' /></td>*@
+                                                                    <td>@Html.CheckBoxFor(model => model.IsValueApply, new { id = "btnSelectRows", name = "btnSelectRows", style = "width:20%", onclick = "CheckedWithTranType(2,this.checked)" })</td>
+
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td id="TrnTypPurchasesID" style="width:80%">TOG Transfer</td>
+                                                                    @*                                                                   <td><input id='btnSelectRows' style="width:20%" name='btnSelectRows' type='checkbox' value='false' class='check-box' onclick='CheckedWithTranType(3, this.checked)' /></td>*@
+                                                                    <td>@Html.CheckBoxFor(model => model.IsValueApply, new { id = "btnSelectRows", name = "btnSelectRows", style = "width:20%", onclick = "CheckedWithTranType(3,this.checked)" })</td>
+
+
+                                                                </tr>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Index", null, new
+                                           {
+                                               @style = "font-size: 12px;color:white;" +
+                                                                "font-family: 'Lucida Sans Unicode', " +
+                                                                "'Lucida Grande', Sans-Serif;text-decoration: none"
+                                           })
+                                            </div>
+                                            <button type="submit" formaction="ProcessTransaction" style="font-size: 14px;font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Sans-Serif';" id="ButtonProcTran" class="btn btn-success pull-left">Process Transaction</button>
+                                            <button type="submit" formaction="AccountLink" style="font-size: 14px;font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Sans-Serif';" id="ButtonAccLink" class="btn btn-success pull-left">Account Link</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="se-pre-con"></div>*@
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+
+@*<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/SweetAlets/sweetalert.js"></script>*@
+
+
+@*<script type="text/javascript">
+        function CheckBoxHeaderSelection(isChecked) {
+            debugger;
+            var table = document.getElementById("tblRecepies");
+
+
+            //if (isChecked) {
+            //    $('input[name="btnSelectRows"]').each(function () {
+            //        this.checked = true;
+            //    });
+            //} else {
+            //    $('input[name="btnSelectRows"]').each(function () {
+            //        this.checked = false;
+            //    });
+            //}
+
+            if (isChecked) {
+                $('#btnSelectRows').change(function () {
+                    this.checked = true;
+                });
+            } else {
+                $('#btnSelectRows').change(function () {
+                    this.checked = false;
+                });
+            }
+        }
+
+    </script>*@
+@*<script>
+    $(document).ready(function(){
+        $('input[name="btnSelectRows"]').change(function () {
+            debugger;
+            console.log("Checkbox value:", value);
+            if(this.checked){
+                var value = $(this).val();
+                console.log("Checkbox value:", value);
+            }
+        });
+    });
+    </script>*@
+

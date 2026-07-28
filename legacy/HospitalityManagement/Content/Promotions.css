@@ -1,0 +1,111 @@
+﻿body {
+}
+h2{
+    color:#1a1a1a;
+}
+.btnallClear{
+  background-color: #990033;
+  border: none;
+  color: white;
+  padding: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius:5px;
+  opacity:0.8;
+  
+}
+.btnallView{
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius:5px;
+  opacity:0.8;
+  
+}
+.btnallSubmit{
+  background-color: #006600;
+  border: none;
+  color: white;
+  padding: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius:5px;
+  opacity:0.8;
+  
+}
+.btnallTemporary{
+  background-color: #0099ff;
+  border: none;
+  color: white;
+  padding: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius:5px;
+  opacity:0.8;
+  
+}
+
+
+.btnallClear:hover{
+  
+  opacity:1;
+  
+}
+.btnallView:hover{
+ 
+  opacity:1;
+  
+}
+.btnallSubmit:hover{
+  
+  opacity:1;
+  
+}
+.btnallTemporary:hover{
+  
+  opacity:1;
+  
+}
+
+
+
+#SupplierId,#POLocationId,#DeliveryLocationId,#CurrencyId,#ValidityPeriod,#PaymentTermId,#PaymentMethodId,#doc,#cdate,#PaymentPeriod{
+    background-color:white;
+    border-radius:5px;
+}
+input[type=number],input[type=text]{
+    background-color:white;
+    border-radius:5px;
+}
+
+.form-control{
+    background-color:white;
+    border-radius:5px;
+}
+
+select{
+    background-color:red;
+}
+
+#step-2{
+    height:500px;
+}

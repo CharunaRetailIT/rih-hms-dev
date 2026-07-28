@@ -1,0 +1,197 @@
+﻿@model RIT.HMS.Domain.RstCategory
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+@*<html lang="en">*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+            {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.RstCategoryID)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Category </strong> @ViewBag.CatCode modified successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Category</strong> @ViewBag.CatCode failed to modify.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Can't be select Active and Delete options in the same time..!
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>Category - Edit</h2>
+                                    <br />
+
+                                 
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        @if (ViewBag.CatDependency == "1")
+                                        {
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Department</label>
+                                                <div class="col-md-3 col-sm-9 col-xs-9">
+                                                    <select id="RstDepartmentID" name="RstDepartmentID" class="form-control"></select>
+
+                                                </div>
+                                            </div>
+                                        }
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Category Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RstCategoryCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 5,
+                                                   Placeholder = "Category Code",
+                                                   @readonly=true
+                                               })
+                                                @Html.ValidationMessageFor(model => model.RstCategoryCode, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Category Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RstCategoryName, new { @class = "form-control", MaxLength = 50, Placeholder = "Category Name" })
+                                                @Html.ValidationMessageFor(model => model.RstCategoryName, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Category Image</label>
+                                            <div class="col-md-6 col-sm-9 col-xs-9">
+                                                <input type="file" id="Photograph" name="Photograph" class="iradio_flat-grey pull-left" />
+                                                @Html.ValidationMessageFor(model => model.Photograph, "", new { @class = "text-danger pull-left" })
+                                                <br />
+                                                <div class="clearfix pull-left">
+                                                    @ViewBag.FileName
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", Placeholder = "Remark" })
+                                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Reset", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewCategories", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Modify</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@*</body>
+    </html>*@
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var departmentDropDown = $("#RstDepartmentID");
+
+        departmentDropDown.empty();
+        departmentDropDown.append("<option value='0'>-- Select a Department --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            departmentDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+        });
+
+        if ('@ViewBag.RstDepartmentID') {
+            $('#RstDepartmentID').val(@ViewBag.RstDepartmentID).trigger("change");
+        } else {
+            $('#RstDepartmentID').val(0).trigger("change");
+        }
+
+
+    });
+
+</script>

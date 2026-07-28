@@ -1,0 +1,2314 @@
+﻿@using RIT.HMS.Domain
+@model RIT.HMS.Domain.Product
+@{
+    ViewBag.Title = "Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+            {
+            @Html.AntiForgeryToken()
+            @*@Html.HiddenFor(model=>model.RstDepartmentID)*@
+            <!-- page content -->
+            <div class="se-pre-con"></div>
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "0")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Product</strong> @ViewBag.PrdCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Product </strong> @ViewBag.PrdCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Product</strong> @ViewBag.PrdCode already exists.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Product must have atleast one supplier.!</strong>.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Please select printer type on Pricing & Stock tab.!</strong>.
+                        </div>
+                    }
+                  
+                 
+
+                    <div class="actionBar">
+                        <div class="msgBox">
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Index", null, new { })'" />
+                            </div>
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewAllProducts", null, new { })'" />
+                            </div>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>Product</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <div class="col-md-12">
+                                        <div class="x_panel">
+                                            <div class="table-responsive" role="tabpanel" data-example-id="togglable-tabs" id="mapContent">
+                                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                                    <li role="presentation" class="active">
+                                                        <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">General</a>
+                                                    </li>
+                                                    <li role="presentation" class="">
+                                                        <a href="#tab_content2" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Pricing & Stock</a>
+                                                    </li>
+                                                    <li role="presentation" class="optDiscounts">
+                                                        <a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Discounts</a>
+                                                    </li>
+                                                    @*<li role="presentation" class="">
+                                                            <a href="#tab_content4" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Receipes</a>
+                                                        </li>*@
+                                                    <li role="presentation" class="optServingUnits">
+                                                        <a href="#tab_content5" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Serving Units</a>
+                                                    </li>
+                                                    <li role="presentation" class="optTaxes">
+                                                        <a href="#tab_content6" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Taxes</a>
+                                                    </li>
+                                                    <li role="presentation" class="" style="display: none;">
+                                                        <a href="#tab_content7" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Configurations</a>
+                                                    </li>
+                                                    <li role="presentation" class="">
+                                                        <a href="#tab_content8" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Suppliers</a>
+                                                    </li>
+                                                    <li role="presentation" class="">
+                                                        <a href="#tab_content9" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Printers</a>
+                                                    </li>
+                                                    <li role="presentation" class="">
+                                                        <a href="#tab_content10" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Price Level</a>
+                                                    </li>
+                                                    <li role="presentation" class="">
+                                                        <a href="#tab_content11" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Target</a>
+                                                    </li>
+                                                </ul>
+
+                                                <div id="myTabContent" class="tab-content">
+
+                                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                                                        <div class="form-horizontal form-label-left col-md-6">
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Product Code *</label>
+                                                                <div class="col-md-4 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.ProductCode,
+                                                                   new
+                                                                   {
+                                                                       @class = "form-control",
+                                                                       MaxLength = 10,
+                                                                       Placeholder = "Code",
+                                                                       onkeyup = "checkProductCode()",
+                                                                       onkeypress = "return checkCodeTypeInput(event)"
+                                                                   })
+                                                                    @Html.ValidationMessageFor(model => model.ProductCode, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                                <font color="red" class="col-md-5">
+                                                                    <label id="validatecode" name="validatecode" style="font:small-caption"></label>
+                                                                </font>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Raw Material</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                    @Html.CheckBoxFor(model => model.IsRowMaterial, new { id = "IsRowMaterial" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Product Name *</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", Placeholder = "ProductName" })
+                                                                    @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Description </label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.ProductDesp, new { @class = "form-control", Placeholder = "Description" })
+                                                                    @Html.ValidationMessageFor(model => model.ProductDesp, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Name On Invoice</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.NameOnInvoice, new { @class = "form-control", Placeholder = "NameOnInvoice" })
+                                                                    @Html.ValidationMessageFor(model => model.NameOnInvoice, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Product Name (Sinhala)</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.ProductNameInSinhala, new { @class = "form-control", Placeholder = "ProductNameInSinhala" })
+                                                                    @Html.ValidationMessageFor(model => model.ProductNameInSinhala, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Ref Code 01</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.RefCode01, new { @class = "form-control", Placeholder = "Ref Code 01" })
+                                                                    @Html.ValidationMessageFor(model => model.ProductNameInSinhala, "",
+                                                                    new { @class = "text-danger pull-left" }
+                                                                   )
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Ref Code 02</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.RefCode02, new { @class = "form-control", Placeholder = "Ref Code 02" })
+                                                                    @Html.ValidationMessageFor(model => model.ProductNameInSinhala, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Bar Code</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.Barcode, new { @class = "form-control", Placeholder = "Bar Code" })
+                                                                    @Html.ValidationMessageFor(model => model.Barcode, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Product Image</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <input type="file" id="Photograph" name="Photograph" class="flat pull-left" />
+                                                                    @Html.ValidationMessageFor(model => model.Photograph, "", new { @class = "text-danger pull-left" })
+                                                                    
+                                                                    <div class="pull-left">
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+
+                                                                @*<label class="control-label col-md-3 col-sm-3 col-xs-3">Active</label>
+                        <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                            @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                        </div>*@
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                @*<label class="control-label col-md-3 col-sm-3 col-xs-3">Delete</label>
+                        <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                            @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                        </div>*@
+
+                                                            </div>
+                                                            <div class="form-group" style="display: none;">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3" style="display: none;">Is Pack</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9" style="display: none;">
+                                                                    @Html.CheckBoxFor(model => model.IsPackItem, new { @class = "flat", visible = false })
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Expiary</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                    @Html.CheckBoxFor(model => model.IsExpiry)
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">No Effect Cost for Menu</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                    @Html.CheckBoxFor(model => model.IsNoEffectCostforMenu)
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="IsMaterialLeft">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Promotion</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsPromotion)
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group" style="display: none;">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3" style="display: none;">Free Issue</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9" style="display: none;">
+                                                                        @Html.CheckBoxFor(model => model.IsFreeIssue, new { @class = "flat" })
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="form-group" style="display: none;">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3" style="display: none;">Bundle</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9" style="display: none;">
+                                                                        @Html.CheckBoxFor(model => model.IsBundle, new { @class = "flat" })
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Sell In Fraction</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsCountable)
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Open Item</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsOpenItem)
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Update Cost On Receipe</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsCostOnReceipe)
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <br />
+
+                                                        </div>
+
+                                                        <div class="form-horizontal form-label-left col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Department *</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <select id="DepartmentId" name="DepartmentId" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Category *</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <select id="CategoryId" name="CategoryId" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Category*</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <select id="SubCategoryId" name="SubCategoryId" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.SubCategoryId, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            @*<div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Order Type</label>
+                        <div class="col-md-3 col-sm-9 col-xs-9">
+                            <select id="OrderType" name="OrderType" class="form-control">
+                                <option value="NONE">NONE</option>
+                                <option value="KOT">KOT</option>
+                                <option value="BOT">BOT</option>
+
+                            </select>
+                            @Html.ValidationMessageFor(model => model.OrderType, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Printer Type *</label>
+                                                                <div class="col-md-5 col-sm-9 col-xs-9">
+                                                                    <select id="PrinterTypeId" name="PrinterTypeId" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.PrinterTypeId, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            @*<div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Kitchen / Bar</label>
+                        <div class="col-md-5 col-sm-9 col-xs-9">
+                            <select id="KitchenCode" name="KitchenCode" class="form-control"></select>
+                            @Html.ValidationMessageFor(model => model.KitchenCode, "", new { @class = "text-danger pull-left" })
+                        </div>
+                    </div>*@
+                                                            <div class="form-group" style="display: none;">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Wastage Prc</label>
+                                                                <div class="col-md-3 col-sm-3 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.WastagePrc, new { @class = "form-control", Type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46" })
+                                                                    @Html.ValidationMessageFor(model => model.WastagePrc, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" style="display: none;">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Pack Size</label>
+                                                                <div class="col-md-3 col-sm-3 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.PackSize, new { @class = "form-control", Type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46" })
+                                                                    @Html.ValidationMessageFor(model => model.PackSize, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" style="display: none;">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Pack Price</label>
+                                                                <div class="col-md-3 col-sm-3 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.PackPrice, new { @class = "form-control", Type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46" })
+                                                                    @Html.ValidationMessageFor(model => model.PackPrice, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Unit Of Measure*</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <select id="PurchasingUnit" name="PurchasingUnit" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.PurchasingUnit, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Unit *</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <select id="WeightPerUnit" name="WeightPerUnit" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.WeightPerUnit, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Addon</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9 ">
+                                                                    @Html.CheckBoxFor(model => model.IsAddon, new { id = "IsAddon" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Addon Category</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    <select id="AddonCategoryMasterId" name="AddonCategoryMasterId" class="form-control"></select>
+                                                                    @Html.ValidationMessageFor(model => model.AddonCategoryMasterId, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            <br />
+
+                                                            <div class="form-group" style="display: none;">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3" style="display: none;">Scale Item</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9" style="display: none;">
+                                                                    @Html.CheckBoxFor(model => model.IsScaleItem, new { @class = "flat" })
+                                                                </div>
+                                                            </div>
+                                                            @*<div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Update Cost On Receipe</label>
+                        <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                            @Html.CheckBoxFor(model => model.IsCostOnReceipe)
+                        </div>
+                    </div>*@
+                                                            <div id="IsMaterialRight">
+
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Allow Discounts</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsDiscount)
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsTax, new { id = "IsTax" })
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax Include Price</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsTaxInclude)
+                                                                    </div>
+                                                                </div>
+
+                                                                @*<div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax On Tax</label>
+                            <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                @Html.CheckBoxFor(model => model.IsTaxOnTax, new { @class = "flat" })
+                            </div>
+                        </div>*@
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Is Under Cost</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.IsUnderCost)
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Auto Production</label>
+                                                                    <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                        @Html.CheckBoxFor(model => model.AutoProduction)
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade tab-pane" id="tab_content2" aria-labelledby="profile-tab">
+
+                                                        <div class="clearfix"></div>
+                                                        <div class="text-info"><b>Locations</b></div>
+                                                        <div id="btnAddToAllLocs">
+                                                            <input type="button" id="btnAddToAll" class="btn btn-round btn-info pull-right"
+                                                                   value="Add to all locations" />
+                                                            @Html.ValidationMessageFor(model => model.ProductLocationViewModel, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                        <br />
+                                                        <table id="tblpricelevel" class="table table table-striped table-bordered bulk_action table-responsive">
+
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style='display:none'>Location Id</th>
+                                                                    <th>Location</th>
+                                                                    <th>Cost Price</th>
+                                                                    <th>Selling Price</th>
+                                                                    <th>Re Order Level</th>
+                                                                    <th>Re Order Qty</th>
+                                                                    <th>Re Order Period</th>
+                                                                    @*<th>Max Price</th>
+                            <th>Min Price</th>
+                            <th>Discount (%)</th>*@
+                                                                    <th>Foreign Customer Price</th>
+                                                                    <th style='display:none;'>Printer Type</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="unititems">
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var productloc in Model.ProductLocationViewModel)
+                                                                    {
+                                                                        <tr class="table-responsive">
+
+                                                                            <td style='display:none'><input name='ProductLocationViewModel.Index' type='hidden' value=@Model.ProductLocationViewModel.IndexOf(productloc) /></td>
+                                                                            <td style='display:none'><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_LocationId' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].LocationId' type='hidden' readonly value='@productloc.LocationId' /></td>
+                                                                            <td style="width:20%">@productloc.Location</td>
+                                                                            @*<td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_CostPrice' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].CostPrice' type='number' min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='0.00' /></td>
+                                    <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_SellingPrice' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].SellingPrice' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='0.00' /></td>
+                                    <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ReOrdderLevel' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ReOrdderLevel' type='number' min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='0.0' /></td>
+                                    <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ReOrderQuantity' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ReOrderQuantity' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='0.0' /></td>
+                                    <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ReOrderPeriod' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ReOrderPeriod' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='0.0' /></td>
+                                    <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ForignCustomerPrice' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ForignCustomerPrice' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='0.0' /></td>*@
+
+                                                                            <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_CostPrice' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].CostPrice' type='number' min='0' , step='0.001' onkeypress='return event.charCode >= 46' value='@productloc.CostPrice.ToString("0.000")' /></td>
+                                                                            <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_SellingPrice' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].SellingPrice' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='@productloc.SellingPrice.ToString("0.00")' /></td>
+                                                                            <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ReOrdderLevel' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ReOrdderLevel' type='number' min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='@productloc.ReOrdderLevel.ToString("0.0")' /></td>
+                                                                            <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ReOrderQuantity' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ReOrderQuantity' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='@productloc.ReOrderQuantity.ToString("0.0")' /></td>
+                                                                            <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ReOrderPeriod' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ReOrderPeriod' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='@productloc.ReOrderPeriod.ToString("0.0")' /></td>
+                                                                            <td><input id='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)]_ForignCustomerPrice' class='form-control' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].ForignCustomerPrice' type="number" min='0' , step='0.01' onkeypress='return event.charCode >= 46' value='@productloc.ForignCustomerPrice.ToString("0.00")' /></td>
+
+                                                                            <td style='display:none;'>
+                                                                                <select id='PrinterType_Id_@Model.ProductLocationViewModel.IndexOf(productloc)' name='ProductLocationViewModel[@Model.ProductLocationViewModel.IndexOf(productloc)].PrinterType_Id' class='form-control'>
+                                                                                    <option selected="selected" value='0'>-- Select Printer --</option>
+                                                                                    @foreach (var pt in Model.PrinterTypes)
+                                                                                    {
+                                                                                        if (productloc.PrinterType_Id == pt.PrinterTypeId)
+                                                                                        {
+                                                                                            <option value=@pt.PrinterTypeId selected="selected">@pt.PrinterTypeName</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value=@pt.PrinterTypeId>@pt.PrinterTypeName</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade tab-pane" id="tab_content3" aria-labelledby="profile-tab">
+                                                        <div class="form-horizontal form-label-left col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Max Price</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.MaxPrice, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00" })
+                                                                    @Html.ValidationMessageFor(model => model.MaxPrice, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Fixed Discount Percentage</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.FixedDiscountPercentage, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00", onkeyup = "return checkDiscountPercentage()", onChange = "return checkDiscountPercentage()" })
+                                                                    @Html.ValidationMessageFor(model => model.FixedDiscountPercentage, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Maximum Discount Percentage</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.MaximumDiscountPercentage, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00" })
+                                                                    @Html.ValidationMessageFor(model => model.MaximumDiscountPercentage, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.DiscountPrecentage, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00", style = "display: none;" })
+                                                                    @Html.ValidationMessageFor(model => model.DiscountPrecentage, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-horizontal form-label-left col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Min Price</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.MinPrice, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00" })
+                                                                    @Html.ValidationMessageFor(model => model.MinPrice, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Fixed Discount Amount</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.FixedDiscountAmount, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00", onkeyup = "return checkDiscountAmount()", onChange = "return checkDiscountAmount()" })
+                                                                    @Html.ValidationMessageFor(model => model.FixedDiscountAmount, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Maximum Discount</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.MaximumDiscount, new { @class = "form-control", type = "number", min = "0", step = "0.01", onkeypress = "return event.charCode >= 46", value = "0.00" })
+                                                                    @Html.ValidationMessageFor(model => model.MaximumDiscount, "", new { @class = "text-danger pull-left" })
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="profile-tab">
+
+                                                        @*<table id="buttons" class="table table table-striped table-bordered">
+                <thead>
+                    <tr style="background-color:whitesmoke">
+                        <th>
+                            Serving Unit: <input id="servingunitname"  style="height:30px; width:20%; text-align:left" type="text" />
+                            Cost Price: <input id="servingunitcp" readonly style="height:30px; width:10%; text-align:right" value="0" type="number" />
+                            Selling Price: <input id="servingunitsp" readonly style="height:30px; width:10%;text-align:right" value="0" type="number" />
+                            <input type="button" id="btnNewServingUnit" onclick="ClearServingUnit();" class="btn btn-link" value="New Serving Unit" />
+                        </th>
+                        </tr>
+                    </thead>
+                </table>*@
+
+
+                                                        @*<table id="buttons" class="table table table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th style="width:70%">Material (UOM)</th>
+                            <th style="width:20%">Quantity</th>
+                            <th style="width:10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="width:70%"><select id="ReceipeProductId" name="ReceipeProductId" class="form-control select2" style="width:100%"></select></td>
+
+                            <td style="width:20%"><input type="number" step="0.01" min="0" onkeypress='return event.charCode >= 46' id="ProductQuantity" class="form-control" /></td>
+
+                            <td style="width:10%"><input type="button" id="btnAdd" class="btn btn-round btn-info" value="+" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <div class="text-info"><b>Receipe Items</b></div>
+                <table id="tblRecepies" class="table table table-striped table-bordered bulk_action">
+                    <thead>
+                        <tr>
+
+
+                            <th >Serving Unit</th>
+                            <th >Serving CP</th>
+                            <th >Serving SP</th>
+                            <th >Material Id</th>
+                            <th >Material</th>
+                            <th >Quantity</th>
+                            <th >UOM</th>
+                            <th ></th>
+                        </tr>
+                    </thead>
+                    <tbody id="receipeitems">
+                        @if (Model != null)
+                        {
+                            foreach (var receipes in Model.Receipes)
+                            {
+
+                                <tr>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@receipes.ProductId</td>
+                                    <td>@receipes.ProductName</td>
+                                    <td>@receipes.UOM</td>
+                                    <td>@receipes.Quantity</td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>*@
+
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
+
+                                                        <table id="unitsbuttons" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Serving Unit</th>
+                                                                    <th>Deduct Stock On Recipe</th>
+                                                                    @*<th>Selling Price</th>*@
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        @*<input id="servingUnit" class="form-control" />*@
+                                                                        <select id="servingUnit" name="servingUnit" class="form-control"></select>
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                            @Html.CheckBoxFor(model => model.DeductStockOnRecipe, new { @class = "flat" })
+                                                                        </div>
+
+                                                                    </td>
+                                                                    @*<td><input id="costPrice" type="number" step="0.01" min="0" onkeypress="return event.charCode >= 46" class="form-control" /></td>
+                            <td><input id="sellingPrice" type="number" step="0.01" min="0" onkeypress="return event.charCode >= 46" class="form-control" /></td>*@
+                                                                    <td><input type="button" id="btnAddUnit" class="btn btn-round btn-info" value="+" /></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <br />
+                                                        <div class="text-info"><b>Serving Units</b></div>
+                                                        <table id="tblUnits" class="table table table-striped table-bordered bulk_action">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Serving Unit</th>
+                                                                    <th style="width:20%">Deduct Stock On Receipe</th>
+                                                                    @*<th>Cost Price</th>
+                            <th>Selling Price</th>*@
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="sunititems">
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var servingunit in Model.ProductServingUnit)
+                                                                    {
+
+                                                                        <tr>
+
+                                                                            <td style='display:none'><input name='ProductServingUnit.Index' type='hidden' value=@Model.ProductServingUnit.IndexOf(servingunit) /></td>
+                                                                            <td><input id='ProductServingUnit+@Model.ProductServingUnit.IndexOf(servingunit)+_ServingUnit' class='form-control' name='ProductServingUnit[@Model.ProductServingUnit.IndexOf(servingunit)].ServingUnit' type='text' readonly value='@servingunit.ServingUnit' /></td>
+                                                                            <td style="width:20%"><input id='ProductServingUnit+@Model.ProductServingUnit.IndexOf(servingunit)+_DeductStockOnRecipe' class='form-control' name='ProductServingUnit[@Model.ProductServingUnit.IndexOf(servingunit)].DeductStockOnRecipe' type='text' readonly value='@servingunit.DeductStockOnRecipe.ToString()' /></td>
+                                                                            <td>
+                                                                                <input id="btnRemoveServingUnit" type="button" value="-"
+                                                                                       class="btn btn-round btn-info"
+                                                                                       onclick="removeServingUnitRow(this);" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content6" aria-labelledby="profile-tab">
+                                                        <table id="buttons" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th>Tax Description</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><select id="TaxId" name="TaxId" class="form-control"></select></td>
+                                                                    <td><input type="button" id="btnAddTax" class="btn btn-round btn-info" value="+" /></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <br />
+                                                        @*<div class="text-info"><b>Taxes Applies</b></div>*@
+                                                        <table id="tblTaxes" class="table table table-striped table-bordered bulk_action">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="display:none">TaxId</th>
+                                                                    <th>Taxes Applies</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="taxitems">
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var tax in Model.ProductTax)
+                                                                    {
+                                                                        <tr>
+                                                                            <td style='display:none'><input name='ProductTax.Index' type='hidden' value=@Model.ProductTax.IndexOf(tax) /></td>
+                                                                            <td style="display:none"><input id='ProductTax+@Model.ProductTax.IndexOf(tax)+_TaxId' class='form-control' name='ProductTax[@Model.ProductTax.IndexOf(tax)].TaxId' type='text' readonly value='@tax.TaxId' /></td>
+                                                                            <td><input id='ProductTax+@Model.ProductTax.IndexOf(tax)+_TaxDescription' class='form-control' name='ProductTax[@Model.ProductTax.IndexOf(tax)].TaxDescription' readonly value='@tax.TaxDescription' /></td>
+
+                                                                            <td>
+                                                                                <input id="btnRemoveProductTax" type="button" value="-"
+                                                                                       class="btn btn-round btn-info"
+                                                                                       onclick="removeProductTaxRow(this);" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content7" aria-labelledby="profile-tab">
+                                                        <div class="form-horizontal form-label-left col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Printer</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.Printer, new { @class = "form-control", Placeholder = "Printer" })
+                                                                    @Html.ValidationMessageFor(model => model.Printer, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Lock Item</label>
+                                                                <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                                    @Html.CheckBoxFor(model => model.IsItemLock, new { @class = "flat" })
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                        </div>
+
+                                                        <div class="form-horizontal form-label-left col-md-6">
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Bar Code</label>
+                                                                <div class="col-md-6 col-sm-9 col-xs-9">
+                                                                    @Html.TextBoxFor(model => model.Barcode, new { @class = "form-control", Placeholder = "Bar Code" })
+                                                                    @Html.ValidationMessageFor(model => model.Barcode, "", new { @class = "text-danger pull-left" })
+                                                                </div>
+                                                            </div>
+
+                                                            <br />
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content8" aria-labelledby="profile-tab">
+
+                                                        <table id="buttons" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th>Supplier</th>
+                                                                    <th>Preferred</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:80%"><select id="SupplierId" style="width:100%" name="SupplierId" class="form-control select2"></select></td>
+                                                                    <td><input id='IsPreferredSupplier' class='check-box' type='checkbox' /></td>
+                                                                    <td><input type="button" id="btnAddSupplier" class="btn btn-round btn-info" value="+" /></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <br />
+                                                        @*<div class="text-info"><b>Suppliers</b></div>*@
+                                                        <table id="tblSuppliers" class="table table table-striped table-bordered bulk_action">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="display:none">SupplierId</th>
+                                                                    <th style="width:80%">Supplier(s)</th>
+                                                                    <th>Preferred</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="supplieritems">
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var supplier in Model.SupplierProduct)
+                                                                    {
+                                                                        <tr>
+                                                                            <td style='display:none'><input name='SupplierProduct.Index' type='hidden' value=@Model.SupplierProduct.IndexOf(supplier) /></td>
+                                                                            <td style='display:none'><input id='SupplierProduct+@Model.SupplierProduct.IndexOf(supplier)+_SupplierId' class='form-control' name='SupplierProduct[@Model.SupplierProduct.IndexOf(supplier)].SupplierId' type='text' readonly value='@supplier.SupplierId' /></td>
+                                                                            <td><input id='SupplierProduct+@Model.SupplierProduct.IndexOf(supplier)+_Supplier' class='form-control' name='SupplierProduct[@Model.SupplierProduct.IndexOf(supplier)].Supplier' readonly value='@supplier.Supplier' /></td>
+                                                                            @if (supplier.IsPreferredSupplier)
+                                                                            {
+                                                                                <td><input id='SupplierProduct+@Model.SupplierProduct.IndexOf(supplier)+_IsPreferredSupplier' type='checkbox' name='SupplierProduct[@Model.SupplierProduct.IndexOf(supplier)].IsPreferredSupplier' class='check-box' checked value='true' /></td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td><input id='SupplierProduct+@Model.SupplierProduct.IndexOf(supplier)+_IsPreferredSupplier' type='checkbox' name='SupplierProduct[@Model.SupplierProduct.IndexOf(supplier)].IsPreferredSupplier' class='check-box' value='false' /></td>
+                                                                            }
+                                                                            <td>
+                                                                                <input id="removeProductSupplier" type="button" value="-"
+                                                                                       class="btn btn-round btn-info"
+                                                                                       onclick="removeProductSupplierRow(this);" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+
+                                                    </div>
+
+
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content9" aria-labelledby="profile-tab">
+
+                                                        <table id="buttons" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th>Printer Types</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:80%"><select id="PrinterID" style="width:100%" name="PrinterID" class="form-control select2"></select></td>
+
+                                                                    <td><input type="button" id="btnAddPrinter" class="btn btn-round btn-info" value="+" /></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <br />
+
+                                                        <table id="KitchenMasters" class="table table table-striped table-bordered bulk_action">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="display:none">KitchenId</th>
+                                                                    <th style="width:80%">Printer Type(s)</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="PrinterTypeitems">
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var KitchenPrinters in Model.KitchenPrinters_Modl)
+                                                                    {
+
+                                                                        <tr>
+                                                                            <td style='display:none'><input name='KitchenPrinters_Modl.Index' type='hidden' value=@Model.KitchenPrinters_Modl.IndexOf(KitchenPrinters) /></td>
+                                                                            <td style='display:none'><input id='KitchenPrinters_Modl+@Model.KitchenPrinters_Modl.IndexOf(KitchenPrinters)+_KitchenID' class='form-control' name='KitchenPrinters_Modl[@Model.KitchenPrinters_Modl.IndexOf(KitchenPrinters)].KitchenID' type='text' readonly value='@KitchenPrinters.KitchenID' /></td>
+                                                                            <td><input id='KitchenPrinters_Modl+@Model.KitchenPrinters_Modl.IndexOf(KitchenPrinters)+_KitchenPrinterName' class='form-control' name='KitchenPrinters_Modl[@Model.KitchenPrinters_Modl.IndexOf(KitchenPrinters)].KitchenPrinterName' readonly value='@KitchenPrinters.KitchenPrinterName' /></td>
+
+                                                                            <td>
+                                                                                <input id="removeKitchenPrinterType" type="button" value="-"
+                                                                                       class="btn btn-round btn-info"
+                                                                                       onclick="removeKitchenPrinterTypeRow(this);" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content10" aria-labelledby="profile-tab">
+                                                        <table id="buttons" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Location</th>
+                                                                    <th>Serving Unit</th>
+                                                                    <th>Price Level</th>
+                                                                    <th>Cost Price</th>
+                                                                    <th>Selling Price</th>
+                                                                    <th>Qty</th>
+                                                                    @*<th>Selling Price</th>*@
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    @*<td style="width:25%"><select id="PrinterID" style="width:100%" name="PrinterID" class="form-control select2"></select></td>*@
+                                                                    <td style="width:25%"><select id="LocationID1" style="width:100%" name="LocationID1" class="form-control select2"></select></td>
+                                                                    <td style="width:15%"><select id="UnitID1" style="width:100%" name="UnitID1" class="form-control select2"></select></td>
+                                                                    <td style="width:15%"><select id="PriceLevelID" style="width:100%" name="PriceLevelID" class="form-control select2"></select></td>
+                                                                    <td style="width:15%"><input type="number" style="width:100%" class="form-control has-feedback-left text-right" min="0" value="0" id="costprice" placeholder="Cost Price"></td>
+                                                                    <td style="width:15%"><input type="number" style="width:100%" class="form-control has-feedback-left text-right" min="0" value="0" id="Selling" placeholder="Selling Price"></td>
+                                                                    <td style="width:30%"><input type="number" style="width:100%" class="form-control has-feedback-left text-right" min="0" value="0" id="Qty" placeholder="Quantity"></td>
+                                                                    <td><input type="button" id="btnAddpricelevel" class="btn btn-round btn-info" value="+" /></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="text-info"><b>Price Levels</b></div>
+                                                        <table id="tblUnits" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <td style="width:25%">Location</td>
+                                                                    <td style="width:15%">Serving Unit</td>
+                                                                    <td style="width:15%">Price Level</td>
+                                                                    <td style="width:15%">Cost Price</td>
+                                                                    <td style="width:15%">Selling Price</td>
+                                                                    <td style="width:15%">Qty</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="pricelevels">
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var pricelevellist in Model.PriceLevelTypes)
+                                                                    {
+                                                                        <tr>
+                                                                            @*<td style='display:none'><input name='PriceLevelTypes.Index' type='hidden' value=@Model.PriceLevelTypes.IndexOf(pricelevellist) /></td>
+                                                                            <td style='display:none'><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_InvPriceLevelID' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].InvPriceLevelID' type='text' readonly value='@pricelevellist.InvPriceLevelID' /></td>
+                                                                            <td style='display:none'><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_LocationID' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].LocationID' readonly value='@pricelevellist.LocationId' /></td>  
+                                                                            <td style='display:none'><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_ServingUnitID' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].ServingUnitID' readonly value='@pricelevellist.ServingUnitID' /></td>*@
+                                                                           
+
+
+                                                                            @*<td><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_LocationName' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].LocationName' readonly value='@pricelevellist.LocationName' /></td>*@
+                                                                            @*<td><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_ServingUnit' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].ServingUnit' readonly value='@pricelevellist.ServingUnit' /></td>
+                                                                            <td><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_PriceLevelName' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].PriceLevelName' readonly value='@pricelevellist.PriceLevelName' /></td>
+                                                                            <td><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_CostPrice' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].CostPrice' readonly value='@pricelevellist.CostPrice' /></td>
+                                                                            <td><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_SellingPrice' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].SellingPrice' readonly value='@pricelevellist.SellingPrice' /></td>
+                                                                            <td><input id='PriceLevelTypes+@Model.PriceLevelTypes.IndexOf(pricelevellist)+_Qty' class='form-control' name='PriceLevelTypes[@Model.PriceLevelTypes.IndexOf(pricelevellist)].Qty' readonly value='@pricelevellist.Qty' /></td>*@
+                                                                            @* <td>
+                                                                                <input type="button" id="removePriceLevel" class="btn btn-round btn-info" value="-" onclick="removePriceLevelTypeRow(this);" />
+                                                                            </td>    *@
+                                                                        </tr>
+
+
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div> 
+
+
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content11" aria-labelledby="profile-tab">
+                                                        <table id="buttons" class="table table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Target Period</th>
+                                                                    <th>Target Type</th>
+                                                                    <th>Enter Qty/Value</th>  
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    @*<td style="width:25%"><select id="PrinterID" style="width:100%" name="PrinterID" class="form-control select2"></select></td>*@
+                                                                    <td style="width:25%">   <select class="form-control" id="TypeIdTargetPeriod" name="TypeIdTargetPeriod">
+                                                                                    <option value=''>-- Select a TargertPeriod --</option>
+                                                                                    <option>Daily</option>
+                                                                                    <option>Weekly</option>
+                                                                                    <option>Monthly</option>
+                                                                                    <option>Quarterly</option>
+                                                                                    <option>Yearly</option>
+                                                                                </select></td>
+                                                                    <td style="width:25%">
+                                                                        <select class="form-control" id="TypeIdTargetType" name="TypeIdTargetType">
+                                                                            <option value=''>-- Select a TargetType --</option>
+                                                                            <option>Qty</option>
+                                                                            <option>Value</option>
+                                                                        </select> 
+                                                                    </td>
+                                                                    @*<td style="width:15%">@*<input type="number" style="width:100%" class="form-control has-feedback-left text-right" min="0" value="0" id="Target_Qty">*@
+                                                                  
+                                                                    <td style="width:25%">
+                                                                        <div class="form-group">
+                                                                            @Html.TextBoxFor(model => model.Target_Qty, new { @class = "form-control", Placeholder = "Enter Qty/Value", type = "number", step = "0.01" })
+                                                                            @Html.ValidationMessageFor(model => model.Target_Qty, "", new { @class = "text-danger" })
+                                                                        </div>
+                                                                    </td>
+
+@*<td style="width:15%"><input type="number" style="width:100%" class="form-control has-feedback-left text-right" min="0" value="0" id="Target_Qty" placeholder="Enter Qty/Value"></td>*@ 
+                                                                </tr>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr>
+                                                                    
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                     
+                                                    </div> 
+
+                                                    </div>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+                                                <div class="pull-left">
+                                                    <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Index", null, new { })'" />
+                                                </div>
+                                                <div class="pull-left">
+                                                    <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewAllProducts", null, new { })'" />
+                                                </div>
+                                                <button type="submit" id="btnsubmit" class="btn btn-success">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function checkProductCode() {
+        document.getElementById('validatecode').innerHTML = '';
+
+        $.ajax({
+            url: "@Url.Action("VaidateProductCode", "Product")",
+            data: { productcode: $("#ProductCode").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+                if (resp != null || resp != "") {
+                    document.getElementById('validatecode').innerHTML = "Product Code Already Exists";
+                    // document.getElementById('ProductCode').value = '';
+
+                } else {
+                    document.getElementById('validatecode').innerHTML = "";
+                }
+            }
+        });
+    }
+</script>
+
+
+<script> 
+    $.getJSON("@Url.Action("GetActiveKitchens", "Product")", function (data) {
+
+        var KitchenCode = $("#KitchenCode");
+
+        KitchenCode.empty();
+        KitchenCode.append("<option value=''>-- Select a Kitchen --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            KitchenCode.append($('<option />', { value: optionaldata.KitchenCode }).html(optionaldata.KitchenDesc));
+        });
+
+        if ('@Model.KitchenCode') {
+            $('#KitchenCode').val('@Model.KitchenCode').trigger("change");
+        }
+        else {
+            $('#KitchenCode').val('').trigger("change");
+        }
+    });
+
+
+    $.getJSON("@Url.Action("GetPrinters", "Product")", function (data) {
+
+        var PrinterCode = $("#PrinterID");
+
+        PrinterCode.empty();
+        PrinterCode.append("<option value=''>-- Select a Printer --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PrinterCode.append($('<option />', { value: optionaldata.KitchenID }).html(optionaldata.KitchenPrinterName));
+        });
+
+        if ('@Model.PrinterCode') {
+            $('#PrinterCode').val('@Model.PrinterCode').trigger("change");
+        }
+        else {
+            $('#PrinterCode').val('').trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetPriceLevels", "Product")", function (data){
+
+        var PrinterCode = $("#PriceLevelID");
+
+        PrinterCode.empty();
+        PrinterCode.append("<option value=''>-- Select a Price Level --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PrinterCode.append($('<option />', { value: optionaldata.InvPriceLevelID }).html(optionaldata.PriceLevelName));
+        });
+
+        if ('@Model.PrinterCode') {
+            $('#PrinterCode').val('@Model.PrinterCode').trigger("change");
+        }
+        else {
+            $('#PrinterCode').val('').trigger("change");
+        }
+    });
+
+
+    $.getJSON("@Url.Action("GetLocations", "Product")", function (data){
+
+        var LocationCode = $("#LocationID1");
+
+        LocationCode.empty();
+        LocationCode.append("<option value=''>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            LocationCode.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+        });
+
+        if ('@Model.LocationCode') {
+            $('#LocationCode').val('@Model.LocationCode').trigger("change");
+        }
+        else {
+            $('#LocationCode').val('').trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetAllServingUnits1", "Product")", function (data){
+
+        var PrinterCode = $("#UnitID1");
+
+        PrinterCode.empty();
+        PrinterCode.append("<option value='0'>-- Select a Unit--</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PrinterCode.append($('<option />', { value: optionaldata.ServingUnitId }).html(optionaldata.ServingUnitName));
+        });
+        if ('@Model.PrinterCode') {
+            $('#PrinterCode').val('@Model.PrinterCode').trigger("change");
+        }
+        else {
+            $('#PrinterCode').val('').trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetPrinterTypes", "Product")", function (data) {
+
+        var PrinterTypeId = $("#PrinterTypeId");
+
+        PrinterTypeId.empty();
+        PrinterTypeId.append("<option value='0'>-- Select Printer --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PrinterTypeId.append($('<option />', { value: optionaldata.PrinterTypeId }).html(optionaldata.PrinterTypeName));
+        });
+
+        if ('@ViewBag.PrinterTypeId') {
+            $('#PrinterTypeId').val(@ViewBag.PrinterTypeId).trigger("change");
+        }
+        else {
+            $('#PrinterTypeId').val(0).trigger("change");
+        }
+    });
+
+    $("#PrinterTypeId").change(function () {
+        var pid = this.value;
+
+        $.getJSON("@Url.Action("GetActiveKitchensByPrinterId", "Product")", { id: pid },
+            function (data) {
+
+                var KitchenCode = $("#KitchenCode");
+
+                KitchenCode.empty();
+                KitchenCode.append("<option value=''>-- Select a Kitchen --</option>");
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    KitchenCode.append($('<option />', { value: optionaldata.KitchenCode }).html(optionaldata.KitchenDesc));
+                });
+            });
+    });
+
+    $.getJSON("@Url.Action("GetUnitOfMeasures", "UnitConversion")", function (data) {
+
+        var PurchasingUnit = $("#PurchasingUnit");
+
+        PurchasingUnit.empty();
+        PurchasingUnit.append("<option value='0'>-- Select a Unit Of Measure --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PurchasingUnit.append($('<option />', { value: optionaldata.UnitOfMeasureId }).html(optionaldata.UnitOfMeasureName));
+        });
+
+        if ('@ViewBag.PurchasingUnitId') {
+            $('#PurchasingUnit').val(@ViewBag.PurchasingUnitId).trigger("change");
+        }
+        else {
+            $('#PurchasingUnit').val(0).trigger("change");
+        }
+        var WeightPerUnit = $("#WeightPerUnit");
+        WeightPerUnit.append("<option value='0'>-- Select a Sub Unit --</option>");
+        $.getJSON("@Url.Action("GetUnitOfConversionsById", "UnitConversion")", { id: @ViewBag.PurchasingUnitId },
+            function (data) {
+
+                var WeightPerUnit = $("#WeightPerUnit");
+
+                WeightPerUnit.empty();
+                WeightPerUnit.append("<option value='0'>-- Select a Sub Unit --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    WeightPerUnit.append($('<option />', { value: optionaldata.UnitConversionId }).html(optionaldata.SubUnitSymbol));
+                });
+
+                if ('@ViewBag.WeightPerUnit') {
+                    $('#WeightPerUnit').val(@ViewBag.WeightPerUnit).trigger("change");
+                } else {
+                    $('#WeightPerUnit').val(0).trigger("change");
+                }
+            });
+    });
+
+    $("#PurchasingUnit").change(function () {
+        var measurementid = this.value;
+
+        $.getJSON("@Url.Action("GetUnitOfConversionsById", "UnitConversion")", { id: measurementid },
+            function (data) {
+
+                var WeightPerUnit = $("#WeightPerUnit");
+                WeightPerUnit.empty();
+                WeightPerUnit.append("<option value='0'>-- Select a Sub Unit --</option>");
+                $.each(JSON.parse(data), function (index, optionaldata)
+                {
+                    WeightPerUnit.append($('<option />', { value: optionaldata.UnitConversionId }).html(optionaldata.SubUnitSymbol));
+                });
+            });
+    });
+
+    $.getJSON("@Url.Action("GetAddonCategories", "Product")", function (data) {
+
+        var AddonCategoryMasterId = $("#AddonCategoryMasterId");
+
+        AddonCategoryMasterId.empty();
+        AddonCategoryMasterId.append("<option value='0'>-- Select an Addon Category --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            AddonCategoryMasterId.append($('<option />', { value: optionaldata.AddonCategoryMasterId }).html(optionaldata.AddonCatName));
+        });
+
+        if ('@ViewBag.AddonCategoryMasterId') {
+            $('#AddonCategoryMasterId').val(@ViewBag.AddonCategoryMasterId).trigger("change");
+        }
+        else {
+            $('#AddonCategoryMasterId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetSuppliers", "Supplier")", function (data) {
+        
+        var supplierId = $("#SupplierId");
+        supplierId.empty();
+        supplierId.append("<option value='0'>-- Select a Supplier --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            supplierId.append($('<option />', { value: optionaldata.SupplierID }).html(optionaldata.SupplierName));
+
+        });
+
+        if ('@ViewBag.supplierId') {
+            $('#supplierId').val(@ViewBag.supplierId).trigger("change");
+        } else {
+            $('#supplierId').val(0).trigger("change");
+        }
+    });
+
+
+
+    $.getJSON("@Url.Action("GetActiveTaxes", "Tax")", function (data) {
+
+        var taxId = $("#TaxId");
+        taxId.empty();
+        taxId.append("<option value='0'>-- Select a Tax --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            taxId.append($('<option />', { value: optionaldata.TaxId }).html(optionaldata.TaxName));
+
+        });
+        if ('@ViewBag.taxId') {
+            $('#taxId').val(@ViewBag.taxId).trigger("change");
+        } else {
+            $('#taxId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActiveProducts", "Product")", function (data)
+    {
+
+        var productdorpdown = $("#ReceipeProductId");
+
+        productdorpdown.empty();
+        productdorpdown.append("<option value='0'>-- Select a Product --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            productdorpdown.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName + " (" + optionaldata.UOM + ")"));
+
+        });
+
+        if ('@ViewBag.ReceipeProductId') {
+            $('#ProductId').val(@ViewBag.ReceipeProductId).trigger("change");
+        } else {
+            $('#ProductId').val(0).trigger("change");
+        }
+    });
+    
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var DepartmentId = $("#DepartmentId");
+        var CategoryId = $("#CategoryId");
+        var subCategoryId = $("#SubCategoryId");
+
+        DepartmentId.empty();
+        DepartmentId.append("<option value='0'>-- Select a department --</option>");
+        CategoryId.append("<option value='0'>-- Select Category --</option>");
+        subCategoryId.append("<option value='0'>-- Select sub Category --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DepartmentId.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+        
+        if ('@ViewBag.DepartmentId') {
+            $('#DepartmentId').val(@ViewBag.DepartmentId).trigger("change");
+        } else {
+            $('#DepartmentId').val(0).trigger("change");
+        }
+    });
+
+    // categories
+    $.getJSON("@Url.Action("GetActiveCategories", "Category")",
+    function (data) {
+
+        var CategoryId = $("#CategoryId");
+
+        CategoryId.empty();
+        CategoryId.append("<option value='0'>-- Select Category --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+        });
+
+        if ('@ViewBag.CategoryId') {
+            $('#CategoryId').val(@ViewBag.CategoryId).trigger("change");
+        } else {
+            $('#CategoryId').val(0).trigger("change");
+        }
+    });
+
+    //Sub Categories
+    $.getJSON("@Url.Action("GetActiveSubCategories", "Product")",
+    function (data) {
+
+        var subCategoryId = $("#SubCategoryId");
+
+        subCategoryId.empty();
+        subCategoryId.append("<option value='0'>-- Select sub Category --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            subCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+        });
+
+        if ('@ViewBag.SubCategoryId') {
+            $('#SubCategoryId').val(@ViewBag.SubCategoryId).trigger("change");
+        } else {
+            $('#SubCategoryId').val(0).trigger("change");
+        }
+    });
+
+    //
+    $("#DepartmentId").change(function () {
+        var diptId = this.value;
+
+        $.getJSON("@Url.Action("GetCategoriesByDepartmentId", "Category")", { id: diptId },
+            function (data) {
+
+                var CategoryId = $("#CategoryId");
+
+                CategoryId.empty();
+                CategoryId.append("<option value='0'>-- Select Category --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+                });
+
+                @*if ('@ViewBag.CategoryId') {
+                    $('#CategoryId').val(@ViewBag.CategoryId).trigger("change");
+                } else {
+                    $('#CategoryId').val(0).trigger("change");
+                }*@
+            });
+    });
+
+    $("#CategoryId").change(function () {
+        var catid = this.value;
+
+        $.getJSON("@Url.Action("GetSubcatByCatId", "Product")", { id: catid },
+            function (data) {
+
+                var subCategoryId = $("#SubCategoryId");
+
+                subCategoryId.empty();
+                subCategoryId.append("<option value='0'>-- Select sub Category --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    subCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+                });
+
+                @*if ('@ViewBag.SubCategoryId') {
+                    $('#SubCategoryId').val(@ViewBag.SubCategoryId).trigger("change");
+                } else {
+                    $('#SubCategoryId').val(0).trigger("change");
+                }*@
+            });
+    });
+
+
+    //Load Printer Types into Locations
+    $.getJSON("@Url.Action("GetPrinterTypes", "Product")", function (data) {
+
+        var rowCount = $('#unititems tr').length;
+        for (var i = 0; i < rowCount; i++) {
+            var PrinterType_Id_0 = $("#PrinterType_Id_" + i);
+
+            PrinterType_Id_0.empty();
+            PrinterType_Id_0.append("<option value='0'>-- Select Printer --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                PrinterType_Id_0.append($('<option />', { value: optionaldata.PrinterTypeId }).html(optionaldata.PrinterTypeName));
+            });
+        }
+    });
+
+    //Serving Units
+    $.getJSON("@Url.Action("GetAllServingUnits", "Product")", function (data) {
+        ;
+        var servingUnit = $("#servingUnit");
+
+        servingUnit.empty();
+        servingUnit.append("<option value='0'>-- Select Serving Unit --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            servingUnit.append($('<option />', { value: optionaldata.ServingUnitName }).html(optionaldata.ServingUnitName));
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    function checkDiscountAmount() {
+        if (!($('#IsDiscount').is(":checked"))) {
+            $("#FixedDiscountAmount").val("0.00");
+            return;
+        }
+        var Dis = $("#FixedDiscountPercentage");
+        if (Dis.val() > 0) {
+            alert("Cannot apply fixed discount percentage with fixed discount amount for the same item..!");
+            $("#FixedDiscountAmount").val("0.00");
+            return;
+        }
+    }
+</script>
+
+
+<script type="text/javascript">
+    function checkDiscountPercentage() {
+        if (!($('#IsDiscount').is(":checked"))) {
+            $("#FixedDiscountPercentage").val("0.00");
+            return;
+        }
+        var Dis = $("#FixedDiscountAmount");
+        if (Dis.val() > 0) {
+            alert("Cannot apply fixed discount amount with fixed discount percentage for the same item..!");
+            $("#FixedDiscountPercentage").val("0.00");
+            return;
+        }
+        var DisPer = $("#FixedDiscountPercentage");
+        if (DisPer.val() > 100) {
+            $("#FixedDiscountPercentage").val("100.00");
+            return;
+        }
+    }
+</script>
+
+
+ @*<script>
+    //
+     $.getJSON("@Url.Action("SubmitData", "Product")", function (data)
+     {
+         
+         console.log("heey1");
+         $(document).ready(function() {
+             $('body').on('submit', function(event) {
+                 event.preventDefault();
+                 
+                 console.log("heey2");
+                 var selectedValue = $('#TypeIdTargetPeriod').val();
+
+                 $.ajax({
+
+                     data: { selectedValue: selectedValue },
+                     success: function(response) {
+                         alert('Data sent successfully: ' + response);
+                     },
+                     error: function(error) {
+                         alert('Error: ' + error);
+                     }
+                 });
+             });
+         });
+     });
+     //
+     
+</script>*@
+@*<script>
+    $("#TypeIdTargetPeriod").change(function () {
+        var pid = this.value;
+        console.alert(pid);
+        $.getJSON("@Url.Action("GetTargertPeriodId", "Product")", { id: pid },
+            function (data) {
+
+                var  TypeIdTargetPeriod = $("#TypeIdTargetPeriod");
+
+                TypeIdTargetPeriod.empty();
+                TypeIdTargetPeriod.append("<option value=''>-- Select a TypeIdTargetPeriod --</option>");
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    TypeIdTargetPeriod.append($('<option />', { value: optionaldata.id }).html(optionaldata.Target_TypeID));
+                });
+            });
+    });
+
+</script>*@
+
+
+@*<script>
+    $("#TypeIdTargetType").change(function () {
+        var pid = this.value;
+
+        $.getJSON("@Url.Action("GetTargertTypeId", "Product")", { id: pid },
+            function (data) {
+
+                var  TargetType = $("#TargetType");
+
+                TargertPeriod.empty();
+                TargertPeriod.append("<option value=''>-- Select a TargetType --</option>");
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    TargertPeriod.append($('<option />', { value: optionaldata.id }).html(optionaldata.Target_TypeID));
+                });
+            });
+    });
+
+</script>*@
+
+ <script>
+    $("body").on("click", "#btnsubmit", function ()
+    {
+        if ($("#SupplierId").val() == 0 || $("#SupplierId").val() == null)
+        {
+         alert("Select a Supplier!");
+         return false;
+        }
+    });
+ </script>
+    <script>
+        $(document).ready(function() {
+            $('#TypeIdTargetPeriod').change(function() {
+                var selectedValue = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("UpdateTargetPeriod", "Product")',
+                    type: 'POST',
+                    data: {
+                        TypeIdTargetType: selectedValue
+                    },
+                    success: function(response) {
+                        console.log("Value sent to the server successfully.");
+                    },
+                    error: function(error) {
+                        console.log("Error sending value to the server:", error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+ 
+    <script>
+        $(document).ready(function() {
+            $('#TypeIdTargetType').change(function() {
+                var selectedValue = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("UpdateTargetType", "Product")',
+                    type: 'POST',
+                    data: {
+                        TypeIdTargetType: selectedValue
+                    },
+                    success: function(response) {
+                        console.log("Value sent to the server successfully.");
+                    },
+                    error: function(error) {
+                        console.log("Error sending value to the server:", error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+@*<script>
+    $(document).ready(function() {
+        $.getJSON("@Url.Action("SubmitData", "Product")", function(data) {
+            
+            console.log("heey1");
+
+            $('body').on('submit', 'form', function(event) {
+                event.preventDefault();
+                
+                console.log("heey2");
+                var selectedValue = $('#TypeIdTargetPeriod').val();
+
+                $.ajax({
+                    url: "@Url.Action("SubmitData", "Product")", // Ensure this is the correct URL
+                    type: "GET", // or "GET" depending on your action method
+                    data: { selectedValue: selectedValue },
+                    success: function(response) {
+                        alert('Data sent successfully: ' + response);
+                    },
+                    error: function(error) {
+                        alert('Error: ' + error.responseText);
+                    }
+                });
+            });
+        });
+    });
+</script>*@
+
+<script type="text/javascript">    
+        $("body").on("click", "#btnAddpricelevel", function ()
+        {
+        
+            if ($("#LocationID1").val() == 0 || $("#LocationID1").val() == null)
+            {
+                alert("Please select a location !");
+                return;
+            }
+
+            //if ($("#UnitID1").val() == 0 || $("#UnitID1").val() == null)
+            //{
+            //    alert("Please select a serving unit !");
+            //    return;
+            //}
+
+            if ($("#PriceLevelID").val() == 0 || $("#PriceLevelID").val() == null)
+            {
+                alert("Please select a price level !");
+                return;
+            }
+
+            if ($("#costprice").val() == 0  || $("#costprice").val() == null)
+            {
+                alert("You cannot add 0 value in cost price !");
+                return;
+            }
+
+            if ($("#Selling").val() == 0  || $("#Selling").val() == null)
+            {
+                alert("You cannot add 0 value in selling price !");
+                return;
+            }
+
+            if($("#Selling").val() == 0 || $("#costprice").val() == 0  || $("#Selling").val() == null || $("#costprice").val() == null)
+            {
+                alert("You cannot add cost price 0 value and selling price 0 value! " + pricelevels);
+                return;
+            }
+
+
+
+            var SysLocationID = $("#LocationID1");//
+            var UnitOfMeasureId = $("#UnitID1");
+
+            var ServingUnit = $("#UnitID1 option:selected").text();
+            //alert(ServingUnit);
+            var InvPriceLevelID = $("#PriceLevelID");//
+
+            var LocationName = $("#LocationID1 option:selected").text();
+            var PriceLevelName = $("#PriceLevelID option:selected").text();
+            var CostPrice = $("#costprice");
+            var SellingPrice = $("#Selling");
+            var Qty = $("#Qty");
+        
+
+
+            var table = document.getElementById('pricelevels');
+            for (var r = 0, n = table.rows.length; r < n; r++)
+            { 
+                if (table.rows[r].cells[6].firstChild.value == SysLocationID.val() && table.rows[r].cells[7].firstChild.value == UnitOfMeasureId.val() && table.rows[r].cells[8].firstChild.value == InvPriceLevelID.val())
+                    //&& table.rows[r].cells[1].firstChild.value == SysLocationID.val()  && table.rows[r].cells[3].firstChild.value == ServingUnit && table.rows[r].cells[4].firstChild.value == PriceLevelName)
+                {
+                    alert("Already added " + PriceLevelName);
+                    return;
+                } 
+            }
+
+
+
+            @{
+            Model.PriceLevelTypes.Add(new InvPriceLevel());
+        }
+            var pricelevels = $("#pricelevels").children("tr").length;
+            var pricelevelTypeindexindexCell = "<td style='display:none'><input name='PriceLevelTypes.Index' type='hidden' value='" + pricelevels + "' /></td>";
+
+            var SysLocationIDCell = "<td style='display:none'><input id='PriceLevelTypes" + pricelevels + "_LocationID' class='form-control' name='PriceLevelTypes[" + pricelevels + "].LocationID' type='text' readonly value='" + SysLocationID.val() + "' /></td>";
+
+            var LocationNameCell = "<td><input id='PriceLevelTypes" + pricelevels + "_LocationName'  class='form-control'  name='PriceLevelTypes[" + pricelevels + "].LocationName' type='text' readonly value='" + LocationName + "' /></td>";
+
+
+            var ServingUnitIDCell = "<td style='display:none'><input id='PriceLevelTypes" + pricelevels + "_ServingUnitID' class='form-control' name='PriceLevelTypes[" + pricelevels + "].ServingUnitID' type='text' readonly value='" + UnitOfMeasureId.val() + "' /></td>";
+
+            var ServingUnitCell = "<td><input id='PriceLevelTypes" + pricelevels + "_ServingUnit' class='form-control' name='PriceLevelTypes[" + pricelevels + "].ServingUnit' type='text' readonly value='" + ServingUnit + "' /></td>";
+
+
+            var pricelevelTypeindexIdCell = "<td style='display:none'><input id='PriceLevelTypes" + pricelevels + "_InvPriceLevelID' class='form-control' name='PriceLevelTypes[" + pricelevels + "].InvPriceLevelID' type='text' readonly value='" + InvPriceLevelID.val() + "' /></td>";
+            var pricelevelTypeindexNameCell = "<td><input id='PriceLevelTypes" + pricelevels + "_PriceLevelName'  class='form-control'  name='PriceLevelTypes[" + pricelevels + "].PriceLevelName' type='text' readonly value='" + PriceLevelName + "' /></td>";
+            var CostPriceCell = "<td><input id='PriceLevelTypes" + pricelevels + "_CostPrice'  class='form-control'  name='PriceLevelTypes[" + pricelevels + "].CostPrice' type='number'  min='0' step='0.01' value='" + CostPrice.val() + "' /></td>";
+            var SellingPriceCell = "<td><input id='PriceLevelTypes" + pricelevels + "_SellingPrice'  class='form-control'  name='PriceLevelTypes[" + pricelevels + "].SellingPrice' type='number'  min='0' step='0.01' value='" + SellingPrice.val() + "' /></td>";
+            var QtyCell = "<td><input id='PriceLevelTypes" + pricelevels + "_Qty'  class='form-control'  name='PriceLevelTypes[" + pricelevels + "].Qty' type='number'  min='0' step='0.01' value='" + Qty.val() + "' /></td>";
+
+            var pricelevelTypeindexRemoveCell = "<td><input id='btnAddpricelevel' type='button' value='-' class='btn btn-round btn-info'  onclick='removePriceLevelRow(" + pricelevels + ");' /></td>";
+
+            if (UnitOfMeasureId.val()!="0")
+            {
+                ServingUnitCell="<td><input id='PriceLevelTypes" + pricelevels + "_ServingUnit' class='form-control' name='PriceLevelTypes[" + pricelevels + "].ServingUnit' type='text' readonly value='" + ServingUnit + "' /></td>";
+            }
+            else
+            {
+                ServingUnitCell="<td><input id='PriceLevelTypes" + pricelevels + "_ServingUnit' class='form-control' name='PriceLevelTypes[" + pricelevels + "].ServingUnit' type='text' readonly value='' /></td>";
+
+            }
+            
+       
+
+
+
+            var newPriceLevelTypeRow = "<tr id='trpricelevels" + pricelevels + "'>"+ LocationNameCell + ServingUnitCell+pricelevelTypeindexNameCell +CostPriceCell+ SellingPriceCell+QtyCell+SysLocationIDCell+ServingUnitIDCell+pricelevelTypeindexIdCell+pricelevelTypeindexRemoveCell+"</tr>";
+            //+   ServingUnitCell + pricelevelTypeindexindexCell + pricelevelTypeindexIdCell + pricelevelTypeindexNameCell + CostPriceCell + SellingPriceCell + QtyCell + pricelevelTypeindexRemoveCell + "</tr>";
+            $("#pricelevels").append(newPriceLevelTypeRow);
+            //
+        });
+
+    function removePriceLevelRow(id)
+        {
+            var controlToBeRemoved = "#trpricelevels" + id;
+            $(controlToBeRemoved).remove();
+        }
+
+
+    function removePriceLevelTypeRow(button)
+        {
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(1).html();
+            if (confirm("Do you want to delete? "))
+            {
+                var table = $("#pricelevels")[0];
+                table.deleteRow(row[0].rowIndex - 1);
+            }
+    }
+
+
+</script>
+ 
+@*Recepies Handling*@
+<script type="text/javascript">
+    $("body").on("click", "#btnAdd", function () {
+
+
+        //Reference the Name and Country TextBoxes.
+
+        if ($("#ReceipeProductId").val() == 0 || $("#ReceipeProductId").val() == null) {
+            alert("Select a product !");
+            return;
+        }
+
+        if ($("#ProductQuantity").val() === "") {
+            alert("Quantity required!");
+            return;
+        }
+
+        var productId = $("#ReceipeProductId");
+        var productName = $("#ReceipeProductId option:selected").text().split(" (")[0];
+        var productQuantity = $("#ProductQuantity");
+        var productUOM = $("#ReceipeProductId option:selected").text().split(" (")[1].split(")")[0];
+
+        @{
+                Model.Receipes.Add(new Receipe());
+            }
+        var index = $("#receipeitems").children("tr").length;
+        var indexCell = "<td style='display:none'><input name='Receipes.Index' type='hidden' value='" + index + "' /></td>";
+        var productIdCell = "<td><input id='Receipes" + index + "_MaterialId' class='form-control' name='Receipes[" + index + "].MaterialId' type='text' readonly value='" + productId.val() + "' /></td>";
+
+        var productNameCell = "<td><input id='Receipes" + index + "_ProductName'  class='form-control'  name='Receipes[" + index + "].ProductName' type='text' readonly value='" + productName + "' /></td>";
+        var productQuantityCell = "<td><input id='Receipes" + index + "_Quantity'  class='form-control'  name='Receipes[" + index + "].Quantity' type='number' min='0' step='0.01' value='" + productQuantity.val() + "' /></td>";
+        var productUOMCell = "<td><input id='Receipes" + index + "_UOM'  class='form-control'  name='Receipes[" + index + "].UOM' type='text' readonly value='" + productUOM + "' /></td>";
+        var removeCell = "<td><input id='btnAdd' type='button' value='-' class='btn btn-round btn-info'  onclick='removeRow(" + index + ");' /></td>";
+
+        var newRow = "<tr id='trReceipe" + index + "'>" +
+            indexCell + productIdCell + productNameCell + productQuantityCell + productUOMCell + removeCell + "</tr>";
+        $("#receipeitems").append(newRow);
+    });
+
+    function removeRow(id) {
+        var controlToBeRemoved = "#trReceipe" + id;
+        $(controlToBeRemoved).remove();
+    }
+</script>
+
+<script>
+    function ClearServingUnit() {
+        document.getElementById("servingunitname").value = "";
+        document.getElementById("servingunitcp").value = "0";
+        document.getElementById("servingunitsp").value = "0";
+    }
+
+</script>
+
+@*Taxes Handling*@
+<script type="text/javascript">
+    $("body").on("click", "#btnAddTax", function () {
+        //Reference the Name and Country TextBoxes.
+
+        if ($("#TaxId").val() == 0 || $("#TaxId").val() == null) {
+            alert("Select a Tax !");
+            return;
+        }
+
+        if (document.getElementById('IsTax').checked == false) {
+            alert("Tick on Tax in  General Tab ");
+            return;
+        }
+
+        var taxId = $("#TaxId");
+        var taxName = $("#TaxId option:selected").text();
+
+        //Check duplicates
+        var table = document.getElementById('taxitems');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            if (table.rows[r].cells[1].firstChild.value == taxId.val()) {
+                alert("Tax already Exists..! " + taxName);
+                return;
+            }
+        }
+        @{
+            Model.ProductTax.Add(new ProductTax());
+        }
+        var taxindex = $("#taxitems").children("tr").length;
+        var taxindexCell = "<td style='display:none'><input name='ProductTax.Index' type='hidden' value='" + taxindex + "' /></td>";
+        var taxIdCell = "<td style='display:none'><input id='ProductTax" + taxindex + "_TaxId' class='form-control' name='ProductTax[" + taxindex + "].TaxId' type='text' readonly value='" + taxId.val() + "' /></td>";
+        var taxNameCell = "<td><input id='ProductTax" + taxindex + "_TaxDescription'  class='form-control'  name='ProductTax[" + taxindex + "].TaxDescription' type='text' readonly value='" + taxName + "' /></td>";
+
+        var taxRemoveCell = "<td><input id='btnAddTax' type='button' value='-' class='btn btn-round btn-info'  onclick='removeTaxRow(" + taxindex + ");' /></td>";
+
+        var newTaxRow = "<tr id='trTax" + taxindex + "'>" +
+            taxindexCell + taxIdCell + taxNameCell + taxRemoveCell + "</tr>";
+        $("#taxitems").append(newTaxRow);
+    });
+
+    function removeTaxRow(id) {
+        var controlToBeRemoved = "#trTax" + id;
+        $(controlToBeRemoved).remove();
+
+    }
+        
+    function removeProductTaxRow(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? ")) {
+            var table = $("#taxitems")[0];
+            table.deleteRow(row[0].rowIndex - 1);
+        }
+    };
+</script>
+
+@*Serving Units Handling*@
+<script type="text/javascript">
+    $("body").on("click", "#btnAddUnit", function () {
+        //Reference the Name and Country TextBoxes.
+
+        if ($("#servingUnit").val() == 0 || $("#servingUnit").val() == null) {
+            alert("Serving Unit Required");
+            return;
+        }
+
+        var servingUnit = $("#servingUnit").val();
+        var deductstockonrecipe = document.getElementById('DeductStockOnRecipe').checked;
+
+        //  alert(deductstockonrecipe);
+        var servingUnitid = $("#servingUnit");
+        var servingUnitName = $("#servingUnit option:selected").text();
+        //Check duplicates
+        var table = document.getElementById('sunititems');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            if (table.rows[r].cells[1].firstChild.value == servingUnitid.val()) {
+                alert("Already added " + servingUnitName);
+                return;
+            }
+        }
+        @{
+            Model.ProductServingUnit.Add(new ProductServingUnit());
+        }
+        var unitindex = $("#sunititems").children("tr").length;
+        var unitindexCell = "<td style='display:none'><input name='ProductServingUnit.Index' type='hidden' value='" + unitindex + "' /></td>";
+        var unitCell = "<td><input id='ProductServingUnit" + unitindex + "_ServingUnit' class='form-control' name='ProductServingUnit[" + unitindex + "].ServingUnit' type='text' readonly value='" + servingUnit + "' /></td>";
+        //var unitCostCell = "<td><input id='ProductServingUnit" + unitindex + "_CostPrice'  class='form-control'  name='ProductServingUnit[" + unitindex + "].CostPrice' type='text' readonly value='" + costPrice + "' /></td>";
+        //var unitSellCell = "<td><input id='ProductServingUnit" + unitindex + "_SellingPrice'  class='form-control'  name='ProductServingUnit[" + unitindex + "].SellingPrice' type='text' readonly value='" + sellingPrice + "' /></td>";
+        var stockCell = "<td><input id='ProductServingUnit" + unitindex + "_DeductStockOnRecipe class='form-control' name='ProductServingUnit[" + unitindex + "].DeductStockOnRecipe' type='text' readonly value='" + deductstockonrecipe + "' /></td>";
+        var unitRemoveCell = "<td><input id='btnAddUnit' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" + unitindex + ");' /></td>";
+
+        //var newUnitRow = "<tr id='trUnit" + unitindex + "'>" +
+        //    unitindexCell + unitCell + unitCostCell + unitSellCell + unitRemoveCell + "</tr>";
+
+        var newUnitRow = "<tr id='trUnit" + unitindex + "'>" +
+          unitindexCell + unitCell + stockCell + unitRemoveCell + "</tr>";
+
+        $("#sunititems").append(newUnitRow);
+        $("#servingUnit").val('');
+    });
+
+    function removeUnitRow(id) {
+        var controlToBeRemoved = "#trUnit" + id;
+        $(controlToBeRemoved).remove();
+    }
+
+    function removeServingUnitRow(button) {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? ")) {
+            var table = $("#sunititems")[0];
+            table.deleteRow(row[0].rowIndex - 1);
+        }
+    };
+</script>
+
+@*Supplier Handling*@
+<script type="text/javascript">
+    $("body").on("click", "#btnAddSupplier", function () {
+        //Reference the Name and Country TextBoxes.
+        
+        if ($("#SupplierId").val() == 0 || $("#SupplierId").val() == null) {
+            //alert("Select a Supplier!");
+            return;
+        }
+
+        var SupplierId = $("#SupplierId");
+        var SupplierName = $("#SupplierId option:selected").text();
+        //Check duplicates
+        var table = document.getElementById('supplieritems');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            if (table.rows[r].cells[1].firstChild.value == SupplierId.val()) {
+                alert("Already added" + SupplierName);
+                return;
+            }
+        }
+        
+        @{
+            Model.SupplierProduct.Add(new SupplierProduct());
+        }
+        var supplierindex = $("#supplieritems").children("tr").length;
+        var supplierindexindexCell = "<td style='display:none'><input name='SupplierProduct.Index' type='hidden' value='" + supplierindex + "' /></td>";
+        var supplierindexIdCell = "<td style='display:none'><input id='SupplierProduct" + supplierindex + "_SupplierId' class='form-control' name='SupplierProduct[" + supplierindex + "].SupplierId' type='text' readonly value='" + SupplierId.val() + "' /></td>";
+        var supplierindexNameCell = "<td><input id='SupplierProduct" + supplierindex + "_Supplier'  class='form-control'  name='SupplierProduct[" + supplierindex + "].Supplier' type='text' readonly value='" + SupplierName + "' /></td>";
+
+        var supplierindexRemoveCell = "<td><input id='btnAddSupplier' type='button' value='-' class='btn btn-round btn-info'  onclick='removeSupplierRow(" + supplierindex + ");' /></td>";
+        if ($('#IsPreferredSupplier').is(":checked")) {
+            var PreferredSupplier = "<td><input id='SupplierProduct" + supplierindex + "_IsPreferredSupplier' class='check-box' name='SupplierProduct[" + supplierindex + "].IsPreferredSupplier' type='checkbox' checked value='true' /></td>";
+        }
+        else {
+            var PreferredSupplier = "<td><input id='SupplierProduct" + supplierindex + "_IsPreferredSupplier' class='check-box' name='SupplierProduct[" + supplierindex + "].IsPreferredSupplier' type='checkbox' value='false' /></td>";
+        }
+        var newsupplierRow = "<tr id='trSupplier" + supplierindex + "'>" +
+            supplierindexindexCell + supplierindexIdCell + supplierindexNameCell + PreferredSupplier + supplierindexRemoveCell + "</tr>";
+        $("#supplieritems").append(newsupplierRow);
+        $("#IsPreferredSupplier").prop("checked", false);
+    });
+
+    function removeSupplierRow(id) {
+        var controlToBeRemoved = "#trSupplier" + id;
+        $(controlToBeRemoved).remove();        
+    }
+
+    function removeProductSupplierRow(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? ")) {
+            var table = $("#supplieritems")[0];
+            table.deleteRow(row[0].rowIndex - 1);
+        }
+    };
+</script>
+
+@*Printers Handling*@
+<script type="text/javascript">
+
+    $("body").on("click", "#btnAddPrinter", function ()
+    {
+        
+        if ($("#PrinterID").val() == 0 || $("#PrinterID").val() == null)
+        {
+            alert("Select a Printer !");
+            return;
+        }
+
+        var PrinterID = $("#PrinterID");
+        var KitchenPrinterName = $("#PrinterID option:selected").text();
+
+        var table = document.getElementById('PrinterTypeitems');
+        for (var r = 0, n = table.rows.length; r < n; r++)
+        {
+            if (table.rows[r].cells[1].firstChild.value == PrinterID.val())
+            {
+                alert("Already added " + PrinterTypeitems);
+                return;
+            }
+        }
+        
+        @{
+             Model.KitchenPrinters_Modl.Add(new KitchenMaster());
+         }
+
+        
+        var PrinterTypeitems = $("#PrinterTypeitems").children("tr").length;
+        var PrinterTypeindexindexCell = "<td style='display:none'><input name='KitchenPrinters_Modl.Index' type='hidden' value='" + PrinterTypeitems + "' /></td>";
+        var PrinterTypeindexIdCell = "<td style='display:none'><input id='KitchenPrinters_Modl" + PrinterTypeitems + "_KitchenID' class='form-control' name='KitchenPrinters_Modl[" + PrinterTypeitems + "].KitchenID' type='text' readonly value='" + PrinterID.val() + "' /></td>";
+        var PrinterTypeindexNameCell = "<td><input id='KitchenPrinters_Modl" + PrinterTypeitems + "_KitchenPrinterName'  class='form-control'  name='KitchenPrinters_Modl[" + PrinterTypeitems + "].KitchenPrinterName' type='text' readonly value='" + KitchenPrinterName + "' /></td>";
+
+        var PrinterTypeindexRemoveCell = "<td><input id='btnAddPrinter' type='button' value='-' class='btn btn-round btn-info'  onclick='removePrinterTypeRow(" + PrinterTypeitems + ");' /></td>";
+
+
+        var newPrinterTypeRow = "<tr id='trPrinterTypeitems" + PrinterTypeitems + "'>" + PrinterTypeindexindexCell + PrinterTypeindexIdCell + PrinterTypeindexNameCell   +  PrinterTypeindexRemoveCell + "</tr>";
+
+        $("#PrinterTypeitems").append(newPrinterTypeRow);
+        $("#IsActive").prop("checked", true);
+        //$("#IsActive").prop("checked", false);
+
+
+
+    });
+
+    function removePrinterTypeRow(id)
+    {
+        var controlToBeRemoved = "#trPrinterTypeitems" + id;
+        $(controlToBeRemoved).remove();
+    }
+
+
+    function removeKitchenPrinterTypeRow(button)
+    {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? "))
+        {
+            var table = $("#PrinterTypeitems")[0];
+            table.deleteRow(row[0].rowIndex - 1);
+        }
+    }
+</script>
+
+
+
+    @*<script type="text/javascript">
+    $("body").on("click", "#btnAddPrinterTypes", function () {
+
+        if ($("#PrinterTypeID").val() == 0 || $("#PrinterTypeId").val() == null) {
+            alert("Select a Printer Type !");
+            return;
+        }
+
+        var PrinterTypeId = $("#PrinterTypeId");
+        var KitchenPrinterName = $("#PrinterTypeId option:selected").text();
+        //Check duplicates
+        var table = document.getElementById('PrinterTypeitems');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            if (table.rows[r].cells[1].firstChild.value == PrinterTypeId.val()) {
+                alert("Already added " + KitchenPrinterName);
+                return;
+            }
+        }
+
+        @{
+             Model.KitchenPrinters_Modl.Add(new KitchenMaster());
+        }
+
+        var PrinterTypeitems = $("#PrinterTypeitems").children("tr").length;
+        var supplierindexindexCell = "<td style='display:none'><input name='KitchenPrinters_Modl.Index' type='hidden' value='" + PrinterTypeitems + "' /></td>";
+        var supplierindexIdCell = "<td style='display:none'><input id='KitchenPrinterName" + PrinterTypeitems + "_PrinterTypeId' class='form-control' name='KitchenPrinterName[" + PrinterTypeitems + "].PrinterTypeId' type='text' readonly value='" + PrinterTypeId.val() + "' /></td>";
+        var supplierindexNameCell = "<td><input id='KitchenPrinterName" + PrinterTypeitems + "_KitchenPrinterName'  class='form-control'  name='PrinterTypeitems[" + PrinterTypeitems + "].PrinterTypeitems' type='text' readonly value='" + PrinterTypeitems + "' /></td>";
+        var supplierindexRemoveCell = "<td><input id='btnAddPrinterTypes' type='button' value='-' class='btn btn-round btn-info'  onclick='removeSupplierRow(" + PrinterTypeitems + ");' /></td>";
+
+
+    });
+    </script>*@
+@*Add to all Locations*@
+    <script type="text/javascript">
+        $("body").on("click", "#btnAddToAll", function () {
+
+            var table = document.getElementById("unititems");
+            for (var i = 1, rows; row = table.rows[i]; i++) {
+
+                var cp = document.getElementById('ProductLocationViewModel[0]_CostPrice').value;
+                var sp = document.getElementById('ProductLocationViewModel[0]_SellingPrice').value;
+                var rl = document.getElementById('ProductLocationViewModel[0]_ReOrdderLevel').value;
+                var rq = document.getElementById('ProductLocationViewModel[0]_ReOrderQuantity').value;
+                var rp = document.getElementById('ProductLocationViewModel[0]_ReOrderPeriod').value;
+                var fp = document.getElementById('ProductLocationViewModel[0]_ForignCustomerPrice').value;
+                var ptid = document.getElementById('PrinterType_Id_0').value;
+
+                document.getElementById('ProductLocationViewModel[' + i + ']_CostPrice').value = cp;
+                document.getElementById('ProductLocationViewModel[' + i + ']_SellingPrice').value = sp;
+                document.getElementById('ProductLocationViewModel[' + i + ']_ReOrdderLevel').value = rl;
+                document.getElementById('ProductLocationViewModel[' + i + ']_ReOrderQuantity').value = rq;
+                document.getElementById('ProductLocationViewModel[' + i + ']_ReOrderPeriod').value = rp;
+                document.getElementById('ProductLocationViewModel[' + i + ']_ForignCustomerPrice').value = fp;
+                document.getElementById('PrinterType_Id_' + i).value = ptid;
+            }
+        });
+
+</script>
+
+
+
+<script>
+    window.onload = function () {
+        $('#AddonCategoryMasterId').prop('disabled', true);
+        $('#mapContent ul li.optTaxes').hide();
+        $('#mapContent ul li.optDiscounts').hide();
+
+        var chkIsAddon = document.getElementById("IsAddon");
+        chkIsAddon.addEventListener('click', function () {
+            if (chkIsAddon.checked) {
+                $('#AddonCategoryMasterId').prop('disabled', false);
+            } else {
+                $('#AddonCategoryMasterId').prop('disabled', true);
+                $("select#AddonCategoryMasterId").prop('selectedIndex', 0);
+            }
+        });
+        var chkIsTax = document.getElementById("IsTax");
+        chkIsTax.addEventListener('click', function () {
+            if (chkIsTax.checked) {
+                $('#mapContent ul li.optTaxes').show();
+            } else {
+                $('#mapContent ul li.optTaxes').hide();
+            }
+        });
+        var chkIsDiscount = document.getElementById("IsDiscount");
+        chkIsDiscount.addEventListener('click', function () {
+            if (chkIsDiscount.checked) {
+                $('#mapContent ul li.optDiscounts').show();
+            } else {
+                $('#mapContent ul li.optDiscounts').hide();
+            }
+        });
+        var chkIsMatirial = document.getElementById("IsRowMaterial");
+        chkIsMatirial.addEventListener('click', function () {
+            if (chkIsMatirial.checked) {
+                $('#IsMaterialLeft').hide();
+                $('#IsMaterialRight').hide();
+
+                $("#IsPromotion").prop("checked", false);
+                $("#IsCountable").prop("checked", false);
+                $("#IsOpenItem").prop("checked", false);
+                $("#IsDiscount").prop("checked", false);
+                $("#IsTax").prop("checked", false);
+                $("#IsTaxInclude").prop("checked", false);
+                $("#IsUnderCost").prop("checked", false);
+                $("#AutoProduction").prop("checked", false);
+
+                $('#mapContent ul li.optTaxes').hide();
+                $('#mapContent ul li.optDiscounts').hide();
+                $('#mapContent ul li.optServingUnits').hide();
+
+                var rowCount = $('#unititems tr').length;
+                for (var i = 0; i < rowCount; i++) {
+                    document.getElementById('ProductLocationViewModel[' + i + ']_SellingPrice').value = '0.00';
+                    document.getElementById('ProductLocationViewModel[' + i + ']_SellingPrice').disabled = true;
+                }
+            } else {
+                $('#IsMaterialLeft').show();
+                $('#IsMaterialRight').show();
+                $('#mapContent ul li.optServingUnits').show();
+
+                var rowCount = $('#unititems tr').length;
+                for (var i = 0; i < rowCount; i++) {
+                    document.getElementById('ProductLocationViewModel[' + i + ']_SellingPrice').disabled = false;
+                }
+            }
+        });
+        if (chkIsAddon.checked) {
+            $('#AddonCategoryMasterId').prop('disabled', false);
+        }
+        if (chkIsTax.checked) {
+            $('#mapContent ul li.optTaxes').show();
+        }
+        if (chkIsDiscount.checked) {
+            $('#mapContent ul li.optDiscounts').show();
+        }
+        if (!chkIsMatirial.checked) {
+            $('#IsMaterialLeft').show();
+            $('#IsMaterialRight').show();
+        }
+        if (chkIsMatirial.checked) {
+            $('#mapContent ul li.optServingUnits').hide();
+            $('#IsMaterialLeft').hide();
+            $('#IsMaterialRight').hide();
+        }
+    }
+</script>

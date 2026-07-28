@@ -1,0 +1,241 @@
+﻿@model  RIT.HMS.Domain.ViewModels.Reports.StockMovementViewModel
+@{
+    ViewBag.Title = "RPTStockMovement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/Content/Report.css" rel="stylesheet" />
+@using (Html.BeginForm("RPTStockMovement", "StockInitialization", FormMethod.Post, new { @class = "" }))
+{
+  
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Stock Movement Report<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" value="@Model.DateFrom.ToString("yyyy-MM-dd")" id="DateFrom" name="DateFrom" />
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Date To </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" value="@Model.DateTo.ToString("yyyy-MM-dd")" id="DateTo" name="DateTo" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Location </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <select id="LocationId" name="LocationId" class="form-control"></select>
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Doc No </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <select id="DocumentId" name="DocumentId" class="form-control select2"></select>
+                                    </div>
+                                </div>*@
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="actionBar">
+                                <div class="msgBox">
+                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                        <ul class="dropdown-menu">
+
+                                            <li>
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Export to Excel", "ExportToExcel", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                @*<a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                </a>*@
+                                            </li>
+                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="clearfix"></div>
+
+                            <div id="printcontent">
+
+                                <div class="clearfix"></div>
+                              
+                                <div class="col-md-12">
+
+
+                                </div>
+                                <div class="clearfix"></div>
+                             
+
+                                <div class="table-responsive">
+
+                                    @if (Model != null)
+                                    {
+                                        <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th class="column-title">Item Code</th>
+                                                    <th class="column-title">Item</th>
+                                                    <th class="column-title">Opening Balance</th>
+                                                    <th class="column-title">GRN Qty</th>
+                                                    <th class="column-title">Return Qty</th>
+                                                    <th class="column-title">Stock Adjustment</th>
+                                                    <th class="column-title">Transfer In</th>
+                                                    <th class="column-title">Tansfer Out</th> 
+                                                    <th class="column-title">Sales</th> 
+                                                    <th class="column-title">Sales Returns</th> 
+                                                    <th class="column-title">Balance Qty</th> 
+                                                    <th class="column-title">Sold Qty</th>
+                                                    <th class="column-title">Closing Balance For (@Model.DateTo.ToString("yyyy-MM-dd"))</th>
+                                                    <th class="column-title">Rate</th>
+                                                    <th class="column-title">Total Amount</th>
+                                                </tr>
+                                            </thead>
+                                        
+                                                <tbody>
+                                                    @foreach (var item in Model.Details)
+                                                    {
+                                                        decimal soldqty =  item.SalesInQty - item.SalesOutQty;//((item.OpeningBalance + item.TotalQty + item.GRNQty - item.ReturnQty + item.StockAdjustment + item.TransferIn) - item.OpeningBalanceToDate - item.TransferOut - item.SalesInQty + item.SalesOutQty);
+                                                    <tr class="even pointer">
+                                                        <td>@item.ProductCode</td>
+                                                        <td class="">@item.ProductDesc</td>
+                                                        <td style="text-align:right">@item.OpeningBalance.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.GRNQty.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.ReturnQty.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.StockAdjustment.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.TransferIn.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.TransferOut.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.SalesInQty.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.SalesOutQty.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.TotalQty.ToString("n2")</td>
+                                                        @*<td style="text-align:right">@((item.OpeningBalance + item.TotalQty + item.GRNQty - item.ReturnQty + item.StockAdjustment + item.TransferIn - item.TransferOut - item.SalesInQty + item.SalesOutQty).ToString("n2"))</td>*@
+                                                        @*<td style="text-align:right">@soldqty.ToString("n2")</td>*@
+                                                        <td style="text-align:right">@item.SoldQty.ToString("n2")</td>
+
+
+
+                                                        <td style="text-align:right">@item.OpeningBalanceToDate.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.Rate.ToString("n2")</td>
+                                                        @*<td style="text-align:right">@((soldqty*item.Rate).ToString("n2"))</td>*@
+
+                                                        <td style="text-align:right">@item.TotalAmount.ToString("n2")</td>
+
+                                                    </tr>
+                                                    }
+                                                </tbody>
+                                         
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false,
+            "scrollY": "500px",
+            "scrollCollapse": true,
+            "scrollX": true,  // Enable horizontal scrolling
+            "fixedHeader": false, // Disable fixed header for horizontal scrolling
+            "autoWidth": false 
+        });
+    });
+</script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var poLocationId = $("#LocationId");
+
+        poLocationId.empty();
+      //  poLocationId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@Model.LocationId') {
+            $('#LocationId').val(@Model.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+
+
+    });
+
+
+    @*$("#LocationId").change(
+      function () {
+          var loc = this.value;
+
+          $.getJSON("@Url.Action("GetDocNoByLocId", "StockAdjustment")", { locid: loc, frm: $("#DateFrom").val(), to: $("#DateTo").val() },
+
+           function (data) {
+
+               var DocNo = $("#DocumentId");
+
+               DocNo.empty();
+               DocNo.append("<option value='0'>-- Select a Document --</option>");
+
+               $.each(JSON.parse(data), function (index, optionaldata) {
+                   DocNo.append($('<option />', { value: optionaldata.StockAdjustmentHeaderId }).html(optionaldata.DocumentNo));
+
+               });
+           });
+      });*@
+
+
+
+
+</script>
+
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+        }
+</script>
+

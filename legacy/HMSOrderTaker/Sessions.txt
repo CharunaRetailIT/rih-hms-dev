@@ -1,0 +1,4 @@
+﻿ Session						Initialized From
+ 
+ Session["CompanyId"] -			STOSysUserController => Index
+ Session["LocationId"] -		STOSysUserController => Index

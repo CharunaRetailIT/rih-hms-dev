@@ -1,0 +1,286 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Transactions.TransferNoteHeader>
+    @{
+        ViewBag.Title = "ViewAllTOGs";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+        <body class="nav-md">
+
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="x_panel">
+                                        <div class="x_title">
+                                            <h2>Transfer Note of Goods<small>Existing</small></h2>
+                                            <ul class="nav navbar-right panel_toolbox">
+                                                <li>
+                                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                </li>                                              
+                                                <li>
+                                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="clearfix"></div>
+                                            <br />
+                                            <br />
+
+
+                                            <div class=" form-horizontalcol-md-12">
+
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            TOG Date From <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <input id="PODateFrom" class="form-control col-md-6 col-xs-6" type="date" value=@ViewBag.datefrom.ToString("yyyy-MM-dd") />
+                                                            @Html.ValidationMessageFor(model => model.First().TOGDateFrom, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-horizontal  col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            To <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <input id="PODateTo" class="form-control col-md-6 col-xs-6" type="date" value=@ViewBag.dateTo.ToString("yyyy-MM-dd") />
+                                                            @Html.ValidationMessageFor(model => model.First().TOGDateTo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            TOG Status <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="DocStatusId" class="form-control" Name="DocStatusId"></select>
+                                                            @Html.ValidationMessageFor(model => model.First().DocStatusId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-horizontal  col-md-6">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-6 col-sm-6 pull-right">
+                                                            <input type="button" id="btnFilter" class="btn btn-primary btn-sm" value="Filter" />
+                                                            <input type="button" class="btn btn-success btn-sm" value="View All" onclick="location.href='@Url.Action("ViewAllTOG", null, new { })'" />
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="clerfix"></div>
+                                            <br />
+                                            <br />
+
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content">
+                                            @*<table id="datatable-responsive"
+                                                   class="table table-striped table-bordered dt-responsive nowrap">*@
+                                            @*<table id="datatable-responsive" class="mstable">*@
+
+                                                <div style="overflow-y: auto; max-height:600px; border: 1px solid #ddd; padding: 5px;">
+                                                    <table id="tblTOG" class="mstable" style="width: 100%; border-collapse: collapse;">
+
+
+                                                        <thead>
+                                                            <tr>
+                                                                <th>TOG Number</th>
+                                                                <th>TOG Date</th>
+                                                                <th>From Location</th>
+                                                                <th>To Location</th>
+                                                                <th>Net Amount</th>
+                                                                <th>Status</th>
+                                                                <th>Edit|Approve</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                            @foreach (var item in Model)
+                                                            {
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(modelItem => item.DocumentNo)</td>
+                                                                @*<td>@Html.DisplayFor(modelItem => item.TOGDate)</td>*@
+                                                                <td>@item.TOGDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                                                <td>@Html.DisplayFor(modelItem => item.FromLocationName)</td>
+                                                                <td>@Html.DisplayFor(modelItem => item.ToLocationName)</td>
+
+
+                                                                <td style="text-align:right">@item.NetAmount</td>
+                                                                <td>@item.DocState</td>
+                                                                <td>@Html.ActionLink("Click", "Edit", new { id = item.TransferNoteHeaderId })</td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);"
+                                                                       class="anchorDetail"
+                                                                       data-id="@item.TransferNoteHeaderId">Print</a>
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                    </div>
+                                                </div>
+</div>
+
+                                    <div id='myModal' class='modal'>
+                                        <div class="col-md-12">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div id='myModalContent'>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>  
+
+
+                                </div>
+                            </div>
+                            <div class="clerfix">
+                                <div class="pull-left">                                  
+                                    <input type="button" class="btnallView" value=" Create New TOG " onclick="location.href='@Url.Action("CreateTOG", null, new { })'" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+
+    var TeamDetailPostBackURL = '/TOG/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id,"printstatus":2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>  
+
+<script>
+    $.getJSON("@Url.Action("GetDocStatus", "PO")", function (data) {
+
+        var DocStatusId = $("#DocStatusId");
+
+
+        DocStatusId.empty();
+        DocStatusId.append("<option value='0'>-- Select a Doc Status--</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DocStatusId.append($('<option />', { value: optionaldata.DocStatusId }).html(optionaldata.Description));
+
+        });
+
+        @*if ('@ViewBag.DocStatusId') {
+            $('#DocStatusId').val(@ViewBag.DocStatusId).trigger("change");
+        } else {
+            $('#DocStatusId').val(0).trigger("change");
+        }*@
+
+        if ('@ViewBag.DocStatusId') {
+             var Select_AppStatus = '@ViewBag.DocStatusId';
+
+             var drpStatusElement = document.getElementById("DocStatusId");
+             if (drpStatusElement) {
+
+                 drpStatusElement.value = Select_AppStatus; // Set the value from ViewBag
+             }
+         }
+
+
+    });
+</script>
+
+<script>
+    $('#btnFilter').click(function () {
+        debugger;
+        var statusid = $('#DocStatusId').val();
+        var datefrom = $('#PODateFrom').val();
+        var dateto = $('#PODateTo').val();
+        var url = $(this).attr('href') + 'FilterTog?statusid=' + statusid + '&datefrom=' + datefrom + '&dateto=' + dateto;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+});
+</script>
+
+
+<style>
+    .mstable {
+        width: 100%;
+        border-collapse: collapse; /* Collapse borders */
+    }
+
+    thead {
+        background-color: #f2f2f2; /* Header background color */
+        position: sticky; /* Makes the header sticky */
+        top: 0; /* Position from the top */
+        z-index: 10; /* Ensure it stays on top */
+    }
+
+    th, td {
+        padding: 12px; /* Padding for cells */
+        text-align: left; /* Align text to the left */
+        border: 1px solid #ddd; /* Border for cells */
+        box-sizing: border-box; /* Include padding and border in total width */
+    }
+
+    tbody {
+        display: block; /* Keeps tbody scrollable */
+        max-height: 400px; /* Set a max height for the tbody */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    tr {
+        display: table; /* Ensure rows are table elements */
+        width: 100%; /* Full width for the row */
+        table-layout: fixed; /* Equal width for columns */
+    }
+</style>

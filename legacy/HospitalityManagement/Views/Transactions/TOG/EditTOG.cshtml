@@ -1,0 +1,2360 @@
+﻿@using RIT.HMS.Domain
+@model RIT.HMS.Domain.Transactions.TransferNoteHeader
+@{
+    ViewBag.Title = "EditTOG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("EditTOG", "TOG", FormMethod.Post, new
+        {
+            id= "EditTOG",
+            @class = "form-horizontal",
+            enctype = "multipart/form-data"
+        }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.TransferNoteHeaderId);
+            @Html.HiddenFor(model => model.DocumentStatus);
+            @Html.HiddenFor(model => model.ReferenceDocumentId);
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>TOG</strong> @ViewBag.TOGCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>TOG</strong> @ViewBag.TOGCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>TOG</strong> @ViewBag.TOGCode already exists.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>TOG</strong> @ViewBag.TOGCode Temporary saved.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "5")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Please enter TOG details !.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "6")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Selected month is not open for this Location</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "7")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Please enter the reject reason !</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "8")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Please enter the cancel reason !</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "9")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cannot Approve. Reject/Cancel reason available !</strong>
+                        </div>
+                    }
+
+
+                    <div class="actionBar">
+                        <div class="msgBox">
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-success" value="Reset" onclick="location.href='@Url.Action("CreateTOG", null, new { })'" />
+                            </div>
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewAllTOG", null, new { })'" />
+                            </div>
+
+                            @if (Model.IsTempTOG && Model.DocumentNo.Contains("X"))
+                            {
+                                <button type="submit" id="ButtonTempEdit" formaction="/TOG/TempEdit" class="btn btn-info pull-left">Temporary Edit</button>
+                                <button type="submit" formaction="/TOG/Cancel" id="ButtonCancel" class="btn btn-danger pull-left">Cancel</button>
+                                <button type="submit" formaction="/TOG/EditTOG id="ButtonSubmit" class="pull-left btn btn-primary">Submit TOG</button>
+                            }
+                            @if (Convert.ToBoolean(Session["APPTOG"]) == true && Model.TOGType != "RequestNoteBased")
+                            {
+                                if (Model.DocumentStatus == 2 || Model.DocumentStatus == 6)
+                                {
+                                    <button type="submit" formaction="/TOG/Approve" id="ButtonApprove" class="btn btn-success pull-left">Approve</button>
+
+                                    if (Convert.ToBoolean(Session["DisableTOGReject"]) == false)
+                                    {
+                                    <button type="submit" formaction="/TOG/Reject" id="ButtonReject" class="btn btn-danger pull-left">Reject</button>
+                                    <button type="submit" formaction="/TOG/Cancel" id="ButtonCancel" class="btn btn-danger pull-left">Cancel</button>
+                                    <button type="submit" formaction="/TOG/ForcefullyClose" id="ButtonForcefullyClose"  class="btn btn-danger pull-left">Forcefully Close</button>
+                                    }
+
+                                }
+                                if (Model.DocumentStatus == 4 || Model.DocumentStatus == 5)
+                                {
+                                    <button type="submit" formaction="/TOG/Reopen" id="ButtonReopen" class="btn btn-success pull-left">Re Open</button>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Transfer Note of Goods - Edit</h2>
+                                    <h4 class="small">@Model.DocState</h4>
+                                    <br />                                
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>General</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small>Items</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-3">
+                                                    <span class="step_no">3</span>
+                                                    <span class="step_descr">
+                                                        Step 3<br />
+                                                        <small>Prices</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            
+                                        </ul>
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12 trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Doc # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                            @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Mode <span class="required">*</span>
+                                                        </label>
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.TOGType, "Manual", new { @id = "Manual", @checked = true })
+                                                                Manual
+
+                                                            </div> <div class="clearfix"></div>
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.TOGType, "GRNBased", new { @id = "Auto" })
+                                                                GRN based
+
+                                                            </div>
+                                                            <div class="clearfix"></div>
+
+
+                                                            @{ // Retrieve the value from the session and convert it to a boolean
+                                                                bool RequestNoteBasedTOG = Convert.ToBoolean(Session["RequestNoteBasedTOG"]);
+                                                                bool DisablePriceRequestNote = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+                                                                bool IsEventMandatory = Session["IsEventMandatory"] != null && (bool)Session["IsEventMandatory"];
+
+
+
+                                                                }
+                                                            @if (RequestNoteBasedTOG)
+                                                            {
+                                                                <div class="pull-left">
+                                                                    @Html.RadioButtonFor(m => m.TOGType, "RequestNoteBased", new { @id = "Request" })
+                                                                    Request Note Based
+
+                                                                </div>
+                                                            }
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-horizontal col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            From Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="FromLocationId" disabled class="form-control" name="FromLocationId"></select>
+                                                            @Html.ValidationMessageFor(m => m.FromLocationId, "", new { @class = "text-danger" });
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            To Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="ToLocationId" disabled class="form-control" name="ToLocationId"></select>
+                                                            @Html.ValidationMessageFor(m => m.ToLocationId, "", new { @class = "text-danger" });
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            TOG Date <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.TOGDate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           @Type = "date",
+                                                           @Value = Model.TOGDate.ToString("yyyy-MM-dd"),
+                                                           Placeholder = "Expected Date"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.TOGDate, "", new { @class = "text-danger" })
+
+                                                        </div>
+                                                    </div>
+                                                    @if (IsEventMandatory)
+                                                    {
+
+
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Event<span class="required"></span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <select id="EventId" class="form-control" Name="EventId"></select>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="form-group" style="display: none;">
+                                                            <label class="control-label col-md-3 col-sm-6" style="display: none;">
+                                                                Event<span class="required"></span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12" style="display: none;">
+                                                                <select id="EventId" class="form-control" Name="EventId"></select>
+                                                            </div>
+                                                        </div>
+
+                                                    }
+                                                    @*<div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-6">
+                    Event<span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="EventId" class="form-control" Name="EventId"></select>
+                </div>
+            </div>
+        </div>*@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-2">
+                                            <div class="trn-detail col-md-12">
+                                                <br />
+                                                <div class="form-group">
+                                                    @*Item Table*@
+                                                    <div id="buttons">
+                                                        <table id="buttons1" class="table table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Item/Material</th>
+                                                                    <th>UOM</th>
+                                                                    <th>Cost</th>
+                                                                    <th>Quantity</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:50%">
+                                                                        @Html.DropDownList("ItemId", (IEnumerable<SelectListItem>)Session["AllItemsToTOG"], new
+                                                                   {
+                                                                       @class = "form-control select2",
+                                                                       @style = "width:80%"
+                                                                   })
+                                                                        @*<select id="ItemId" class="form-control select2" style="width:80%" name="ItemId"></select>*@
+                                                                    </td>
+
+                                                                    <td style="width:15%">
+                                                                        <input id='UOM' class='form-control' name='UOM' type='text' readonly value='' />
+                                                                    </td>
+                                                                    <td style="width:15%"><input type="text" step="0.0001" min="0" onkeypress='return event.charCode >= 46' id="CostPrice" class="form-control" readonly /></td>
+                                                                    <td style="width:20%">
+                                                                        <input id="RecQty" name="RecQty" type="number"
+                                                                               min="0" , onkeypress="return event.charCode >= 46"
+                                                                               onkeyup="checkProductQuantity()"
+                                                                               class="form-control col-md-2 col-xs-6">
+
+                                                                        <font color="red">
+                                                                            <label id="validateqty" name="validateqty" style="font:small-caption"></label>
+                                                                        </font>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="button" id="btnAddTOGItem" class="btn btn-round btn-info" value="+" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="btnAddReOrderItems">
+                                                        <table id="buttons1" class="table table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @{ // Retrieve the value from the session and convert it to a boolean
+                                                                    bool TOGGridAdditional = Convert.ToBoolean(Session["TOGGridAdditionalColumn"]);
+                                                                   // bool DisablePriceRequestNote = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+                                                                }
+
+                                                                @if (TOGGridAdditional)
+                                                                {
+                                                                    <tr>
+                                                                        <td style="width:10%">
+                                                                            GRN
+                                                                        </td>
+                                                                        <td>
+                                                                            @*<select id="GRNId" class="form-control select2" style="width:100%" name="GRNId"></select>*@
+                                                                            <input id="GRNNo" type="text" name="GRNNo"  readonly  placeholder="GRN Document Number" class="form-control">
+                                                                            <input id="GRNId" type="number" name="GRNId" style="display:none">
+                                                                        </td>
+                                                                        <td>
+                                                                           
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+                                                                        <td style="width:10%">
+                                                                            GRN
+                                                                        </td>
+                                                                        <td>
+                                                                            @*<select id="GRNId" class="form-control select2" style="width:100%" name="GRNId"></select>*@
+                                                                            <input id="GRNNo" type="text" name="GRNNo" placeholder="GRN Document Number" class="form-control">
+                                                                            <input id="GRNId" type="number" name="GRNId" style="display:none">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="button" id="btnAddGRNItem" class="btn btn-round btn-info" value="+" />
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="btnAddRequestItems">
+                                                        <table id="buttons1" class="table table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:10%">
+                                                                        Request Notes
+                                                                    </td>
+                                                                    <td>
+                                                                        <select id="RequestNoteId" class="form-control select2" disabled style="width:100%" name="RequestNoteId"></select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="button" id="btnAddRequestNoteItem" class="btn btn-round btn-info" value="+" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <br />
+
+                                                    <div class="clearfix"></div>
+                                                    <div class="text-info"><b>Transfer of Goods</b></div>
+
+                                                    <table id="tblTOGs" class="table table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                @*<th>idx</th>*@
+                                                                <th style="display:none">Item Id</th>
+
+                                                                @{ // Retrieve the value from the session and convert it to a boolean
+                                                                    bool TOGGridAdditionalColumn = Convert.ToBoolean(Session["TOGGridAdditionalColumn"]);
+                                                                    bool DisablePrice = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+
+                                                                }
+                                                                @if (TOGGridAdditionalColumn)
+                                                                {
+
+                                                                    <th style='display:none'>Requestnote Hearder Id</th>
+                                                                    <th>Request Note Date</th>
+                                                                    <th>Request Note No </th>
+                                                                }
+
+
+
+                                                                <th>Item</th>
+                                                                <th style="display:none">Quantity</th>
+                                                                @if (TOGGridAdditionalColumn)
+                                                                {
+                                                                    <td>SIH</td>
+
+
+                                                                    if (DisablePrice)
+                                                                    {
+                                                                        <td style="display:none">Cost Price</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>Cost Price</td>
+                                                                    }
+
+
+                                                                }
+                                                                <th>Quantity</th>
+
+                                                                @if (DisablePrice)
+                                                                {
+
+
+                                                                    <th style="display: none;">Line Cost Value</th>
+                                                                }
+                                                                else
+                                                                {
+
+
+                                                                    <th>Line Cost Value</th>
+
+                                                                }
+                                                                <th style="display: none;">Unit SP</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="togitems">
+                                                            @if (Model.TOGDetail != null)
+                                                        {
+
+
+                                                            foreach (var togDetail in Model.TOGDetail)
+                                                            {
+                                                            <tr>
+                                                                <td style='display:none'>
+
+                                                                <td style='display:none'><input name='TOGDetail.Index' type='hidden' value=@togDetail.sequence /></td>
+                                                                <td style='display:none'><input id='TOGDetail[@togDetail.sequence]_ProductId' class='form-control' name='TOGDetail[@togDetail.sequence].ProductId' type='text' readonly value=@togDetail.ProductId /></td>
+
+                                                                @if (Convert.ToBoolean(Session["TOGGridAdditionalColumn"]))
+                                                                {
+
+                                                                    <td style='display:none'><input id='TOGDetail[@togDetail.sequence]_RequestNoteHeaderID' class='form-control' name='TOGDetail[@togDetail.sequence].RequestNoteHeaderID' type='text' readonly value=@togDetail.RequestNoteHeaderID /></td>
+
+                                                                    <td><input id='TOGDetail[@togDetail.sequence]_ReqNoteCreatedDate' class='form-control' name='TOGDetail[@togDetail.sequence].ReqNoteCreatedDate' type='text' readonly value='@togDetail.ReqNoteCreatedDate.ToString("MM/dd/yyyy")' /></td>
+                                                                    <td><input id='TOGDetail[@togDetail.sequence]_RequestNoteDocumentNo' class='form-control' name='TOGDetail[@togDetail.sequence].RequestNoteDocumentNo' type='text' readonly value='@togDetail.RequestNoteDocumentNo' /></td>
+
+                                                                }
+
+
+
+
+
+                                                                <td><input id='TOGDetail[@togDetail.sequence]_ProductName' class='form-control' name='TOGDetail[@togDetail.sequence].ProductName' type='text' readonly value='@togDetail.ProductName' /></td>
+
+                                                                @if (TOGGridAdditionalColumn)
+                                                                {
+                                                                    <td><input id='TOGDetail[@togDetail.sequence]_SIH' class='form-control' name='TOGDetail[@togDetail.sequence].SIH' type='text' readonly value='@togDetail.SIH' /></td>
+
+
+                                                                    if (DisablePrice)
+                                                                    {
+                                                                        <td style="display:none"><input id='TOGDetail[@togDetail.sequence]_CostPrice' class='form-control' name='TOGDetail[@togDetail.sequence].CostPrice' type='text' readonly value='@togDetail.CostPrice' /></td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td><input id='TOGDetail[@togDetail.sequence]_CostPrice' class='form-control' name='TOGDetail[@togDetail.sequence].CostPrice' type='text' readonly value='@togDetail.CostPrice' /></td>
+                                                                    }
+
+                                                                }
+
+
+                                                                <td><input id='TOGDetail[@togDetail.sequence]_OrderQty' class='form-control' name='TOGDetail[@togDetail.sequence].OrderQty'  value=@Convert.ToDecimal(togDetail.OrderQty) /></td>
+
+
+                                                                <td style="display:none"><input id='TOGDetail[@togDetail.sequence]_UOM' class='form-control' name='TOGDetail[@togDetail.sequence].UOM' type='text' readonly value=@togDetail.UOM></td>
+
+                                                                @if (DisablePrice)
+                                                                {
+
+                                                                    <td style="display: none;"><input id='TOGDetail[@togDetail.sequence]_CostValue' class='form-control' readonly name='TOGDetail[@togDetail.sequence].CostValue' type='number' value=@Convert.ToDecimal(togDetail.CostValue) /></td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td><input id='TOGDetail[@togDetail.sequence]_CostValue' class='form-control' readonly name='TOGDetail[@togDetail.sequence].CostValue' type='number' value=@Convert.ToDecimal(togDetail.CostValue) /></td>
+                                                                }
+
+                                                                <td style="display: none;"><input id='TOGDetail[@togDetail.sequence]_SellingPrice' class='form-control' readonly name='TOGDetail[@togDetail.sequence].SellingPrice' type='number' value=@Convert.ToDecimal(togDetail.SellingPrice) /></td>
+
+                                                                <td>
+                                                                    <input id='btnAddPOItem1' type='button' value='-' class='btn btn-round btn-info' onclick='removeTOGRow(this);' />
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div id="summary" class="col-lg-12">
+                                                    <div class="col-md-3" style="display:none">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-4 col-sm-6">
+                                                                Total Qty <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6">
+                                                                @*<input id="TotQty" name="TotQty" type="number" readonly="readonly" value="0" class="form-control">*@
+                                                                @Html.TextBoxFor(model => model.TotQty, new { id = "TotQty", type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.TotQty, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3" style="display: none;">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-5 col-sm-6">
+                                                                Total Selling Price <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-7 col-sm-6">
+                                                                @*<input id="TotSellingPrice" name="TotSellingPrice" readonly="readonly" value="0" class="form-control">*@
+                                                                @Html.TextBoxFor(model => model.TotSellingPrice, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.TotSellingPrice, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+
+                                                        @if (DisablePriceRequestNote)
+                                                        {
+
+                                                            <div class="form-group"  style="display: none;">
+                                                                <label class="control-label col-md-5 col-sm-6">
+                                                                    Total Cost Price <span class="required">*</span>
+                                                                </label>
+                                                                <div class="col-md-7 col-sm-6">
+                                                                    @*<input id="TotCostPrice" name="TotCostPrice" type="number" readonly="readonly" value="0" class="form-control">*@
+                                                                    @Html.TextBoxFor(model => model.TotCostPrice, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                    @Html.ValidationMessageFor(model => model.TotCostPrice, "", new { @class = "text-danger" })
+                                                                </div>
+
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-5 col-sm-6">
+                                                                    Total Cost Price <span class="required">*</span>
+                                                                </label>
+                                                                <div class="col-md-7 col-sm-6">
+                                                                    @*<input id="TotCostPrice" name="TotCostPrice" type="number" readonly="readonly" value="0" class="form-control">*@
+                                                                    @Html.TextBoxFor(model => model.TotCostPrice, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                                    @Html.ValidationMessageFor(model => model.TotCostPrice, "", new { @class = "text-danger" })
+                                                                </div>
+
+                                                            </div>
+
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-3">
+                                            <div class="col-md-12 trn-footer">
+                                                <br />
+                                                <div class="col-md-6" style="display:none">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Gross Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.GrossAmount, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                            @Html.ValidationMessageFor(model => model.GrossAmount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    @if (DisablePriceRequestNote)
+                                                    {
+
+
+                                                        <div class="form-group" style="display:none">
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Net Amount<span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                                @Html.TextBoxFor(model => model.NetAmount, new { type = "number", @class = "form-control", @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.NetAmount, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Net Amount<span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                                @Html.TextBoxFor(model => model.NetAmount, new { type = "number", @class = "form-control", @readonly = true })
+                                                                @Html.ValidationMessageFor(model => model.NetAmount, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+
+                                                    }
+
+
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Ref No<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.ReferenceNo, new { type = "text", @class = "form-control", MaxLength = 20 })
+                                                            @Html.ValidationMessageFor(model => model.ReferenceNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Remark<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextAreaFor(model => model.Remark, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                @if (Convert.ToBoolean(Session["DisableTOGReject"]) == false)
+                                                {
+
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        @if (Model.DocumentStatus != 1)
+                                                        {
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Reason for Reject<span class="required"></span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                @Html.TextAreaFor(model => model.RejectReason, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                                @Html.ValidationMessageFor(model => model.RejectReason, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        @if (Model.DocumentStatus != 1 || Model.IsTempTOG)
+                                                        {
+                                                            <label class="control-label col-md-3 col-sm-6">
+                                                                Reason for Cancel<span class="required"></span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                @Html.TextAreaFor(model => model.CancelReason, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                                @Html.ValidationMessageFor(model => model.CancelReason, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                }
+                                            </div>
+                                        </div>
+                                       
+
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-success" value="Reset" onclick="location.href='@Url.Action("CreateTOG", null, new { })'" />
+                                            </div>
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewAllTOG", null, new { })'" />
+                                            </div>
+
+                                            @if (Model.IsTempTOG && Model.DocumentNo.Contains("X"))
+                                            {
+                                                <button type="submit" formaction="/TOG/TempEdit" id="ButtonTempEditB" class="btn btn-info pull-left">Temporary Edit</button>
+                                                <button type="submit" formaction="/TOG/Cancel" id="ButtonCancelB" class="btn btn-danger pull-left">Cancel</button>
+                                                <button type="submit" id="ButtonSubmitB" class="pull-left btn btn-primary">Submit TOG</button>
+
+                                            }
+                                            @if (Convert.ToBoolean(Session["APPTOG"]) == true)
+                                            {
+                                                if (Model.DocumentStatus == 2 || Model.DocumentStatus == 6)
+                                                {
+                                                    <button type="submit" formaction="/TOG/Approve" id="ButtonApproveB" class="btn btn-success pull-left">Approve</button>
+
+                                                    if (Convert.ToBoolean(Session["DisableTOGReject"]) == false)
+                                                    {
+                                                        <button type="submit" formaction="/TOG/Reject" id="ButtonReject" class="btn btn-danger pull-left">Reject</button>
+                                                        <button type="submit" formaction="/TOG/Cancel" id="ButtonCancel" class="btn btn-danger pull-left">Cancel</button>
+                                                        <button type="submit" formaction="/TOG/ForcefullyClose" id="ButtonForcefullyClose" class="btn btn-danger pull-left">Forcefully Close</button>
+                                                    }
+
+                                  }
+                                                if (Model.DocumentStatus == 4 || Model.DocumentStatus == 5)
+                                                {
+                                                    <button type="submit" formaction="/TOG/Reopen" id="ButtonReopenB" class="btn btn-success pull-left">Re Open</button>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="se-pre-con"></div>
+                        <div id='myModal' class='modal'>
+                            <div class="col-md-12">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div id='myModalContent'>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/Scripts/TOG/TOGHandler.js"></script>
+<script src="~/Scripts/TOG/TOG.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#ButtonSubmit').on('click',
+            function (event) {
+                $('#ButtonSubmit').text('Processing...');
+                $('#ButtonSubmit').prop('disabled', true);
+                $('#ButtonSubmitB').text('Processing...');
+                $('#ButtonSubmitB').prop('disabled', true);
+                $('#FromLocationId').removeAttr('disabled');
+                $('#ToLocationId').removeAttr('disabled');
+                $('#EditTOG').submit();
+            });
+        $('#ButtonSubmitB').on('click',
+           function (event) {
+               $('#ButtonSubmit').text('Processing...');
+               $('#ButtonSubmit').prop('disabled', true);
+               $('#ButtonSubmitB').text('Processing...');
+               $('#ButtonSubmitB').prop('disabled', true);
+               $('#FromLocationId').removeAttr('disabled');
+               $('#ToLocationId').removeAttr('disabled');
+               $('#EditTOG').submit();
+           });
+        //--------------------------------------------------------------
+        $('#ButtonTempEdit').on('click',
+           function (event) {
+               $('#ButtonTempEdit').text('Processing...');
+               $('#ButtonTempEdit').prop('disabled', true);
+               $('#ButtonTempEditB').text('Processing...');
+               $('#ButtonTempEditB').prop('disabled', true);
+               $('#FromLocationId').removeAttr('disabled');
+               $('#ToLocationId').removeAttr('disabled');
+               $('#EditTOG').attr('action', '/TOG/TempEdit');
+               $('#EditTOG').submit();
+           });
+        $('#ButtonTempEditB').on('click',
+          function (event) {
+              $('#ButtonTempEdit').text('Processing...');
+              $('#ButtonTempEdit').prop('disabled', true);
+              $('#ButtonTempEditB').text('Processing...');
+              $('#ButtonTempEditB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/TempEdit');
+              $('#EditTOG').submit();
+          });
+        //---------------------------------------------------------
+        $('#ButtonCancel').on('click',
+          function (event) {
+              $('#ButtonCancel').text('Processing...');
+              $('#ButtonCancel').prop('disabled', true);
+              $('#ButtonCancelB').text('Processing...');
+              $('#ButtonCancelB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/Cancel');
+              $('#EditTOG').submit();
+          });
+        $('#ButtonCancelB').on('click',
+          function (event) {
+              $('#ButtonCancel').text('Processing...');
+              $('#ButtonCancel').prop('disabled', true);
+              $('#ButtonCancelB').text('Processing...');
+              $('#ButtonCancelB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/Cancel');
+              $('#EditTOG').submit();
+          });
+        //---------------------------------------------------------
+        $('#ButtonApprove').on('click',
+         function (event) {
+             $('#ButtonApprove').text('Processing...');
+             $('#ButtonApprove').prop('disabled', true);
+             $('#ButtonApproveB').text('Processing...');
+             $('#ButtonApproveB').prop('disabled', true);
+             $('#FromLocationId').removeAttr('disabled');
+             $('#ToLocationId').removeAttr('disabled');
+             $('#EditTOG').attr('action', '/TOG/Approve');
+             $('#EditTOG').submit();
+         });
+        $('#ButtonApproveB').on('click',
+          function (event) {
+              $('#ButtonApprove').text('Processing...');
+              $('#ButtonApprove').prop('disabled', true);
+              $('#ButtonApproveB').text('Processing...');
+              $('#ButtonApproveB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/Approve');
+              $('#EditTOG').submit();
+          });
+        //---------------------------------------------------------
+        $('#ButtonReject').on('click',
+         function (event) {
+             $('#ButtonReject').text('Processing...');
+             $('#ButtonReject').prop('disabled', true);
+             $('#ButtonRejectB').text('Processing...');
+             $('#ButtonRejectB').prop('disabled', true);
+             $('#FromLocationId').removeAttr('disabled');
+             $('#ToLocationId').removeAttr('disabled');
+             $('#EditTOG').attr('action', '/TOG/Reject');
+             $('#EditTOG').submit();
+         });
+        $('#ButtonRejectB').on('click',
+          function (event) {
+              $('#ButtonReject').text('Processing...');
+              $('#ButtonReject').prop('disabled', true);
+              $('#ButtonRejectB').text('Processing...');
+              $('#ButtonRejectB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/Reject');
+              $('#EditTOG').submit();
+          });
+        //----------------------------------------------------------
+        $('#ButtonForcefullyClose').on('click',
+         function (event) {
+             $('#ButtonForcefullyClose').text('Processing...');
+             $('#ButtonForcefullyClose').prop('disabled', true);
+             $('#ButtonForcefullyCloseB').text('Processing...');
+             $('#ButtonForcefullyCloseB').prop('disabled', true);
+             $('#FromLocationId').removeAttr('disabled');
+             $('#ToLocationId').removeAttr('disabled');
+             $('#EditTOG').attr('action', '/TOG/ForcefullyClose');
+             $('#EditTOG').submit();
+         });
+        $('#ButtonForcefullyCloseB').on('click',
+          function (event) {
+              $('#ButtonForcefullyClose').text('Processing...');
+              $('#ButtonForcefullyClose').prop('disabled', true);
+              $('#ButtonForcefullyCloseB').text('Processing...');
+              $('#ButtonForcefullyCloseB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/ForcefullyClose');
+              $('#EditTOG').submit();
+          });
+        //----------------------------------------------------------
+        $('#ButtonReopen').on('click',
+         function (event) {
+             $('#ButtonReopen').text('Processing...');
+             $('#ButtonReopen').prop('disabled', true);
+             $('#ButtonReopenB').text('Processing...');
+             $('#ButtonReopenB').prop('disabled', true);
+             $('#FromLocationId').removeAttr('disabled');
+             $('#ToLocationId').removeAttr('disabled');
+             $('#EditTOG').attr('action', '/TOG/Reopen');
+             $('#EditTOG').submit();
+         });
+        $('#ButtonReopenB').on('click',
+          function (event) {
+              $('#ButtonReopen').text('Processing...');
+              $('#ButtonReopen').prop('disabled', true);
+              $('#ButtonReopenB').text('Processing...');
+              $('#ButtonReopenB').prop('disabled', true);
+              $('#FromLocationId').removeAttr('disabled');
+              $('#ToLocationId').removeAttr('disabled');
+              $('#EditTOG').attr('action', '/TOG/Reopen');
+              $('#EditTOG').submit();
+          });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function SwitchWizard ()
+    {
+        if('@Convert.ToBoolean(Session["POWizadUI"])'=='False'){
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+        }
+    });
+</script>
+<script>
+
+    $(document).ready(function() {
+
+        EnableDisable();
+
+    });
+
+    $('input[type=radio][name=TOGType]').change(function()
+    {
+
+        if (this.value == 'Manual')
+        {
+            EnableDisable();
+        }
+        else if (this.value == 'GRNBased')
+        {
+            EnableDisable();
+
+        }
+        else if (this.value == 'RequestNoteBased')
+        {
+            $("#Manual").prop("checked", true);
+            $("#ReOrderLevelBased").prop("checked", true);
+            return;
+            EnableDisable();
+
+        }
+    });
+</script>
+<script>
+    if('@ViewBag.TOGType' == "GRNBased")
+    {
+        document.getElementById("GRNNo").value = '@ViewBag.GRNNumber';
+    }
+</script>
+<script>
+    if(@ViewBag.TransferNoteHeaderId!=null){
+
+        var TeamDetailPostBackURL = '/TOG/Print';
+
+        $(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": @ViewBag.TransferNoteHeaderId,"printstatus":1 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+
+    }
+</script>
+<script>
+
+    var TeamDetailPostBackURL = '/TOG/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id,"printstatus":1 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+<script>
+
+
+    $(document).ready(function () {
+        $("#ItemId").change(function () {
+            if ($("#ItemId").val() != 0) {
+                $.ajax({
+                    url: "@Url.Action("GetProductData", "TOG")",
+                    data: {
+                    id: $("#ItemId").val(), qty: "1", frmlocid: $("#FromLocationId").val(), tolocid: $("#ToLocationId").val(),
+                    fromlocname: $("#FromLocationId option:selected").text(), tolocname: $("#ToLocationId option:selected").text()
+                    },
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $("#CostPrice").val(parseFloat(data.CostPrice).toFixed(2));
+                    $("#UOM").val(data.UOM);
+                }
+            });
+        }
+        });
+    });
+
+    @*$.getJSON("@Url.Action("GetLocationProducts", "PO")", { locid:@ViewBag.FromLocationId},
+       function (data) {
+
+           var itemId = $("#ItemId");
+
+           itemId.empty();
+           itemId.append("<option value='0'>-- Select an Item --</option>");
+
+           $.each(JSON.parse(data),function (index, optionaldata)
+           {
+               itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName + "(" + optionaldata.UOMDesc + ")"));
+
+           }
+           );
+
+       });*@
+
+    @*$.getJSON("@Url.Action("GetGRNWiseProduct", "GRN")", { frmloc: @ViewBag.FromLocationId },
+
+         function (data) {
+             var GRNId = $("#GRNId");
+             GRNId.empty();
+             GRNId.append("<option value='0'>-- Select a GRN --</option>");
+
+
+             $.each(JSON.parse(data), function (index, optionaldata) {
+                 GRNId.append($('<option />', { value: optionaldata.PurchaseHeaderId }).html(optionaldata.DocumentNo));
+
+             });
+
+             if ('@ViewBag.GRNId') {
+                 $('#GRNId').val(@ViewBag.GRNId).trigger("change");
+             } else {
+                 $('#GRNId').val(0).trigger("change");
+             }
+         });*@
+
+
+    $.getJSON("@Url.Action("GetLocWiseAccRequest", "RequestNote")", { locid: @ViewBag.FromLocationId },
+
+       function (data) {
+           var RequestNoteId = $("#RequestNoteId");
+           RequestNoteId.empty();
+           RequestNoteId.append("<option value='0'>-- Select a Request Note --</option>");
+
+           $.each(JSON.parse(data), function (index, optionaldata) {
+               RequestNoteId.append($('<option />', { value: optionaldata.RequestNoteAccptanceHeaderId }).html(optionaldata.DocumentNo));
+
+           });
+
+           if ('@ViewBag.RequestNoteId') {
+               $('#RequestNoteId').val(@ViewBag.RequestNoteId).trigger("change");
+           } else {
+               $('#RequestNoteId').val(0).trigger("change");
+           }
+       });
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $("#ItemId").change(function(){
+            checkProductQuantity();
+        });
+    });
+
+    function checkProductQuantity()
+    {
+        document.getElementById('validateqty').innerHTML = '';
+
+        if ($("#FromLocationId").val() == 0 || $("#FromLocationId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select a Location';
+
+            return;
+        }
+
+        if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select an Item';
+            return;
+        }
+
+        
+
+        $.ajax({
+            url: "@Url.Action("VaidateQuantityForTOG", "PO")",
+            data: { id: $("#ItemId").val(), polocid: $("#FromLocationId").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                var stock = resp.Stock || 0;
+                var holdStock = resp.Hold_Stock || 0;
+
+
+                var recQty = $("#RecQty").val();
+
+                if (recQty === "0" || recQty === "") {
+                    $('#validateqty').html(
+                        'Available stock is ' + stock + ' (Hold stock: ' + holdStock + ')'
+                    );
+                    $('#RecQty').val('0');
+                }
+                else {
+                    if (parseFloat(stock) < parseFloat(recQty)) {
+                        $('#validateqty').html(
+                            'Available stock is ' + stock + ' (Hold stock: ' + holdStock + ')'
+                        );
+                        $('#RecQty').val('0');
+                    } else {
+                        $('#validateqty').html('');
+                    }
+                }
+                //data = resp;
+                //debugger;
+                //if($("#RecQty").val()=="0" || $("#RecQty").val()=="" ){
+                //    document.getElementById('validateqty').innerHTML = 'available stock is ' + resp;
+                //    document.getElementById('RecQty').value = '0';
+                //}else{
+                    
+                //    if (resp < $("#RecQty").val()) {
+                //        document.getElementById('validateqty').innerHTML = 'available stock is ' + resp;
+                //        document.getElementById('RecQty').value = '0';
+                //    } else {
+                //        document.getElementById('validateqty').innerHTML = '';
+                //    }
+                //}
+            }
+        });
+    }
+</script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#FromLocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.FromLocationId') {
+            $('#FromLocationId').val(@ViewBag.FromLocationId).trigger("change");
+        } else {
+            $('#FromLocationId').val(0).trigger("change");
+        }
+    });
+</script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var toLocationId = $("#ToLocationId");
+
+        toLocationId.empty();
+        toLocationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            toLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.toLocationId') {
+            $('#ToLocationId').val(@ViewBag.toLocationId).trigger("change");
+        } else {
+            $('#ToLocationId').val(0).trigger("change");
+        }
+    });
+</script>
+<script>
+    $.getJSON("@Url.Action("GetEvents", "PO")", function (data) {
+
+        debugger;
+
+        var EventId = $("#EventId");
+
+        EventId.empty();
+        EventId.append("<option value='0'>-- Select an Event --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            EventId.append($('<option />', { value: optionaldata.EventId }).html(optionaldata.EventName));
+
+        });
+
+        if ('@ViewBag.EventId') {
+            $('#EventId').val(@ViewBag.EventId).trigger("change");
+        } else {
+            $('#EventId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+<script>
+
+    $('#ToLocationId').change(function () {
+        var tolocid = this.value;
+
+        if ($('#FromLocationId').val() == $('#ToLocationId').val()) {
+            alert("Select different locations!");
+
+            $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+                var locationId = $("#FromLocationId");
+
+                locationId.empty();
+                locationId.append("<option value='0'>-- Select a Location --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+                });
+
+                if ('@ViewBag.locationId') {
+                    $('#FromLocationId').val(@ViewBag.locationId).trigger("change");
+                } else {
+                    $('#FromLocationId').val(0).trigger("change");
+                }
+            });
+
+            $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+                var toLocationId = $("#ToLocationId");
+
+                toLocationId.empty();
+                toLocationId.append("<option value='0'>-- Select a Location --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata)
+                {
+                    toLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+                });
+
+                if ('@ViewBag.toLocationId') {
+                    $('#ToLocationId').val(@ViewBag.toLocationId).trigger("change");
+                } else {
+                    $('#ToLocationId').val(0).trigger("change");
+                }
+            });
+
+            return;
+        }
+
+        @*$('#ItemId').prepend($('<option></option>').html('Loading...'));
+
+        $.getJSON("@Url.Action("GetLocationWiseProduct", "Product")", { frmloc: $('#FromLocationId').val(), toloc: tolocid },
+        function (data) {
+           var itemId = $("#ItemId");
+            itemId.empty();
+            itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                //itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName + " (" +optionaldata.UOM+ ")"));
+
+            });
+
+        });*@
+
+    });
+</script>
+<script>
+
+    $('#FromLocationId').change(function ()
+    {
+        var frmlocid = this.value;
+
+        if ($('#FromLocationId').val() == $('#ToLocationId').val()) {
+            alert("Select different locations!");
+
+            $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+                var locationId = $("#FromLocationId");
+
+                locationId.empty();
+                locationId.append("<option value='0'>-- Select a Location --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+                });
+
+                if ('@ViewBag.locationId') {
+                    $('#FromLocationId').val(@ViewBag.locationId).trigger("change");
+                } else {
+                    $('#FromLocationId').val(0).trigger("change");
+                }
+
+
+            });
+
+
+            $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+                var toLocationId = $("#ToLocationId");
+
+                toLocationId.empty();
+                toLocationId.append("<option value='0'>-- Select a Location --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata)
+                {
+                    toLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+                });
+
+                if ('@ViewBag.toLocationId') {
+                    $('#ToLocationId').val(@ViewBag.toLocationId).trigger("change");
+                } else {
+                    $('#ToLocationId').val(0).trigger("change");
+                }
+
+
+            });
+
+            return;
+        }
+
+        @*$('#ItemId').prepend($('<option></option>').html('Loading...'));
+        $.getJSON("@Url.Action("GetLocationWiseProduct", "Product")", { frmloc: frmlocid, toloc: $('#ToLocationId').val() },
+        function (data) {
+            var itemId = $("#ItemId");
+            itemId.empty();
+            itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                //itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName + "(" + optionaldata.UOM + ")"));
+
+            });
+
+
+        });*@
+
+
+        @*$.getJSON("@Url.Action("GetGRNWiseProduct", "GRN")", { frmloc: frmlocid },
+
+        function (data) {
+           var GRNId = $("#GRNId");
+           GRNId.empty();
+           GRNId.append("<option value='0'>-- Select a GRN --</option>");
+
+
+           $.each(JSON.parse(data), function (index, optionaldata) {
+               GRNId.append($('<option />', { value: optionaldata.PurchaseHeaderId }).html(optionaldata.DocumentNo));
+
+           });
+
+           if ('@ViewBag.GRNId') {
+               $('#GRNId').val(@ViewBag.GRNId).trigger("change");
+           } else {
+               $('#GRNId').val(0).trigger("change");
+           }
+       });*@
+
+
+
+
+    });
+</script>
+
+@*PO Item handling*@
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddTOGItem",
+        function () {
+
+            debugger;
+            if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+                alert("Select a product !");
+                return;
+            }
+            if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+
+            if ($("#FromLocationId").val() == 0 || $("#FromLocationId").val() == null) {
+                alert("Select a From location!");
+                return;
+            }
+
+            if ($("#ToLocationId").val() == 0 || $("#ToLocationId").val() == null) {
+                alert("Select a To location!");
+                return;
+            }
+
+            var itemId = $("#ItemId").val();
+            var itemDesc = $("#ItemId option:selected").text().split('(')[0];
+
+
+            $.ajax({
+                url: "@Url.Action("GetProductData", "TOG")",
+                data: {
+                    id: $("#ItemId").val(), qty: $("#RecQty").val(), frmlocid: $("#FromLocationId").val(), tolocid: $("#ToLocationId").val(),
+                    fromlocname: $("#FromLocationId option:selected").text(), tolocname:$("#ToLocationId option:selected").text()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    debugger;
+                    if (data.ItemId == "0")
+                    {
+                        alert("Item : " + itemDesc + " not exists at Location: " + $("#ToLocationId option:selected").text());
+                        return;
+                    }
+                    if (data.Qty > data.CrrQty) {
+                        alert("Item : " + itemDesc + " no enough stock. available stock is: "+data.CrrQty);
+                        return;
+                    }
+
+                    @{
+                        Model.TOGDetail.Add(new RIT.HMS.Domain.Transactions.TransferNoteDetail());
+                    }
+
+                    var table = document.getElementById("togitems");
+                    var hasitem = '0';
+
+                    // checking already exists
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+
+                        var itemidcell = table.rows[r].cells[1].innerHTML;
+                        var regex = /value="(\d+(\.\d)*)/i;
+                        var itemidex = itemidcell.match(regex)[1];
+                        if (itemidex == itemId) {
+                            hasitem = '1';
+                        }
+
+                    }
+
+                        @{ // Retrieve the value from the session and convert it to a boolean
+                            bool TOGGridAdditionalColumn1 = Convert.ToBoolean(Session["TOGGridAdditionalColumn"]);
+                            bool DisablePriceRequestNote0 = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+                         }
+                       // Pass the server-side boolean value to JavaScript
+                           var TOGGridAdditionalColumn1 = @TOGGridAdditionalColumn1.ToString().ToLower(); // 'true' or 'false'
+                       var DisablePriceRequest_Note = @DisablePriceRequestNote0.ToString().ToLower();
+
+                    if (hasitem == '0')
+                    {
+
+                        // var unitindex = $("#togitems").children("tr").length;
+                        var unitindex=data.ItemId;
+                        var unitindexCell = "<td style='display:none'><input name='TOGDetail.Index' type='hidden' value=" +
+                            unitindex + " /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='TOGDetail[" + unitindex + "]_ProductId' class='form-control' name='TOGDetail[" +
+                            unitindex + "].ProductId' type='text' readonly value='" + data.ItemId + "' /></td>";
+
+
+
+
+                        var RequestNoteHeaderIDCell = "<td style='display:none'><input id='TOGDetail[" + data.ItemId + "]_RequestNoteHeaderID' class='form-control' name='TOGDetail[" +
+                            data.ItemId + "].RequestNoteHeaderID' type='text' readonly value='" + data.RequestNoteHeaderID + "' /></td>";
+
+
+
+
+                        if (!TOGGridAdditionalColumn1) {
+
+                            var ReqNoteCreatedDateCell = "<td style='display:none' ><input id='TOGDetail[" + data.ItemId + "]_ReqNoteCreatedDate'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].ReqNoteCreatedDate' type='text' readonly value='" + moment(data.ReqNoteCreatedDate).format('YYYY-MM-DD') + "' /></td>";
+
+
+                            var RequestNoteDocumentNoCell = "<td style='display:none;' ><input id='TOGDetail[" + data.ItemId + "]_RequestNoteDocumentNo'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].RequestNoteDocumentNo' type='text' readonly value='" + data.RequestNoteDocumentNo + "' /></td>";
+
+
+                            var SIHCell = "<td style='display:none;' ><input id='TOGDetail[" + data.ItemId + "]_SIH'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].SIH' type='text' readonly value='" + data.SIH + "' /></td>";
+
+                            var CostPriceCell = "<td style='display:none;' ><input id='TOGDetail[" + data.ItemId + "]_CostPrice'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].CostPrice' type='text' readonly value='" + data.CostPrice + "' /></td>";
+
+
+                        }
+
+                        else {
+
+                            var ReqNoteCreatedDateCell = "<td ><input id='TOGDetail[" + data.ItemId + "]_ReqNoteCreatedDate'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].ReqNoteCreatedDate' type='text' readonly value='" + moment(data.ReqNoteCreatedDate).format('YYYY-MM-DD') + "' /></td>";
+
+
+                            var RequestNoteDocumentNoCell = "<td  ><input id='TOGDetail[" + data.ItemId + "]_RequestNoteDocumentNo'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].RequestNoteDocumentNo' type='text' readonly value='" + data.RequestNoteDocumentNo + "' /></td>";
+
+
+                            var SIHCell = "<td  ><input id='TOGDetail[" + data.ItemId + "]_SIH'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].SIH' type='text' readonly value='" + data.SIH + "' /></td>";
+
+                            var CostPriceCell = "<td  ><input id='TOGDetail[" + data.ItemId + "]_CostPrice'  class='form-control'  name='TOGDetail[" +
+                                data.ItemId + "].CostPrice' type='text' readonly value='" + data.CostPrice + "' /></td>";
+
+
+                        }
+
+
+                        var unitDescCell = "<td><input id='TOGDetail[" + unitindex + "]_ProductName'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].ProductName' type='text' readonly value='" + itemDesc + "' /></td>";
+
+                        var unitQtyCell = "<td style='display:none'><input id='TOGDetail[" + unitindex + "]_OrderQty'   class='form-control'  name='TOGDetail[" +
+                            unitindex + "].OrderQty' type='hidden' readonly value='" + data.Qty + "' /></td>";
+
+                        var unitUOMCell = "<td><input id='TOGDetail[" + unitindex + "]_UOM'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].UOM' type='text' readonly value='" + data.Qty + " " + data.UOM + "' /></td>";
+
+
+                        var unitSellingPriceCell = "<td style='display: none;'><input id='TOGDetail[" + unitindex + "]_SellingPrice'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].SellingPrice' type='text' readonly value='" + parseFloat(Number(data.SellingPrice)).toFixed(2) + "' /></td>";
+
+                        if (DisablePriceRequest_Note) {
+                            var unitCostPriceCell = "<td style='display: none;' ><input id='TOGDetail[" + unitindex + "]_CostValue'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].CostValue' type='text' readonly value='" + parseFloat(Number(data.CostValue)).toFixed(2) + "' /></td>";
+                        }
+                        else {
+
+                            var unitCostPriceCell = "<td><input id='TOGDetail[" + unitindex + "]_CostValue'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].CostValue' type='text' readonly value='" + parseFloat(Number(data.CostValue)).toFixed(2) + "' /></td>";
+                        }
+
+                      
+
+                        var unitRemoveCell = "<td><input id='btnAddTOGItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trTOGItem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            RequestNoteHeaderIDCell + ReqNoteCreatedDateCell + RequestNoteDocumentNoCell +
+                            unitDescCell + SIHCell + CostPriceCell+
+                            unitQtyCell +
+                            unitUOMCell +
+                            unitCostPriceCell +
+                            unitSellingPriceCell +
+                            unitRemoveCell + "</tr>";
+
+                        $("#togitems").append(newUnitRow);
+
+                    }
+
+                    else if (hasitem == '1')
+                    {
+                        if (confirm("Do you want to Override item? "))
+                        {
+                            // itemOverride(newoddrUnitRow, itemId);
+
+
+                            var orrtable = document.getElementById("togitems");
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var indexval;
+                            var xxx;
+
+                            for (var r = 0, n = orrtable.rows.length; r < n; r++)
+                            {
+                                var idcell = orrtable.rows[r].cells[1].innerHTML;
+                                var idval = idcell.match(regex)[1];
+
+                                if (idval == itemId) {
+
+                                    var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                                    indexval = indexcell.match(regex)[1];
+                                    var xxx= orrtable.rows[r].rowIndex;
+                                }
+
+                            }
+
+                            var controlToBeRemoved = "#trTOGItem" + indexval;
+                            $(controlToBeRemoved).remove();
+
+                            // -------------------------
+
+
+                            var unitindex = $("#togitems").children("tr").length;
+                            var table = $("#togitems")[0];
+                          //  table.deleteRow(xxx-1);
+                            var unitindexCell = "<td style = 'display:none'><input name='TOGDetail.Index' type='text' value='" +
+                                xxx + "' /></td>";
+
+                            var unitIdCell = "<td style='display:none'><input id='TOGDetail[" + xxx + "]_ProductId' class='form-control' name='TOGDetail[" +
+                                xxx + "].ProductID' type='text' readonly value='" + data.ItemId + "' /></td>";
+
+                            var unitDescCell = "<td><input id='TOGDetail[" + xxx + "]_ProductName'  class='form-control'  name='TOGDetail[" +
+                                xxx + "].ProductName' type='text' readonly value='" + itemDesc + "' /></td>";
+
+
+                            //
+                            if (!TOGGridAdditionalColumn1) {
+
+                                var ReqNoteCreatedDateCell = "<td style='display:none' ><input id='TOGDetail[" + xxx + "]_ReqNoteCreatedDate'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].ReqNoteCreatedDate' type='text' readonly value='" + moment(data.ReqNoteCreatedDate).format('YYYY-MM-DD') + "' /></td>";
+
+
+                                var RequestNoteDocumentNoCell = "<td style='display:none;' ><input id='TOGDetail[" + xxx + "]_RequestNoteDocumentNo'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].RequestNoteDocumentNo' type='text' readonly value='" + data.RequestNoteDocumentNo + "' /></td>";
+
+
+                                var SIHCell = "<td style='display:none;' ><input id='TOGDetail[" + xxx + "]_SIH'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].SIH' type='text' readonly value='" + data.SIH + "' /></td>";
+
+                                var CostPriceCell = "<td style='display:none;' ><input id='TOGDetail[" + xxx + "]_CostPrice'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].CostPrice' type='text' readonly value='" + data.CostPrice + "' /></td>";
+
+
+
+
+                            }
+
+                            else {
+
+                                var ReqNoteCreatedDateCell = "<td ><input id='TOGDetail[" + xxx + "]_ReqNoteCreatedDate'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].ReqNoteCreatedDate' type='text' readonly value='" + moment(data.ReqNoteCreatedDate).format('YYYY-MM-DD') + "' /></td>";
+
+
+                                var RequestNoteDocumentNoCell = "<td  ><input id='TOGDetail[" + xxx + "]_RequestNoteDocumentNo'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].RequestNoteDocumentNo' type='text' readonly value='" + data.RequestNoteDocumentNo + "' /></td>";
+
+
+
+                                var SIHCell = "<td  ><input id='TOGDetail[" + xxx + "]_SIH'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].SIH' type='text' readonly value='" + data.SIH + "' /></td>";
+
+                                var CostPriceCell = "<td  ><input id='TOGDetail[" + xxx + "]_CostPrice'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].CostPrice' type='text' readonly value='" + data.CostPrice + "' /></td>";
+
+
+
+                            }
+
+
+                             //
+
+
+
+
+
+
+
+
+
+
+                            var unitQtyCell = "<td style='display:none'><input id='TOGDetail[" + xxx + "]_OrderQty'  class='form-control'  name='TOGDetail[" +
+                                xxx + "].OrderQty' type='number' readonly value='" + data.Qty + "' /></td>";
+
+                            var unitUOMCell = "<td><input id='TOGDetail[" + xxx + "]_UOM'  class='form-control'  name='TOGDetail[" +
+                                xxx + "].UOM' type='text' readonly value='" + data.Qty+data.UOM + "' /></td>";
+
+                            var unitSellingPriceCell = "<td style='display: none;'><input id='TOGDetail[" + xxx + "]_SellingPrice'  class='form-control'  name='TOGDetail[" +
+                                xxx + "].SellingPrice' type='text' readonly value='" + parseFloat(Number(data.SellingPrice)).toFixed(2) + "' /></td>";
+
+                            if (DisablePriceRequest_Note) {
+
+                                var unitCostPriceCell = "<td style='display: none;'><input id='TOGDetail[" + xxx + "]_CostValue'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].CostValue' type='text' readonly value='" + parseFloat(Number(data.CostValue)).toFixed(2) + "' /></td>";
+                            }
+                            else {
+                                var unitCostPriceCell = "<td><input id='TOGDetail[" + xxx + "]_CostValue'  class='form-control'  name='TOGDetail[" +
+                                    xxx + "].CostValue' type='text' readonly value='" + parseFloat(Number(data.CostValue)).toFixed(2) + "' /></td>";
+                            }
+
+                            var unitRemoveCell = "<td><input id='btnAddTOGItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                xxx + ");' /></td>";
+
+                            var newUnitRow1 = "<tr id='trTOGItem" + xxx + "'>" +
+                                unitindexCell +
+                                unitIdCell +
+
+                                RequestNoteHeaderIDCell + ReqNoteCreatedDateCell + RequestNoteDocumentNoCell +
+                                unitDescCell + SIHCell + CostPriceCell
+                                unitQtyCell +
+                                unitUOMCell +
+                                unitCostPriceCell +
+                                unitSellingPriceCell +
+                                unitRemoveCell + "</tr>";
+                            $("#togitems").append(newUnitRow1);
+
+                        }
+                    }
+
+                    document.getElementById("RecQty").value = "";
+                    var table = document.getElementById("togitems");
+                    debugger;
+                    var totsp = 0.0;
+                    var totcp = 0.0;
+                    var totqty = 0;
+
+                    var regex = /value="(\d+(\.\d)*)/i;
+                    var rowproductid=0;
+
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+                        rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+                        var spvalue= document.getElementById('TOGDetail[' + rowproductid + ']_SellingPrice').value
+                        totsp += Number(spvalue);
+
+                        var cpvalue = document.getElementById('TOGDetail[' + rowproductid + ']_CostValue').value
+                        totcp += Number(cpvalue);
+
+                    }
+
+                    //  alert(5);
+
+                    document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+                    // alert(6);
+                    document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+                    //  document.getElementById("TotQty").value = parseFloat(totqty).toFixed(2);
+
+                    document.getElementById("GrossAmount").value = parseFloat(
+                        Number(document.getElementById("TotSellingPrice").value)
+                    ).toFixed(2);
+
+                    //  alert(7);
+                    document.getElementById("NetAmount").value = parseFloat((
+                            Number(document.getElementById("TotCostPrice").value))
+                    ).toFixed(2);
+
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+    function removeUnitRow(id) {
+        debugger;
+
+        if (confirm("Do you want to delete? ")) {
+            var controlToBeRemoved = "#trTOGItem" + id;
+            $(controlToBeRemoved).remove();
+
+            var table = document.getElementById("togitems");
+
+            var totsp = 0;
+            var totcp = 0;
+            var totqty = 0;
+
+            var regex = /value="(\d+(\.\d)*)/i;
+            var rowproductid=0;
+
+            for (var r = 0, n = table.rows.length; r < n; r++)
+            {
+                rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+                var spvalue= document.getElementById('TOGDetail[' + rowproductid + ']_SellingPrice').value
+                totsp += Number(spvalue);
+
+                var cpvalue = document.getElementById('TOGDetail[' + rowproductid + ']_CostValue').value
+                totcp += Number(cpvalue);
+
+            }
+            document.getElementById("TotSellingPrice").value = totsp;
+            document.getElementById("TotCostPrice").value = totcp;
+            //  document.getElementById("TotQty").value = totqty;
+
+            document.getElementById("GrossAmount").value = parseFloat(
+                      Number(document.getElementById("TotSellingPrice").value)
+                  ).toFixed(2);
+
+            document.getElementById("NetAmount").value = parseFloat((
+                    Number(document.getElementById("TotCostPrice").value))
+            ).toFixed(2);
+
+        }
+
+    }
+
+
+</script>
+<script type="text/javascript">
+
+    function removeTOGRow(button)
+    {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? "))
+        {
+
+            var table = $("#togitems")[0];
+
+            table.deleteRow(row[0].rowIndex - 1);
+
+            var tabletorem = document.getElementById("togitems");
+
+            var totsp = 0.0;
+            var totcp = 0.0;
+            var totqty = 0.0;
+            var totdis = 0.0;
+            var tottax = 0.0;
+            var regex = /value="(\d+(\.\d)*)/i;
+            var rowproductid=0;
+            for (var r = 0, n = tabletorem.rows.length; r < n; r++)
+            {
+                rowproductid = table.rows[r].cells[1].innerHTML.match(regex)[1];
+                var spvalue= document.getElementById('TOGDetail[' + rowproductid + ']_SellingPrice').value
+                totsp += Number(spvalue);
+
+                var cpvalue = document.getElementById('TOGDetail[' + rowproductid + ']_CostValue').value
+                totcp += Number(cpvalue);
+
+            }
+            document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+            document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+            // document.getElementById("TotQty").value = totqty;
+
+            document.getElementById("GrossAmount").value = parseFloat(
+                Number(document.getElementById("TotDiscounts").value) +
+                Number(document.getElementById("TotSellingPrice").value)
+            ).toFixed(2);
+
+            document.getElementById("NetAmount").value = parseFloat((tottax +
+            Number(document.getElementById("TotSellingPrice").value)) -
+                Number(document.getElementById("TotDiscounts").value)
+            ).toFixed(2);
+
+
+
+        }
+
+    };
+</script>
+
+
+@*GRN based TOG*@
+
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddGRNItem",
+        function () {
+
+            debugger;
+            if ($("#FromLocationId").val() == 0 || $("#FromLocationId").val() == null) {
+                alert("Select a From location!");
+                return;
+            }
+
+            if ($("#ToLocationId").val() == 0 || $("#ToLocationId").val() == null) {
+                alert("Select a To location!");
+                return;
+            }
+            if ($("#GRNNo").val() == "" || $("#GRNNo").val() == null) {
+                alert("Enter a GRN Number!");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("GetGRNData", "TOG")",
+                data: { id: $("#GRNNo").val(), fromlocid: $("#FromLocationId").val(), tolocid: $("#ToLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+                    debugger;
+                    if(data==null || data=="")
+                    {
+                        alert("No Items to Transfer");
+                    }
+
+                    $("#togitems tr").remove();
+                    $.each(data, function (i, item)
+                    {
+
+                        @{
+                            Model.TOGDetail.Add(new RIT.HMS.Domain.Transactions.TransferNoteDetail());
+
+                            bool DisablePriceRequestNote1 = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+                        }
+                        var DisablePriceRequest_Note1 = @DisablePriceRequestNote1.ToString().ToLower();
+
+
+                        document.getElementById("GRNId").value = item.PurchaseHeaderId;
+                        //var unitindex = $("#togitems").children("tr").length;
+                        var unitindex=item.ItemId;
+                        var unitindexCell = "<td style='display:none'><input name='TOGDetail.Index' type='hidden' value='" +
+                            unitindex + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='TOGDetail" + unitindex + "_ProductID' class='form-control' name='TOGDetail[" +
+                            unitindex + "].ProductID' type='text' readonly value='" + item.ItemId + "' /></td>";
+
+                        var unitDescCell = "<td><input id='TOGDetail" + unitindex + "_ProductName'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].ProductName' type='text' readonly value='" + item.ItemDesc + "' /></td>";
+
+                        var unitQtyCell = "<td><input id='TOGDetail" + unitindex + "_OrderQty'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].OrderQty'  readonly value='" + item.Qty + "' /></td>";
+
+                        var unitSellingPriceCell = "<td style='display: none;'><input id='TOGDetail" + unitindex + "_SellingPrice'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].SellingPrice' type='text' readonly value='" + parseFloat(Number(item.SellingPrice)).toFixed(2) + "' /></td>";
+
+                        if (DisablePriceRequest_Note1) {
+                            var unitCostPriceCell = "<td style='display: none;'><input id='TOGDetail" + unitindex + "_CostValue'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].CostValue' type='text' readonly value='" + parseFloat(Number(item.CostValue)).toFixed(2) + "' /></td>";
+                        }
+                        else {
+
+                            var unitCostPriceCell = "<td><input id='TOGDetail" + unitindex + "_CostValue'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].CostValue' type='text' readonly value='" + parseFloat(Number(item.CostValue)).toFixed(2) + "' /></td>";
+                        }
+
+                        var unitRemoveCell = "<td><input id='btnAddGRNItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trTOGItem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+                            unitQtyCell +
+                            unitCostPriceCell +
+                            unitSellingPriceCell +
+                            unitRemoveCell + "</tr>";
+                        //bgcolor='#ffff99'
+                        var newUnitRow2 = "<tr bgcolor='#ffff99' id='trTOGItem" + unitindex + "'>" +
+                           unitindexCell +
+                           unitIdCell +
+                           unitDescCell +
+                           unitQtyCell +
+                           unitCostPriceCell +
+                           unitSellingPriceCell +
+                           unitRemoveCell + "</tr>";
+
+
+
+                        if (item.HasItem == 1)
+                        {
+                            // document.getElementById('lblerror').innerHTML = 'Highlighted item(s) are not exists in location : ' + $("#ToLocationId option:selected").text();
+                            $("#togitems").append(newUnitRow);
+
+                        } else
+                        {
+                            $("#togitems").append(newUnitRow2);
+                        }
+
+
+                    });
+                    document.getElementById("RecQty").value = "";
+                    var table = document.getElementById("togitems");
+
+                    var totsp = 0.0;
+                    var totcp = 0.0;
+                    var totqty = 0;
+
+                    var regex = /value="(\d+(\.\d)*)/i;
+                    var rowproductid=0;
+
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+
+                        rowproductid =  table.rows[r].cells[1].innerHTML.match(regex)[1];
+                        var spvalue= document.getElementById('TOGDetail[' + rowproductid + ']_SellingPrice').value
+                        totsp += Number(spvalue);
+
+                        var cpvalue = document.getElementById('TOGDetail[' + rowproductid + ']_CostValue').value
+                        totcp += Number(cpvalue);
+
+                    }
+                    document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+                    document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+                    // document.getElementById("TotQty").value = parseFloat(totqty).toFixed(2);
+
+                    document.getElementById("GrossAmount").value = parseFloat(
+                        Number(document.getElementById("TotSellingPrice").value)
+                    ).toFixed(2);
+
+                    document.getElementById("NetAmount").value = parseFloat((
+                            Number(document.getElementById("TotCostPrice").value))
+                    ).toFixed(2);
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+
+
+
+</script>
+
+@*GRN based TOG*@
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddRequestNoteItem",
+        function () {
+
+
+            if ($("#FromLocationId").val() == 0 || $("#FromLocationId").val() == null) {
+                alert("Select a From location!");
+                return;
+            }
+
+            if ($("#ToLocationId").val() == 0 || $("#ToLocationId").val() == null) {
+                alert("Select a To location!");
+                return;
+            }
+            if ($("#RequestNoteId").val() == 0 || $("#RequestNoteId").val() == null) {
+                alert("Select a Request Note!");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("GetRequestNoteData", "TOG")",
+                data: { id:$("#RequestNoteId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    debugger;
+                    data = resp;
+
+                    $("#togitems tr").remove();
+                    $.each(data, function (i, item) {
+
+                        @{
+                        Model.TOGDetail.Add(new RIT.HMS.Domain.Transactions.TransferNoteDetail());
+                        }
+
+                        // var unitindex = $("#togitems").children("tr").length;
+                        var unitindex = item.ItemId;
+                        var unitindexCell = "<td style='display:none'><input name='TOGDetail.Index' type='hidden' value='" +
+                            unitindex + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='TOGDetail[" + unitindex + "]_ProductID' class='form-control' name='TOGDetail[" +
+                            unitindex + "].ProductID' type='text' readonly value='" + item.ItemId + "' /></td>";
+
+                        var unitDescCell = "<td><input id='TOGDetail[" + unitindex + "]_ProductName'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].ProductName' type='text' readonly value='" + item.ItemDesc + "' /></td>";
+
+                        var unitQtyCell = "<td><input id='TOGDetail[" + unitindex + "]_OrderQty'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].OrderQty'  readonly value='" + item.IssueQty + "' /></td>";
+
+                        var unitSellingPriceCell = "<td style='display: none;'><input id='TOGDetail[" + unitindex + "]_SellingPrice'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].SellingPrice' type='text' readonly value='" + parseFloat(Number(item.SellingPrice)).toFixed(2) + "' /></td>";
+
+                        var unitCostPriceCell = "<td><input id='TOGDetail[" + unitindex + "]_CostValue'  class='form-control'  name='TOGDetail[" +
+                            unitindex + "].CostValue' type='text' readonly value='" + parseFloat(Number(item.CostValue)).toFixed(2) + "' /></td>";
+
+                        var unitRemoveCell = "<td><input id='btnAddGRNItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trTOGItem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+                            unitQtyCell +
+                            unitCostPriceCell +
+                            unitSellingPriceCell +
+
+                            unitRemoveCell + "</tr>";
+
+                        $("#togitems").append(newUnitRow);
+
+                    });
+
+                    var table = document.getElementById("togitems");
+
+                    var totsp = 0.0;
+                    var totcp = 0.0;
+                    var totqty = 0;
+
+                    var regex = /value="(\d+(\.\d)*)/i;
+                    var rowproductid=0;
+
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+
+                        rowproductid =  table.rows[r].cells[1].innerHTML.match(regex)[1];
+                        var spvalue= document.getElementById('TOGDetail[' + rowproductid + ']_SellingPrice').value
+                        totsp += Number(spvalue);
+
+                        var cpvalue = document.getElementById('TOGDetail[' + rowproductid + ']_CostValue').value
+                        totcp += Number(cpvalue);
+
+
+                    }
+                    document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+                    document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+                    //   document.getElementById("TotQty").value = parseFloat(totqty).toFixed(2);
+
+                    document.getElementById("GrossAmount").value = parseFloat(
+                        Number(document.getElementById("TotSellingPrice").value)
+                    ).toFixed(2);
+
+                    document.getElementById("NetAmount").value = parseFloat((
+                            Number(document.getElementById("TotCostPrice").value))
+                    ).toFixed(2);
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+
+
+
+</script>
+<script>
+    $(this).submit(function() {
+        $('#ToLocationId').removeAttr('disabled');
+        $('#FromLocationId').removeAttr('disabled');
+    });
+</script>
+
+
+
+@*<script type="text/javascript">
+        $("body").on("click",
+            "#btnAddGRNItem",
+            function () {
+
+
+                if ($("#FromLocationId").val() == 0 || $("#FromLocationId").val() == null) {
+                    alert("Select a From location!");
+                    return;
+                }
+
+                if ($("#ToLocationId").val() == 0 || $("#ToLocationId").val() == null) {
+                    alert("Select a To location!");
+                    return;
+                }
+                if ($("#GRNId").val() == 0 || $("#GRNId").val() == null) {
+                    alert("Select a GRN!");
+                    return;
+                }
+
+                $.ajax({
+                    url: "@Url.Action("GetGRNData", "TOG")",
+                    data: { id:$("#GRNId").val(),"","" },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (resp) {
+                        data = resp;
+
+                        $("#togitems tr").remove();
+                        $.each(data, function (i, item) {
+
+                            @{
+                            Model.TOGDetail.Add(new HospitalityManagement.Models.Transactions.TransferNoteDetail());
+                            }
+
+                            var unitindex = $("#togitems").children("tr").length;
+                            var unitindexCell = "<td style='display:none'><input name='TOGDetail.Index' type='hidden' value='" +
+                                unitindex + "' /></td>";
+
+                            var unitIdCell = "<td><input id='TOGDetail" + unitindex + "_ProductID' class='form-control' name='TOGDetail[" +
+                                unitindex + "].ProductID' type='text' readonly value='" + item.ItemId + "' /></td>";
+
+                            var unitDescCell = "<td><input id='TOGDetail" + unitindex + "_ProductName'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].ProductName' type='text' readonly value='" + item.ItemDesc + "' /></td>";
+
+                            var unitQtyCell = "<td><input id='TOGDetail" + unitindex + "_OrderQty'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].OrderQty'  readonly value='" + item.Qty + "' /></td>";
+
+                            var unitSellingPriceCell = "<td><input id='TOGDetail" + unitindex + "_SellingPrice'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].SellingPrice' type='text' readonly value='" + item.SellingPrice + "' /></td>";
+
+                            var unitCostPriceCell = "<td><input id='TOGDetail" + unitindex + "_CostPrice'  class='form-control'  name='TOGDetail[" +
+                                unitindex + "].CostPrice' type='text' readonly value='" + item.CostPrice + "' /></td>";
+
+                            var unitRemoveCell = "<td><input id='btnAddGRNItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                unitindex + ");' /></td>";
+
+                            var newUnitRow = "<tr id='trTOGItem" + unitindex + "'>" +
+                                unitindexCell +
+                                unitIdCell +
+                                unitDescCell +
+                                unitQtyCell +
+                                unitCostPriceCell +
+                                unitSellingPriceCell +
+
+                                unitRemoveCell + "</tr>";
+
+                            $("#togitems").append(newUnitRow);
+
+                        });
+
+                        var table = document.getElementById("togitems");
+
+                        var totsp = 0.0;
+                        var totcp = 0.0;
+                        var totqty = 0;
+
+                        for (var r = 0, n = table.rows.length; r < n; r++) {
+                            var spcell = table.rows[r].cells[5].innerHTML;
+                            //alert(spcell);
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var spvalue = spcell.match(regex)[1];
+
+                            // alert((spvalue));
+                            totsp += Number(spvalue);
+
+                            var cpcell = table.rows[r].cells[4].innerHTML;
+                            var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                            totcp += Number(cpvalue);
+
+                            var qtycell = table.rows[r].cells[3].innerHTML;
+                            var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                            totqty += Number(qtyvalue);
+
+
+                        }
+                        document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(2);
+                        document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+                        document.getElementById("TotQty").value = parseFloat(totqty).toFixed(2);
+
+                        document.getElementById("GrossAmount").value = parseFloat(
+                            Number(document.getElementById("TotSellingPrice").value)
+                        ).toFixed(2);
+
+                        document.getElementById("NetAmount").value = parseFloat((
+                                Number(document.getElementById("TotSellingPrice").value))
+                        ).toFixed(2);
+                    },
+                    error: function (error) {
+                        alert("Item data mapping error");
+                    }
+                });
+
+            });
+
+
+    </script>*@

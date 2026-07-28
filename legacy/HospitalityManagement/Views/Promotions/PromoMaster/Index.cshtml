@@ -1,0 +1,552 @@
+﻿@model RIT.HMS.Domain.Promotions.InvPromotionMaster
+@{
+    ViewBag.Title = "Create Promotion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Promotions.css" rel="stylesheet" />
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body">
+    <div class="main_container">
+
+
+        @using (Html.BeginForm("CreatePromotion", "Promotion", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Promotion</strong> @ViewBag.PromotionCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Promotion</strong> @ViewBag.PromotionCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Promotion code already exists.</strong>
+                        </div>
+                    }
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Promotion Master</h2>
+                                    <br />
+                                    
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small></small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small></small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12  trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Promotion No # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.PromotionCode, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Promotion Code",
+                                                           MaxLength = 50,
+                                                           oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.PromotionCode, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Promotion Name  <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            @Html.TextBoxFor(model => model.PromotionName, new { @class = "form-control", MaxLength = 20, Placeholder = "Promotion Name" })
+                                                            @Html.ValidationMessageFor(model => model.PromotionName, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Business Type <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="BusinessTypeIDs" class="form-control select2" name="BusinessTypeIDs" required="required"></select>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Start Date <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.StartDate, new { @id = "StartDate", @class = "form-control pull-left", Type = "date", Placeholder = "StartDate" })
+                                                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            No Of Times  <span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.PromotionCount, new { @id = "Count", @class = "form-control pull-left", Type = "number", Placeholder = "StartDate" })
+                                                            @Html.ValidationMessageFor(model => model.PromotionCount, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-horizontal col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Locations <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="LocationIds" class="form-control select2" name="LocationIds" required="required"></select>
+                                                            @*@Html.ValidationMessageFor(model => model.LocationIds, "", new { @class = "text-danger" })*@
+                                                        </div>
+
+                                                         
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Promotion Type <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="PromotionTypeId" class="form-control" name="PromotionTypeId" required="required">
+                                                                @Html.ValidationMessageFor(model => model.PromotionTypeID, "", new { @class = "text-danger" })
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Customer Group <span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="CustomerGroupIds" multiple class="form-control select2" name="CustomerGroupIds" ></select>
+                                                            @Html.ValidationMessageFor(model => model.CustomerGroupIds, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            End Date <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.EndDate, new { @id = "EndDate", @class = "form-control pull-left", Type = "date", Placeholder = "End Date" })
+                                                            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>  <br />  
+                                        <div id="step-2">
+                                            <div class="col-md-12 trn-detail">
+                                                <br />
+                                                <div class="form-group">
+                                                    <div id="buttons1">
+                                                        <table id="buttons1" class="table table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:10%">
+                                                                        Day
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <select id="DayId" class="form-control" style="width:100%" name="DayId">
+                                                                            <option value="0">- Select A Day -</option>
+                                                                            <option value="Sunday">Sunday</option>
+                                                                            <option value="Monday">Monday</option>
+                                                                            <option value="Tuesday">Tuesday</option>
+                                                                            <option value="Wednesday">Wednesday</option>
+                                                                            <option value="Thursday">Thursday</option>
+                                                                            <option value="Friday">Friday</option>
+                                                                            <option value="Saturday">Saturday</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td style="width:10%">
+                                                                        From Time
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <input id="FromTime" name="FromTime" type="time" class="form-control col-md-2 col-xs-6">
+                                                                    </td>
+                                                                    <td style="width:10%">
+                                                                        To Time
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <input id="ToTime" name="ToTime" type="time" class="form-control col-md-2 col-xs-6">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="button" id="btnAddItem" class="btn btn-round btn-info" value="+" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <div id="btnAddItems1">
+
+                                                    </div>
+
+                                                    <div class="text-info"><b>Promotion Time Slots</b></div> <br />
+
+                                                    <table id="tblPromotions" class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display:none">idx</th>
+                                                                <th>Day</th>
+                                                                <th>From Time</th>
+                                                                <th>To Time</th>
+                                                                <th></th>
+                                                            </tr>
+
+                                                        </thead>
+
+                                                        <tbody id="grnitems">
+                                                            @if (Model.VMPromotionSchedular != null)
+                                                            {
+                                                                foreach (var days in Model.VMPromotionSchedular)
+                                                                {
+                                                                        <tr>
+                                                                            <td style='display:none'><input name='VMPromotionSchedular.Index' type='hidden' value=@days.Day /></td>
+                                                                            <td style='display:none'><input id='VMPromotionSchedular[@days.Day]_DayId' class='form-control' name='VMPromotionSchedular[@days.Day].DayId' type='text' readonly value='@days.DayId' /></td>
+                                                                            <td><input id='VMPromotionSchedular[@days.Day]_Day' class='form-control' name='VMPromotionSchedular[@days.Day].Day' type='text' readonly value='@days.Day' /></td>
+                                                                            <td><input id='VMPromotionSchedular[@days.Day]_FromTime' class='form-control' name='VMPromotionSchedular[@days.Day].FromTime' readonly value='@days.FromTime' /></td>
+                                                                            <td><input id='VMPromotionSchedular[@days.Day]_ToTime' class='form-control' name='VMPromotionSchedular[@days.Day].ToTime' type='text' readonly value='@days.ToTime' /></td>
+                                                                            <td><input id='btnAddItem' type='button' value='-' class='btn btn-round btn-info' onclick='removeUnitRow(@days.Day);' /></td>
+                                                                        </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Index", null, new
+                                           {
+                                               @style = "font-size: 12px;color:white;" +
+                                                                "font-family: 'Lucida Sans Unicode', " +
+                                                                "'Lucida Grande', Sans-Serif;text-decoration: none"
+                                           })
+                                            </div>
+                                            <button type="submit" formaction="CreatePromotion"
+                                                    class="btn btn-success pull-left">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="se-pre-con"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function SwitchWizard ()
+    {
+        //alert('@Convert.ToBoolean(Session["POWizadUI"])');
+        if('@Convert.ToBoolean(Session["POWizadUI"])'=='False'){
+            //debugger;
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+        }
+    });
+</script>
+
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#LocationIds");
+
+        locationId.empty();
+        locationId.append("<option value='0'>All</option>");
+     //   locationId.append("<option value='0'>Select a Location</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.locationId') {
+            $('#LocationId').val(@ViewBag.locationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveCateringMoods", "Promotion")", function (data) {
+
+        var businessTypeID = $("#BusinessTypeIDs");
+
+        businessTypeID.empty(); 
+        businessTypeID.append("<option value='0'>All</option>");
+        //locationId.append("<option value='0'>Select a Location</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            businessTypeID.append($('<option />', { value: optionaldata.CateringMoodID }).html(optionaldata.CateringMoodName));
+
+        });
+
+        if ('@ViewBag.businessTypeID') {
+            $('#BusinessTypeID').val(@ViewBag.businessTypeID).trigger("change");
+        } else {
+            $('#BusinessTypeID').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveCustomerCategories", "Customer")", function (data) {
+
+        var customerGroupId = $("#CustomerGroupIds");
+
+        customerGroupId.empty();
+        //customerGroupId.append("<option value='0'>Select a Customer Group</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            customerGroupId.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+
+        });
+
+        if ('@ViewBag.customerGroupIds') {
+            $('#CustomerGroupId').val(@ViewBag.customerGroupIds).trigger("change");
+        } else {
+            $('#CustomerGroupId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetPromoTypes", "Promotion")", function (data) {
+
+        var promotionTypeId = $("#PromotionTypeId");
+
+        promotionTypeId.empty();
+        promotionTypeId.append("<option value='0'>Select a Promotion Type </option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            promotionTypeId.append($('<option />', { value: optionaldata.PromotionTypeCode }).html(optionaldata.PromotionTypeName));
+
+        });
+
+        if ('@ViewBag.promotionTypeId') {
+            $('#PromotionTypeId').val(@ViewBag.promotionTypeId).trigger("change");
+        } else {
+            $('#PromotionTypeId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddItem",
+        function ()
+        {
+
+            debugger;
+
+            if ($("#DayId").val() == "0" || $("#DayId").val() == null)
+            {
+                alert("Select a Day!");
+                return;
+            }
+
+            if ($("#FromTime").val() == "" || $("#FromTime").val() == null)
+            {
+                alert("Select a start Time !");
+                return;
+            }
+
+            if ($("#ToTime").val() == "" || $("#ToTime").val() == null)
+            {
+                alert("Select an end  Time !");
+                return;
+            }
+
+            var fromtime1 = $("#FromTime").val();
+            var totime2 = $("#ToTime").val();
+
+            if (fromtime1 > totime2)
+            {
+                alert("Cannot Add From Time To More Than To Time!");
+                return;
+            }
+             
+            debugger;
+
+            var dayid = $("#DayId").val();
+            var fromtime = $("#FromTime").val();
+            var totime = $("#ToTime").val();
+            var table = document.getElementById("grnitems");
+            var hasitem = '0';  
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+
+                var day = document.getElementById('VMPromotionSchedular[' + r + ']_DayId').value;
+                var timefrom = document.getElementById('VMPromotionSchedular[' + r + ']_FromTime').value;
+                var tometo = document.getElementById('VMPromotionSchedular[' + r + ']_ToTime').value;
+
+                if (day == dayid && timefrom == fromtime && tometo == totime)
+                {
+                    hasitem = '1';
+                }
+ 
+ 
+            }
+            debugger;
+
+
+            if (hasitem == '1') 
+            {
+                alert("Already added this day with same time duration!");
+                return;
+            }
+ 
+
+            @{
+                Model.VMPromotionSchedular.Add(new RIT.HMS.Domain.ViewModels.Promotions.VMPromotionSchedular());
+            }
+
+            debugger;
+
+            var unitindex = $("#grnitems").children("tr").length;
+            var unitindexCell = "<td style='display:none'><input name='VMPromotionSchedular.Index' type='hidden' value='" + unitindex + "' /></td>";
+            var unitIdCell = "<td style='display:none'><input id='VMPromotionSchedular[" + unitindex + "]_DayId' class='form-control' name='VMPromotionSchedular[" + unitindex + "].DayId' type='text' readonly value='" + $("#DayId").val() + "' /></td>";
+            var unitDescCell = "<td><input id='VMPromotionSchedular[" + unitindex + "]_Day' class='form-control' name='VMPromotionSchedular[" + unitindex + "].Day' type='text' readonly value='" + $("#DayId").val() + "' /></td>";
+            var unitFromTimeCell = "<td><input id='VMPromotionSchedular[" + unitindex + "]_FromTime'  class='form-control'  name='VMPromotionSchedular[" + unitindex + "].FromTime'  readonly value='" + $("#FromTime").val() + "' /></td>";
+            var unitToTimeCell = "<td><input id='VMPromotionSchedular[" + unitindex + "]_ToTime'  class='form-control'  name='VMPromotionSchedular[" + unitindex + "].ToTime' type='text' readonly value='" + $("#ToTime").val() + "'/></td>";
+            var unitRemoveCell = "<td><input id='btnAddItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" + unitindex + ");' /></td>";
+
+            var newUnitRow = "<tr id='trItem" + unitindex + "'>" +
+                unitindexCell +
+                unitIdCell +
+                unitDescCell +
+                unitFromTimeCell +
+                unitToTimeCell +
+                unitRemoveCell +
+                "</tr>";
+
+            $("#tblPromotions").append(newUnitRow);
+
+
+        });
+
+
+    function removeUnitRow(id)
+    {
+
+        if (confirm("Do you want to delete? "))
+        {
+            var controlToBeRemoved = "#trItem" + id;
+            $(controlToBeRemoved).remove();
+            var table = document.getElementById("tblPromotions");
+        }
+    }
+
+</script>
+
+
+
+<script>
+    function removedayRow(id)
+    {
+        if (confirm("Do you want to delete? "))
+        {
+            var controlToBeRemoved = "#trPromo" + id;
+            $(controlToBeRemoved).remove();
+
+        }
+    }
+</script>
+
+
+
+

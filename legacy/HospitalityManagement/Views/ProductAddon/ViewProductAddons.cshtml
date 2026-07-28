@@ -1,0 +1,139 @@
+﻿@model List<RIT.HMS.Domain.Addons>
+    @{
+        ViewBag.Title = "View Product Addons";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    
+        <h2></h2>
+
+        <body class="nav-md">
+
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Product Addons</strong> modified successfully.
+                        </div>
+                    }
+
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @using (Html.BeginForm("ApplyChanges", "ProductAddon", FormMethod.Post))
+                            { 
+                            <div class="x_panel">  
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="x_panel">
+                                        <div class="x_title">
+                                            <h2>Product Addons<small>Existing</small></h2>
+                                            <ul class="nav navbar-right panel_toolbox">
+                                                <li>
+                                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                </li>
+                                                @*<li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="#">Settings 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Settings 2</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>*@
+                                                <li>
+                                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content">
+                                            <table id="datatable-responsive"
+                                                   class="table table-striped table-bordered dt-responsive nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="display:none"></th>
+                                                        <th>Product</th>
+                                                        <th>Addon Code</th>
+                                                        <th>Addon</th>
+                                                        <th class="text-right">Addon Quantity</th>
+                                                        <th class="text-right">Addon Selling Price</th>
+                                                        <th>Show on Bill</th>
+                                                        <th></th>
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+
+                                                    @for (var i = 0; i < Model.Count(); i++)
+                                                    {
+                                                        var showOnBill = (Model[i].IsShowOnBill ? "Yes" : "No");
+                                                        <tr>
+                                                            <td style="display:none">@Html.HiddenFor(modelItem => Model[i].AddonsId, new { @readonly = "readonly" })</td>
+                                                            <td>@Html.DisplayFor(modelItem => Model[i].ProductDesc, new { @readonly = "readonly" })</td>
+                                                            <td>@Html.DisplayFor(modelItem => Model[i].ProductAddonCode, new { @readonly = "readonly" })</td>
+                                                            <td>@Html.DisplayFor(modelItem => Model[i].AddonDesc, new { @readonly = "readonly" })</td>
+                                                            <td>@Html.TextBoxFor(modelItem => Model[i].AddonQuantity, new { @class = "text-danger pull-right text-right", @type = "number", min = "0", step = "any"})</td>
+                                                            <td>@Html.TextBoxFor(modelItem => Model[i].AddonSellingPrice, new { @class = "text-danger pull-right text-right", @type = "number", min = "0", step = "any" })</td>
+                                                            <td>@Html.DisplayFor(modelItem => showOnBill, new { @readonly = "readonly" })</td>
+                                                            <td>@Html.ActionLink("Remove", "Edit", new { id = Model[i].AddonsId }, new { onclick = "return confirm('Are you sure you wish to delete this addon?');" })</td>
+
+                                                        </tr>
+                                                    }
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                                <button type="submit" class="btn btn-success">Apply Changes</button>
+                            }
+                            <div class="clerfix">
+
+                                <div class="actionBar">
+                                    <div class="msgBox">
+
+                                        <div class="pull-left">
+                                            <input type="button" class="btn btn-primary" value="Create New Product Addons" onclick="location.href='@Url.Action("Create", null, new { })'" />
+                                        </div>
+                                        <div class="pull-left">
+                                            <input type="button" class="btn btn-primary" value="Back To Products" onclick="location.href='@Url.Action("ViewAddonBasedProducts", null, new { })'" />
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+
+                                @*<div class="btn btn-info pl_add btn-small pull-left">
+
+
+                                    <div class="btn btn-primary pl_add btn-small pull-left">
+                                       
+                                    </div>
+                                    <div class="btn btn-info pl_add btn-small pull-left">
+                                       
+                                    </div>
+
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+

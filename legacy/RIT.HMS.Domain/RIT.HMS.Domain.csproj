@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78B7E86E-2D0C-4856-9E56-527C2B53C1AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RIT.HMS.Domain</RootNamespace>
+    <AssemblyName>RIT.HMS.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\HMS Source Versions\v 18\HMSAllStarSvn\HospitalityManagement\bin\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\HMS Source Versions\v 18\HMSAllStarSvn\HospitalityManagement\bin\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\New folder\HMSNewest\HospitalityManagement\bin\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\New folder\HMSNewest\HospitalityManagement\bin\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\..\New folder\HMSNewest\HospitalityManagement\bin\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\..\New folder\HMSNewest\HospitalityManagement\bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\AccountViewModels.cs" />
+    <Compile Include="AddonCategoryMaster.cs" />
+    <Compile Include="Addons.cs" />
+    <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="Bank.cs" />
+    <Compile Include="BudgetItemWise.cs" />
+    <Compile Include="BudgetOutlet.cs" />
+    <Compile Include="CardType.cs" />
+    <Compile Include="CateringModeTax.cs" />
+    <Compile Include="ComboPackBundleItemPromotion.cs" />
+    <Compile Include="Common\AutoGenerateInfo.cs" />
+    <Compile Include="BaseEntity.cs" />
+    <Compile Include="CashierFunction.cs" />
+    <Compile Include="CashierGroup.cs" />
+    <Compile Include="CashierPermission.cs" />
+    <Compile Include="CateringMood.cs" />
+    <Compile Include="ChairMaster.cs" />
+    <Compile Include="Common\Connection.cs" />
+    <Compile Include="Common\ConnectionManager.cs" />
+    <Compile Include="Common\StructureChanges.cs" />
+    <Compile Include="Common\StructureChangesAlter.cs" />
+    <Compile Include="Common\StructureChangesFunctions.cs" />
+    <Compile Include="Common\StructureChangesInsert.cs" />
+    <Compile Include="Common\StructureChangesTableTypes.cs" />
+    <Compile Include="Common\StructureChangesTriggers.cs" />
+    <Compile Include="Common\StructureChangesView.cs" />
+    <Compile Include="Common\StrutureChangesSP.cs" />
+    <Compile Include="ConditionalRequiredAttribute.cs" />
+    <Compile Include="Configurations\Configuration.cs" />
+    <Compile Include="ConnectionManager\CompanyUser.cs" />
+    <Compile Include="Currency.cs" />
+    <Compile Include="CurrencyHistory.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="CustomerCategory.cs" />
+    <Compile Include="CustomerDiscounts.cs" />
+    <Compile Include="CustomoerPreviousVisits.cs" />
+    <Compile Include="DeliveryPerson.cs" />
+    <Compile Include="Common\DocumentNumber.cs" />
+    <Compile Include="DocStatus.cs" />
+    <Compile Include="Employee.cs" />
+    <Compile Include="EmployeeGroup.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="EventProduct.cs" />
+    <Compile Include="InterDepartment.cs" />
+    <Compile Include="InvAdvanceNoteDet.cs" />
+    <Compile Include="InvAdvanceNoteHed.cs" />
+    <Compile Include="InvAdvancePaymentDet.cs" />
+    <Compile Include="InvPosTerminalDetails.cs" />
+    <Compile Include="InvPriceLevel.cs" />
+    <Compile Include="InvPriceLevelList.cs" />
+    <Compile Include="InvProductMaster.cs" />
+    <Compile Include="InvSupplier.cs" />
+    <Compile Include="Journal\ImportJournalDetails.cs" />
+    <Compile Include="Journal\ImportJournalDetailsLog.cs" />
+    <Compile Include="KitchenAddToLocation.cs" />
+    <Compile Include="KitchenMaster.cs" />
+    <Compile Include="KitchenPrinterTypes.cs" />
+    <Compile Include="KOTBOTDescription.cs" />
+    <Compile Include="LocationTax.cs" />
+    <Compile Include="Logs\LOGAddons.cs" />
+    <Compile Include="Logs\LOGCustomer.cs" />
+    <Compile Include="Logs\LOGInvPromotionMaster.cs" />
+    <Compile Include="Logs\LOGProduct.cs" />
+    <Compile Include="Logs\LOGProductServingUnit.cs" />
+    <Compile Include="Logs\LOGProductStockMaster.cs" />
+    <Compile Include="Logs\LOGProductTax.cs" />
+    <Compile Include="Logs\LOGReceipe.cs" />
+    <Compile Include="Logs\LOGSupplier.cs" />
+    <Compile Include="Logs\LOGSupplierProduct.cs" />
+    <Compile Include="Logs\LOGUnitConversion.cs" />
+    <Compile Include="Loyalty\CardGenerationLocationSetting.cs" />
+    <Compile Include="Loyalty\CardMaster.cs" />
+    <Compile Include="Loyalty\PointsExpiration.cs" />
+    <Compile Include="Loyalty\PointsExpirationType.cs" />
+    <Compile Include="Loyalty\InvLoyaltyTransaction.cs" />
+    <Compile Include="Loyalty\LoyaltyCardGenerationDetail.cs" />
+    <Compile Include="Loyalty\LoyaltyCardGenerationHeader.cs" />
+    <Compile Include="Loyalty\LoyaltyCardIssueDetail.cs" />
+    <Compile Include="Loyalty\LoyaltyCardIssueHeader.cs" />
+    <Compile Include="Loyalty\LoyaltyCardSchems.cs" />
+    <Compile Include="Loyalty\LoyaltyCustomer.cs" />
+    <Compile Include="Loyalty\PointsExpirationSchedule.cs" />
+    <Compile Include="Loyalty\ReferenceType.cs" />
+    <Compile Include="MasterEnums\MasterEnums.cs" />
+    <Compile Include="MonthEnd.cs" />
+    <Compile Include="PaidInType.cs" />
+    <Compile Include="PaidOutType.cs" />
+    <Compile Include="PaymentDet.cs" />
+    <Compile Include="PaymentMethod.cs" />
+    <Compile Include="PaymentTerm.cs" />
+    <Compile Include="PayTypeTax.cs" />
+    <Compile Include="POProductTax.cs" />
+    <Compile Include="POSUserGroup.cs" />
+    <Compile Include="PriceLevel.cs" />
+    <Compile Include="PrinterType.cs" />
+    <Compile Include="Product.cs" />
+    <Compile Include="ProductAddons.cs" />
+    <Compile Include="ProductInstruction.cs" />
+    <Compile Include="ProductKitchenMapper.cs" />
+    <Compile Include="ProductMapperToKitchen.cs" />
+    <Compile Include="ProductServingUnit.cs" />
+    <Compile Include="ProductStockMaster.cs" />
+    <Compile Include="ProductTax.cs" />
+    <Compile Include="Promotions\BankBin.cs" />
+    <Compile Include="Promotions\Enums\PromotionModuleEnums.cs" />
+    <Compile Include="Promotions\InvBillValueDiscount.cs" />
+    <Compile Include="Promotions\InvBundleItemPrice.cs" />
+    <Compile Include="Promotions\InvComboPackBundleItemPrices.cs" />
+    <Compile Include="Promotions\InvGiftVoucherPromotions.cs" />
+    <Compile Include="Promotions\InvPromoBillValueBasedGetYProduct.cs" />
+    <Compile Include="Promotions\InvPromoBusinessType.cs" />
+    <Compile Include="Promotions\InvPromoCustomerCategory.cs" />
+    <Compile Include="Promotions\InvPromoLowestPriceWaveOff.cs" />
+    <Compile Include="Promotions\InvPromotionDetailsBuyXProduct.cs" />
+    <Compile Include="Promotions\InvPromotionDetailsProductDis.cs" />
+    <Compile Include="Promotions\InvPromotionMaster.cs" />
+    <Compile Include="Promotions\InvPromotionType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receipe.cs" />
+    <Compile Include="Reports\ReportCategory.cs" />
+    <Compile Include="Reports\ReportInfo.cs" />
+    <Compile Include="RstCategory.cs" />
+    <Compile Include="RstDepartment.cs" />
+    <Compile Include="RstKotCategory.cs" />
+    <Compile Include="RstMealType.cs" />
+    <Compile Include="RstPromotions.cs" />
+    <Compile Include="RstPromotionTypes.cs" />
+    <Compile Include="RstRoomMaster.cs" />
+    <Compile Include="RstRoomType.cs" />
+    <Compile Include="RstRoomTypeRate.cs" />
+    <Compile Include="RstSubCategory.cs" />
+    <Compile Include="ServingUnit.cs" />
+    <Compile Include="StewardsMaster.cs" />
+    <Compile Include="Supplier.cs" />
+    <Compile Include="SupplierGroup.cs" />
+    <Compile Include="SupplierProduct.cs" />
+    <Compile Include="SupplierType.cs" />
+    <Compile Include="SuspendDet.cs" />
+    <Compile Include="SuspendDetBackup.cs" />
+    <Compile Include="SuspendHed.cs" />
+    <Compile Include="SuspendHedBackup.cs" />
+    <Compile Include="SuspendPaymentDet.cs" />
+    <Compile Include="SysCompany.cs" />
+    <Compile Include="SysConfiguration.cs" />
+    <Compile Include="SysGroupOfCompany.cs" />
+    <Compile Include="SysLocation.cs" />
+    <Compile Include="SysLocationMapper.cs" />
+    <Compile Include="SysLocationType.cs" />
+    <Compile Include="SysUserFunction.cs" />
+    <Compile Include="SysUserGroup.cs" />
+    <Compile Include="SysUserGroupPermission.cs" />
+    <Compile Include="SysUserMaster.cs" />
+    <Compile Include="SysUserPermission.cs" />
+    <Compile Include="SysYears.cs" />
+    <Compile Include="TableMaster.cs" />
+    <Compile Include="Tax.cs" />
+    <Compile Include="tmpMonthEnd.cs" />
+    <Compile Include="TourAgent.cs" />
+    <Compile Include="TourAgentCompany.cs" />
+    <Compile Include="TransactionDet.cs" />
+    <Compile Include="TransactionLog.cs" />
+    <Compile Include="Transactions\AccountDataTransfer.cs" />
+    <Compile Include="Transactions\CustomProductionNoteDetail.cs" />
+    <Compile Include="Transactions\CustomProductionNoteHeader.cs" />
+    <Compile Include="Transactions\DocStatusChangeLog.cs" />
+    <Compile Include="Transactions\GiftVoucherGoodReceiveNote.cs" />
+    <Compile Include="Transactions\InvGiftVoucherBookCode.cs" />
+    <Compile Include="Transactions\InvGiftVoucherCancel.cs" />
+    <Compile Include="Transactions\InvGiftVoucherDocumentNumber.cs" />
+    <Compile Include="Transactions\InvGiftVoucherGroup.cs" />
+    <Compile Include="Transactions\InvGiftVoucherMaster.cs" />
+    <Compile Include="Transactions\InvGiftVoucherPurchaseDetails.cs" />
+    <Compile Include="Transactions\invGiftVoucherPurchaseHeaders.cs" />
+    <Compile Include="Transactions\InvGiftVoucherPurchaseOrderDetail.cs" />
+    <Compile Include="Transactions\InvGiftVoucherPurchaseOrderHeader.cs" />
+    <Compile Include="Transactions\InvGiftVoucherTransferNoteDetail.cs" />
+    <Compile Include="Transactions\InvGiftVoucherTransferNoteHeader.cs" />
+    <Compile Include="Transactions\InvRequestNotePOTransaction.cs" />
+    <Compile Include="Transactions\InvSales.cs" />
+    <Compile Include="Transactions\InvStructureChanges.cs" />
+    <Compile Include="Transactions\JobItem.cs" />
+    <Compile Include="Transactions\Mearge_PO_Header.cs" />
+    <Compile Include="Transactions\PayType.cs" />
+    <Compile Include="Transactions\ProductionNoteDetail.cs" />
+    <Compile Include="Transactions\ProductionNoteHeader.cs" />
+    <Compile Include="Transactions\PurchaseDetail.cs" />
+    <Compile Include="Transactions\PurchaseHeader.cs" />
+    <Compile Include="Transactions\PurchaseOrderDetail.cs" />
+    <Compile Include="Transactions\PurchaseOrderHeader.cs" />
+    <Compile Include="Transactions\RequestNoteAcceptanceDetail.cs" />
+    <Compile Include="Transactions\RequestNoteAccptanceHeader.cs" />
+    <Compile Include="Transactions\RequestNoteDetail.cs" />
+    <Compile Include="Transactions\RequestNoteHeader.cs" />
+    <Compile Include="Transactions\RequestNoteParameter.cs" />
+    <Compile Include="Transactions\StockAdjustmentDetail.cs" />
+    <Compile Include="Transactions\StockAdjustmentHeader.cs" />
+    <Compile Include="Transactions\StockAdjustmentType.cs" />
+    <Compile Include="Transactions\JobHeader.cs" />
+    <Compile Include="Transactions\TempItemTax.cs" />
+    <Compile Include="Transactions\TmpProductStockDetail.cs" />
+    <Compile Include="Transactions\TransferNoteDetail.cs" />
+    <Compile Include="Transactions\TransferNoteHeader.cs" />
+    <Compile Include="UnitConversion.cs" />
+    <Compile Include="UnitOfMeasure.cs" />
+    <Compile Include="Vehicle.cs" />
+    <Compile Include="ViewModels\CustomerPricesViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\DataUpload\DataUploadProductTaxViewModel.cs" />
+    <Compile Include="ViewModels\DataUpload\DataUploadProductViewModel.cs" />
+    <Compile Include="ViewModels\DataUpload\DataUploadRecipePriceChangeViewModel.cs" />
+    <Compile Include="ViewModels\DataUpload\DataUploadRecipeViewModel.cs" />
+    <Compile Include="ViewModels\DataUpload\DataUploadViewModel.cs" />
+    <Compile Include="ViewModels\GRNTaxViewModel.cs" />
+    <Compile Include="ViewModels\Journal\JournalViewModel.cs" />
+    <Compile Include="ViewModels\MonthEndViewModel.cs" />
+    <Compile Include="ViewModels\PORepoViewModel.cs" />
+    <Compile Include="ViewModels\POViewModel.cs" />
+    <Compile Include="ViewModels\ProductionViewModel.cs" />
+    <Compile Include="ViewModels\ProductLocationViewModel.cs" />
+    <Compile Include="ViewModels\ProductStockMasterViewModel.cs" />
+    <Compile Include="ViewModels\ProductUploadViewModel.cs" />
+    <Compile Include="ViewModels\Promotions\VMProductDiscounts.cs" />
+    <Compile Include="ViewModels\Promotions\VMPromotionItems.cs" />
+    <Compile Include="ViewModels\Promotions\VMPromotionSchedular.cs" />
+    <Compile Include="ViewModels\ReceipeViewModel.cs" />
+    <Compile Include="ViewModels\Reports\CustomerDetailViewModel.cs" />
+    <Compile Include="ViewModels\Reports\CustomerStatementViewModel.cs" />
+    <Compile Include="ViewModels\Reports\DailySalesViewMdel.cs" />
+    <Compile Include="ViewModels\Reports\FoodCostingViewModel.cs" />
+    <Compile Include="ViewModels\Reports\GRNDetailViewModel.cs" />
+    <Compile Include="ViewModels\Reports\GRNSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Reports\ItemUsageViewModel.cs" />
+    <Compile Include="ViewModels\Reports\JournalViewModel.cs" />
+    <Compile Include="ViewModels\Reports\PODetailViewModel.cs" />
+    <Compile Include="ViewModels\Reports\POSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Reports\PRNDetailViewModel.cs" />
+    <Compile Include="ViewModels\Reports\PRNSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Reports\ProductionReportViewModel.cs" />
+    <Compile Include="ViewModels\Reports\ProductStockViewModel.cs" />
+    <Compile Include="ViewModels\Reports\SalesRegisterView.cs" />
+    <Compile Include="ViewModels\Reports\SalesRegisterViewModel.cs" />
+    <Compile Include="ViewModels\Reports\StockAdjustmentReportViewModel.cs" />
+    <Compile Include="ViewModels\Reports\StockBinCardViewModel.cs" />
+    <Compile Include="ViewModels\Reports\StockMovementViewModel.cs" />
+    <Compile Include="ViewModels\Reports\TOGDetailViewModel.cs" />
+    <Compile Include="ViewModels\Reports\TOGSummaryViewModel.cs" />
+    <Compile Include="ViewModels\RequestNoteViewModel.cs" />
+    <Compile Include="ViewModels\ServingUnitPricesViewModel.cs" />
+    <Compile Include="ViewModels\ServingUnitsViewModel.cs" />
+    <Compile Include="ViewModels\StockAdjustmentViewModel.cs" />
+    <Compile Include="ViewModels\TaxModesViewModel.cs" />
+    <Compile Include="ViewModels\TestViewModel.cs" />
+    <Compile Include="ViewModels\TOGViewModel.cs" />
+    <Compile Include="ViewModels\VMInvRequestNotePOTransactions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

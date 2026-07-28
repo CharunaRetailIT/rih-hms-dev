@@ -1,0 +1,379 @@
+﻿@model RIT.HMS.Domain.Addons
+    @{
+        ViewBag.Title = "Edit";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+
+    <!DOCTYPE HTML>
+    @*<html lang="en">*@
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Hospitality Management System!</title>
+
+
+    </head>
+
+    @if (ViewBag.Message != null)
+    {
+        <script>
+
+            $(document).ready(function () {  
+
+                alert('@ViewBag.ErrorMessage');
+
+            });
+
+        </script>
+
+    }
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Edit", "ProductAddon", FormMethod.Post, new
+        {
+            @class = "form-horizontal",
+            enctype = "multipart/form-data"
+        }))
+            {
+
+                @Html.AntiForgeryToken()
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+
+
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Addons</strong> @ViewBag.ProductAddonCode modified successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Addons</strong> @ViewBag.ProductAddonCode failed to modified.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Addons</strong> @ViewBag.ProductAddonCode already exists.
+                            </div>
+                        }
+
+
+                        <div class="row">
+
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Product Addons - Edit</h2>
+                                        <br />
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            @*<li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="#">Settings 1</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Settings 2</a>
+                                                    </li>
+                                                </ul>
+                                            </li>*@
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content">
+
+
+                                        <form class="form-horizontal form-label-left">
+
+                                            <div class="form-group">
+                                                @*Item Table*@
+                                                @*<br />*@
+                                                <div class="col-md-12">
+                                                    <table id="buttons" class="table table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width:10%" align="right">
+                                                                    Item/Product
+                                                                </td>
+                                                                <td>
+                                                                    <select id="ProductId" class="form-control select2" style="width:100%" name="ProductId"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right">
+                                                                    Addon
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <select id="AddonId" class="form-control select2" style="width:100%" name="AddonId"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right">
+                                                                    Department
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <select id="DepartmentId" class="form-control select2" style="width:100%" name="DepartmentId"></select>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="button" id="btnAddItem" class="btn btn-round btn-info" value="+" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="clearfix"></div>
+
+                                                <div class="text-info"><b>Product Addons</b></div>
+
+                                                <table id="tblRecepies" class="table table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Department ID</th>
+                                                            @*<th>Product Id</th>*@
+                                                            <th>Product Desc</th>
+                                                            @*<th>Addon Id</th>*@
+                                                            <th>Addon Desc</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody id="addons">
+                                                        @if (Model != null)
+                                                        {
+                                                            //foreach (var productAddons in Model)
+                                                            //{
+
+                                                                <tr>
+                                                                    <td>@Model.DepartmentDesc</td>
+                                                                    @*<td>@Model.ProductId</td>*@
+                                                                    <td>@Model.ProductDesc</td>
+                                                                    @*<td>@Model.ProductAddonId</td>*@
+                                                                    <td>@Model.AddonDesc</td>
+                                                                    @*<td>@Model.DepartmentId</td>*@
+
+
+                                                                    <td></td>
+                                                                </tr>
+
+                                                          //  }
+
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                            <hr />
+
+                                        </form>
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewProductAddons", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success pull-left">Modify PO</button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    <script>
+
+        $.getJSON("@Url.Action("GetNotRawProducts", "Product")", function (data) {
+
+            var itemId = $("#ProductId");
+
+
+            itemId.empty();
+            itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+            });
+
+            if ('@ViewBag.ProductId') {
+                $('#ProductId').val(@ViewBag.ProductId).trigger("change");
+            } else {
+                $('#ProductId').val(0).trigger("change");
+            }
+
+
+        });
+    </script>
+
+
+    <script>
+
+        $.getJSON("@Url.Action("GetActiveInterDepartments", "Product")", function (data) {
+
+            var itemId = $("#AddonId");
+
+
+            itemId.empty();
+            itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+            });
+
+            if ('@ViewBag.AddonId') {
+                $('#AddonId').val(@ViewBag.AddonId).trigger("change");
+            } else {
+                $('#AddonId').val(0).trigger("change");
+            }
+
+
+        });
+    </script>
+
+    <script>
+        $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+            var departmentGroupDropDown = $("#DepartmentId");
+
+            departmentGroupDropDown.empty();
+            departmentGroupDropDown.append("<option value='0'>-- Select a Department--</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                departmentGroupDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+            });
+
+            if ('@ViewBag.DepartmentId') {
+                $('#DepartmentId').val(@ViewBag.DepartmentId).trigger("change");
+            } else {
+                $('#DepartmentId').val(0).trigger("change");
+            }
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+        $("body").on("click",
+            "#btnAddItem",
+            function () {
+
+                if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                    alert("Select a Product !");
+                    return;
+                }
+
+                if ($("#AddonId").val() == 0 || $("#AddonId").val() == null) {
+                    alert("Select a Addon !");
+                    return;
+                }
+                if ($("#DepartmentId").val() == 0 || $("#DepartmentId").val() == null) {
+                    alert("Select a Department!");
+                    return;
+                }
+                var ProductId = $("#ProductId").val();
+                var AddonId = $("#AddonId").val();
+                var addonDesc = $("#AddonId option:selected").text();
+                var productDesc = $("#ProductId option:selected").text();
+
+                var DeptId = $("#DepartmentId").val();
+
+
+
+
+                var unitindex = $("#addons").children("tr").length;
+                var unitindexCell = "<td style='display:none' ><input name='Addons.Index' type='hidden' value='" +
+                    unitindex + "' /></td>";
+
+                var unitProductIdCell = "<td><input id='Addons" + unitindex + "_ProductId' class='form-control' name='Addons[" +
+                    unitindex + "].ProductId' type='text' readonly value='" + ProductId + "' /></td>";
+
+                var unitProductDescCell = "<td><input id='Addons" + unitindex + "_ProductDesc'  class='form-control'  name='Addons[" +
+                 unitindex + "].ProductDesc' type='text' readonly value='" + productDesc + "' /></td>";
+
+
+                var unitaddonIdCell = "<td><input id='Addons" + unitindex + "_ProductAddonId'  class='form-control'  name='Addons[" +
+                    unitindex + "].ProductAddonId' type='text' readonly value='" + AddonId + "' /></td>";
+
+                var unitaddonDescCell = "<td><input id='Addons" + unitindex + "_AddonDesc'  class='form-control'  name='Addons[" +
+                    unitindex + "].AddonDesc' type='text' readonly value='" + addonDesc + "' /></td>";
+
+
+                var unitDeptIdCell = "<td><input id='Addons" + unitindex + "_DepartmentId'  class='form-control'  name='Addons[" +
+                    unitindex + "].DepartmentId' type='text' readonly value='" + DeptId + "' /></td>";
+
+
+                var unitRemoveCell = "<td><input id='btnAddItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                      unitindex + ");' /></td>";
+
+
+                var newUnitRow = "<tr id='trAddons" + unitindex + "'>" +
+                    unitDeptIdCell +
+                    unitProductIdCell +
+                    unitProductDescCell +
+                    unitaddonIdCell +
+                    unitaddonDescCell +
+                    unitRemoveCell + "</tr>";
+
+                $("#addons").append(newUnitRow);
+
+            });
+
+
+
+        function removeUnitRow(id) {
+
+            if (confirm("Do you want to delete? ")) {
+                var controlToBeRemoved = "#trAddons" + id;
+                $(controlToBeRemoved).remove();
+
+                var table = document.getElementById("Addons");
+
+
+            }
+
+        }
+
+
+    </script>

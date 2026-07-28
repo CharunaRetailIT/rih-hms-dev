@@ -1,0 +1,235 @@
+﻿@model RIT.HMS.Domain.RstRoomTypeRate
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System </title>
+
+
+</head>
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Create", "RoomTypeRate", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room Type Rate</strong> @ViewBag.RoomTypeRateCode saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room Type Rate</strong> @ViewBag.RoomTypeRateCode save failed.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "3")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room Type Rate</strong> @ViewBag.RoomTypeRateCode already exists.
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Room Type Rate</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Type Rate Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RoomTypeRateCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 50,
+                                                   Placeholder = "Room Type Rate Code",
+                                                   onkeypress = "return checkCodeTypeInput(event)"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.RoomTypeRateCode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Type Rate Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RoomTypeRateName, new { @class = "form-control", MaxLength = 50, Placeholder = "Room Type Rate Name" })
+                                                @Html.ValidationMessageFor(model => model.RoomTypeRateName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Rate</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Rate, new { @class = "form-control", MaxLength = 50, Placeholder = "Rate" })
+                                                @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">From Date</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control", Type = "date", Placeholder = "From Date" })
+                                                @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">To Date</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control", Type = "date", MaxLength = 50, Placeholder = "To Date" })
+                                                @Html.ValidationMessageFor(model => model.ToDate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Extra Adult Rate</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ExtraAdultRate, new { @class = "form-control", MaxLength = 50, Placeholder = "Extra Adult Rate" })
+                                                @Html.ValidationMessageFor(model => model.ExtraAdultRate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Extra Child Rate</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ExtraChildRate, new { @class = "form-control", MaxLength = 50, Placeholder = "Extra Child Rate" })
+                                                @Html.ValidationMessageFor(model => model.ExtraChildRate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Foreign Rate</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ForeignRate, new { @class = "form-control", MaxLength = 50, Placeholder = "Foreign Rate" })
+                                                @Html.ValidationMessageFor(model => model.ForeignRate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Package</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Package, new { @class = "form-control", MaxLength = 50, Placeholder = "Package" })
+                                                @Html.ValidationMessageFor(model => model.Package, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewRoomTypeRates", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>*@
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+
+
+@*<script>
+        $.getJSON("@Url.Action("GetGroupOfCompanies", "GroupOfCompany")", function (data) {
+
+            var companyDropDown = $("#SysGroupOfCompanyId");
+
+            companyDropDown.empty();
+            companyDropDown.append("<option value='0'>-- Select a Group of Company --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                companyDropDown.append($('<option />', { value: optionaldata.SysGroupOfCompanyId }).html(optionaldata.GroupOfCompanyName));
+            });
+
+            if ('@ViewBag.SysGroupOfCompanyId') {
+                $('#SysGroupOfCompanyId').val(@ViewBag.SysGroupOfCompanyId).trigger("change");
+            } else {
+                $('#SysGroupOfCompanyId').val(0).trigger("change");
+            }
+
+
+        });
+
+    </script>*@
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+
+<script>
+    $("#ToDate").change(function () {
+        var startDate = document.getElementById("FromDate").value;
+        var endDate = document.getElementById("ToDate").value;
+
+        if ((Date.parse(endDate) <= Date.parse(startDate))) {
+            alert("To Date should be greater than From Date");
+            document.getElementById("ToDate").value = "";
+        }
+    });
+</script>
+
+

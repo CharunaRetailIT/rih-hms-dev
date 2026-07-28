@@ -1,0 +1,364 @@
+﻿@model RIT.HMS.Domain.Promotions.InvBillValueDiscount
+@{
+    ViewBag.Title = "Create Bill Value Discounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Promotions.css" rel="stylesheet" />
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+
+<div class="right_col" role="main">
+
+
+    <div class="clearfix"></div>
+    <div class="container body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Total Bill Value Discounts Promotions <small>Discounts for Total Bill Value</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+
+                        <div class="form-horizontal form-group col-md-2">
+
+                            <label class="control-label">Promotion Name</label>
+
+                        </div>
+                        <div class="form-horizontal form-group col-md-4">
+
+                            <select class="form-control select2" id="PromotionMasterID" name="PromotionMasterID"> </select>
+                        </div>
+
+                        <div class="col-md-6 text-left" style="background-color:#ddd">
+                            <h4>Promotion Details:</h4>
+                            <label id="promotiondetails" style="font-weight:normal">
+                                Get discounts for total bill value.
+                            </label>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <hr />
+                        <br />
+                        <div class="clearfix"></div>
+                        <div class="col-md-6">
+                          
+
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">                                                                        
+                                    <input type="radio"   name="billvaluetype" id="billvaluerange" value="R" />
+                                    <h4>Bill Value Range</h4>                                                             
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">                                 
+                                    <input type="radio"    name="billvaluetype" id="totlabillvalue" value="T"  checked="checked" />
+                                    <h4>Total Bill value</h4>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br />
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    From Value
+                                    @Html.TextBoxFor(model => model.BillValueRangeFrom, new { @class = "form-control", Type = "number", step = "0.01", onkeypress = "return event.charCode >= 46" })
+                                    @*<input type="number" min="1" value="0" class="form-control text-right" id="ValueFrom" placeholder="From Value">*@
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    To Value
+                                    @Html.TextBoxFor(model => model.BillValueRangeTo, new { @class = "form-control", Type = "number", step = "0.01", onkeypress = "return event.charCode >= 46" })
+                                    @*<input type="number" min="1" value="0" class="form-control text-right" id="ValueTo" placeholder="To Value">*@
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    @*<button type="button" id="addpromotionitem" class="btn btn-primary col-md-6 col-sm-6 col-xs-12 pull-right">Add Item</button>*@
+                                </div>
+                                <div class="clearfix"></div>
+                               
+                                <br />
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    Discounts Type
+                                    <div class="clearfix"></div>
+                                    <div>
+                                        <input type="radio" class="flat" name="gender" id="discountAmt" value="A" required />
+                                        Amount:
+                                         &nbsp;&nbsp;
+                                        <input type="radio" class="flat" name="gender" id="discountPrc" value="P" checked="checked" />
+                                        Prc(%):
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    Discount Value
+                                    @Html.TextBoxFor(model => model.DiscountAmount, new { @class = "form-control", Type = "number", step = "0.01", onkeypress = "return event.charCode >= 46" })
+                                    @*<input type="number" min="1" value="0" class="form-control text-right" id="discountValue" placeholder="Discount">*@
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-md-6">
+                            <h4>Discount Item(s)</h4>
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Free Item </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control select2" id="YProductId" name="YProductId"> </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Serving Unit</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" id="YServingUnitId" name="YServingUnitId"> </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    Selling Price
+                                    <input type="text" class="form-control has-feedback-left text-right" disabled="disabled"
+                                           id="freesellingprice" placeholder="Selling Price">
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    Quantity
+                                    <input type="number" min="1" value="0" class="form-control text-right" id="freequantity" placeholder="Quantity">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <button type="button" id="addfreeitem" class="btn btn-primary col-md-6 col-sm-6 col-xs-12 pull-right">Add Item</button>
+                                </div>
+                                <div class="clearfix"></div>                              
+                            </div>
+                        </div>                    
+                        <table id="freeitem" class="mstable">
+                            <thead>
+                                <tr>
+                                    <th style="display:none">Item Id</th>
+                                    <th>Item Code</th>
+                                    <th>Desc</th>
+                                    <th style="display:none">Serving Unit Id</th>
+                                    <th>Serving Unit</th>
+                                    <th style="display:none">UOMId</th>
+                                    <th>UOM</th>
+                                    <th>Selling Price</th>
+                                    <th style='display:none'>Discount Type</th>
+                                    <th>Discount Amt</th>
+                                    <th>Qty</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>*@
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                            <button class="btn btn-primary pull-right" id="btnReset" onclick='Reset();' type="reset">Reset</button>
+                            <button type="submit" id="btnSave" class="btn btn-success pull-right">Submit</button>
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("EditBillValueDiscount", null, new { })'" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+
+<script>
+
+    $(document).ready(function ()
+    {
+        debugger;
+ 
+        if ('@Model.TotalBillValueDiscount'=='True') 
+        {
+            $("#BillValueRangeFrom").prop("disabled", true);
+            $("#BillValueRangeTo").prop("disabled", true);
+            $("#totlabillvalue").prop("checked", true);
+            $("#billvaluerange").prop("checked", false);
+        }
+        if('@Model.BillValueRangeDiscount'=='True')
+        {
+            $("#BillValueRangeFrom").prop("disabled", false);
+            $("#BillValueRangeTo").prop("disabled", false);
+            $("#totlabillvalue").prop("checked", false);
+            $("#billvaluerange").prop("checked", true);
+        }
+
+        if ($("#totlabillvalue").prop("checked"))
+        {
+            $("#BillValueRangeFrom").prop("disabled", true);
+            $("#BillValueRangeTo").prop("disabled", true);
+        }
+        debugger;
+        $('input[type=radio][name=billvaluetype]').change(function () {
+            debugger;
+            if (this.value == 'R') {
+                $("#BillValueRangeFrom").prop("disabled", false);
+                $("#BillValueRangeTo").prop("disabled", false);
+            }
+            else if (this.value == 'T') {
+                $("#BillValueRangeFrom").prop("disabled", true);
+                $("#BillValueRangeTo").prop("disabled", true);
+                $("#BillValueRangeFrom").val("0");
+                $("#BillValueRangeTo").val("0");
+            }
+        });
+
+
+
+    });
+
+    
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetDiscountPromotions", "Promotion")", function (data) {
+
+        var promotionMasterID = $("#PromotionMasterID");
+
+        promotionMasterID.empty();
+        promotionMasterID.append("<option value='0'>Select a Promotion</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            promotionMasterID.append($('<option />', { value: optionaldata.InvPromotionMasterID }).html(optionaldata.PromotionName));
+
+        });
+
+        if ('@Model.PromotionMasterId') {
+            $('#PromotionMasterID').val(@Model.PromotionMasterId).trigger("change");
+        } else {
+            $('#PromotionMasterID').val(0).trigger("change");
+        }
+
+    });
+</script>
+
+
+
+@*Submit*@
+
+<script>
+
+    $(document).ready(function () {
+        $("body").on("click", "#btnSave", function () {
+            debugger;
+            if ($("#PromotionMasterID").val() == 0 || $("#PromotionMasterID").val() == null) {
+                alert("Select a Promotion !");
+                return;
+            }
+
+            if ($("#DiscountAmount").val() == 0 || $("#DiscountAmount").val() == null) {
+                alert("Discount value can not be 0 !");
+                return;
+            }
+
+            if ($("#billvaluerange").prop("checked") && ($("#BillValueRangeFrom").val() == 0 || $("#BillValueRangeTo").val() == 0))
+            {
+                alert("Bill Value from and Bill Value to is required !");
+                return;
+            }
+          
+            debugger;
+            swal({
+                title: "Bill Value Discounts Prmotion ",
+                text: "Confirm?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+               function (isConfirm) {
+                   if (isConfirm) {
+
+
+                       var Discounts = {};
+                       Discounts.PromotionMasterId = $("#PromotionMasterID").val();
+
+                     
+                       if ($("#totlabillvalue").prop("checked"))
+                       {
+                           Discounts.TotalBillValueDiscount = true;
+                          
+                       }
+                       if ($("#billvaluerange").prop("checked")) {
+
+                           Discounts.BillValueRangeDiscount = true;
+                           Discounts.BillValueRangeFrom = $("#BillValueRangeFrom").val();
+                           Discounts.BillValueRangeTo = $("#BillValueRangeTo").val();
+                       }
+                     
+                       if ($("#discountAmt").prop("checked")) {
+
+                           Discounts.DiscountType = "Amt";
+                       }
+                       if ($("#discountPrc").prop("checked")) {
+
+                           Discounts.DiscountType = "Prc";
+                       }
+
+                       Discounts.DiscountAmount = $("#DiscountAmount").val();
+                       Discounts.IsExists='@Model.IsExists';
+                       Discounts.InvBillValueDiscountId = '@Model.InvBillValueDiscountId';
+                       debugger;
+                       $.ajax({
+                           type: "POST",
+                           url: "@Url.Action("SubmitBillValueDiscounts", "BillValueBasedPromotions")",                                                     
+                           data: JSON.stringify(Discounts),
+                           contentType: "application/json; charset=utf-8",
+                           dataType: "json",
+                           success: function (res) {
+                               debugger;
+                            //   alert(res);
+                               if (res != 0) {
+                                   debugger;
+                                   swal({
+                                       title: "",
+                                       text: "Promotion Saved Successfully!",
+                                       type: "success",
+                                       showCancelButton: false,
+                                       confirmButtonClass: "btn-success",
+                                       confirmButtonText: "Ok",
+                                       closeOnConfirm: true
+                                   },
+                                    function () {
+                                        window.location.href = "/BillValueBasedPromotions/CreateBillValueDiscounts";
+                                    });
+
+                               }
+                               else {
+
+                                   swal("Error", "Promotion save failed!", "error");
+                               }
+                           }
+                       });
+                   }
+               });
+        });
+    });
+</script>
+
+
+@*Reset*@
+
+<script>
+    function Reset() {
+
+        window.location.href = "/BillValueBasedPromotions/CreateBillValueDiscounts";
+    };
+</script>

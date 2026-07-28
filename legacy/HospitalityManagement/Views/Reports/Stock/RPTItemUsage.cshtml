@@ -1,0 +1,243 @@
+﻿@model  RIT.HMS.Domain.ViewModels.Reports.ItemUsageViewModel
+@{
+    ViewBag.Title = "RPT Item Usage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<link href="~/Content/Report.css" rel="stylesheet" />*@
+@using (Html.BeginForm("RPTItemUsage", "Report", FormMethod.Post, new { @class = "" }))
+{
+   //@Html.HiddenFor(model => model.Kitchens)
+
+  //  @Html.HiddenFor(model => model.Departments)
+
+   // @Html.HiddenFor(model => model.Products)
+
+    @Html.HiddenFor(model => model.CompanyId)
+    @Html.HiddenFor(model=>model.LocationId)
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Item Usage<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" value="@Model.DateFrom.ToString("yyyy-MM-dd")" id="DateFrom" name="DateFrom" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Kitchen </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        @*<select id="KitchenId" name="KitchenId" class="form-control"></select>*@
+                                        @Html.DropDownList("KitchenId", Model.Kitchens, new
+                                      {
+                                          @class = "form-control",
+                                          @style = "width:100%"
+                                      })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Date To </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" value="@Model.DateTo.ToString("yyyy-MM-dd")" id="DateTo" name="DateTo" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Department </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        @Html.DropDownList("DepartmentId",Model.Departments, new
+                                   {
+                                       @class = "form-control",
+                                       @style = "width:100%"
+                                   })
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Product </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        @Html.DropDownList("ProductId", Model.Products, new
+                                   {
+                                       @class = "form-control select2",
+                                       @style = "width:100%"
+                                   })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="actionBar">
+                                <div class="msgBox">
+                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                        <ul class="dropdown-menu">
+
+                                            <li>
+                                                @*<a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                </a>*@
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Export to Excel", "ExportToExcelItemUsage", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                            </li>
+                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="clearfix"></div>
+
+                            <div id="printcontent">
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12">
+
+
+                                </div>
+                                <div class="clearfix"></div>
+
+
+                                <div class="table-responsive">
+
+                                    @if (Model != null)
+                                    {
+                                        <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th class="column-title">Recipe</th>
+                                                    <th class="column-title">Serving Unit</th>
+                                                    <th class="column-title">Recipe Qty</th>
+                                                    <th class="column-title">Material</th>
+                                                    <th class="column-title">UOM</th>
+                                                    <th class="column-title">Material Qty</th>                                                 
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                              
+
+                                                @foreach (var item in Model.Details)
+                                                {
+                                                    decimal matqty= 0;
+                                                    matqty = item.ProductQty * item.ItemQty;
+                                                    <tr>
+                                                        <td>@item.ProductName</td>
+                                                        <td>@item.ServingUnit</td>
+                                                        <td>@item.ProductQty.ToString("n2")</td>
+                                                        <td>@item.ItemName</td>
+                                                        <td>@item.SubUnit</td>
+                                                        <td>@matqty.ToString("n2")<td>
+                                                    </tr>
+
+                                                }
+                                            </tbody>
+                                        </table>
+                                       }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+                                                    }
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function ()
+    {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false,
+            "scrollY": "500px",
+            "scrollCollapse": true,
+            "scrollX": true,  // Enable horizontal scrolling
+            "fixedHeader": false, // Disable fixed header for horizontal scrolling
+            "autoWidth": false  
+        });
+      //  SummerizeTable();
+    });
+</script>
+
+<script>
+
+
+    $("#DepartmentId").change(
+             function () {
+                 debugger;
+                 var dept = this.value;
+                 $.getJSON("@Url.Action("GetProductsByDeptId", "Product")", { id: dept },
+                 function (data) {
+                     var ProductId = $("#ProductId");
+                     ProductId.empty();
+                     ProductId.append("<option value='0'>-- Select a Product --</option>");
+                     $.each(JSON.parse(data), function (index, optionaldata) {
+                         ProductId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+                     });
+                 });
+             });
+</script>
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+        }
+</script>
+
+
+<script>
+    function SummerizeTable()
+    {
+        var table = document.getElementById("datatable-responsive");
+        $(table).each(function () {
+            $(table).find('td').each(function () {
+                var $this = $(this);
+                var col = $this.index();
+                var html = $this.html();
+                var row = $(this).parent()[0].rowIndex;
+                var span = 1;
+                var cell_above = $($this.parent().prev().children()[col]);
+                while (cell_above.html() === html) {
+                    span += 1;
+                    cell_above_old = cell_above;
+                    cell_above = $(cell_above.parent().prev().children()[col]);
+                }
+                if (span > 1) {
+                    // console.log(span);
+                    $(cell_above_old).attr('rowspan', span);
+                    $this.hide();
+                }
+
+            });
+        });
+    }
+</script>

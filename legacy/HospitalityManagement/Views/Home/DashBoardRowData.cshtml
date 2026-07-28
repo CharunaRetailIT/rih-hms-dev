@@ -1,0 +1,76 @@
+﻿@model List<RIT.HMS.Domain.ViewModels.DashboardViewModel.RevenueVsCost>
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<body>
+    <div class="right_col" role="main">
+        <div><span class="pull-left"></span></div>
+        <div class="clearfix"></div>
+        <br />
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="x_panel">
+
+                <div class="x_content">                  
+                    <div class="clerfix">
+                        <div class="pull-left">
+                            <input type="button" class="btn btn-default" value="Back to Dashboard" onclick="location.href='@Url.Action("index", null, new { })'" />
+                        </div>
+                    </div>
+                    <div class="x_panel">
+                      
+                        <div class="x_title">
+                            <h2><small></small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li>
+                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li>
+                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <table id="datatable-responsive" class="mstable col-xs-12 col-lg-12 col-md-12 col-sm-12" ">
+                                <thead>
+                                    <tr>
+                                        <th>Day/Week/Month</th>
+                                        <th>Revenue</th>
+                                        <th>Cost</th>
+                                        
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.recdate</td>
+                                            <td style="text-align:right">@item.Nett.ToString("n2")</td>
+                                            <td style="text-align:right">@item.Cost.ToString("n2")</td>                                          
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="clerfix"></div>
+            </div>
+          
+           
+        </div>
+      
+        
+    </div>
+    <div class="clearfix"></div>
+  
+</body>
+
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>

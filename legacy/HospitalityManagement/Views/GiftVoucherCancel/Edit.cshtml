@@ -1,0 +1,135 @@
+﻿@model  HospitalityManagement.Models.Transactions.InvGiftVoucherCancel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @*<div class="form-horizontal">*@
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Edit", "GiftvoucherCancel", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GiftVoucher Group</strong> @ViewBag.Gift Voucher Cancel saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "0")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GiftVoucher Group</strong> @ViewBag.GiftVoucher save failed.
+                        </div>
+                    }
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Gift Voucher Cancel</h2>
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher No *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.VoucherNo, new { @Value = ViewBag.GVgroupCode, @class = "form-control", Readonly = true, MaxLength = 15, Placeholder = "Gift Voucher No" })
+                                                </div>
+                                                <div class="form-group">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher Group </label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.InvGiftVoucherGroupID, new { @class = "form-control", Readonly = true, MaxLength = 50, Placeholder = "Gift Voucher Group *" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Book Code </label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.BookCode, new { @class = "form-control", Readonly = true, MaxLength = 50, Placeholder = "Book Code*" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Book Name </label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.BookName, new { @class = "form-control", Readonly = true, MaxLength = 50, Placeholder = "Book Name*" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher Value</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.GiftVoucherValue, new { @class = "form-control", Readonly = true, @type = "number", MaxLength = 50, Placeholder = "0.00" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Validity Period(Days)</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.ValidityPeriod, new { @class = "form-control", Readonly = true, @type = "number", MaxLength = 50, Placeholder = "Validity Period(Days)" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Is Cancel*</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                <input type="checkbox" name="Voucher" value="Voucher" />
+                                                @*@Html.TextBoxFor(model => model.IsCancel, new { @class = "form-control", MaxLength = 2, Placeholder = "Cansel Status" })*@
+                                                @Html.ValidationMessageFor(model => model.IsCancel, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control", MaxLength = 50, Placeholder = "Remark" })
+                                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group">
+                                        <!--<div class="btn btn-primary pl_add btn-small pull-left">-->
+                                        @*@Html.ActionLink("Clear", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                                        <!--</div>-->
+                                        <div class="btn btn-primary pl_add btn-small pull-left">
+                                            @Html.ActionLink("Save", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

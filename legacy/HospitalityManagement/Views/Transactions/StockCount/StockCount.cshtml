@@ -1,0 +1,281 @@
+﻿@model  RIT.HMS.Domain.Transactions.JobHeader
+@{
+    ViewBag.Title = "Stock Count";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<link href="~/Content/Report.css" rel="stylesheet" />*@
+@using (Html.BeginForm("StockCount", "StockCount", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ExistsJobId)
+    @Html.HiddenFor(model => model.CompanyID)
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+               
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">  
+                        <div class="headings">
+                        <h2>Stock Count<small></small></h2>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div >
+                            @if (Model.Messanger == 1)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Job</strong> @Model.JobNumber  Failed To Start.
+                                </div>
+                            }
+                            else if (Model.Messanger == 2)
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Job</strong> @Model.JobNumber Started successfully.
+                                </div>
+                            }
+                            else if (Model.Messanger == 3)
+                            {
+                                <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong></strong>@Model.Message
+                                </div>
+                            }
+                            else if (Model.Messanger == 4)
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong></strong>@Model.Message
+                                </div>
+                            }
+                            else if (Model.Messanger == 5)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong></strong>@Model.Message
+                                </div>
+                            }
+                            else if (Model.Messanger == 6)
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong></strong>@Model.Message
+                                </div>
+                            }
+                            else if (Model.Messanger == 7)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong></strong>@Model.Message
+                                </div>
+                            }
+                        </div>  
+                        <div class="x_content">
+                            <br />
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Job Number </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-6">
+                                        @Html.TextBoxFor(model => model.JobNumber, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Job Number" })
+                                    </div>
+                                    <div class="col-md-2 col-sm-3">
+                                        <button class="btn btn-primary" type="submit" formaction="ViewJob">View</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Job Date </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" value="@Model.JobDate.ToString("yyyy-MM-dd")" id="JobDate" name="JobDate" />
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Location </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                      @Html.DropDownList("LocationId", Model.Locations, new
+                                 {
+                                     @class = "form-control",
+                                     @style = "width:100%"
+                                 })
+                                      @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Department </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                       @Html.DropDownList("DepartmentId", Model.Departments, new
+                                  {
+                                      @class = "form-control",
+                                      @style = "width:100%"
+                                  })
+                                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div> 
+                                <div class="clearfix"></div>
+                                <br />
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3"> </label>
+                                    <div class="col-md-3">                       
+                                        <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                </a>
+                                            </li>
+                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-primary" type="submit" formaction="StartJob">Start Job</button>
+                                    </div>
+                                </div>                 
+                            </div>
+
+                            <div class="clearfix"></div>                        
+                            <br />
+        
+                                <div class="table-responsive">
+                                    <div id="printcontent">
+                                    @if (Model != null)
+                                    {
+                                        <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th class="column-title">Department</th>
+                                                    <th class="column-title">Product Id</th>
+                                                    <th class="column-title">Product Code</th>
+                                                    <th class="column-title">Product Description</th>
+                                                    <th class="column-title">System Qty</th>
+                                                    <th class="column-title">Physical Qty</th>
+                                                   
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.JobItem)
+                                                {
+
+                                                    <tr>
+                                                        <td>@item.DepartmentName</td>
+                                                        <td>@item.ProductId</td>
+                                                        <td>@item.ProductCode</td>
+                                                        <td>@item.ProductName</td>
+                                                        <td>@item.SystemQty.ToString("n2")</td>
+                                                        <td>@item.PhysicalQty</td>                                                       
+                                                        
+                                                    </tr>
+
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    </div>
+                               </div>                                                     
+                        </div>
+                        <div class="actionBar">
+                            <div class="msgBox"> 
+
+                                @*<input type="file" name="ProductSupplierUploadFile" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />*@
+                                <button type="submit" formaction="ConfirmJob" id="ConfirmJob" class="btn btn-success">Confirm Job</button>                                 
+                                <button type="submit" name="sbt" formaction="UploadFile" id="UploadFile" class="btn btn-primary pull-left">Upload File</button>                          
+                                <input type="file" name="ProductUploadFile" class="" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />                     
+                                                         
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+
+}
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function ()
+    {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false
+        });
+      //  SummerizeTable();
+    });
+</script>
+
+<script>
+
+    $("#LocationId").change(
+   function () {
+       var loc = this.value;
+       $.getJSON("@Url.Action("GetActiveDepartmentsByLocationId", "Department")", { locationid: loc, },
+           function (data) {
+               var DepartmentId = $("#DepartmentId");
+               DepartmentId.empty();
+               DepartmentId.append("<option value='0'>-- All Departments --</option>");
+               $.each(JSON.parse(data), function (index, optionaldata) {
+                   DepartmentId.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+               });
+           });
+   });
+</script>
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+        }
+</script>
+
+
+<script>
+    function SummerizeTable()
+    {
+        var table = document.getElementById("datatable-responsive");
+        $(table).each(function () {
+            $(table).find('td').each(function () {
+                var $this = $(this);
+                var col = $this.index();
+                var html = $this.html();
+                var row = $(this).parent()[0].rowIndex;
+                var span = 1;
+                var cell_above = $($this.parent().prev().children()[col]);
+                while (cell_above.html() === html) {
+                    span += 1;
+                    cell_above_old = cell_above;
+                    cell_above = $(cell_above.parent().prev().children()[col]);
+                }
+                if (span > 1) {
+                    // console.log(span);
+                    $(cell_above_old).attr('rowspan', span);
+                    $this.hide();
+                }
+
+            });
+        });
+    }
+</script>

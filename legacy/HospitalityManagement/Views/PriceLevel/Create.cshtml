@@ -1,0 +1,178 @@
+﻿@*@model HospitalityManagement.Models.SysCompany*@
+@model RIT.HMS.Domain.InvPriceLevel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<!DOCTYPE html>
+    <html lang="en">*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System </title>
+    <!-- Bootstrap -->
+
+</head>
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Create", "PriceLevel", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.InvPriceLevelID)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Price Level</strong> @ViewBag.PriceLevelCode Created successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Price Level</strong> @ViewBag.PriceLevelCode failed to modify.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "4")
+                            {
+                                <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    Can't be select Active and Delete options in the same time..!
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Price Level - Create</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">PriceLevel Code *</label>
+                                                <div class="col-md-4 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.PriceLevelCode,
+                                                                   new
+                                                                   {
+                                                                       @class = "form-control",
+                                                                       MaxLength = 10,
+                                                                       Placeholder = "Code",
+                                                                       onkeyup = "checkPriceLevelCode()",
+                                                                       onkeypress = "return checkCodeTypeInput(event)"
+                                                                   })
+                                                    @Html.ValidationMessageFor(model => model.PriceLevelCode, "", new { @class = "text-danger pull-left" })
+                                                </div>
+                                                <font color="red" class="col-md-5">
+                                                    <label id="validatecode" name="validatecode" style="font:small-caption"></label>
+                                                </font>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Price Level Name</label>
+                                            <div class="col-md-9 col-sm-7 col-xs-12">
+                                                @Html.TextBoxFor(model => model.PriceLevelName, new { @class = "form-control", MaxLength = 50, Placeholder = "Price Level Name" })
+                                                @Html.ValidationMessageFor(model => model.PriceLevelName, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", Placeholder = "Remark" })
+                                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+                                                <div class="btn btn-primary pl_add btn-small pull-right">
+                                                    @Html.ActionLink("Clear", "", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-right">
+                                                    @Html.ActionLink("View All", "ViewPriceLevel", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+                                                
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+@*Price Level Handling*@
+<script type="text/javascript">
+    function checkPriceLevelCode() {
+        document.getElementById('validatecode').innerHTML = '';
+
+        $.ajax({
+            url: "@Url.Action("VaidatePriceLevelCode", "PriceLevel")",
+            data: { PriceLevelCode: $("#PriceLevelCode").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+                if (resp != null || resp != "") {
+                    document.getElementById('validatecode').innerHTML = "Price Level Code Already Exists";
+                    // document.getElementById('ProductCode').value = '';
+
+                }
+                else
+                {
+                    document.getElementById('validatecode').innerHTML = "";
+                }
+            }
+        });
+    }
+</script>
+

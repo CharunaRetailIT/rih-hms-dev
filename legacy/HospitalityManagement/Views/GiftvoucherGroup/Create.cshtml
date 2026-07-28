@@ -1,0 +1,143 @@
+﻿@model RIT.HMS.Domain.Transactions.InvGiftVoucherGroup
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @*<div class="form-horizontal">*@
+    <div class="container body">
+        <div class="main_container">
+            @*@using (Html.BeginForm("Create", "GiftvoucherGroup", FormMethod.Post, new { @class = "form-horizontal" }))*@
+            @using (Html.BeginForm("", "GiftvoucherGroup", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>GiftVoucher Group Saved Successfully</strong>
+                            </div>
+                        }
+
+                        else if (@ViewBag.Message == "0")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>GiftVoucher Group Save Failed</strong>
+                            </div>
+                        }
+
+                        <div class="row">
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>GiftVoucher Group</h2>
+                                        <br />
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <br />
+
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">GiftVoucher Group Code *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    <div class="input-group">
+                                                        @Html.TextBoxFor(model => model.GiftVoucherGroupCode, new { @Value = ViewBag.GVgroupCode, @class = "form-control", MaxLength = 50, Placeholder = "GiftVoucher Group Code", @readonly = "readonly" })
+
+                                                        <span class="input-group-btn">
+                                                            <input type="submit" value="New Code" formaction="GetNewGiftVoucherGroupCode" class="btn btn-primary pull-right">
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.GiftVoucherGroupCode, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">GiftVoucher Group Name *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.GiftVoucherGroupName, new { @class = "form-control", MaxLength = 50, Placeholder = "GiftVoucher Group Name" })
+                                                    @Html.ValidationMessageFor(model => model.GiftVoucherGroupName, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.Remark, new { @class = "form-control", MaxLength = 50, Placeholder = "Remark" })
+                                                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            <div class="x_content">
+                                                <br />
+
+                                                <table id="datatable-responsive" class="mstable col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>GiftVoucher Group Code</th>
+                                                            <th>GiftVoucher Group Name</th>
+                                                            <th>Remark</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (ViewBag.GVGroupAll != null)
+                                                        {
+                                                            foreach (var item in ViewBag.GVGroupAll)
+                                                            {
+                                                                <tr>
+                                                                    <td><span>@item.GiftVoucherGroupCode</span></td>
+                                                                    <td><span>@item.GiftVoucherGroupName</span></td>
+                                                                    <td><span>@item.Remark</span></td>
+                                                                </tr>
+                                                            }
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewAllGroups", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            @*<button type="submit" class="btn btn-success">Submit</button>*@
+                                            <input type="submit" value="Submit" formaction="Create" class="btn btn-primary pull-left">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

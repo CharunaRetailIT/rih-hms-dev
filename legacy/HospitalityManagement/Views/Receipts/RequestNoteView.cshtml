@@ -1,0 +1,225 @@
+﻿@model RIT.HMS.Domain.Transactions.RequestNoteHeader
+@{
+    ViewBag.Title = "Request Note";
+    Layout = null;
+    // Layout =null;
+}
+
+@using (Html.BeginForm("CreateRequestNote", "RequestNote", FormMethod.Get, new { @class = "form-horizontal", }))
+{
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <div class="modal-header col-md-12">
+
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">...</h4>
+        </div>
+
+
+        <div class="x_panel">
+
+            <div id="printcontent">
+                <div class="title" style="text-align:center">
+                    @if (Model.PrintStatus == 1)
+                    {
+                        <div class="small text-right" style="text-align:right">Original | @Model.DocState</div>
+                    }
+                    else
+                    {
+                        <div class="small text-right" style="text-align:right">Duplicate | @Model.DocState</div>
+                    }
+                    <div class="small text-left" style="text-align:right">@DateTime.Now</div>
+                    <div style="font-size:large">@Model.SysCompany.CompanyName</div>
+                    <div style="font-size:medium">@Model.SysCompany.Address1,@Model.SysCompany.Address2,@Model.SysCompany.Address3</div><br />
+                    <div style="font-size:large">Request Note</div>
+                    <br />
+                    <hr />
+
+                </div>
+
+                <div class="x_content">
+                    <div>
+
+                        <table align="center" style="width:100%">
+                            <tr>
+                                <td style="text-align:left">
+                                    <label class="control-label">From Location: @Model.FromLocation </label>
+                                </td>
+                                <td width="10%"></td>
+                                <td style="text-align:right">
+                                    <label class="control-label">To Location: @Model.ToLocation </label>
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <label class="control-label">Doc #: @Model.DocumentNo </label>
+                                </td>
+                                <td width="10%"></td>
+                                <td style="text-align:right">
+                                    <label class="control-label">RequestNote Date: @Model.DocumentDate.ToShortDateString()</label>
+                                </td>
+                            </tr>
+                            @*<tr>
+                                <td style="text-align:left">
+                                    <label class="control-label">From Department: @Model.FromDepartment </label>
+                                </td>
+                                <td width="10%"></td>
+                                <td style="text-align:right">
+                                    <label class="control-label">To Department: @Model.ToLocation</label>
+                                </td>
+                            </tr>*@
+                            <tr>
+                                <td style="text-align:left">
+                                    <label class="control-label">Request Type: @Model.RequestType </label>
+                                </td>
+                                <td width="10%"> </td>
+                                <td style="text-align:right">
+                                    <label class="control-label">Expected Delivery Date: @Model.ExpectedDeleveryDate.ToShortDateString()</label>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <br />
+                    <div class="clearfix"></div>
+
+
+                    <br />
+                    <div class="table-responsive">
+                        @if (Model.RequestDetail != null)
+                        {
+                            <table id="tblstock" border="1" style="width:100%;border:none" class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+
+                                        <th>Product Code</th>
+                                        <th>Product Name</th>
+                                        <th>Request Quantity </th>
+                                        <th>Unit CP </th>
+                                        <th>Selling Price</th>
+                                        <th>Remark</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.RequestDetail)
+                                    {
+                                        <tr class="even pointer">
+
+                                            <td>@item.ProductCode</td>
+                                            <td>@item.ProductName</td>
+                                            <td style="text-align:right">@item.RequestQty</td>
+                                            <td style="text-align:right">@item.CostPrice</td>
+                                            <td style="text-align:right">@item.SellingPrice</td>
+                                            <td style="text-align:right">@item.Remark</td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                                <!--<tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>-->
+                                        @*<td></td>*@
+                                        <!--<td></td>
+                                        <td style="text-align:right">@Model.TotCostPrice</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>-->
+                            </table>
+                            <br />
+
+                            @*<table id="tblNet" style="width:50%" align="right">
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Total Tax: </label>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">@Model.TotalTaxAmount </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Other Chargers:  </label>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">@Model.OtherCharges </label>
+                                    </td>
+                                </tr>
+
+                            </table>*@
+
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <table id="signature" style="width:100%">
+                                <tr style="width:100%">
+                                    <td style="text-align:center">
+                                        ..................................<br />
+                                        Entered By
+                                    </td>
+                                    <td style="text-align:center">
+                                        ..................................<br />
+                                        Checked By
+                                    </td>
+                                    <td style="text-align:center">
+                                        ..................................<br />
+                                        Approved By
+                                    </td>
+                                </tr>
+                            </table><div class="clearfix"></div>
+                            @*<br /><hr />
+                            <div style="font-size:small; text-align:left">
+                                Delivery Details:<br /> @Model.RequestDetail
+                            </div>
+                            <br />*@
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actionBar">
+            <div class="msgBox">
+                <button type="submit" class="btn btn-primary pull-right">Back</button>
+                <div class="btn-group">
+                    <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="btnPrint" onclick="PrintDiv();">
+                                <img src='~/Content/Images/icons/pdf.png' width="10" />
+                                Print/PDF
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+</script>

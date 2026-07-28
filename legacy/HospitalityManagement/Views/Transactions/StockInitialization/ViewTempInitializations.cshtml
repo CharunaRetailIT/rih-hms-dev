@@ -1,0 +1,150 @@
+﻿@model List<RIT.HMS.Domain.Transactions.StockAdjustmentHeader>
+@{
+    ViewBag.Title = "Temp Initializations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Stock Initializations<small>Temp</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                    <br />
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>Doc Number</th>
+                                                <th>Doc Date</th>
+                                               
+                                                <th></th>
+                                              
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@item.DocumentNo</td>
+                                                    <td>@item.CreatedDate.ToShortDateString()</td>
+                                                    
+                                                    <td>@Html.ActionLink("Recall", "Edit", new { initheaderid = item.StockAdjustmentHeaderId})</td>                                                  
+                                                    
+
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id='myModal' class='modal'>
+                                <div class="col-md-12">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div id='myModalContent'>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">
+                         
+                            <input type="button" class="btn btn-info" value="Create New Initialization" onclick="location.href='@Url.Action("Index", null, new { })'" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+    var TeamDetailPostBackURL = '/PO/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id,"printstatus":2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+
+
+<script>
+    $('#btnFilter').click(function () {
+        debugger;
+        var statusid = $('#DocStatusId').val();
+        var datefrom = $('#PODateFrom').val();
+        var dateto = $('#PODateTo').val();
+        var url = $(this).attr('href') + 'FilterPos?statusid=' + statusid + '&datefrom=' + datefrom + '&dateto=' + dateto;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+});
+</script>

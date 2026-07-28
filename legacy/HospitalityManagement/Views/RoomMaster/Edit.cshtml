@@ -1,0 +1,210 @@
+﻿@model RIT.HMS.Domain.RstRoomMaster
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System </title>
+
+</head>
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Edit", "RoomMaster", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.RstRoomMasterID)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room</strong> @ViewBag.RoomCode modified successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room</strong> @ViewBag.RoomCode failed to modify.
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Room Master - Edit</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                      
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Master Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                            
+                                                @Html.TextBoxFor(model => model.RoomMasterCode, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Room Master Code",
+                                               MaxLength = 50,
+                                               @readonly = true,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            })
+                                                @Html.ValidationMessageFor(model => model.RoomMasterCode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RoomName, new { @class = "form-control", MaxLength = 50, Placeholder = "Room Name" })
+                                                @Html.ValidationMessageFor(model => model.RoomName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Type</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                <select id="RoomType" name="RoomType" class="form-control"
+                                                        data-val="true"
+                                                        data-val-regex="Please select a valid Room Type"
+                                                        data-val-regex-pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$"
+                                                        data-val-required="Please select a valid Room Type"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Floor</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.Floor, new { @class = "form-control", MaxLength = 50, Placeholder = "Floor" })
+                                                    @*@Html.ValidationMessageFor(model => model.Floor, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Room No</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.RoomNo, new { @class = "form-control", MaxLength = 50, Placeholder = "Room No" })
+                                                    @Html.ValidationMessageFor(model => model.RoomNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Inter-Com No</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.InterComNo, new { @class = "form-control", MaxLength = 50, Placeholder = "Inter-Com No" })
+                                                    @Html.ValidationMessageFor(model => model.InterComNo, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">RFID No</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RFIDNo, new { @class = "form-control", MaxLength = 50, Placeholder = "RFID No" })
+                                                @Html.ValidationMessageFor(model => model.RFIDNo, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1 pull-left ">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                                </div>
+                                            </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                            </div>
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Reset", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewRooms", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Modify</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+   
+    if ('@ViewBag.SysUserGroupID') {
+        $('#SysGroupOfCompanyId').val(@ViewBag.SysUserGroupID).trigger("change");
+    } else {
+        $('#SysUserGroupID').val(0).trigger("change");
+    }
+
+
+  
+    $.getJSON("@Url.Action("GetActiveRoomTypes", "RoomType")", function (data) {
+
+        var roomTypeDropDown = $("#RoomType");
+        //var CompanyCodelist = $("#CompanyID");
+
+        roomTypeDropDown.empty();
+        roomTypeDropDown.append("<option value='0'>-- Select a Room Type--</option>");
+        //CompanyCodelist.append("<option value='0'>-- Select a Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            roomTypeDropDown.append($('<option />', { value: optionaldata.RstRoomTypeID }).html(optionaldata.RoomTypeName));
+
+        });
+
+        if ('@ViewBag.RoomTypeID') {
+            $('#RoomType').val(@ViewBag.RoomTypeID).trigger("change");
+        } else {
+            $('#RoomType').val(0).trigger("change");
+        }
+
+    });
+
+</script>
+
+

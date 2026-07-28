@@ -1,0 +1,998 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+    @*<link href="~/Content/Transactions.css" rel="stylesheet" />*@
+    <title>Smart Hospitality Management System </title>
+
+    <!-- Bootstrap 1 -->
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="~/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="~/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <!-- bootstrap-daterangepicker -->
+    <link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="~/build/css/custom.min.css" rel="stylesheet">
+
+    <link href="~/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    @*<link href="~/Scripts/Exports/jquery.dataTables.min.css" rel="stylesheet" />1*@
+
+    <link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+    <style>
+        div#spinner .no-js #loader {
+            display: none;
+        }
+
+        .js #loader {
+            display: block;
+            position: absolute;
+            left: 100px;
+            top: 0;
+        }
+
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('../../../images/loaders/loader-64x/Preloader_3.gif') center no-repeat #fff;
+        }
+    </style>
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+
+                    <div class="navbar nav_title" style="border: 0;" id="logomain2">
+                        <a class="site_title" id="logomain" href="">
+                            @*<i class="fa fa-paw"></i>*@
+                            @*<h4 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ; text-align: center;"><span>Smart Hospitality Management System</span></h4>*@
+                            <span><img src="~/Content/Images/Login/logof1.png" width="100" height="100" class="image" /><br></span>
+                        </a>
+                    </div>
+
+
+                    @*<div class="navbar nav_title" style="border: 0;">
+                            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+                        </div>*@
+
+
+                    <div class="clearfix"></div>
+
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="~/images/no-image-icon-.png" class="img-circle profile_img" />
+                        </div>
+                        <div class="profile_info">
+                            @*<span>Welcome!</span>*@
+                            <h2><b>@(Session["loggeduser"].ToString())</b></h2>
+                            <h2>@(Session["loggedusercompany"].ToString())</h2>
+                           
+                        </div>
+                    </div>
+                    <!-- /menu profile quick info -->
+
+                    <br />
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            @*<h3>General</h3>*@
+                            <ul class="nav side-menu ">
+                                <li>
+                                    <a class=""><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu ">
+                                        <li>@Html.ActionLink("Dashboard", "Index", "Home")</li>
+                                        @*<li>@Html.ActionLink("Advanced Dashboard", "AdvancedDashboard", "Home")</li>*@
+                                        @*<li onclick="location.href='@Session["DURL"].ToString();"> Advanced Dashboard </li>*@                                      
+
+                                        <li>@Html.ActionLink("StructureChanges", "Create", "StructureChanges")</li>
+
+                                        <li>@Html.ActionLink("Account Transfer", "GLDataTransfering", "AccountTransfer")</li>
+
+                                    </ul>
+                                </li>
+                                <li class="">
+                                    <a class=""><i class="fa fa-road "></i> Master Files <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu  one">
+                                        <li class="list">
+                                            <a class="subone"><i class="fa fa-sitemap"></i> Comp. Loc & Depts <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu subtwo mf">
+                                                <li>@Html.ActionLink("Group of Company", "ViewGroupOfCompanies", "GroupOfCompany")</li>
+                                                <li>@Html.ActionLink("Company", "ViewCompanies", "Company")</li>
+                                                <li>@Html.ActionLink("Locations", "ViewLocations", "Location")</li>
+                                                <li>@Html.ActionLink("Assign Kitchens", "AssignKitchens", "Location")</li>
+                                                <li>@Html.ActionLink("Inter Department", "ViewInterDepartments", "InterDepartment")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-adn"></i> Gift Voucher <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Gift voucher Group", "Create", "GiftvoucherGroup")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Master", "Create", "GiftVoucherMaster")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Purchase Order", "Create", "GiftVoucherPurchaseOrder")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Book Generation", "Create", "GiftVoucherBookCode")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Cancel", "ViewVoucher", "GiftVoucherCancel")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Good Receive Note", "Create", "GiftVoucherGoodReceiveNote")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Transfer", "Create", "GiftVoucherTransfer")</li>
+                                                <li>@Html.ActionLink("Gift Voucher Barcode", "Create", "GiftVoucherBarcode")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-adn"></i> Cat. & Sub Cat(s). <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Department", "ViewDepartments", "Department")</li>
+                                                <li>@Html.ActionLink("Category", "ViewCategories", "Category")</li>
+                                                <li>@Html.ActionLink("Sub Category", "ViewSubCategories", "SubCategory")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-user"></i> Customers <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Customer Groups", "ViewCustomerCategories", "CustomerCategory")</li>
+                                                <li>@Html.ActionLink("Customers", "ViewCustomers", "Customer")</li>
+                                                <li>@Html.ActionLink("Customer Wise Prices / Discounts", "CustomerWisePrices", "Customer")</li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-user"></i> Tour Agents <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Tour Agent Company", "ViewTourAgentCompany", "TourAgentCompany")</li>
+                                                <li>@Html.ActionLink("Tour Agents", "ViewTourAgents", "TourAgent")</li>
+                                               @* <li>@Html.ActionLink("Tour Agent Commitions", "", "")</li>*@
+
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-user"></i> Stewards <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Stewards", "ViewStewards", "StewardsMaster")</li>
+                                                @*<li>@Html.ActionLink("Create", "Create", "StewardsMaster")</li>*@
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-user-plus"></i> Employees <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Employee Group", "ViewEmployeeGroups", "EmployeeGroup")</li>
+                                                <li>@Html.ActionLink("Employee", "ViewEmployees", "Employee")</li>
+                                                <li>@Html.ActionLink("Delivery Person", "ViewDeliveryPersons", "DeliveryPerson")</li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-user"></i> Suppliers <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Supplier Group", "ViewSupplierGroups", "SupplierGroup")</li>
+                                                <li>@Html.ActionLink("Supplier Types", "ViewSupplierTypes", "SupplierTypes")</li>
+                                                <li>@Html.ActionLink("Supplier", "ViewSuppliers", "Supplier")</li>
+
+                                            </ul>
+                                        </li>
+
+                                        <li class="list">
+                                            <a><i class="fa fa-desktop"></i> Back End Users <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("User Group", "ViewUserGroups", "UserGroup")
+                                                <li>
+                                                <li>@Html.ActionLink("User Group Permissions", "Index", "UserGroupPermission")
+                                                <li>
+                                                <li>@Html.ActionLink("User Master", "ViewUsers", "UserMaster")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a><i class="fa fa-desktop"></i> POS Users <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Cashier Group Permissions", "CashierGroupPermission", "CashierMaster")</li>
+                                                <li>@Html.ActionLink("Cashiers", "ViewCashiers", "CashierMaster")</li>
+                                                
+                                            </ul>
+                                        </li>
+
+                                        <li class="list" style="display:none;">
+                                            <a><i class="fa fa-home"></i> Rooms <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Room Master", "ViewRooms", "RoomMaster")</li>
+                                                <li>@Html.ActionLink("Room Type", "ViewRoomTypes", "RoomType")</li>
+                                                <li>@Html.ActionLink("Room Type Rate", "ViewRoomTypeRates", "RoomTypeRate")</li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="list">
+                                            <a><i class="fa fa-table"></i> Tables & Chairs <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Table Master", "ViewTables", "TableMaster")</li>
+                                                <li>@Html.ActionLink("Chair Master", "ViewChairs", "ChairMaster")</li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="list">
+                                            <a><i class="fa fa-product-hunt"></i> Items & Products <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Serving Unit", "Index", "ServingUnit")</li>
+                                                <li>@Html.ActionLink("Serving Units Prices", "ServingUnitsPrices", "ServingUnitsPrices")</li>
+                                                <li>@Html.ActionLink("Product", "ViewAllProducts", "Product")</li> 
+                                                <li>@Html.ActionLink("Assign Kitchens", "AssignKitchens", "Product")</li>
+                                                <li>@Html.ActionLink("Receipes", "ViewReceipes", "Receipe")</li>
+                                                <li>@Html.ActionLink("Product Addons", "ViewAddonBasedProducts", "ProductAddon")</li>
+                                                <li>@Html.ActionLink("KOT BOT Descriptions", "Description", "ProductInstruction")</li>
+                                                <li>@Html.ActionLink("Product Instructions", "Create", "ProductInstruction")</li>
+                                            </ul>
+                                        </li>
+
+
+                                        <li class="list">
+                                            <a><i class="fa fa-adjust"></i> Unit Of Measures <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Unit of Measure", "ViewUnitOfMeasures", "UnitOfMeasure")</li>
+                                                <li>@Html.ActionLink("Unit Conversion", "Index", "UnitConversion")</li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="list">
+                                            <a><i class="fa fa-dollar"></i> Taxes & Currencies <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Tax", "ViewTaxes", "Tax")</li>
+                                                <li>@Html.ActionLink("Location / PayMode / Catering Mode Wise Taxes", "TaxModes", "Tax")</li>
+                                                <li>@Html.ActionLink("Currency", "ViewCurrencies", "Currency")</li>
+                                                <li>@Html.ActionLink("Payment Methods", "Index", "PaymentMethod")</li>
+                                                <li>@Html.ActionLink("Payment Terms", "Index", "PaymentTerm")</li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="list">
+                                            <a><i class="fa fa-neuter"></i> Others <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu mf">
+                                                <li>@Html.ActionLink("Meal Type", "ViewMealTypes", "MealType")</li>
+                                                <li>@Html.ActionLink("Vehicle", "ViewVehicles", "Vehicle")</li>
+                                                <li>@Html.ActionLink("Events", "ViewEvents", "Event")</li>
+                                            </ul>
+                                        </li>
+
+
+
+                                        @*<li>@Html.ActionLink("UI Test", "UITest", "UITest")</li>*@
+
+
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-sitemap"></i> Transactions <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li class="list">
+                                            <a> Purchase Orders<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li>@Html.ActionLink("Purchase Order Create", "CreatePO", "PO")</li>
+                                                <li>@Html.ActionLink("View | Edit | Approve PO", "ViewAllPO", "PO")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>GRN s<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("GRN Create", "CreateGRN", "GRN")</li>
+                                                <li>@Html.ActionLink("View | Edit | Approve GRN", "ViewAllGRN", "GRN")</li>
+
+                                                @*<li class="sub_menu">@Html.ActionLink("Partial GRN", "Index", "PartialGRN")</li>*@
+
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>PRNs<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("PRN Create", "CreatePRN", "PurchaseReturnNote")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>TOGs<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("TOG Create", "CreateTOG", "TOG")</li>
+                                                <li>@Html.ActionLink("View | Edit | Approve TOG", "ViewAllTOG", "TOG")</li>
+
+                                            </ul>
+
+                                        </li>
+                                        <li class="list">
+                                            <a>Request Notes<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("Request Notes", "CreateRequestNote", "RequestNote")</li>
+                                                <li class="sub_menu">@Html.ActionLink("View | Edit Request Notes", "ViewAllRequestNotes", "RequestNote")</li>
+                                                <li class="sub_menu">@Html.ActionLink("Approve Request Notes", "AcceptRequestNote", "RequestNote")</li>
+                                                <li class="sub_menu">@Html.ActionLink("Request Note Based PO", "Merge_PO", "Merge_PO_Request")</li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Productions<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                @*<li class="sub_menu">@Html.ActionLink("Production", "Index", "Production")</li>*@
+                                                <li class="sub_menu">@Html.ActionLink("Productions", "Index", "MultipleProduction")</li>
+                                                <li class="sub_menu">@Html.ActionLink("Custom Productions", "Index", "CustomProduction")</li>
+
+                                            </ul>
+
+                                        </li>
+                                        <li class="list">
+                                            <a>Stock<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("Stock Initialization", "Index", "StockInitialization")</li>
+                                                <li class="sub_menu">@Html.ActionLink("Stock Adjustment", "Index", "StockAdjustment")</li>
+
+                                            </ul>
+
+                                        </li>
+
+                                        <li class="list">
+                                            <a>Month End<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("Month End", "Index", "MonthEnd")</li>
+                                                <li class="sub_menu">@Html.ActionLink("Stock Count", "StartJob", "StockCount")</li>
+                                            </ul>
+                                        </li>
+
+                                        @*<li class="list">
+                                            <a>Day End<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("Process Day End", "DayEnd", "DayEnd")</li>
+
+                                            </ul>
+
+                                        </li>*@
+
+                                        @*<li class="list">
+                                            <a>Invoice<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu tra">
+                                                <li class="sub_menu">@Html.ActionLink("Test Pages", "Stock", "TOG")</li>
+
+                                            </ul>
+                                        </li>*@
+
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a><i class="fa fa-user"></i>Loyalty <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        @*<li class="list">
+                                            <a>Card Types<span class="fa fa-chevron-down"></span></a>*@
+                                            @*<ul class="nav child_menu pro">*@        
+                                                <li>@Html.ActionLink("Card Schems", "AllCardTypes", "CardMaster")</li>                                        
+                                                @*<li>@Html.ActionLink("Card Schems", "CardMaster", "CardMaster")</li>*@
+                                                <li>@Html.ActionLink("Generate Card Numbers", "CardNumberGeneration", "CardNumberGeneration")</li>                                               
+                                                <li>@Html.ActionLink("Points Expirations", "Expirations", "CardMaster")</li>                                                                                                     
+                                            @*</ul>*@
+                                        @*</li>*@
+                                        @*<li class="list">
+                                            <a>Card Number Generation<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Generate Card Numbers", "CardNumberGeneration", "CardNumberGeneration")</li>                                               
+                                            </ul>
+                                        </li>*@                                              
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a><i class="fa fa-money"></i>Promotions <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li class="list">
+                                            <a>Promotion Schedular<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                @*<li>@Html.ActionLink("Promotion Master", "ViewAllPromotions", "Promotion")</li>*@
+                                                <li>@Html.ActionLink("Promotion Master", "Index", "Promotion")</li>
+                                                <li>@Html.ActionLink("View / Edit Promotion Schedular", "ViewAllPromotions", "Promotion")</li>
+                                            </ul>
+
+                                        </li>
+                                        <li class="list">
+                                            <a>Item(s) To Item Promotions<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                @*<li>@Html.ActionLink("XY Promotions", "Index", "ProductXYPromotions")</li>*@
+                                                <li>@Html.ActionLink("Create XY Promotion", "CreateProductXYPromotions", "ProductXYPromotions")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Discounts Promotions<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Discounts Promotion", "CreateDiscountsPromotion", "DiscountsPromotions")</li>
+                                                <li>@Html.ActionLink("Dept. Cat. Sub Cat. Product Discounts Promotions", "ProductDiscountPromotions", "ProductDiscountPromotions")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Lowest Price Wave Off<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Lowest Price Wave Off", "LowestPriceWaveOff", "Promotion")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Bill Value Based Promotions<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Bill Value Based Free Products", "CreateBillValueBasedGetYProductPromo", "BillValueBasedPromotions")</li>
+                                                <li>@Html.ActionLink("Bill Value Based Product Discounts", "CreateBillValueBasedDiscountPromo", "BillValueBasedPromotions")</li>
+                                                <li>@Html.ActionLink("Bill Value Discounts", "CreateBillValueDiscounts", "BillValueBasedPromotions")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Bundle Item Promotions<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Create Bundle Item Promotions", "BundleItemPromotion", "BundleItemPromotions")</li> 
+                                                <li>@Html.ActionLink("Create Combopack Bundle Item Promotions", "CombopackBundleItemPromotion", "BundleItemPromotions")</li>                                               
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Card Promotions<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Create Card Promotions", "CreateCardPromotions", "CardPromotions")</li>
+                                                @*<li>@Html.ActionLink("Coupons", "CreateBillValueBasedDiscountPromo", "BillValueBasedPromotions")</li>*@
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Coupons & Vouchers<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu pro">
+                                                <li>@Html.ActionLink("Gift Voucher Promotions", "CreateGiftVoucherPromotions", "GiftVoucherPromotions")</li>
+                                                <li>@Html.ActionLink("Coupons", "CreateBillValueBasedDiscountPromo", "BillValueBasedPromotions")</li>
+
+                                            </ul>
+                                        </li>
+                                       
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-clone"></i> Reports <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu ">
+                                        <li class="list">
+                                            <a>Reports<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Reports", "GetReports", "Report", null, new { target = "_blank" })</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Customer<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Customer Detail", "RPTCustomerDetails", "Customer")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Stock<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Stock Details", "RPTStockDetails", "Product")</li>
+                                                <li>@Html.ActionLink("As At Stock Balance", "AsAtStockBalance", "Report")</li>
+                                                <li>@Html.ActionLink("Stock Adjustments", "StockAdjustmentReport", "StockAdjustment")</li>
+                                                <li>@Html.ActionLink("Stock Movement", "RPTStockMovement", "StockInitialization")</li>
+                                                <li>@Html.ActionLink("Recipes", "RPTReceipe", "Product")</li>
+                                                <li>@Html.ActionLink("Stock Bin Card", "StockBinCard", "Report")</li>
+                                                <li>@Html.ActionLink("Item Usage", "RPTItemUsage", "Report")</li>
+                                                
+                                               
+                                            </ul>
+                                        </li>
+
+                                        <li class="list">
+                                            <a>PO<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("PO Summary", "RPTPOSummary", "PO")</li>
+                                                <li>@Html.ActionLink("PO Detail", "GetPODetailReport", "PO")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>GRN<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("GRN Summary", "RPTGRNSummary", "GRN")</li>
+                                                <li>@Html.ActionLink("GRN Detail", "GetGRNDetailReport", "GRN")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>PRN<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("PRN Summary", "RPTPRNSummary", "PurchaseReturnNote")</li>
+                                                <li>@Html.ActionLink("PRN Detail", "GetPRNDetailReport", "PurchaseReturnNote")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>TOG<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("TOG Summary", "RPTTOGSummary", "TOG")</li>
+                                                <li>@Html.ActionLink("TOG Detail", "GetTOGDetailReport", "TOG")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Production<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Production Detail", "ProductionReport", "MultipleProduction")</li>
+                                                <li>@Html.ActionLink("Custom Productions", "Report", "CustomProduction")</li>
+                                                <li>@Html.ActionLink("Advance Notes", "AdvanceNote", "AdvanceNote")</li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Costing<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Food Costing", "FoodCosting", "Report")</li>                                               
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Item Consumption<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Item Consumption", "ItemConsumption", "Report")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Sales Register<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Sales Register", "RPTSalesRegister", "Report")</li>
+                                                <li>@Html.ActionLink("Daily Sales", "RPTDailySales", "Report")</li>
+                                                <li>@Html.ActionLink("Given Date Sales", "RPTGivenDateSales", "Report")</li>
+                                                <li>@Html.ActionLink("Journal", "RPTJournal", "Report")</li>
+                                                <li>@Html.ActionLink("Budget Vs Sales Report", "RPTBudgetVsSales", "Report")</li>
+                                            </ul>
+                                        </li>
+                                        <li class="list">
+                                            <a>Loyalty<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu report">
+                                                <li>@Html.ActionLink("Loyalty Points Summary", "StatementSummary", "CardMaster")</li>
+                                                <li>@Html.ActionLink("Loyalty Points Detail", "Statement", "CardMaster")</li>
+                                               
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-upload"></i> Uploads <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu mf">
+                                        <li>@Html.ActionLink("Upload Products", "UploadProductsFromExcel", "Product")</li>
+                                        <li>@Html.ActionLink("Upload Products Price Change", "UploadProductsPriceChnageFromExcel", "Product")</li>
+                                        <li>@Html.ActionLink("Stock Adjustment", "StockAdjustment", "Product")</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-upload"></i> Sales Journal <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu mf">
+                                        <li>@Html.ActionLink("Upload Data", "Journal", "Journal")</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a><i class="fa fa-upload"></i> Kitchen Master <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu mf">
+                                        <li>@Html.ActionLink("KOT & BOT" ,"ViewKitchens", "Kitchen")</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-upload"></i> Price Levels <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu mf">
+                                        <li>@Html.ActionLink("Price Levels", "ViewPriceLevel", "PriceLevel")</li>
+                                    </ul>
+                                </li>
+                                @*<li>
+                                    <a><i class="fa fa-upload"></i> Price Levels <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu mf">
+                                        <li>@Html.ActionLink("Price Levels", "Create", "PriceLevel")</li>
+                                    </ul>
+                                </li>*@
+
+                                <li>
+                                    <a><i class="fa fa-upload"></i> Sales Budget<span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu mf">
+                                        @*<li>@Html.ActionLink("Budget Outlet Wise", "Create", "BudgetOutlet")</li>*@
+                                        <li>@Html.ActionLink("Budget Outlet Wise", "ViewBudget", "BudgetOutlet")</li>
+                                        <li>@Html.ActionLink("Budget Item Type Wise", "Create", "BudgetItemWise")</li>
+                                    </ul>
+                                </li>
+
+                                @*<li>
+                                        <a><i class="glyphicon glyphicon-cog " style="font-size:20px"></i> Customizations <span class="fa fa-chevron-down"></span></a>
+
+                                        <ul class="nav child_menu">
+                                            <li class="sub_menu">@Html.ActionLink("Customizations", "Create", "Customizations")</li>
+
+                                        </ul>
+
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-file " style="font-size:20px"></i> Meal Type <span class="fa fa-chevron-down"></span></a>
+
+                                        <ul class="nav child_menu">
+                                            <li class="sub_menu">@Html.ActionLink("Meal", "Index", "Meal")</li>
+
+                                        </ul>
+
+                                    </li>*@
+                            </ul>
+                        </div>
+
+
+
+                    </div>
+                    <!-- /sidebar menu -->
+                    <!-- /menu footer buttons -->
+                    
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="">
+                            <span class="glyphicon" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                            <span class="glyphicon" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Lock">
+                            <span class="glyphicon" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="@Url.Action("LogOut", "Account", new {Area = ""})">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+
+                <div class="nav_menu">
+
+                    <nav class="">
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="passlog">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/images/no-image-icon-.png" alt=""><span class="usrname">@(Session["loggeduser"].ToString())</span>
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    @*<li><a href="javascript:;"> Profile</a></li>
+                                        <li>
+                                          <a href="javascript:;">
+                                            <span class="badge bg-red pull-right">50%</span>
+                                            <span>Settings</span>
+                                          </a>
+                                        </li>*@
+                                    <li><a href="@Url.Action("ChangePassword", "UserMaster", new {Area = ""})">Change Password</a></li>
+                                    <li><a href="@Url.Action("LogOut", "Account", new {Area = ""})"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                </ul>
+                            </li>
+
+                            <li role="presentation" class="dropdown">
+                                @*<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <span class="badge bg-green">6</span>
+                                    </a>*@
+                                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                    <li>
+                                        <a>
+                                            @*<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>*@
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            @*<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>*@
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            @*<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>*@
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            @*<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>*@
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="text-center">
+                                            <a>
+                                                <strong>See All Alerts</strong>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+
+            <br />
+            <div align="center">
+                @RenderBody()                  
+            </div>
+
+            <!-- footer content -->
+            <div class="clearfix"></div>       
+            @*<div align="right" class="panel-footer">
+               <label>version 01.00.01</label>
+            </div>*@
+           
+        </div>
+    </div>
+
+
+
+
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    @*<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>*@
+
+
+    <!-- Bootstrap -->
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    <!-- FastClick -->
+    <script src="~/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="~/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="~/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="~/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="~/vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="~/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="~/vendors/Flot/jquery.flot.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="~/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="~/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="~/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="~/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="~/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="~/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="~/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="~/vendors/moment/min/moment.min.js"></script>
+    <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    @*<script src="~/vendors/iCheck/icheck.min.js"></script>*@
+
+
+    @*Dropdown lists*@
+    <script src="~/vendors/select2/dist/js/select2.full.min.js"></script>
+
+    @*Data Tables*@
+    <script src="~/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    @*<script src="~/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="~/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+        <script src="~/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+        <script src="~/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+        <script src="~/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+        <script src="~/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+        <script src="~/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+        <script src="~/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+        <script src="~/vendors/jszip/dist/jszip.min.js"></script>
+        <script src="~/vendors/pdfmake/build/pdfmake.min.js"></script>
+        <script src="~/vendors/pdfmake/build/vfs_fonts.js"></script>*@
+
+    <script src="~/Scripts/Exports/tableExport.js"></script>
+    <script src="~/Scripts/Exports/base64.js"></script>
+    <script src="~/Scripts/Exports/html2canvas.js"></script>
+    <script src="~/Scripts/Exports/jquery.base64.js"></script>
+    <script src="~/Scripts/Exports/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/Exports/jspdf.js"></script>
+    <script src="~/Scripts/Exports/sprintf.js"></script>
+
+    <script src="~/build/js/custom.min.js"></script>
+
+
+    <!-- jQuery Smart Wizard -->
+    @*<script src="~/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>*@
+    <script src="~/vendors/jQuery-Smart-Wizard/js/Jquery.SmartWizard.PO.js"></script>
+    <!-- Custom Theme Scripts -->
+
+    <script>
+
+        //$('ul.nav li.list').hover(function () {
+        //    $(this).find('.child_menu').stop(true, true).delay(100).fadeIn(100);
+        //}, function () {
+        //    $(this).find('.child_menu').stop(true, true).delay(100).fadeOut(100);
+        //});
+
+        //$('ul.nav').click(function () {
+
+        //    var x = $(window).width();           
+        //    if (x < 700) {             
+        //        $(this).find('.mf').stop(true, true).delay(100).fadeIn(100);
+        //    }
+
+        //});
+
+        //$('ul.nav').click(function () {
+
+        //    var x = $(window).width();         
+
+        //    if (x < 700) {               
+        //        $(this).find('.tra').stop(true, true).delay(100).fadeIn(100);
+        //    }
+        //});
+
+        //$('ul.nav').click(function () {
+
+        //    var x = $(window).width();           
+        //    if (x < 700) {              
+        //        $(this).find('.pro').stop(true, true).delay(100).fadeIn(100);
+        //    }
+        //});
+
+        //$('ul.nav').click(function () {
+
+        //    var x = $(window).width();           
+        //    if (x < 700) {               
+        //        $(this).find('.report').stop(true, true).delay(100).fadeIn(100);
+        //    }
+        //});
+
+
+        let isVisible = true;
+        $("#menu_toggle").on('click', function () {
+
+            if (isVisible == true) {
+                $('ul.nav li.list').hover(function () {
+                    $(this).find('.child_menu').stop(true, true).delay(100).fadeIn(100);
+                }, function () {
+                    $(this).find('.child_menu').stop(true, true).delay(100).fadeOut(100);
+                });
+
+                isVisible = !isVisible;
+
+            }
+            else {
+
+                $('ul.nav li.list').unbind();
+                isVisible = !isVisible;
+            }
+
+        });
+
+
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+
+
+            //$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            //$('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //$('[data-mask]').inputmask()
+            //$('#reservation').daterangepicker()
+            //$('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+
+
+
+            //$('#daterange-btn').daterangepicker(
+            //  {
+            //    ranges   : {
+            //      'Today'       : [moment(), moment()],
+            //      'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            //      'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+            //      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            //      'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+            //      'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            //    },
+            //    startDate: moment().subtract(29, 'days'),
+            //    endDate  : moment()
+            //  },
+            //  function (start, end) {
+            //    $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            //  }
+            //)
+
+
+            //$('#datepicker').datepicker({
+            //  autoclose: true
+            //})
+
+
+            //$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            //  checkboxClass: 'icheckbox_minimal-blue',
+            //  radioClass   : 'iradio_minimal-blue'
+            //})
+
+            //$('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            //  checkboxClass: 'icheckbox_minimal-red',
+            //  radioClass   : 'iradio_minimal-red'
+            //})
+
+            //$('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            //  checkboxClass: 'icheckbox_flat-green',
+            //  radioClass   : 'iradio_flat-green'
+            //})
+
+
+            //$('.my-colorpicker1').colorpicker()
+
+            //$('.my-colorpicker2').colorpicker()
+
+
+            //$('.timepicker').timepicker({
+            //  showInputs: false
+            //})
+
+        })
+
+    </script>
+
+
+
+
+    <script>
+        $(window).load(function () {
+
+            $(".se-pre-con").fadeOut("slow");
+        });
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+    @*<script src="~/vendors/jQuery-Smart-Wizard/js/Jquery.SmartWizard.PO.js"></script>*@
+    <script src="~/Scripts/Validations/FormValidations.js"></script>
+
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,25 @@
+{
+	admin off
+	# Used only when SITE_ADDRESS is a real domain (automatic HTTPS via Let's Encrypt).
+	email {$ACME_EMAIL:admin@example.com}
+}
+
+# SITE_ADDRESS:
+#   http://            → listen on :80 for any host, HTTP only (no TLS). IP test box.
+#   hms.example.com    → automatic HTTPS (DNS must point here, ports 80+443 open).
+{$SITE_ADDRESS:http://} {
+	encode zstd gzip
+
+	# Backend API (.NET). The Next.js client calls /api/v1/* (relative paths); the
+	# health probe lives at /health. Both go straight to the API service — this is
+	# what makes the front-end's same-origin /api assumption hold in a deployed env.
+	@api path /api/* /health /health/*
+	handle @api {
+		reverse_proxy api:5000
+	}
+
+	# Everything else is the Next.js app. (reverse_proxy auto-streams SSE for the KDS.)
+	handle {
+		reverse_proxy web:3000
+	}
+}

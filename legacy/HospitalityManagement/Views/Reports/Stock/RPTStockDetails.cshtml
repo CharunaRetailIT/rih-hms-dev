@@ -1,0 +1,548 @@
+﻿@*@model HospitalityManagement.Models.PopUp.RPTStockLoadingModel*@
+
+@model  RIT.HMS.Domain.ViewModels.Reports.ProductStockViewModel
+@{
+    ViewBag.Title = "RPTStockDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Report.css" rel="stylesheet" />
+@using (Html.BeginForm("RPTStockDetails", "Product", FormMethod.Post, new { @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_title">
+                            <h2>Stock Report</h2>
+                            <br />
+
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li>
+                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+
+                                <li>
+                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-labe col-md-3 col-sm-3 col-xs-3">Product From</label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            @Html.TextBoxFor(Models => Models.StockCodeFrom, new { @class = "form-control", style = "Width=100%", @value = Model.StockCodeFrom })
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 col-xs-12">
+                                            @Html.TextBoxFor(Models => Models.ProductNameFrom, new { @class = "form-control", style = "Width=100%", @value = Model.ProductNameFrom })
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <button id="modal-707666" type="button" Width="100%" style="margin-top:0px;" class="btn" data-toggle="modal" data-target="#modal-container-707666">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Location</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <select id="LocationId" name="LocationId" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Product To</label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            @Html.TextBoxFor(Models => Models.StockCodeTO, new { @class = "form-control", style = "Width=100%", @value = Model.StockCodeTO })
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 col-xs-12">
+                                            @Html.TextBoxFor(Models => Models.ProductNameTO, new { @class = "form-control", style = "Width=100%", @value = Model.ProductNameTO })
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                            <button id="modal-707667" type="button" Width="100%"  style="margin-top:0px;"  class="btn" data-toggle="modal" data-target="#modal-container-707667">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="actionBar">
+                                <div class="msgBox">
+                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                @*<a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                        <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                    </a>*@
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Export to Excel", "ExportToExcel", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                            </li>
+                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                        </ul>
+                                    </div>
+                                    @*<div class="actionBar">
+                                        <div class="msgBox">*@
+
+                                    @*<div class="btn btn-primary pl_add btn-small pull-left">
+                                            @Html.ActionLink("Export to Excel", "ExportToExcel", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                        </div>*@
+
+
+                                    @*</div>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div id="printcontent">
+
+                        <div id="summary" class="pull-left text-info">
+                            @ViewBag.ReportSummary
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <br />
+
+                        <div class="table-responsive">
+                            @if (Model.stockresultmodel != null)
+                            {
+                                <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th></th>
+                                            <th class="column-title">Location</th>
+                                            <th style="display:none" class="column-title">Product Id </th>
+                                            <th class="column-title">Product Code</th>
+                                            <th class="column-title">Product Name </th>
+                                            <th class="column-title">Stock </th>
+                                            <th class="column-title">Cost Price </th>
+                                            <th class="column-title">Average Cost Price</th> @*Added By Nipuna Francisku #2619*@
+                                            <th class="column-title">Cost Value </th>
+                                            <th class="column-title">Average Cost Value</th> @*Added By Nipuna Francisku #2619*@
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.stockresultmodel)
+                                        {
+                                            decimal stockval = 0;
+                                            stockval = (item.ProductDbStock * item.ProductCostPrice);
+                                            <tr class="even pointer">
+                                                <td>@(Model.stockresultmodel.ToList().IndexOf(item)+1)</td>
+                                                <td class="">@Html.DisplayFor(modelItem => item.Location)</td>
+                                                <td style="display:none" class="">@Html.DisplayFor(modelItem => item.ProductId)</td>
+                                                <td class="">@Html.DisplayFor(modelItem => item.ProductCode) </td>
+                                                <td class="">@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                <td style="text-align:right">@item.ProductDbStock.ToString("n2")</td>
+                                                <td style="text-align:center">@item.ProductCostPrice.ToString("n2")</td>
+                                                <td style="text-align:center">@item.AverageCostPrice.ToString("n2")</td> @*Added By Nipuna Francisku #2619*@
+                                                <td style="text-align:center">@stockval.ToString("n2")</td>
+                                                <td style="text-align:center">@item.AverageCostValue.ToString("n2")</td>  @*Added By Nipuna Francisku #2619*@
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                    <tfoot style="font-weight:bold; background-color:#ecf0f5;">
+                                        <tr>
+                                            <td colspan="7">Total value: </td>
+                                            <td style="text-align:center">@ViewBag.TotalCost</td>
+                                            <td style="text-align:center">@ViewBag.TotalAverageCost</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div id="partialModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" style="padding-top:0%;" role="document">
+                        <div class="modal-content" style="width: fit-content!important;">
+                            <div class="modal-header">
+                                <h5 class="modal-title">All Products</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @* test start*@
+
+
+                <div class="modal fade" id="modal-container-707666" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document" style="width: 900px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel">
+                                    Modal title
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @if (Model.stockmodel != null)
+                                {
+                                    <table id="BillDetailsGrid" class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                            <tr class="headings">
+                                                @*<th class="column-title">Location</th>*@
+                                                <th style="display:none" class="column-title">Product Id </th>
+                                                <th class="column-title">Product Code</th>
+                                                <th class="column-title">Product Name </th>
+                                                <th class="column-title">Stock </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.stockmodel)
+                                            {
+                                                decimal stockval = 0;
+                                                stockval = (item.ProductDbStock * item.ProductCostPrice);
+                                                <tr class="even pointer">
+
+                                                    @*<td class="">@Html.DisplayFor(modelItem => item.Location)</td>*@
+                                                    <td style="display:none" class="">@Html.DisplayFor(modelItem => item.ProductId)</td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductCode) </td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                    <td style="text-align:right">@item.ProductDbStock.ToString("n2")</td>
+                                                    <td><input type="button" value="ClickMe" class="btnrowvalue1" /> </td>
+
+
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                        <tfoot style="font-weight:bold; background-color:#ecf0f5;">
+                                            <tr>
+                                                <td colspan="7">Total value: </td>
+                                                <td style="text-align:center">@ViewBag.TotalCost</td>
+                                                <td style="text-align:center">@ViewBag.TotalAverageCost</td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                }
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-primary">
+                                    Save changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                @*test end*@
+
+                @*For secound button*@
+                <div class="modal fade" id="modal-container-707667" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document" style="width: 900px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel">
+                                    Modal title
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @if (Model.stockmodel != null)
+                                {
+                                    <table id="BillDetailsGrid" class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                            <tr class="headings">
+                                                @*<th class="column-title">Location</th>*@
+                                                <th style="display:none" class="column-title">Product Id </th>
+                                                <th class="column-title">Product Code</th>
+                                                <th class="column-title">Product Name </th>
+                                                <th class="column-title">Stock </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.stockmodel)
+                                            {
+                                                decimal stockval = 0;
+                                                stockval = (item.ProductDbStock * item.ProductCostPrice);
+                                                <tr class="even pointer">
+
+                                                    @*<td class="">@Html.DisplayFor(modelItem => item.Location)</td>*@
+                                                    <td style="display:none" class="">@Html.DisplayFor(modelItem => item.ProductId)</td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductCode) </td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                    <td style="text-align:right">@item.ProductDbStock.ToString("n2")</td>
+                                                    <td><input type="button" value="ClickMe" class="btnrowvalue2" /> </td>
+
+
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                        <tfoot style="font-weight:bold; background-color:#ecf0f5;">
+                                            <tr>
+                                                <td colspan="7">Total value: </td>
+                                                <td style="text-align:center">@ViewBag.TotalCost</td>
+                                                <td style="text-align:center">@ViewBag.TotalAverageCost</td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                }
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-primary">
+                                    Save changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                @*end second button*@
+
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/js/Highchart/highcharts.js"></script>
+<script src="~/Scripts/js/Highchart/exporting.js"></script>
+<script src="~/Scripts/js/Highchart/export-data.js"></script>
+<script src="~/Scripts/js/Highchart/highcharts-3d.js"></script>
+<script src="~/Scripts/js/Highchart/cylinder.js"></script>
+<script src="~/Scripts/js/Highchart/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/js/Highchart/highcharts-more.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false,
+            "scrollY": "500px",
+            "scrollCollapse": true,
+            "scrollX": true,  // Enable horizontal scrolling
+            "fixedHeader": false, // Disable fixed header for horizontal scrolling
+            "autoWidth": false 
+        });
+
+        $('#BillDetailsGrid').dataTable({
+            "bPaginate": false
+        });
+    });
+</script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var poLocationId = $("#LocationId");
+
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+        });
+        if ('@ViewBag.LocationId') {
+            $('#LocationId').val(@ViewBag.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });
+</script>
+
+<script>
+    var allactiveproducts = @Html.Raw(Json.Encode(ViewBag.productdata));
+    // debugger ;
+    //var itemID = $("#ProductId");
+    var itemIDFrom = $("#StockCodeFrom");
+    var itemIDTo = $("#StockCodeTO");
+    //itemID.empty();
+    //itemID.append("<option value='0'>-- All Products --</option>");
+    //itemIDFrom.empty();
+    //itemIDTo.empty();
+    //itemIDFrom.append("<option value='0'>-- All Products --</option>");
+    //itemIDTo.append("<option value='0'>-- All Products --</option>");
+    //$.each(allactiveproducts, function (index, optionaldata) {
+    //    itemID.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+
+    //});
+    //alert(itemIDFrom);
+    //alert(itemIDTo);
+
+    //$.each(allactiveproducts, function (index, optionaldata) {
+    //    itemIDFrom.append($('<option />', { value: optionaldata.ProductCode }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+
+    //});
+
+    //$.each(allactiveproducts, function (index, optionaldata) {
+    //    itemIDTo.append($('<option />', { value: optionaldata.ProductCode }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+
+    //});
+
+    if ('@ViewBag.ProductId') {
+        $('#ProductId').val(@ViewBag.ProductId).trigger("change");
+    } else {
+        $('#ProductId').val(0).trigger("change");
+    }
+
+    @*if ('@ViewBag.StockCodeFrom') {
+        $('#StockCodeFrom').val(@ViewBag.StockCodeFrom).trigger("change");
+    } else {
+        $('#StockCodeFrom').val(0).trigger("change");
+    }
+
+    if ('@ViewBag.StockCodeTO') {
+        $('#StockCodeTO').val(@ViewBag.StockCodeTO).trigger("change");
+    } else {
+        $('#StockCodeTO').val(0).trigger("change");
+    }*@
+
+
+    $("#LocationId").change(
+             function () {
+                 debugger;
+                 var loc = this.value;
+                 $.getJSON("@Url.Action("GetProductsByStockLocId", "Product")", { stocklocid: loc },
+                 function (data) {
+                     var ProductId = $("#ProductId");
+                     ProductId.empty();
+                     ProductId.append("<option value='0'>-- All Products --</option>");
+                     $.each(JSON.parse(data), function (index, optionaldata) {
+                         ProductId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+                     });
+                 });
+             });
+</script>
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+        var divToPrint = document.getElementById("datatable-responsive");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+        //var divContents = document.getElementById("#datatable-responsive").innerHTML;
+        //var printWindow = window.open('', '', 'height=200,width=400');
+        //printWindow.document.write('<html><head><title></title>');
+        //printWindow.document.write('</head><body >');
+        //printWindow.document.write(divContents);
+        //printWindow.document.write('</body></html>');
+        //printWindow.document.close();
+        //printWindow.print();
+
+        //$(document).ready(function () {
+        //    $('#printcontent').DataTable();
+        //});
+    }
+
+    @*$(function () {
+        $(".details").click(function () {
+            var $buttonClicked = $(this);
+            var UniInvNo = $buttonClicked.attr('data-id');
+            $.ajax({
+                type: "GET",
+                //url: "/Home/Details",
+                url: "@Url.Action("Details", "Product")",
+                data: {UniInvNo:  UniInvNo},
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $("#partialModal").find(".modal-body").html(response);
+                    $("#partialModal").modal('show');
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });*@
+
+
+    $(".btnrowvalue1").click(function () {
+
+        var FirstCol = $(this).closest('tr').find('td').eq(1).html().trim();
+        var SecondCol = $(this).closest('tr').find('td').eq(2).html().trim();
+        //alert('Type1 : ' + FirstCol + ' ' + SecondCol);
+        //document.getElementById('StockCodeFrom1').value = SecondCol;
+        document.getElementById("StockCodeFrom").innerHTML = FirstCol;
+        document.getElementById("ProductNameFrom").innerHTML = SecondCol;
+
+        var labelValue = $('#StockCodeFrom').text();
+        $('#StockCodeFrom').val(labelValue);
+
+        var labelValueF1 = $('#ProductNameFrom').text();
+        $('#ProductNameFrom').val(labelValueF1);
+        //alert("FRomval "+ labelValue)
+
+    });
+    $(".btnrowvalue2").click(function () {
+
+        var FirstCol = $(this).closest('tr').find('td').eq(1).html().trim();
+        var SecondCol = $(this).closest('tr').find('td').eq(2).html().trim();
+        //alert('Type1Button2 : ' + FirstCol + ' ' + SecondCol);
+        //document.getElementById('StockCodeFrom1').value = SecondCol;
+        document.getElementById("StockCodeTO").innerHTML =FirstCol;
+        document.getElementById("ProductNameTO").innerHTML = SecondCol;
+
+
+        var labelValue1 = $('#StockCodeTO').text();
+        $('#StockCodeTO').val(labelValue1);
+        //alert("To val"+ labelValue1)
+
+        var labelValue2 = $('#ProductNameTO').text();
+        $('#ProductNameTO').val(labelValue2);
+
+        //$('#StockCodeFrom').val($('#StockCodeFrom').text());
+
+    });
+
+
+</script>

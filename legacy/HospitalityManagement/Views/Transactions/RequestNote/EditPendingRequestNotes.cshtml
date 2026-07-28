@@ -1,0 +1,692 @@
+﻿@{
+    ViewBag.Title = "Pending Request Notes Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body" novalidate>
+    <div class="main_container">
+
+        <div class="right_col" role="main">
+            @if (ViewBag.Message == "1")
+            {
+                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong> </strong> @ViewBag.Code Saved Successfully.
+                </div>
+            }
+
+
+            @if (ViewBag.Message == "2")
+            {
+                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong> </strong> @ViewBag.Code Successfully Canceled.
+                </div>
+            }
+
+
+
+
+
+
+            @{ // Assume your session variable is named "ShowTOGSection" and it holds a boolean value
+                bool DisableServingUnit = Session["DisableServingUnit"] != null && (bool)Session["DisableServingUnit"];
+                bool DisableRequestedBy = Session["DisableRequestedBy"] != null && (bool)Session["DisableRequestedBy"];// Set this based on your logic
+                bool DisablePriceRequestNote = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+            }
+
+
+
+            @using (Html.BeginForm("ModifyPendingRequestNote", "RequestNote", FormMethod.Post, new { id = "ModifyPendingRequestNote", @class = "form-horizontal", enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" id="DocumentNo" name="DocumentNo" value="@Model.DocumentNo" />
+                <input type="hidden" id="DocumentDate" name="DocumentDate" value="@Model.DocumentDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" id="CompanyId" name="CompanyId" value="@Model.CompanyId" />
+                <input type="hidden" id="RequestnoteHeaderId" name="RequestnoteHeaderId" value="@Model.RequestnoteHeaderId" />
+                <input type="hidden" id="FromLocationId" name="FromLocationId" value="@Model.FromLocationId" />
+
+
+                <div class="x_panel trn-xpanel">
+                    <div class="x_title1">
+
+                        <h2>Request Note No @Model.DocumentNo </h2>
+
+                        <br />
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <table id="tblTOGs" class="mstable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">Index</th>
+                            <th style="display:none">Product Id</th>
+                            <th style='width:25%'>Product Code</th>
+                            <th style='width:25%'>Product</th>
+                            <th style="display:none">Item Id</th>
+                            <th style='display: none;width:25%'>Item</th>
+                            <th style="display:none">Request Quantity</th>
+
+                            <th>SIH Quantity</th>
+                            <th>Request Qty</th>
+                            @if (DisablePriceRequestNote)
+                            {
+                                <th style="display: none;">Unit</th>
+                                <th style="display: none;">Cost Price</th>
+                            }
+                            else
+                            {
+                                <th>Unit</th>
+                                <th>Cost Price</th>
+
+                            }
+                            <th style="display: none;">Selling Price</th>
+                            @if (DisableRequestedBy)
+                            {
+                                <th style="display: none;">Requested By</th>
+                            }
+                            else
+                            {
+                                <th>Requested By</th>
+
+                            }
+                            @if (DisableServingUnit)
+                            {
+                                <th style="display: none;">Serving Unit</th>
+                            }
+                            else
+                            {
+                                <th>Serving Unit</th>
+
+                            }
+                            <th style="display: none;">Serving Unit Id</th>
+                            <th style="display: none;">Header Id</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="togitems">
+                        <!-- Items will be dynamically loaded here -->
+                    </tbody>
+                </table>
+
+                <!-- Add hidden field for product code -->
+                <input type="hidden" id="ProductCode" name="ProductCode" value="YOUR_PRODUCT_CODE_HERE" />
+                <input type="hidden" id="Remark" name="Remark" />
+
+                <div class="actionBar">
+                    <div class="msgBox">
+                        <div class="pull-left">
+                            <input type="button" class="btnallClear" value="Back" onclick="location.href='@Url.Action("AcceptRequestNote", null, new { })'" />
+                        </div>
+
+                        @if (!Model.IsApproved && (Model.DocumentStatus == 2 || Model.DocumentStatus == 1))
+                        {
+                            <div id="RequestStatus2">
+                                <button type="submit" formaction="AcceptRequestNote" id="ButtonAcceptRequestNote" class="btnallSubmit btn pull-left">Request Approve</button>
+                            </div>
+                        }
+
+                        @if (!Model.IsApproved && Convert.ToBoolean(Session["EnableRequestNoteCancelOnly"]) == true && (Model.DocumentStatus == 2 || Model.DocumentStatus == 1))
+                        {<div class="pull-left">
+
+
+
+
+                                <button type="submit" formaction="ButtonCancel" id="ButtonCancel" class="btnallClear">Cancel Request Note</button>
+
+
+
+                            </div>
+                        }
+
+
+
+
+                        <div id="RequestStatus4">
+                            <button type="submit" formaction="ReOpen" id="ButtonReOpen" class="btn btnallView pull-left">Request Re-Open</button>
+                        </div>
+                        <div id="RequestStatus6">
+                            <button type="submit" formaction="AcceptRequestNote" id="ButtonAcceptRequestNote2" class="btnallSubmit btn pull-left">Request Approve</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @section Scripts {
+            <script type="text/javascript">
+        $(document).ready(function () {
+            // Show success message if it exists
+            if ('@ViewBag.Message' == '1') {
+                $('#ButtonAcceptRequestNote').attr('disabled', true);
+                $('#ButtonAcceptRequestNote2').attr('disabled', true);
+            }
+        });
+            </script>
+        }
+
+        <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#ButtonReject').on('click',
+                    function (event) {
+                        $('#ButtonReject').text('Processing...');
+                        $('#ButtonReject').prop('disabled', true);
+                        $('#AcceptRequestNotes').attr('action', 'Reject');
+                        $('#AcceptRequestNotes').submit();
+                    });
+
+                // -------------------------------------------------------
+                //$('#ButtonCancel').on('click',
+                //    function (event) {
+                //        $('#ButtonCancel').text('Processing...');
+                //        $('#ButtonCancel').prop('disabled', true);
+
+                //        //$('#Production').removeAttr("disabled");
+                //        //$('#TOG').removeAttr("disabled");
+                //        //$('#PO').removeAttr("disabled");
+
+                //        $('#ModifyPendingRequestNote').attr('action', '/RequestNote/CancelRequestNoteAccept');
+                //        $('#ModifyPendingRequestNote').submit();
+
+
+
+                //    });
+
+
+
+
+
+
+
+
+
+                //---------------------
+                $('#ButtonCancel').on('click', function (event) {
+                    // Prevent the default action of the button (if any)
+                    event.preventDefault();
+
+                    // Show a confirmation dialog
+                    var userConfirmed = confirm('Are you sure you want to cancel?');
+
+                    if (userConfirmed) {
+                        // If user confirms, proceed with the submission process
+                        $('#ButtonCancel').text('Processing...');
+                        $('#ButtonCancel').prop('disabled', true);
+                        $('#ModifyPendingRequestNote').attr('action', '/RequestNote/CancelRequestNoteAccept');
+                        $('#ModifyPendingRequestNote').submit();
+                    } else {
+                        // If user cancels, you can optionally perform any additional actions here
+                        // For example, resetting the button text
+                        $('#ButtonCancel').text('Cancel Request Note');
+                        $('#ButtonCancel').prop('disabled', false);
+                    }
+                });
+                //---------------------------------------------------------
+                //$('#ButtonAcceptRequestNote').on('click',
+                //    function (event) {
+                //        $('#ButtonAcceptRequestNote').text('Processing...');
+                //        $('#ButtonAcceptRequestNote').prop('disabled', true);
+                //        $('#ModifyPendingRequestNote').attr('action', 'ModifyPendingRequestNote');
+                //        $('#ModifyPendingRequestNote').submit();
+                //    });
+
+
+
+                $('#ButtonAcceptRequestNote').on('click', function (event) {
+                    // Prevent the default action of the button (if any)
+                    event.preventDefault();
+
+                    // Show a confirmation dialog
+                    var userConfirmed = confirm('Are you sure you want to accept this request note?');
+
+                    if (userConfirmed) {
+                        // If user confirms, proceed with the submission process
+                        $('#ButtonAcceptRequestNote').text('Processing...');
+                        $('#ButtonAcceptRequestNote').prop('disabled', true);
+                        $('#ModifyPendingRequestNote').attr('action', '/RequestNote/ModifyPendingRequestNote');
+                        $('#ModifyPendingRequestNote').submit();
+                    } else {
+                        // If user cancels, you can optionally perform any additional actions here
+                        // For example, resetting the button text
+                        $('#ButtonAcceptRequestNote').text('Accept Request');
+                        $('#ButtonAcceptRequestNote').prop('disabled', false);
+                    }
+                });
+
+
+
+
+                //---------------------------------------------------------
+                $('#ButtonForcefullyClose').on('click',
+                    function (event) {
+                        $('#ButtonForcefullyClose').text('Processing...');
+                        $('#ButtonForcefullyClose').prop('disabled', true);
+                        $('#ModifyPendingRequestNote').attr('action', 'ForcefullyClose');
+                        $('#ModifyPendingRequestNote').submit();
+                    });
+                //---------------------------------------------------------
+                $('#ButtonReOpen').on('click',
+                    function (event) {
+                        $('#ButtonReOpen').text('Processing...');
+                        $('#ButtonReOpen').prop('disabled', true);
+                        $('#ModifyPendingRequestNote').attr('action', 'ReOpen');
+                        $('#ModifyPendingRequestNote').submit();
+                    });
+                //---------------------------------------------------------
+            //    $('#ButtonAcceptRequestNote').on('click',
+            //        function (event) {
+            //            $('#ButtonAcceptRequestNote').text('Processing...');
+            //            $('#ButtonAcceptRequestNote').prop('disabled', true);
+            //            $('#ModifyPendingRequestNote').attr('action', 'ModifyPendingRequestNote');
+            //            $('#ModifyPendingRequestNote').submit();
+            //        });
+
+            });
+        </script>
+        <script>
+
+    $(document).ready(function() {
+        var requestid = '@Model.RequestnoteHeaderId';
+
+        $.ajax({
+            url: "@Url.Action("GetRequestData", "RequestNote")",
+            data: { id: requestid },
+            type: "GET",
+            dataType: "json",
+            success: function(resp) {
+                data = resp;
+                console.log(data);
+                $("#togitems tr").remove();
+
+                $.each(data, function(i, item) {
+                    $("#RequestType").val(item.RequestType);
+
+
+
+                               @{ // Assume your session variable is named "ShowTOGSection" and it holds a boolean value
+                                   bool DisableServingUnit1 = Session["DisableServingUnit"] != null && (bool)Session["DisableServingUnit"];
+                                   bool DisableRequestedBy1 = Session["DisableRequestedBy"] != null && (bool)Session["DisableRequestedBy"];// Set this based on your logic
+                                   bool DisablePriceRequestNote0 = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+                                                                    }
+
+                        var DisableRequested_By = @DisableServingUnit1.ToString().ToLower();
+                            var DisableServing_Unit = @DisableRequestedBy1.ToString().ToLower();
+                                var DisablePriceRequest_Note = @DisablePriceRequestNote0.ToString().ToLower();
+
+
+                    var unitindex = $("#togitems").children("tr").length;
+
+                    var unitindexCell = "<td style='display:none'><input name='AcceptanceDetail.Index' type='hidden' value='" + unitindex + "' /></td>";
+
+                    var unitPIdCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductId' class='form-control' name='AcceptanceDetail[" +
+                        unitindex + "].ProductId' type='text' readonly value='" + item.ProductId + "' /></td>";
+
+
+                    var ProductCodeCell = "<td style='width:25%' id='AcceptanceDetail" + unitindex + "_ProductCode'   name='AcceptanceDetail[" +
+                        unitindex + "].ProductCode'> " + item.ProductCode + " (" + item.ProductCode + ")" + "</td>";
+
+                    var unitPDescCell = "<td style='width:25%' id='AcceptanceDetail" + unitindex + "_ProductName'   name='AcceptanceDetail[" +
+                        unitindex + "].ProductName'> " + item.ProductName + " (" + item.ProductQuantity + ")" + "</td>";
+
+                    var unitPQtyCell = "<td  style='display:none' ><input id='AcceptanceDetail" + unitindex + "_ProductQty'  class='form-control' type='text'  name='AcceptanceDetail[" +
+                        unitindex + "].ProductQty'  readonly value='" + item.ProductQuantity + "' /></td>";
+
+                    var SIHCell = "<td ><input id='AcceptanceDetail" + unitindex + "_SIH'  class='form-control' type='text'  name='AcceptanceDetail[" +
+                        unitindex + "].SIH'  readonly value='" + item.SIH + "' /></td>";
+
+
+                    var unitIssueQtyCell = "<td ><input id='AcceptanceDetail" + unitindex + "_IssueQty0'  class='form-control'   name='AcceptanceDetail[" +
+                        unitindex + "].IssueQty0' type='text' min='0' onkeypress='return isNumber(event)' onkeyup = 'return TableIssueQty(this)' value='" + item.MaterialQuantity.toFixed(2) + "' /></td>";
+
+
+
+                    if (DisablePriceRequest_Note) {
+                        var unitUOMCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_UOM'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].UOM'  readonly value='" + item.MaterialQuantity.toFixed(2) + '' + item.MaterialUOMName + "' /></td>";
+                        var unitCostPriceCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_CostPrice'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].CostPrice' type='text' readonly value='" + item.MaterialCostPrice.toFixed(2) + "' /></td>";
+                    }
+
+                    else {
+                        var unitUOMCell = "<td ><input id='AcceptanceDetail" + unitindex + "_UOM'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].UOM'  readonly value='" + item.MaterialQuantity.toFixed(2) + '' + item.MaterialUOMName + "' /></td>";
+                        var unitCostPriceCell = "<td><input id='AcceptanceDetail" + unitindex + "_CostPrice'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].CostPrice' type='text' readonly value='" + item.MaterialCostPrice.toFixed(2) + "' /></td>";
+
+                    }
+
+                    if (DisableRequested_By) {
+                        var unitrequestedByCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_RequestedBy'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].RequestedBy' type='text' readonly value='" + item.RequestedBy + "' /></td>";
+                    }
+                    else {
+
+                        var unitrequestedByCell = "<td><input id='AcceptanceDetail" + unitindex + "_RequestedBy'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].RequestedBy' type='text' readonly value='" + item.RequestedBy + "' /></td>";
+                    }
+
+
+                    if (DisableServing_Unit) {
+                        var unitServingUnitCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ServingUnit'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].ServingUnit' type='text' readonly value='" + item.ServingUnit + "' /></td>";
+
+                    }
+                    else {
+
+                        var unitServingUnitCell = "<td><input id='AcceptanceDetail" + unitindex + "_ServingUnit'  class='form-control'  name='AcceptanceDetail[" +
+                            unitindex + "].ServingUnit' type='text' readonly value='" + item.ServingUnit + "' /></td>";
+                    }
+
+
+                    var unitIdCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_MaterialId' class='form-control' name='AcceptanceDetail[" +
+                        unitindex + "].MaterialId' type='text' readonly value='" + item.MaterialId + "' /></td>";
+
+                    var unitDescCell = "<td style='display:none;width:25%'><input id='AcceptanceDetail" + unitindex + "_MaterialName' class='form-control' name='AcceptanceDetail[" +
+                        unitindex + "].MaterialName' readonly value = '" + item.MaterialName + "'/></td>";
+
+                    var unitQtyCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_MaterialQty'  class='form-control' type='hidden'  name='AcceptanceDetail[" +
+                        unitindex + "].MaterialQty'  readonly value='" + item.MaterialQuantity.toFixed(2) + "' /></td>";
+
+
+
+
+
+
+
+                    var unitSellingPriceCell = "<td style='display: none;'><input id='AcceptanceDetail" + unitindex + "_SellingPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].SellingPrice' type='text' readonly value='" + item.MaterialCostPrice.toFixed(2) + "' /></td>";
+
+
+
+                    var prdSellingPriceCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductSellingPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ProductSellingPrice' type='text' readonly value='" + item.ProductSellingPrice + "' /></td>";
+
+
+
+                    var prdCostPriceCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ProductCostPrice'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ProductCostPrice' type='text' readonly value='" + item.ProductCostPrice.toFixed(2) + "' /></td>";
+
+                    //var unitRemoveCell = "<td><input id='btnRemoveReceipeItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                    //    unitindex + ");' /></td>";
+
+                    var unitIssueQtyCell_ = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_IssueQty'  class='form-control'   name='AcceptanceDetail[" +
+                        unitindex + "].IssueQty' type='hidden' value='" + item.MaterialQuantity + "' /></td>";
+
+                    var unitIssueQtyCell_1 = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_IssueQty1'  class='form-control'   name='AcceptanceDetail[" +
+                        unitindex + "].IssueQty1' type='hidden' value='" + item.MaterialQuantity + "' /></td>";
+
+
+
+
+
+                    var unitServingUnitIdCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_ServingUnitId'  class='form-control'  name='AcceptanceDetail[" +
+                        unitindex + "].ServingUnitId' type='text' readonly value='" + item.ServingUnitId + "' /></td>";
+
+                    var unitHIDCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_DocumentNo' class='form-control' name='AcceptanceDetail[" +
+      unitindex + "].DocumentNo' type='text' readonly value='" + item.DocumentNo + "' /></td>";
+                    var unitDocDateCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_DocumentDate' class='form-control' name='AcceptanceDetail[" +
+   unitindex + "].DocumentDate' type='text' readonly value='" + item.DocumentDate + "' /></td>";
+                    var unitDocDateCell = "<td style='display:none'><input id='AcceptanceDetail" + unitindex + "_CompanyId' class='form-control' name='AcceptanceDetail[" +
+unitindex + "].CompanyId' type='text' readonly value='" + item.CompanyId + "' /></td>";
+
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                        unitPIdCell + ProductCodeCell+
+                        unitPDescCell +
+                        unitPQtyCell +
+
+                        SIHCell +
+
+                        unitIssueQtyCell +
+
+                        unitUOMCell +
+                        unitCostPriceCell +
+
+                        unitrequestedByCell +
+                        unitServingUnitCell +
+
+
+
+                        unitIdCell +
+                        unitDescCell +
+                        unitQtyCell +
+
+
+
+
+
+
+
+                        unitSellingPriceCell +
+                        prdSellingPriceCell +
+                        prdCostPriceCell +
+
+                        unitServingUnitIdCell+
+                      //  unitRemoveCell +
+                        unitIssueQtyCell_ +
+                        unitIssueQtyCell_1 +
+                        unitHIDCell +
+                        unitDocDateCell +
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                    document.getElementById('Remark').value = item.Remark;
+                    if (item.DocumentStatus==2 || item.DocumentStatus==5 || item.DocumentStatus==6) {
+                        $('#RequestStatus2').show();
+                    }
+                });
+              // SummerizeTable();
+              //  TableSummery();
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+    });
+
+        </script>
+        <script>
+            function removeUnitRow(id) {
+                if (confirm("Do you want to delete? ")) {
+                    var controlToBeRemoved = "#trreceipeitem" + id;
+                    $(controlToBeRemoved).remove();
+                    TableSummery();
+                }
+            }
+        </script>
+        <script>
+            function SummerizeTable() {
+                var table = document.getElementById("togitems");
+                $(table).each(function () {
+                    $(table).find('td').each(function () {
+                        var $this = $(this);
+
+                        var col = 2;
+                        var html = $this.html();
+                        var row = $(this).parent()[0].rowIndex;
+                        var span = 1;
+                        var cell_above = $($this.parent().prev().children()[col]);
+
+                        while (cell_above.html() === html) {
+                            span += 1;
+                            cell_above_old = cell_above;
+                            cell_above = $(cell_above.parent().prev().children()[col]);
+                        }
+                        if (span > 1) {
+                            $(cell_above_old).attr('rowspan', span);
+                            $this.hide();
+                        }
+                    });
+                });
+            }
+
+            function TableSummery() {
+                var tabletorem = document.getElementById("togitems");
+
+                var totcp = 0.0;
+
+                for (var r = 0, n = tabletorem.rows.length; r < n; r++) {
+                    var cpcell = tabletorem.rows[r].cells[15].innerHTML;
+                    var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                    totcp += Number(cpvalue);
+                }
+                document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+            }
+
+            function TableIssueQty(oTextBox) {
+                console.log("hiii" );
+                var tabletorem = document.getElementById("togitems");
+               
+                var totcp = 0.0;
+
+                for (var r = 0, n = tabletorem.rows.length; r < n; r++) {
+                    var index = tabletorem.rows[r].cells[0].innerHTML;
+                    var indexvalue = index.match(/value="(\d+(\.\d)*)/i)[1];
+
+                    //var qty_cell = tabletorem.rows[r].cells[6].innerHTML;
+                    //console.log("qty_cell" + qty_cell);
+
+
+                    //var qty_value = parseFloat(qty_cell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+                    var issueQty = document.getElementById("AcceptanceDetail" + indexvalue + "_IssueQty0").value;
+
+
+
+                    if (!issueQty) {
+                        issueQty = 0;
+                    } else {
+                        issueQty = parseFloat(issueQty); // Convert to number if it's not empty
+                    }
+
+
+
+                    var qty_value = issueQty;
+
+
+
+
+
+                    var qtycell = tabletorem.rows[r].cells[6].innerHTML;
+                    var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+
+                    console.log("qty_value" + qty_value);
+                    console.log("qtyvalue" + qtyvalue);
+
+
+
+                    var strQty = "AcceptanceDetail" + indexvalue + "_IssueQty0";
+
+                    var upcell = tabletorem.rows[r].cells[16].innerHTML;
+
+                  //  console.log("HI" + upcell);
+                    var upvalue = parseFloat(upcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+                    var cpcell = tabletorem.rows[r].cells[15].innerHTML;
+
+                  //  console.log("HI" + cpcell);
+
+                    var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+                    console.log("HI parseInt(oTextBox.value)" + parseInt(oTextBox.value));
+                    console.log("HI parseInt(issueQty) " + issueQty);
+
+
+
+                    let valueoTextBox;
+
+                    if (oTextBox.value === "" || oTextBox.value === null) {
+                        valueoTextBox = 0;
+                    } else {
+                        valueoTextBox = parseInt(oTextBox.value);
+                    }
+
+
+
+
+                    var Unit_CostPrice = document.getElementById("AcceptanceDetail" + indexvalue + "_CostPrice").value;
+                    var UnitCostPrice = parseFloat(Unit_CostPrice).toFixed(2);
+
+                    if (oTextBox.id == strQty) {
+                        if (valueoTextBox <= parseInt(issueQty)) {
+                            qtyvalue = oTextBox.value;
+
+                            console.log("qtycell" + qtycell);
+                            
+                         
+                            var qtyvalue = parseFloat(qtycell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+
+
+                            var cp_value = ((upvalue / qty_value) * qtyvalue).toFixed(2);
+                           // console.log("cp_value" +cp_value);
+
+                          
+
+
+                            document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value = parseFloat(UnitCostPrice * issueQty ) ;
+                            //console.log("HI" + qtyvalue);
+                            console.log("c value" + parseFloat(UnitCostPrice * issueQty));
+
+
+                            document.getElementById('AcceptanceDetail' + indexvalue + '_IssueQty').value = issueQty;
+                        } else {
+                            document.getElementById('AcceptanceDetail' + indexvalue + '_IssueQty0').value = issueQty;
+                            qtyvalue = oTextBox.value;
+                            var cp_value = ((upvalue / qty_value) * qtyvalue).toFixed(2);
+                            document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value = cp_value.toString();
+                            document.getElementById('AcceptanceDetail' + indexvalue + '_IssueQty').value = qtyvalue;
+                            alert("Cannot increase the Issue Quantity");
+                        }
+                    }
+                    totcp += Number(document.getElementById('AcceptanceDetail' + indexvalue + '_CostPrice').value);
+                }
+                
+              // document.getElementById("TotCostPrice").value = parseFloat(totcp).toFixed(2);
+            }
+        </script>
+
+        <script>
+            window.onload = function () {
+                $('#RequestStatus2').hide();
+                $('#RequestStatus4').hide();
+                $('#RequestStatus6').hide();
+            }
+
+            function isNumber(evt) {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    return false;
+                }
+                return true;
+            }
+
+
+
+
+        </script>
+
+     
+
+
+
+
+    </div>
+    </div>

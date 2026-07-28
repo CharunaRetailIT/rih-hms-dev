@@ -1,0 +1,104 @@
+﻿@model IEnumerable<RIT.HMS.HMSOrderTaker.Domain.DTOs.DTO_Department>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<body>
+
+    <div id="preloader">
+        <div class="loader absolute-center">
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+        </div>
+    </div>
+
+    <!--================ Frist hader Area =================-->
+    <div class="first_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="text-align:center;" class="header_contact_details">
+
+                        @*<button style="float:left;margin-top:10px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon glyphicon-chevron-left"></i></button>*@
+
+                    </div>
+                </div>
+                <div style="text-align:center" class="col-md-4">
+                    <div class="s_black_title">
+                        <h3>Department</h3>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="header_social">
+                        <ul>
+                            <li>
+                                <a href="javascript:Cart()">
+                                    <i class="fa fa-shopping-cart" style="color:white"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================Banner Area =================-->
+    <!--================End Banner Area =================-->
+    <!--================End Our feature Area =================-->
+    <!--================Service Area =================-->
+
+
+    <section class="our_feature_area">
+        <div class="container">
+            <div class="feature_slider">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="item">
+                            @foreach (var listitem in item.DepartmentList)
+                            {
+                                var deptid = listitem.RstDepartmentID;
+                                <div style="margin-bottom:5px;" class="feature_item">
+                                    <div class="service_item" style="height:250px">
+                                       
+                                        <h3>@listitem.DepartmentName</h3>
+                                        <p>@listitem.DepartmentCode</p>
+                                      
+                                        <a class="read_mor_btn" href="javascript:GetCategory(@deptid)">Go</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <!--================End Our feature Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================Back Btn =================-->
+    <div class="icon-bar">
+        <!-- <a href="/FingerScan/Index" class="backsidebtn"><i class="fa fa-angle-double-left"></i></a>       -->
+        <a href="/STOSOrder/BookTable" class="backsidebtn">Back</a>
+    </div>
+</body>
+
+<script>
+    function GetCategory(departmentid)
+    {
+        window.location.href = '/STOSOrder/ProductCategory?deptid=' + departmentid;
+    }
+    function Cart()
+    {
+        window.location.href = '/STOSOrder/Cart';
+    }
+</script>

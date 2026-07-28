@@ -1,0 +1,1234 @@
+﻿@model RIT.HMS.Domain.Transactions.Mearge_PO_Header
+@{
+    ViewBag.Title = "Mearge_PO_Header";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+ 
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body" novalidate>
+    <div class="main_container">
+   
+
+        @using (Html.BeginForm("ViewAll", "Merge_PO_Request", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+          
+
+
+            {
+
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                
+                @*@if (@ViewBag.Message == "1")
+                {
+
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Mearge PO</strong> Sucessfully Saved.
+                    </div>
+                }
+
+                else if (@ViewBag.Message == "0")
+                {
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Mearge PO</strong> Authentication Error
+                    </div>
+                }*@
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2> Creating PO based on Approved Request Note</h2>
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+
+                                    <div class="form-horizontal col-md-12 trn-header">
+                                        @*<br />*@
+
+                                        @{ // Calculate the first day of the current month
+                                            var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd");
+
+                                            var dateFromValue = ViewBag.DateFrom as string;
+
+                                            // If the session value is null or empty, fallback to the calculated first day of the month
+                                            var dateFromUse = string.IsNullOrEmpty(dateFromValue) ? firstDayOfMonth : dateFromValue;
+
+
+
+                                            var today = DateTime.Now.ToString("yyyy-MM-dd");
+
+                                            var dateToValue = ViewBag.DateTo as string;
+
+                                            // If the session value is null or empty, fallback to the calculated first day of the month
+                                            var dateToUse = string.IsNullOrEmpty(dateToValue) ? today : dateToValue;
+
+
+
+                                        }
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-4">From Date <span class="required">*</span></label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@dateFromUse" />
+                                            </div>
+
+                                            <label class="control-label col-md-2 col-sm-4">To Date <span class="required">*</span></label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <input type="date" class="form-control" id="DateTo" name="DateTo" value="@dateToUse" />
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-4">From Location</label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <select id="LocationId" name="LocationId" class="form-control"></select>
+                                            </div>
+
+                                            <label class="control-label col-md-2 col-sm-4">To Location</label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <select id="LocationIdTo" name="LocationIdTo" class="form-control"></select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-4">Status</label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <select id="drpStatus" name="drpStatus" class="form-control"></select>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div style="overflow-y: auto; max-height: 600px; border: 1px solid #ddd; padding: 5px;">
+                                        <table id="tblTOG" class="mstable" style="width: 100%; border-collapse: collapse;">
+                                            @*<table id="tblTOGs" class="mstable">*@
+                                            <thead>
+                                                <tr>
+                                                    <th>DocumentNo</th>
+                                                    <th>From Location</th>
+                                                    <th>To Location</th>
+                                                    <th>Created Date</th>
+                                                    <th>Expected Delivery Date</th>
+
+                                                    <th>Accepted Date</th>
+                                                    <th>View Request Note</th>
+                                                    <th>Status</th>
+                                                    <th>Select</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="togitems">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    </div>
+                                    @*<div class="actionBar">
+        <div class="msgBox">
+
+            <div class="btn btn-primary pl_add btn-small pull-left">
+            @*    @Html.ActionLink("Clear", "CreatePO", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                                    @*<button type="submit" formaction="Create" style="font-size: 14px;font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Sans-Serif';" id="btnsubmit" class="btn btn-success pull-left">Create POn</button>
+        </div>*@
+
+                                    @*  <input type ="submit" id="btnsubmit" class="btn btn-success" value="Create PO" />*@
+                                    @*<input type="button" id="btnsubmit" class="btn btn-success" value="Create PO" />*@
+
+                                    @*  </div>*@
+                                    @*  </div> *@
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+
+                                            <button type="button" formaction="Create" id="btnsubmit" class="btn btn-success fa-pull-right">Create PO</button>
+                                            <div class="btn btn-primary pl_add btn-small pull-right">
+                                                @Html.ActionLink("Clear", "/Merge_PO", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="se-pre-con"></div>
+                        <div id='myModal' class='modal'>
+                            <div class="col-md-12">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div id='myModalContent'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+               
+                </div>
+         }
+            </div>
+       
+
+    </div>
+ 
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">    $("body").on("click",
+        "#btnsubmit",
+        function () {
+            //debugger;
+
+            //if ($("#LocationId").val() == 0 || $("#LocationId").val() == null) {
+            //    alert("Select a From location!");
+            //    return;
+            //}
+        });</script>
+
+<script>
+
+
+
+
+     $.getJSON("@Url.Action("GetActiveShowRoomLocations", "Location")", function (data)
+    {
+         var poLocationId = $("#LocationId");
+
+         poLocationId.empty();
+         poLocationId.append("<option value='0'>-- All From Locations --</option>");
+
+         $.each(JSON.parse(data), function (index, optionaldata) {
+             poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+         });
+
+
+         var poLocationIdTo = $("#LocationIdTo");
+
+         poLocationIdTo.empty();
+         poLocationIdTo.append("<option value='0'>--All To Locations --</option>");
+
+         $.each(JSON.parse(data), function (index, optionaldata) {
+             poLocationIdTo.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+         });
+         var isHeadOffice = @Html.Raw(Json.Encode(Convert.ToBoolean(Session["IsHeadOffice"])));
+        var locationId = '@ViewBag.locationId'; // Ensure locationId is correctly formatted
+
+        if (!isHeadOffice) {
+                var locationElement = document.getElementById("LocationId");
+                if (locationElement) {
+                    locationElement.disabled = true;
+                    locationElement.value = locationId; // Set the value from ViewBag
+                }
+            }
+
+
+         if ('@ViewBag.SelectFromLocation') {
+             var SelectFromlocationId = '@ViewBag.SelectFromLocation';
+
+             var locationElementFrom = document.getElementById("LocationId");
+             if (locationElementFrom) {
+
+                 locationElementFrom.value = SelectFromlocationId; // Set the value from ViewBag
+             }
+         }
+
+
+          if ('@ViewBag.SelectToLocation') {
+             var SelectTolocationId = '@ViewBag.SelectToLocation';
+
+              var locationElementTo = document.getElementById("LocationIdTo");
+              if (locationElementTo) {
+
+                  locationElementTo.value = SelectTolocationId; // Set the value from ViewBag
+             }
+         }
+
+
+
+
+
+
+
+
+
+         var drpStatus = $("#drpStatus");
+
+         drpStatus.empty();
+         drpStatus.append("<option value='0'> All Status</option>");
+         drpStatus.append("<option value='1'> Pending to Generate PO </option>");
+         drpStatus.append("<option value='2'> PO Generated </option>");
+
+
+            if ('@ViewBag.SelectAppStatus') {
+             var Select_AppStatus = '@ViewBag.SelectAppStatus';
+
+             var drpStatusElement = document.getElementById("drpStatus");
+             if (drpStatusElement) {
+
+                 drpStatusElement.value = Select_AppStatus; // Set the value from ViewBag
+             }
+         }
+
+
+        @*if ('@ViewBag.poLocationId') {
+            $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }*@
+    });
+
+    @*$("#LocationId").change(
+function () {
+    var requestid = this.value;
+    $.getJSON("@Url.Action("GetMergePORequestData", "Merge_PO_Request")", { id: requestid, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+        function (data) {
+
+
+        });
+});*@
+
+</script>
+
+
+<script>
+    // Function to be executed when the page loads
+    // Function to handle the event
+    function handleStatusChange(event) {
+        var selectedValue = event.target.value;
+        console.log("Dropdown value changed to:", selectedValue);
+
+        // Example: You can add additional logic here
+        if (!selectedValue) {
+            selectedValue = '0'; // Default to zero if no value is selected
+            event.target.value = selectedValue;
+        }
+    }
+
+    // Function to trigger the change event programmatically
+    function triggerChangeEvent() {
+        var statusElement = document.getElementById("drpStatus");
+        var event = new Event('change');
+        statusElement.dispatchEvent(event);
+    }
+
+    window.onload = function () {
+        var statusElement = document.getElementById("drpStatus");
+
+        // Add an event listener to handle the change event
+        statusElement.addEventListener('change', handleStatusChange);
+
+        // Trigger the change event programmatically
+        triggerChangeEvent();
+    };
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+    const dateToInput = document.getElementById('DateTo');
+    dateToInput.addEventListener('change', function () {
+        // This function will be called whenever the date input changes
+        // You can perform actions here, such as fetching data or updating other parts of the page
+        console.log('Date To changed:', dateToInput.value);
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+
+
+
+
+        var requestidTo = document.getElementById("LocationIdTo").value;
+
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+        $.ajax({
+            url: "@Url.Action("GetApprovedRequestNote", "Merge_PO_Request")",
+            data: { id: requestid, requestidTo: requestidTo, AppStatus: AppStatus, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+
+                $("#togitems tr").remove();
+                $.each(data, function (i, item)
+                {
+
+                    $("#RequestType").val(item.RequestType);
+
+                    var unitindex = $("#togitems").children("tr").length;
+
+
+                  
+
+
+                   // var unitindex = item.ProductId
+                    var unitindexCell = "<td style='display:none'><input name='' type='hidden' value='" + unitindex + "' /></td>";
+
+                    //var unitPIdCell = "<td style='display:none'><input id='" + unitindex + "_requestnoteheaderid' class='form-control' name='RequestNoteHeader[" +
+                    //    unitindex + "].requestnoteheaderid' type='text' readonly value='" + item.requestnoteheaderid + "' /></td>";
+
+                    var unitPIdCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+
+
+
+
+
+
+                    var unitPDescCell = "<td id='" + unitindex + "_DocumentNo'   name='RequestNoteHeader[" +
+                        unitindex + "].DocumentNo'> " + item.DocumentNo + "" + "</td>";
+
+                    var unitPQtyCell = "<td  id='" + unitindex + "_fromlocation'   name='RequestNoteHeader[" +
+                        unitindex + "].fromlocation'> " + item.Location + "" + "</td>";
+
+                    var unitLocationCell = "<td id='" + unitindex + "_Location'   name='RequestNoteHeader[" +
+                        unitindex + "].Location'> " + item.ToLocation + "" + "</td>";
+
+                    var unitCreateDateCell = "<td id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var ExpectedDeleveryDateCell = "<td  id='" + unitindex + "_ExpectedDeleveryDate'   name='RequestNoteHeader[" +
+                        unitindex + "].ExpectedDeleveryDate'> " + item.ExpectedDeleveryDate + "" + "</td>";
+
+
+
+                        var unitAcceptedUserCell = "<td  id='" + unitindex + "_AcceptedUser'   name='RequestNoteHeader[" +
+                        unitindex + "].AcceptedUser'> " + item.AcceptedUser + "" + "</td>";
+
+
+
+
+                        var unitDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var unitApproveCell = "<td  id='" + unitindex + "_Approve'   name='RequestNoteHeader[" +
+                        unitindex + "].Approve'> " + item.Approve + "" + "</td>";
+
+
+                    var unitIsActiveCell = item.Approve === "PO Generated"
+                        ? `<td style=' color: blue; font-weight: bold;'><span></span></td>`
+                        : "<td  id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+
+                    var unitEditCell = `<td  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>View</a></td>`;
+
+
+
+
+                        //var unitIsActiveCell = "<td style='width:15%' id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        //    unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                         unitPIdCell +
+                      unitPDescCell +
+                        unitPQtyCell +
+
+                        unitLocationCell +
+                        unitCreateDateCell + ExpectedDeleveryDateCell+
+                       // unitAcceptedUserCell +
+                        unitDateCell + unitEditCell+
+                        unitApproveCell+
+                        unitIsActiveCell +
+
+
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                   // document.getElementById('Remark').value = item.Remark;
+
+                })
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+
+
+
+    });
+
+
+
+
+
+
+    const dateFromInput = document.getElementById('DateFrom');
+    dateFromInput.addEventListener('change', function () {
+        // This function will be called whenever the date input changes
+        // You can perform actions here, such as fetching data or updating other parts of the page
+        console.log('Date From changed:', dateFromInput.value);
+
+        //var requestid = document.getElementById("LocationId").value;
+
+        //var requestidTo = document.getElementById("LocationIdTo").value;
+        //var AppStatus = document.getElementById("drpStatus").value;
+
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+
+
+
+
+        var requestidTo = document.getElementById("LocationIdTo").value;
+
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $.ajax({
+            url: "@Url.Action("GetApprovedRequestNote", "Merge_PO_Request")",
+            data: { id: requestid, requestidTo: requestidTo, AppStatus: AppStatus, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+
+                $("#togitems tr").remove();
+                $.each(data, function (i, item)
+                {
+
+                    $("#RequestType").val(item.RequestType);
+
+                    var unitindex = $("#togitems").children("tr").length;
+                   // var unitindex = item.ProductId
+                    var unitindexCell = "<td style='display:none'><input name='' type='hidden' value='" + unitindex + "' /></td>";
+
+                    //var unitPIdCell = "<td style='display:none'><input id='" + unitindex + "_requestnoteheaderid' class='form-control' name='RequestNoteHeader[" +
+                        //unitindex + "].requestnoteheaderid' type='text' readonly value='" + item.requestnoteheaderid + "' /></td>";
+
+                    var unitPIdCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+
+
+
+
+
+
+                    var unitPDescCell = "<td  id='" + unitindex + "_DocumentNo'   name='RequestNoteHeader[" +
+                        unitindex + "].DocumentNo'> " + item.DocumentNo + "" + "</td>";
+
+                    var unitPQtyCell = "<td  id='" + unitindex + "_fromlocation'   name='RequestNoteHeader[" +
+                        unitindex + "].fromlocation'> " + item.Location + "" + "</td>";
+
+                    var unitLocationCell = "<td id='" + unitindex + "_Location'   name='RequestNoteHeader[" +
+                        unitindex + "].Location'> " + item.ToLocation + "" + "</td>";
+
+                    var unitCreateDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var ExpectedDeleveryDateCell = "<td  id='" + unitindex + "_ExpectedDeleveryDate'   name='RequestNoteHeader[" +
+                        unitindex + "].ExpectedDeleveryDate'> " + item.ExpectedDeleveryDate + "" + "</td>";
+
+
+
+
+                        var unitAcceptedUserCell = "<td  id='" + unitindex + "_AcceptedUser'   name='RequestNoteHeader[" +
+                        unitindex + "].AcceptedUser'> " + item.AcceptedUser + "" + "</td>";
+
+
+
+
+                        var unitDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var unitApproveCell = "<td  id='" + unitindex + "_Approve'   name='RequestNoteHeader[" +
+                        unitindex + "].Approve'> " + item.Approve + "" + "</td>";
+
+
+                    var unitIsActiveCell = item.Approve === "PO Generated"
+                        ? `<td   color: blue; font-weight: bold;'><span></span></td>`
+                        : "<td  id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+
+                    var unitEditCell = `<td   color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>View</a></td>`;
+
+                        //var unitIsActiveCell = "<td style='width:15%' id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        //    unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                         unitPIdCell +
+                      unitPDescCell +
+                        unitPQtyCell +
+
+                        unitLocationCell +
+                        unitCreateDateCell + ExpectedDeleveryDateCell+
+                       // unitAcceptedUserCell +
+                        unitDateCell + unitEditCell+
+                        unitApproveCell+
+                        unitIsActiveCell +
+
+
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                   // document.getElementById('Remark').value = item.Remark;
+
+                })
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+
+
+
+
+    });
+
+
+
+
+    $('#LocationId').on("change", function ()
+    {
+        //var requestid = this.value;
+
+        //var requestidTo = document.getElementById("LocationIdTo").value;
+        //var AppStatus = document.getElementById("drpStatus").value;
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+
+
+
+
+        var requestidTo = document.getElementById("LocationIdTo").value;
+
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $.ajax({
+            url: "@Url.Action("GetApprovedRequestNote", "Merge_PO_Request")",
+            data: { id: requestid, requestidTo: requestidTo, AppStatus: AppStatus, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+
+                $("#togitems tr").remove();
+                $.each(data, function (i, item)
+                {
+
+                    $("#RequestType").val(item.RequestType);
+
+                    var unitindex = $("#togitems").children("tr").length;
+                   // var unitindex = item.ProductId
+                    var unitindexCell = "<td style='display:none'><input name='' type='hidden' value='" + unitindex + "' /></td>";
+
+                    //var unitPIdCell = "<td style='display:none'><input id='" + unitindex + "_requestnoteheaderid' class='form-control' name='RequestNoteHeader[" +
+                    //    unitindex + "].requestnoteheaderid' type='text' readonly value='" + item.requestnoteheaderid + "' /></td>";
+
+                    var unitPIdCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+
+
+
+
+
+
+                    var unitPDescCell = "<td  id='" + unitindex + "_DocumentNo'   name='RequestNoteHeader[" +
+                        unitindex + "].DocumentNo'> " + item.DocumentNo + "" + "</td>";
+
+                    var unitPQtyCell = "<td  id='" + unitindex + "_fromlocation'   name='RequestNoteHeader[" +
+                        unitindex + "].fromlocation'> " + item.Location + "" + "</td>";
+
+                    var unitLocationCell = "<td id='" + unitindex + "_Location'   name='RequestNoteHeader[" +
+                        unitindex + "].Location'> " + item.ToLocation + "" + "</td>";
+
+                    var unitCreateDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+
+
+                    var ExpectedDeleveryDateCell = "<td  id='" + unitindex + "_ExpectedDeleveryDate'   name='RequestNoteHeader[" +
+                        unitindex + "].ExpectedDeleveryDate'> " + item.ExpectedDeleveryDate + "" + "</td>";
+
+
+
+                        var unitAcceptedUserCell = "<td  id='" + unitindex + "_AcceptedUser'   name='RequestNoteHeader[" +
+                        unitindex + "].AcceptedUser'> " + item.AcceptedUser + "" + "</td>";
+
+
+
+
+                        var unitDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var unitApproveCell = "<td  id='" + unitindex + "_Approve'   name='RequestNoteHeader[" +
+                        unitindex + "].Approve'> " + item.Approve + "" + "</td>";
+
+
+                    var unitIsActiveCell = item.Approve === "PO Generated"
+                        ? `<td style='width:15%;  color: blue; font-weight: bold;'><span></span></td>`
+                        : "<td  id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+
+                    var unitEditCell = `<td   color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>View</a></td>`;
+
+                        //var unitIsActiveCell = "<td style='width:15%' id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        //    unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                         unitPIdCell +
+                      unitPDescCell +
+                        unitPQtyCell +
+
+                        unitLocationCell +
+                        unitCreateDateCell + ExpectedDeleveryDateCell+
+                       // unitAcceptedUserCell +
+                        unitDateCell + unitEditCell+
+                        unitApproveCell+
+                        unitIsActiveCell +
+
+
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                   // document.getElementById('Remark').value = item.Remark;
+
+                })
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+    });
+
+    /////////
+    $('#LocationIdTo').on("change", function ()
+    {
+        //var requestidTo = this.value;
+
+        //var requestid = document.getElementById("LocationId").value;
+
+        //var AppStatus = document.getElementById("drpStatus").value;
+
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+
+
+
+
+        var requestidTo = document.getElementById("LocationIdTo").value;
+
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+
+
+
+
+
+        $.ajax({
+            url: "@Url.Action("GetApprovedRequestNote", "Merge_PO_Request")",
+            data: { id: requestid, requestidTo: requestidTo, AppStatus: AppStatus, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+
+                $("#togitems tr").remove();
+                $.each(data, function (i, item)
+                {
+
+                    $("#RequestType").val(item.RequestType);
+
+                    var unitindex = $("#togitems").children("tr").length;
+                   // var unitindex = item.ProductId
+                    var unitindexCell = "<td style='display:none'><input name='' type='hidden' value='" + unitindex + "' /></td>";
+
+                    //var unitPIdCell = "<td style='display:none'><input id='" + unitindex + "_requestnoteheaderid' class='form-control' name='RequestNoteHeader[" +
+                    //    unitindex + "].requestnoteheaderid' type='text' readonly value='" + item.requestnoteheaderid + "' /></td>";
+
+                    var unitPIdCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+
+
+
+
+
+
+                    var unitPDescCell = "<td  id='" + unitindex + "_DocumentNo'   name='RequestNoteHeader[" +
+                        unitindex + "].DocumentNo'> " + item.DocumentNo + "" + "</td>";
+
+                    var unitPQtyCell = "<td  id='" + unitindex + "_fromlocation'   name='RequestNoteHeader[" +
+                        unitindex + "].fromlocation'> " + item.Location + "" + "</td>";
+
+                    var unitLocationCell = "<td id='" + unitindex + "_Location'   name='RequestNoteHeader[" +
+                        unitindex + "].Location'> " + item.ToLocation + "" + "</td>";
+
+                    var unitCreateDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var ExpectedDeleveryDateCell = "<td  id='" + unitindex + "_ExpectedDeleveryDate'   name='RequestNoteHeader[" +
+                        unitindex + "].ExpectedDeleveryDate'> " + item.ExpectedDeleveryDate + "" + "</td>";
+
+
+
+                        var unitAcceptedUserCell = "<td  id='" + unitindex + "_AcceptedUser'   name='RequestNoteHeader[" +
+                        unitindex + "].AcceptedUser'> " + item.AcceptedUser + "" + "</td>";
+
+
+
+
+                        var unitDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var unitApproveCell = "<td  id='" + unitindex + "_Approve'   name='RequestNoteHeader[" +
+                        unitindex + "].Approve'> " + item.Approve + "" + "</td>";
+
+
+
+                    var unitIsActiveCell = item.Approve === "PO Generated"
+                        ? `<td   color: blue; font-weight: bold;'><span></span></td>`
+                        : "<td  id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+                    var unitEditCell = `<td   color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>View</a></td>`;
+
+                        //var unitIsActiveCell = "<td style='width:15%' id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        //    unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                         unitPIdCell +
+                      unitPDescCell +
+                        unitPQtyCell +
+
+                        unitLocationCell +
+                        unitCreateDateCell + ExpectedDeleveryDateCell+
+                       // unitAcceptedUserCell +
+                        unitDateCell + unitEditCell+
+                        unitApproveCell+
+                        unitIsActiveCell +
+
+
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                   // document.getElementById('Remark').value = item.Remark;
+
+                })
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+    });
+
+
+    //////////
+    $('#drpStatus').on("change", function ()
+    {
+        //var AppStatus = this.value;
+
+        //var requestid = document.getElementById("LocationId").value;
+
+
+        //var requestidTo = document.getElementById("LocationIdTo").value;
+
+
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+
+
+
+
+        var requestidTo = document.getElementById("LocationIdTo").value;
+
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+
+
+
+
+
+
+        $.ajax({
+            url: "@Url.Action("GetApprovedRequestNote", "Merge_PO_Request")",
+            data: { id: requestid, requestidTo: requestidTo, AppStatus: AppStatus, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+
+                $("#togitems tr").remove();
+                $.each(data, function (i, item)
+                {
+
+                    $("#RequestType").val(item.RequestType);
+
+                    var unitindex = $("#togitems").children("tr").length;
+                   // var unitindex = item.ProductId
+                    var unitindexCell = "<td style='display:none'><input name='' type='hidden' value='" + unitindex + "' /></td>";
+
+                    //var unitPIdCell = "<td style='display:none'><input id='" + unitindex + "_requestnoteheaderid' class='form-control' name='RequestNoteHeader[" +
+                    //    unitindex + "].requestnoteheaderid' type='text' readonly value='" + item.requestnoteheaderid + "' /></td>";
+
+                    var unitPIdCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+
+
+
+
+
+
+                    var unitPDescCell = "<td  id='" + unitindex + "_DocumentNo'   name='RequestNoteHeader[" +
+                        unitindex + "].DocumentNo'> " + item.DocumentNo + "" + "</td>";
+
+                    var unitPQtyCell = "<td  id='" + unitindex + "_fromlocation'   name='RequestNoteHeader[" +
+                        unitindex + "].fromlocation'> " + item.Location + "" + "</td>";
+
+                    var unitLocationCell = "<td id='" + unitindex + "_Location'   name='RequestNoteHeader[" +
+                        unitindex + "].Location'> " + item.ToLocation + "" + "</td>";
+
+                    var unitCreateDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var ExpectedDeleveryDateCell = "<td  id='" + unitindex + "_ExpectedDeleveryDate'   name='RequestNoteHeader[" +
+                        unitindex + "].ExpectedDeleveryDate'> " + item.ExpectedDeleveryDate + "" + "</td>";
+
+
+
+
+
+                        var unitAcceptedUserCell = "<td  id='" + unitindex + "_AcceptedUser'   name='RequestNoteHeader[" +
+                        unitindex + "].AcceptedUser'> " + item.AcceptedUser + "" + "</td>";
+
+
+
+
+                        var unitDateCell = "<td  id='" + unitindex + "_CreateDate'   name='RequestNoteHeader[" +
+                        unitindex + "].CreateDate'> " + item.CreateDate + "" + "</td>";
+
+                    var unitApproveCell = "<td  id='" + unitindex + "_Approve'   name='RequestNoteHeader[" +
+                        unitindex + "].Approve'> " + item.Approve + "" + "</td>";
+
+
+
+
+                    var unitIsActiveCell = item.Approve === "PO Generated"
+                        ? `<td ;  color: blue; font-weight: bold;'><span></span></td>`
+                        : "<td  id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+
+                        //var unitIsActiveCell = "<td style='width:15%' id='" + unitindex + "_IsActive'   name='RequestNoteHeader[" +
+                        //    unitindex + "].IsActive'> " + "<input type='checkbox' id='" + unitindex + "_Checkbox'> </td>";
+
+                    var unitEditCell = `<td   color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>View</a></td>`;
+
+
+                    var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                        unitindexCell +
+                         unitPIdCell +
+                      unitPDescCell +
+                        unitPQtyCell +
+
+                        unitLocationCell +
+                        unitCreateDateCell + ExpectedDeleveryDateCell+
+                       // unitAcceptedUserCell +
+                        unitDateCell + unitEditCell+
+                        unitApproveCell+
+                        unitIsActiveCell +
+
+
+                       "</tr>";
+
+                    $("#togitems").append(newUnitRow);
+                   // document.getElementById('Remark').value = item.Remark;
+
+                })
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+    });
+
+
+
+
+    //////
+
+    $("body").on("click", "#btnsubmit", function () {
+        //Loop through the Table rows and build a JSON array.
+        var button = $(this);
+        button.prop("disabled", true);
+        $("body").css("cursor", "wait");
+        debugger;
+        var POmodes = new Array();
+        $("#tblTOG TBODY TR").each(function () {
+            var row = $(this);
+            console.log("row" + row);
+            console.log("row doc" + row.find("TD").eq(2).html());
+            var POMode = {};
+            POMode.DocumentNo = row.find("TD").eq(2).html(); // Assuming DocumentNo is in the third column (index 2)
+
+            console.log(" POMode.DocumentNo  " + POMode.DocumentNo );
+            console.log("row  " + row);
+            console.log(" row.find " + row.find("TD").eq(1).html());
+
+            // POMode.RequestNoteAccptanceHeaderId = row.find("TD").eq(1).html();
+
+            var index = row.find("TD").eq(1).html();
+            console.log("Index value:", index); // Debugging line
+
+            if (index) {
+                // Check if index is a number string and handle it directly
+                if (!isNaN(index)) {
+                    POMode.requestnoteheaderid = index; // Assign directly if it's a number
+                } else {
+                    console.error("No match found in index:", index);
+                }
+            } else {
+                console.error("Index is null or undefined");
+            }
+          
+           // POMode.requestnoteheaderid = index.match(/value="(\d+(\.\d)*)/i)[1];
+
+
+
+            console.log("RequestNoteAccptanceHeaderId " + POMode.requestnoteheaderid );
+
+
+            // Find the checkbox within the row and check if it's checked
+            var isChecked = row.find("input[type='checkbox']").prop("checked");
+
+            // Assign the checked state to IsActive property
+            POMode.IsActive = isChecked;
+
+            POmodes.push(POMode);
+        });
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Merge_PO_Request/Create",
+            data: JSON.stringify(POmodes),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                debugger
+                // $("#CountryName").val(data.con);
+                // $("#tblTaxModes TBODY TR").remove();
+                $("body").css("cursor", "default");
+                data = r;
+                alert(data);
+                window.location.href = "/Merge_PO_Request/Merge_PO";
+            },
+            error: function (error) {
+                $("body").css("cursor", "default");
+                alert("No Records Found");
+                button.prop("disabled", false);
+                window.location.href = "/Merge_PO_Request/Merge_PO";
+            }
+        });
+    });
+
+      // Define editRow function outside of AJAX success callback
+    window.editRow = function (index) {
+
+        console.log("index" +index);
+        console.log("index" + $(`#${index}_requestnoteheaderid`).text());
+        var requestnoteHeaderId = $(`#${index}_requestnoteheaderid`).text();
+            var createDate = $(`#${index}_CreateDate`).text();
+            var location = $(`#${index}_Location`).text();
+            var toLocation = $(`#${index}_ToLocation`).text();
+            var documentNo = $(`#${index}_DocumentNo`).text();
+            var documentStatus = $(`#${index}_DocumentStatus`).text();
+
+            console.log("Editing row with index: " + index);
+            console.log("Request Note Header ID: " + requestnoteHeaderId);
+            console.log("Create Date: " + createDate);
+            console.log("Location: " + location);
+            console.log("To Location: " + toLocation);
+            console.log("Document No: " + documentNo);
+            console.log("Document Status: " + documentStatus);
+
+            //window.location.href = `/RequestNote/EditPendingRequerst?documentNo=${documentNo}`;
+        window.location.href = `/RequestNote/ViewSelectedRequestnote?requestnoteHeaderId=${requestnoteHeaderId}`;
+
+        };
+
+
+
+
+
+</script>
+
+
+
+<style>
+    .mstable {
+        width: 100%;
+        border-collapse: collapse; /* Collapse borders */
+    }
+
+    thead {
+        background-color: #f2f2f2; /* Header background color */
+        position: sticky; /* Makes the header sticky */
+        top: 0; /* Position from the top */
+        z-index: 10; /* Ensure it stays on top */
+    }
+
+    th, td {
+        padding: 12px; /* Padding for cells */
+        text-align: left; /* Align text to the left */
+        border: 1px solid #ddd; /* Border for cells */
+        box-sizing: border-box; /* Include padding and border in total width */
+    }
+
+    tbody {
+        display: block; /* Keeps tbody scrollable */
+        max-height: 400px; /* Set a max height for the tbody */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    tr {
+        display: table; /* Ensure rows are table elements */
+        width: 100%; /* Full width for the row */
+        table-layout: fixed; /* Equal width for columns */
+    }
+
+</style>
+
+

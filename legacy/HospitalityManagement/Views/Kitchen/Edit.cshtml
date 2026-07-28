@@ -1,0 +1,271 @@
+﻿@model RIT.HMS.Domain.KitchenMaster
+@{
+    ViewBag.Title = "Kitchen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewBag.Message != null)
+{
+    <script>
+
+        $(document).ready(function () {
+
+            alert('@ViewBag.ErrorMessage');
+
+        });
+
+    </script>
+
+}
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "Kitchen", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Kitchen</strong> @ViewBag.LocCode Updated successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            @*<strong>Kitchen</strong> @ViewBag.LocCode save failed.*@
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            @*<strong>Kitchen</strong> @ViewBag.LocCode already exists.*@
+                        </div>
+                    }
+
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Only One Head Office Can be Create</strong>
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    @*<h2>Kitchens</h2>*@
+                                    <h2>KOT & BOT</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Kitchen Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.KitchenCode,
+                                                   new
+                                                   {
+                                                       @class = "form-control",
+                                                       MaxLength = 5,
+                                                       Placeholder = "Code",
+                                                       @readonly = true
+                                                   })
+                                                @Html.ValidationMessageFor(model => model.KitchenCode, "", new { @class = "text-danger" })
+
+                                            </div>
+                                            <font color="red" class="col-md-5">
+                                                <label id="validatecode" name="validatecode" style="font:small-caption"></label>
+                                            </font>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Kitchen Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.KitchenDesc, new { @class = "form-control", MaxLength = 50, Placeholder = "Kitchen Name" })
+                                                @Html.ValidationMessageFor(model => model.KitchenDesc, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Printer Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.KitchenPrinterName, new { @class = "form-control", Placeholder = "Printer Name" })
+                                                @Html.ValidationMessageFor(model => model.KitchenPrinterName, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Printer Type *</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                <select id="PrinterTypeId" name="PrinterTypeId" class="form-control"></select>
+                                                
+                                            </div>
+                                        </div>*@
+                                        <div class="form-group">
+
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Active</label>
+                                            <div class="checkbox col-md-3 col-sm-9 col-xs-9">
+                                                @Html.CheckBoxFor(model => model.IsActive)
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Group</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                <select id="GroupOfCompanyID" name="GroupOfCompanyID" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.GroupOfCompanyID, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>*@
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Company</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                <select id="CompanyID" name="CompanyID" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.CompanyID, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>*@
+
+                                        <br />
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewKitchens", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Submit</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $.getJSON("@Url.Action("GetGroupOfCompanies", "GroupOfCompany")", function (data) {
+
+        var companyGroupDropDown = $("#GroupOfCompanyID");
+        var CompanyCodelist = $("#CompanyID");
+
+        companyGroupDropDown.empty();
+        companyGroupDropDown.append("<option value='0'>-- Select a Group of Company --</option>");
+        CompanyCodelist.append("<option value='0'>-- Select a Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            companyGroupDropDown.append($('<option />', { value: optionaldata.SysGroupOfCompanyId }).html(optionaldata.GroupOfCompanyName));
+
+        });
+
+        if ('@ViewBag.GroupOfCompanyID') {
+            $('#GroupOfCompanyID').val(@ViewBag.GroupOfCompanyID).trigger("change");
+        } else {
+            $('#GroupOfCompanyID').val(0).trigger("change");
+        }
+
+
+    });
+
+
+
+    $("#GroupOfCompanyID ").change(function () {
+        var GCId = this.value;
+        $.getJSON("@Url.Action("GetCompanyByGOCId", "Company")", { id: GCId },
+            function (data) {
+
+                var CompanyCodelist = $("#CompanyID");
+
+                CompanyCodelist.empty();
+                CompanyCodelist.append("<option value='0'>-- Select Company --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    CompanyCodelist.append($('<option />', { value: optionaldata.SysCompanyID }).html(optionaldata.CompanyName));
+                });
+
+                if ('@ViewBag.CompanyID') {
+                    $('#CompanyID').val(@ViewBag.CompanyID).trigger("change");
+                } else {
+                    $('#CompanyID').val(0).trigger("change");
+                }
+
+
+            });
+    });
+
+    $.getJSON("@Url.Action("GetPrinterTypes", "Product")", function (data) {
+
+        var PrinterTypeId = $("#PrinterTypeId");
+
+        PrinterTypeId.empty();
+        PrinterTypeId.append("<option value='0'>-- Select Printer --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PrinterTypeId.append($('<option />', { value: optionaldata.PrinterTypeId }).html(optionaldata.PrinterTypeName));
+        });
+
+        if ('@ViewBag.PrinterTypeId') {
+            $('#PrinterTypeId').val(@ViewBag.PrinterTypeId).trigger("change");
+        }
+        else {
+            $('#PrinterTypeId').val(0).trigger("change");
+        }
+    });
+
+
+
+</script>
+

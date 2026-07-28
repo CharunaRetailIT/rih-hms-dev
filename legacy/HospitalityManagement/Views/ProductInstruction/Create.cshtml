@@ -1,0 +1,555 @@
+﻿@model IEnumerable<RIT.HMS.Domain.ProductInstruction>
+@{
+    ViewBag.Title = "Create ProductInstructions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+                      <link href="~/Content/Transactions.css" rel="stylesheet" />
+                      
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Create", "ProductInstruction", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Instructions </strong> saved successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Instructions</strong> save failed.
+                            </div>
+                        }
+                        
+
+                        <div class="row">
+
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+
+                                    <div class="x_title">
+                                        <h2>Product Instructions</h2>
+                                        <br />
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            @*<li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="#">Settings 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Settings 2</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>*@
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content">
+                                        <br />
+                                        <form class="form-horizontal form-label-left">
+
+                                            @*<div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Item/ Product</label>
+                                                    <div class="col-md-3 col-sm-9 col-xs-9">
+                                                        <select id="ProductId" name="ProductId" class="form-control"></select>
+                                                    </div>
+                                                </div>*@
+
+
+
+
+                                            <div class="form-group">
+                                                @*Item Table*@
+                                                @*<br />*@
+                                                <div class="col-md-12">
+                                                    @*<table id="buttons" class="table table table-striped">*@
+                                                    <table id="buttons" class="mstable">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width:10%" align="right">
+                                                                    Department
+                                                                </td>
+                                                                <td>
+                                                                    <select id="Department" class="form-control" style="width:100%" name="Department"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right">
+                                                                    Category
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <select id="Category" class="form-control" style="width:100%" name="Category"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right"></td>
+                                                                <td style="width:20%"></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width:10%" align="right">
+                                                                    Sub Category
+                                                                </td>
+                                                                <td>
+                                                                    <select id="SubCategory" class="form-control" style="width:100%" name="SubCategory"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right">
+                                                                    Product
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <select id="Product" class="form-control select2" style="width:100%" name="Product"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right"></td>
+                                                                <td style="width:20%"></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            @*<tr>
+                    <td align="right">
+                       Instruction
+
+                    </td>
+                    <td >
+                        <select id="Instruction" multiple class="form-control select2" style="width:100%" name="Instruction"></select>
+                    </td>
+                    <td style="width:10%" align="right">
+                        <input type="button" id="btnAddItem" class="btn btn-round btn-info" value="+" />
+                    </td>
+                </tr>*@
+                                                        </tbody>
+                                                    </table>                                     
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="col-md-12">
+                                                    <div class="col-md-1">
+                                                        Instruction(s)
+                                                    </div>
+                                                    <div class="col-md-8 pull-left">
+                                                        <select id="Instruction" multiple class="form-control select2" style="width:100%" name="Instruction"></select>              
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="button" id="btnAddItem" class="btn btn-round btn-info" value="+" />
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <br />
+
+
+                                                <div class="text-info"><b>Product</b></div>
+
+                                                @*<table id="tblProduct" class="table table table-bordered">*@
+                                                <table id="buttons" class="mstable">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th>idx</th>*@
+                                                            @*<th>Department Id</th>*@
+                                                            <th style="display:none">Product Id</th>
+                                                            <th>Product Desc</th>
+                                                            <th style="display:none">Instruction Id</th>
+                                                            <th style="display:none">Instruction</th>
+
+
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="products">
+                                                        @*@if (Model.Addons != null)
+                {
+                    @foreach (var productAddons in Model.Addons)
+                    {
+
+                        <tr>
+
+                            <td>@productAddons.AddonsId</td>
+                            <td>@productAddons.ProductId</td>
+                            <td>@productAddons.ProductAddonId</td>
+                            <td>@productAddons.DepartmentId</td>
+
+
+                            <td></td>
+                        </tr>
+
+                    }
+
+                }*@
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <hr />
+
+
+
+                                            <div class="actionBar">
+                                                <div class="msgBox">
+
+                                                    @*<div class="btn btn-primary pl_add btn-small pull-left">
+                                                        @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>*@
+                                                    <div class="btn btn-info pl_add btn-small pull-left">
+                                                        @Html.ActionLink("View Product Instructions", "Vieww", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success">Submit</button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</body>
+</html>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    $.getJSON("@Url.Action("GetAddons", "Product")", function (data) {
+
+        var itemId = $("#AddonId");
+
+
+        itemId.empty();
+        itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName + '(' + optionaldata.UOM+')'));
+
+        });
+
+        if ('@ViewBag.AddonId') {
+            $('#AddonId').val(@ViewBag.AddonId).trigger("change");
+        } else {
+            $('#AddonId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var departmentGroupDropDown = $("#DepartmentId");
+
+        departmentGroupDropDown.empty();
+        departmentGroupDropDown.append("<option value='0'>-- Select a Department--</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            departmentGroupDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+
+        if ('@ViewBag.DepartmentId') {
+            $('#DepartmentId').val(@ViewBag.DepartmentId).trigger("change");
+        } else {
+            $('#DepartmentId').val(0).trigger("change");
+        }
+    });
+
+
+</script>
+
+
+<script>
+
+
+    $.getJSON("@Url.Action("GetProductInstructions", "ProductInstruction")", function (data) {
+        var Instruction = $("#Instruction");
+        Instruction.empty();
+    
+        Instruction.append("<option value='0'>-- Select Instructions --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            Instruction.append($('<option />', { value: optionaldata.KOTBOTDescriptionId }).html(optionaldata.Description));
+
+        });
+
+
+    });
+
+
+
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var DepartmentId = $("#Department");
+        var CategoryId = $("#Category");
+        var subCategoryId = $("#SubCategory");
+
+        DepartmentId.empty();
+        DepartmentId.append("<option value='0'>-- Select a department --</option>");
+        CategoryId.append("<option value='0'>-- Select All --</option>");
+        subCategoryId.append("<option value='0'>-- Select All --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DepartmentId.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+
+    });
+
+    $("#Department").change(function () {
+        var diptId = this.value;
+
+       $.getJSON("@Url.Action("GetMenuByDeptId", "Product")", { id: diptId },
+       function (data)
+       {
+
+           var itemId = $("#Product");
+
+
+           itemId.empty();
+           itemId.append("<option value='0'>-- Select All Products --</option>");
+
+
+           $.each(JSON.parse(data), function (index, optionaldata) {
+               itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+           });
+
+       }
+    );
+    });
+
+    $("#Department").change(function () {
+        var diptId = this.value;
+
+        $.getJSON("@Url.Action("GetCategoriesByDepartmentId", "Category")", { id: diptId },
+            function (data) {
+
+                var CategoryId = $("#Category");
+
+                CategoryId.empty();
+                CategoryId.append("<option value='0'>-- Select All --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+                });
+
+
+            });
+    });
+
+
+    $("#Category").change(function () {
+        var deptid = $("#Department").val();
+        var catid = this.value;
+
+        $.getJSON("@Url.Action("GetSubcatByCatId", "Product")", { id: catid },
+            function (data) {
+
+                var subCategoryId = $("#SubCategory");
+
+                subCategoryId.empty();
+                subCategoryId.append("<option value='0'>-- Select All --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    subCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+                });
+
+            });
+
+             $.getJSON("@Url.Action("GetMenuByDeptCatId", "Product")", { deptid: deptid, catid: catid },
+              function (data)
+              {
+
+                  var itemId = $("#Product");
+
+
+                  itemId.empty();
+                  itemId.append("<option value='0'>-- Select All Products --</option>");
+
+
+                  $.each(JSON.parse(data), function (index, optionaldata) {
+                      itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+                  });
+
+              }
+            );
+
+
+    });
+
+
+    $("#SubCategory").change(function () {
+        var deptid = $("#Department").val();
+        var catid = $("#Category").val();
+        var scatid = this.value;
+
+        $.getJSON("@Url.Action("GetMenuByDeptCatScatId", "Product")", { deptid: deptid, catid: catid, scatid: scatid },
+              function (data)
+              {
+
+                  var itemId = $("#Product");
+
+
+                  itemId.empty();
+                  itemId.append("<option value='0'>-- Select All Products --</option>");
+
+
+                  $.each(JSON.parse(data), function (index, optionaldata) {
+                      itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+                  });
+
+              }
+            );
+
+
+
+    });
+
+  
+
+
+
+</script>
+
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddItem",
+        function () {
+
+            //if ($("#Product").val() == 0 || $("#Product").val() == null) {
+            //    alert("Select a Product !");
+            //    return;
+            //}
+
+            if ($("#Department").val() == 0 || $("#Department").val() == null) {
+                alert("Select a Department !");
+                return;
+            }
+
+           
+
+           
+
+            var Product = $("#Product").val();
+            var Department = $("#Department").val();
+            var Category = $("#Category").val();
+            var SubCategory = $("#SubCategory").val();
+
+          
+            //var addonDesc = $("#AddonId option:selected").text();
+            //var productDesc = $("#ProductId option:selected").text();
+            //var AddonQty = $("#AddonQuantity").val();
+            //var AddonSP = $("#AddonSellingPrice").val();
+          
+
+            $.ajax({
+                url: "@Url.Action("GetProducts", "ProductInstruction")",
+                data: { deptid: Department, catid: Category, subcatid: SubCategory, pid: Product },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+
+                data = resp;
+
+                $("#products tr").remove();
+
+                $.each(data, function (i, item) {
+
+
+                    var unitindex = $("#products").children("tr").length;
+                    var unitindexCell = "<td style='display:none' ><input name='products.Index' type='hidden' value='" +
+                        unitindex + "' /></td>";
+
+                    var unitProductIdCell = "<td style='display:none'><input id='Idetail" + unitindex + "_ProductId' class='form-control' name='Idetail[" +
+                        unitindex + "].ProductId' type='text' readonly value='" + item.ProductId + "' /></td>";
+
+                    var unitProductDescCell = "<td id='Idetail" + unitindex + "_ProductDesc'    name='Idetail[" +
+                        unitindex + "].ProductDesc'>" + item.ProductName + "</td>";
+
+                    var unitInstructionListCell = "<td style='display:none'><input id='Idetail" + unitindex + "_InstructionList'  class='form-control'  name='Idetail[" +
+                        unitindex + "].InstructionList' type='text' readonly value='" + "" + "' /></td>";
+
+
+
+                    var unitRemoveCell = "<td><input id='btnAddItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                          unitindex + ");' /></td>";
+
+
+                    var newUnitRow = "<tr id='trAddons" + unitindex + "'>" +
+                        //unitDeptIdCell +
+                        unitProductIdCell +
+                        unitProductDescCell +
+                        unitInstructionListCell +
+                        unitRemoveCell + "</tr>";
+
+                    $("#products").append(newUnitRow);
+
+                });
+
+            },
+            error: function (error) {
+                alert("Error");
+            }
+            });
+
+
+        });
+
+</script>
+
+
+<script>
+
+    function removeUnitRow(id) {
+
+        if (confirm("Do you want to delete? "))
+        {
+            var controlToBeRemoved = "#trAddons" + id;
+            $(controlToBeRemoved).remove();
+
+            //var table = document.getElementById("Addons");
+
+
+        }
+
+    }
+
+</script>

@@ -1,0 +1,828 @@
+﻿@model IEnumerable<RIT.HMS.Domain.ViewModels.CustomerPricesViewModel>
+@{
+    ViewBag.Title = "Customer Wise Product Discounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+
+<div class="right_col" role="main">
+    <div class="clearfix"></div>
+    <div class="container body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Customer Wise Product Discounts<small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="form-group left">
+                                    <b>Date Range</b>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-1">From</label>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        <input type="date" class="form-control" id="DateFrom" name="DateFrom">
+                                    </div>
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-1">To</label>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        <input type="date" class="form-control" id="DateTo" name="DateTo">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group left">
+                                    <b>Customer</b>
+                                </div>
+                                <div class="form-group text-left">
+                                    <select class="form-control select2 col-md-3 col-sm-3 col-xs-3" id="CustomerId" name="CustomerId"> </select>
+                                </div>
+                                <hr />
+                                <div class="form-group left">
+                                    <b>Discounts</b>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+
+                                    <div class="control-label col-md-2 col-sm-2 col-xs-2"><input type="radio" id="DAmount" name="fr_Discounts" checked value="Amount"> Amount</div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <input type="number" class="form-control text-right" value="0" min="0" id="DiscountAmount" onkeyup="return checkDiscountAmount()">
+                                    </div>
+
+                                    <div class="control-label col-md-2 col-sm-2 col-xs-2">
+                                        <input type="radio" id="DPrc" name="fr_Discounts" value="Prc"> Prc(%)
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <input type="number" class="form-control text-right" value="0" min="0" id="DiscountPrc" onkeyup="return checkDiscountPercentage()">
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-2">Selling Price</label>
+                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                <input type="number" class="form-control text-right" value="0" id="CustomerSellingPrice" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+
+
+                                </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Product</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control select2" id="ProductId" name="ProductId"> </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Serving Unit</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" id="ServingUnitId" name="ServingUnitId"> </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Selling Price</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" class="form-control has-feedback-left text-right" id="freesellingprice" placeholder="Selling Price" disabled="disabled">
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <hr />
+                                <div class="form-group left">
+                                    <b>Credit Discounts</b>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+
+                                    <div class="control-label col-md-2 col-sm-2 col-xs-2"> <input type="radio" id="CDAmount" name="fr_Credit_Discounts" checked value="Amount"> Amount</div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <input type="number" class="form-control text-right" value="0" min="0" id="CreditDiscountAmount" onkeyup="return checkCreditDiscountAmount()">
+                                    </div>
+
+                                    <div class="control-label col-md-2 col-sm-2 col-xs-2"><input type="radio" id="CDPrc" name="fr_Credit_Discounts" value="Prc"> Prc(%)</div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <input type="number" class="form-control text-right" value="0" min="0" id="CreditDiscountPrc" onkeyup="return checkCreditDiscountPercentage()">
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-2">Selling Price</label>
+                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                <input type="number" class="form-control text-right" value="0" id="CDCustomerSellingPrice" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <button type="button" id="AddItem" class="btn btn-primary col-md-9 col-sm-9 col-xs-12 pull-right">Add Item</button>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align:center">
+                        <hr />
+
+                        <label class="text-danger" id="textTableError"></label>
+
+                        <table class="table table-bordered" id="datatableEdit">
+                            <thead>
+                                <tr>
+                                    <th style="display:none">CustomerDiscountId</th>
+                                    <th style="display:none">Item Id</th>
+                                    <th>Product Code</th>
+                                    <th>Product Desc</th>
+                                    <th style="display:none">Serving Unit Id</th>
+                                    <th>Serving Unit</th>
+                                    <th style="display:none">Customer Id</th>
+                                    <th>Customer</th>
+                                    <th width="150px">Date From</th>
+                                    <th width="150px">Date To</th>
+                                    <th class='text-right'>Discount Amt</th>
+                                    <th class='text-right'>Discount Prc</th>
+                                    <th class='text-right'>Credit Discount Amt</th>
+                                    <th class='text-right'>Credit Discount Prc</th>
+                                    <th style='display:none'>Customer Selling Price</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td style='display:none'>@item.CustomerDiscountId </td>
+                                        <td style='display:none'>@item.ProductId </td>
+                                        <td>@item.ProductCode</td>
+                                        <td>@item.ProductName</td>
+                                        <td style='display:none'>@item.ServingUnitId</td>
+                                        <td>@item.ServingUnit</td>
+                                        <td style='display:none'>@item.CustomerId</td>
+                                        <td>@item.CustomerName</td>
+                                        <td>@item.DateFrom.ToString("yyyy-MM-dd")</td>
+                                        <td>@item.DateTo.ToString("yyyy-MM-dd")</td>
+                                        <td class='text-right'>@item.DiscountAmount</td>
+                                        <td class='text-right'>@item.DiscountPercentage</td>
+                                        <td class='text-right'>@item.CreditDiscountAmount</td>
+                                        <td class='text-right'>@item.CreditDiscountPercentage</td>
+                                        <td style='display:none'>@item.CustomerSellPrice</td>
+                                        <td><button type='button' id='freeitemrowrow' class='btn btn-danger btn-xs'> Remove </button></td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <a class="btn btn-primary pull-right" id="btnReset" href="/Customer/CustomerWisePrices">Reset</a>
+                        <button type="submit" id="btnSave" class="btn btn-success pull-right">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+
+<script>
+
+    document.getElementById('DateFrom').valueAsDate = new Date();
+    document.getElementById('DateTo').valueAsDate = new Date();
+
+    $(document).ready(function ()
+    {
+        LoadItemList();
+        ClearText();
+
+        $("#ProductId").change(function () {
+
+            ClearText();
+
+            $.getJSON("@Url.Action("GetServingUnits","ProductXYPromotions")", { id: $("#ProductId").val() },
+               function (data) {
+                   var ServingUnitId = $("#ServingUnitId");
+
+                   ServingUnitId.empty();
+                   ServingUnitId.append("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+
+                   $.each(JSON.parse(data), function (index, optionaldata) {
+                       ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                   });
+               });
+
+        });
+
+        $("#ServingUnitId").change(function () {
+            $.getJSON("@Url.Action("GetProductDetails", "ProductXYPromotions")", { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val() },
+            function (data)
+            {
+                console.log(data);
+                document.getElementById("freesellingprice").value = parseFloat(data.SellingPrice).toFixed(2);
+                $("#CustomerSellingPrice").val(parseFloat(data.SellingPrice).toFixed(2));
+                $("#CDCustomerSellingPrice").val(parseFloat(data.SellingPrice).toFixed(2));
+            });
+        });
+
+        function SetDateDocumentRead() {
+            var dtToday = new Date();
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate();
+            var year = dtToday.getFullYear();
+            if (month < 10)
+                month = '0' + month.toString();
+            if (day < 10)
+                day = '0' + day.toString();
+
+            var maxDate = year + '-' + month + '-' + day;
+            $('#DateFrom').attr('min', maxDate);
+
+            const d = new Date($('#DateFrom').val());
+            d.setDate(d.getDate() + 1);
+            console.log(d);
+            var vmonth = d.getMonth() + 1;
+            var vday = d.getDate();
+            var vyear = d.getFullYear();
+            if (vmonth < 10)
+                vmonth = '0' + vmonth.toString();
+            if (vday < 10)
+                vday = '0' + vday.toString();
+
+            var vmaxDate = vyear + '-' + vmonth + '-' + vday;
+            console.log(vmaxDate);
+            $('#DateTo').val(vmaxDate);
+            $('#DateTo').attr('min', vmaxDate);
+        };
+
+        $("#DateFrom").change(function () {
+
+            const d = new Date($(this).val());
+            d.setDate(d.getDate() + 1);
+            console.log(d);
+            var vmonth = d.getMonth() + 1;
+            var vday = d.getDate();
+            var vyear = d.getFullYear();
+                if (vmonth < 10)
+                    vmonth = '0' + vmonth.toString();
+                if (vday < 10)
+                    vday = '0' + vday.toString();
+
+            var vmaxDate = vyear + '-' + vmonth + '-' + vday;
+            console.log(vmaxDate);
+            $('#DateTo').val(vmaxDate);
+            $('#DateTo').attr('min', vmaxDate);
+
+        });
+
+        $("#DiscountAmount").change(function () {
+
+            var getValue = $(this).val();
+            if (getValue === "" || parseFloat(getValue) < 0 ) {
+                $(this).val(0);
+            }
+
+        });
+
+        $("#DiscountPrc").change(function () {
+
+            var getValue = $(this).val();
+            if (getValue === "" || parseFloat(getValue) < 0) {
+                $(this).val(0);
+            }
+        });
+
+        $("#CreditDiscountAmount").change(function () {
+
+            var getValue = $(this).val();
+            if (getValue === "" || parseFloat(getValue) < 0) {
+                $(this).val(0);
+            }
+        });
+
+        $("#CreditDiscountPrc").change(function () {
+
+            var getValue = $(this).val();
+            if (getValue === "" || parseFloat(getValue) < 0) {
+                $(this).val(0);
+            }
+        });
+
+        var t = $('#datatableEdit').DataTable();
+
+        $("body").on("click",
+            "#AddItem",
+            function () {
+
+                $("#textTableError").html('');
+                if ($("#DateFrom").val() == $("#DateTo").val()) {
+                    $("#textTableError").html('Select a valid date range!');
+                    return;
+                }
+                if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                    $("#textTableError").html('Select an Item !');
+                    return;
+                }
+                if ($("#ServingUnitId").val() == 0 || $("#ServingUnitId").val() == null) {
+                    $("#textTableError").html('Select a Serving Unit !');
+                    return;
+                }
+                if ($("#CustomerId").val() == 0 || $("#CustomerId").val() == null) {
+                    $("#textTableError").html('Select a customer !');
+                    return;
+                }
+                if ((parseFloat($("#DiscountAmount").val()) > 0 || parseFloat($("#DiscountPrc").val()) > 0) || (parseFloat($("#CreditDiscountAmount").val()) > 0 || parseFloat($("#CreditDiscountPrc").val()) > 0)) {
+                   
+                }
+                else {
+                    $("#textTableError").html('Customer Selling Price is 0.Please Set the Discounts or Credit Discounts.');
+                    return;
+                }
+
+        
+
+                //var getFResult = IsValidateInsertedItemFromDate(t, $("#CustomerId").val(), $("#ProductId").val());
+                //var getTResult = IsValidateInsertedItemToDate(t, $("#CustomerId").val(), $("#ProductId").val());
+                //var getTResult = IsValidateInsertedItemCurrentFromDate(t, $("#CustomerId").val(), $("#ProductId").val());
+                //var getTResult = IsValidateInsertedItemCurrentToDate(t, $("#CustomerId").val(), $("#ProductId").val());
+                var getTResultDateBlock = IsValidateInsertedItemDateBlocker(t, $("#CustomerId").val(), $("#ProductId").val());
+                if (!getTResultDateBlock) {
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("GetProductById", "Product")",
+                        data: { id: $("#ProductId").val() },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (res) {
+                            t.row.add($("<tr style='background:beige;'><td style='display:none'>" + 0 + "</td><td style='display:none'>" + $("#ProductId").val() + "</td><td>" + res.ProductCode + "</td><td>" + $("#ProductId :selected").text() + "</td><td style='display:none'>" + $("#ServingUnitId").val() + "</td><td>" + $("#ServingUnitId :selected").text() + "</td><td style='display:none'>" + $("#CustomerId").val() + "</td><td>" + $("#CustomerId :selected").text() + "</td><td>" + $("#DateFrom").val() + "</td><td>" + $("#DateTo").val() + "</td><td class='text-right'>" + parseFloat($("#DiscountAmount").val()).toFixed(2) + "</td><td class='text-right'>" + parseFloat($("#DiscountPrc").val()).toFixed(2) + "</td><td class='text-right'>" + parseFloat($("#CreditDiscountAmount").val()).toFixed(2) + "</td><td class='text-right'>" + parseFloat($("#CreditDiscountPrc").val()).toFixed(2) + "</td><td style='display:none'>0</td><td><button type='button' id='freeitemrowrow'  class='btn btn-danger btn-xs'> Remove </button></td></tr>")).draw();
+
+                            LoadItemList();
+                            ClearText();
+                        }
+
+                    });
+                }
+                else {
+                    $("#textTableError").html('Item details were already exists below table');
+                }
+            });
+
+        function IsValidateInsertedItemDateBlocker(tabt, customerId, productId) {
+
+            var result = false;
+
+            tabt.rows().eq(0).each(function (index) {
+                var row = t.row(index);
+                var data = row.data();
+                console.log(data);
+                if (data[6] === customerId && data[1] === productId) {
+                    var isCheckTFDate = new Date(data[8]);
+                    var isCheckTTDate = new Date(data[9]);
+                    var insertFDate = new Date($("#DateFrom").val());
+                    var insertTDate = new Date($("#DateTo").val());
+                    if ((isCheckTFDate <= insertFDate && isCheckTTDate >= insertFDate) || (isCheckTFDate <= insertTDate && isCheckTTDate >= insertTDate) || (insertFDate <= isCheckTFDate && insertTDate >= isCheckTFDate) || (insertFDate <= isCheckTTDate && insertTDate >= isCheckTTDate)){
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        function IsValidateInsertedItemFromDate(tabt,customerId, productId) {
+
+            var result = false;
+
+            tabt.rows().eq(0).each(function (index) {
+                var row = t.row(index);
+                var data = row.data();
+                console.log(data);
+                if (data[6] === customerId && data[1] === productId) {
+                    var isCheckTFDate = new Date(data[8]);
+                    var isCheckTTDate = new Date(data[9]);
+                    var insertFDate = new Date($("#DateFrom").val());
+                    if (isCheckTFDate <= insertFDate && isCheckTTDate >= insertFDate) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        function IsValidateInsertedItemToDate(tabt, customerId, productId) {
+
+            var result = false;
+
+            tabt.rows().eq(0).each(function (index) {
+                var row = t.row(index);
+                var data = row.data();
+                console.log(data);
+                if (data[6] === customerId && data[1] === productId) {
+                    var isCheckTFDate = new Date(data[8]);
+                    var isCheckTTDate = new Date(data[9]);
+                    var insertTDate = new Date($("#DateTo").val());
+                    if (isCheckTFDate <= insertTDate && isCheckTTDate >= insertTDate) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        function IsValidateInsertedItemCurrentFromDate(tabt, customerId, productId) {
+
+            var result = false;
+
+            tabt.rows().eq(0).each(function (index) {
+                var row = t.row(index);
+                var data = row.data();
+                console.log(data);
+                if (data[6] === customerId && data[1] === productId) {
+                    var isCheckTFDate = new Date(data[8]);
+                    var insertFDate = new Date($("#DateFrom").val());
+                    var insertTDate = new Date($("#DateTo").val());
+                    if (insertFDate <= isCheckTFDate && insertTDate >= isCheckTFDate) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        function IsValidateInsertedItemCurrentToDate(tabt, customerId, productId) {
+
+            var result = false;
+
+            tabt.rows().eq(0).each(function (index) {
+                var row = t.row(index);
+                var data = row.data();
+                console.log(data);
+                if (data[6] === customerId && data[1] === productId) {
+                    var isCheckTTDate = new Date(data[9]);
+                    var insertFDate = new Date($("#DateFrom").val());
+                    var insertTDate = new Date($("#DateTo").val());
+                    if (insertFDate <= isCheckTTDate && insertTDate >= isCheckTTDate) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        $("body").on("click", "#btnSave", function ()
+        {
+
+            if ($('#datatableEdit tr').length == 1)
+                    {
+                        return;
+                    }
+
+                    debugger;
+                    swal({
+                        title: "Customer Prices & Discounnts Save",
+                        text: "Confirm?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        cancelButtonText: "No",
+                        confirmButtonText: "Yes",
+
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                       function (isConfirm)
+                       {
+                           if (isConfirm)
+                           {
+
+                               var customerdiscounts = new Array();
+
+                               t.rows().eq(0).each(function (index) {
+                                   var row = t.row(index);
+                                   var data = row.data();
+                                   console.log(data);
+                                   var customerdiscount = {};
+                                   customerdiscount.ProductId = data[1];
+                                   customerdiscount.ProductCode = data[2];
+                                   customerdiscount.CustomerCode = "";
+                                   customerdiscount.ServingUnitId = data[4];
+                                   customerdiscount.DiscountAmount = data[10];
+                                   customerdiscount.CustomerId = data[6];
+                                   customerdiscount.DiscountPercentage = data[11];
+                                   customerdiscount.CreditDiscountAmount = data[12];
+                                   customerdiscount.CreditDiscountPercentage = data[13];;
+                                   customerdiscount.CustomerSellPrice = data[14];
+                                   customerdiscount.DateFrom = data[8];
+                                   customerdiscount.DateTo = data[9];
+                                   customerdiscount.IsActive = true;
+
+                                   customerdiscounts.push(customerdiscount);
+
+                               });
+
+                               console.log(JSON.stringify(customerdiscounts));
+
+                               $.ajax({
+                                   type: "POST",
+                                   url: "@Url.Action("SubmitCustomerPrices", "Customer")",
+                                   data: JSON.stringify(customerdiscounts),
+                                   contentType: "application/json; charset=utf-8",
+                                   dataType: "json",
+                                   success: function (res)
+                                   {
+                                       if (res != 0)
+                                       {
+
+                                           swal({
+                                               title: "",
+                                               text: "Customer Discounts Saved Successfully!",
+                                               type: "success",
+                                               showCancelButton: false,
+                                               confirmButtonClass: "btn-success",
+                                               confirmButtonText: "Ok",
+                                               closeOnConfirm: true
+                                           },
+                                            function ()
+                                            {
+                                                window.location.href = "/Customer/CustomerWisePrices";
+                                            });
+
+                                       }
+                                       else
+                                       {
+
+                                           swal("Error", "Customer discount save failed!", "error");
+                                       }
+
+                                   }
+                           });
+                           }
+                       });
+                });
+
+        $('#datatableEdit').on("click", "button", function () {
+            console.log($(this).parent());
+
+             var row = $(this).closest("TR");
+            var name = $("TD", row).eq(3).html();
+
+            var id = $("TD", row).eq(0).html();
+            var customerid = $("TD", row).eq(6).html();
+            var productid = $("TD", row).eq(1).html();
+            var IsValidateRo = false;
+            if (confirm("Do you want to delete: " + name + " ?")) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("RemoveCustomerDiscount", "Customer")",
+                    data: { customerid: customerid, productid: productid },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        IsValidateRo = true;
+
+                    }
+                });
+
+                t.row($(this).parents('tr')).remove().draw(false);
+
+            }
+        });
+
+        function ClearText() {
+            if ($('#DAmount').is(':checked')) {
+                $("#DiscountPrc").attr('readonly', true);
+                $("#DiscountAmount").attr('readonly', false);
+                $("#DiscountAmount").val(0);
+            }
+            if ($('#DPrc').is(':checked')) {
+                $("#DiscountPrc").attr('readonly', false);
+                $("#DiscountAmount").attr('readonly', true);
+                $("#DiscountPrc").val(0);
+            }
+
+            if ($('#CDAmount').is(':checked')) {
+                $("#CreditDiscountPrc").attr('readonly',true);
+                $("#CreditDiscountAmount").attr('readonly', false);
+                $("#CreditDiscountAmount").val(0);
+            }
+            if ($('#CDPrc').is(':checked')) {
+                $("#CreditDiscountPrc").attr('readonly', false);
+                $("#CreditDiscountAmount").attr('readonly', true);
+                $("#CreditDiscountPrc").val(0);
+            }
+
+            SetDateDocumentRead();
+            LoadCustomer();
+            $("#ServingUnitId").html("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+            $("#DiscountAmount").val('0');
+            $("#DiscountPrc").val('0');
+            $("#CreditDiscountAmount").val('0');
+            $("#CreditDiscountPrc").val('0');
+            $("#freesellingprice").val('0');
+            $("#CustomerSellingPrice").val('0');
+            $("#CDCustomerSellingPrice").val('0');
+        }
+
+        $("#DAmount").change(function () {
+
+            if ($(this).is(':checked')) {
+                $("#DiscountPrc").attr('readonly', true);
+                $("#DiscountAmount").attr('readonly', false);
+                $("#DiscountAmount").val(0);
+                $("#DiscountPrc").val(0);
+                $("#CustomerSellingPrice").val(parseFloat($('#freesellingprice').val()).toFixed(2));
+                $("#DiscountAmount").select();
+            }
+        });
+
+        $("#DPrc").change(function () {
+
+            if ($(this).is(':checked')) {
+                $("#DiscountPrc").attr('readonly', false);
+                $("#DiscountAmount").attr('readonly', true);
+                $("#DiscountPrc").val(0);
+                $("#DiscountAmount").val(0);
+                $("#CustomerSellingPrice").val(parseFloat($('#freesellingprice').val()).toFixed(2));
+                $("#DiscountPrc").select();
+            }
+        });
+
+        $("#CDAmount").change(function () {
+
+            if ($(this).is(':checked')) {
+                $("#CreditDiscountPrc").attr('readonly', true);
+                $("#CreditDiscountAmount").attr('readonly', false);
+                $("#CreditDiscountAmount").val(0);
+                $("#CreditDiscountPrc").val(0);
+                $("#CDCustomerSellingPrice").val(parseFloat($('#freesellingprice').val()).toFixed(2));
+                $("#CreditDiscountAmount").select();
+            }
+        });
+
+        $("#CDPrc").change(function () {
+
+            if ($(this).is(':checked')) {
+                $("#CreditDiscountPrc").attr('readonly', false);
+                $("#CreditDiscountAmount").attr('readonly', true);
+                $("#CreditDiscountPrc").val(0);
+                $("#CreditDiscountAmount").val(0);
+                $("#CDCustomerSellingPrice").val(parseFloat($('#freesellingprice').val()).toFixed(2));
+                $("#CreditDiscountPrc").select();
+            }
+        });
+
+        function LoadItemList() {
+
+
+            $.getJSON("@Url.Action("GetPromotionItems", "ProductXYPromotions")", function (data) {
+
+                var ProductId = $("#ProductId");
+
+                ProductId.empty();
+                ProductId.append("<option value='0'>-- Select a Product --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    ProductId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+                });
+            });
+
+            $("#ServingUnitId").html("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+        }
+
+        function LoadCustomer() {
+
+            $.getJSON("@Url.Action("GetCustomers", "Customer")", function (data) {
+
+                var CustomerId = $("#CustomerId");
+
+                CustomerId.empty();
+                CustomerId.append("<option value='0'>-- Select a Customer --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    CustomerId.append($('<option />', { value: optionaldata.CustomerID }).html(optionaldata.CustomerName));
+                });
+            });
+        }
+
+    });
+
+    function checkDiscountAmount() {
+        var Dis = $("#DiscountPrc");
+        $("#CustomerSellingPrice").val("0.00");
+        if (Dis.val() > 0) {
+            alert("Can't apply discount percentage with discount amount for the same item..!");
+            $("#DiscountAmount").val("0.00");
+            return;
+        }
+        var strDiscountAmount = $("#DiscountAmount").val();
+        var strFreesellingprice = $("#freesellingprice").val();
+        if ((Number(strFreesellingprice) - Number(strDiscountAmount)) < 0) {
+            alert("Can't apply discount amount more than selling price for the item..!");
+            $("#DiscountAmount").val("0.00");
+        }
+        if ((Number(strFreesellingprice) - Number(strDiscountAmount)) > 0) {
+            $("#CustomerSellingPrice").val(parseFloat(Number(strFreesellingprice) - Number(strDiscountAmount)).toFixed(2));
+        }
+    }
+
+    function checkDiscountPercentage() {
+        var Dis = $("#DiscountAmount");
+        $("#CustomerSellingPrice").val("0.00");
+        if (Dis.val() > 0) {
+            alert("Can't apply discount amount with discount percentage for the same item..!");
+            $("#DiscountPrc").val("0.00");
+            return;
+        }
+        var DisPer = $("#DiscountPrc");
+        if (DisPer.val() > 100) {
+            $("#DiscountPrc").val("100.00");
+            return;
+        }
+        var strDiscountPrc = $("#DiscountPrc").val();
+        var strFreesellingprice = $("#freesellingprice").val();
+        $("#CustomerSellingPrice").val(parseFloat(Number(strFreesellingprice) - (Number(strFreesellingprice) * (Number(strDiscountPrc) / 100))).toFixed(2));
+    }
+
+    function checkCreditDiscountAmount() {
+        var Dis = $("#CreditDiscountPrc");
+        $("#CDCustomerSellingPrice").val("0.00");
+        if (Dis.val() > 0) {
+            alert("Can't apply credit discount percentage with credit discount amount for the same item..!");
+            $("#CreditDiscountAmount").val("0.00");
+            return;
+        }
+        var strDiscountAmount = $("#CreditDiscountAmount").val();
+        var strFreesellingprice = $("#freesellingprice").val();
+        if ((Number(strFreesellingprice) - Number(strDiscountAmount)) < 0) {
+            alert("Can't apply discount amount more than selling price for the item..!");
+            $("#CreditDiscountAmount").val("0.00");
+        }
+        if ((Number(strFreesellingprice) - Number(strDiscountAmount)) > 0) {
+            $("#CDCustomerSellingPrice").val(parseFloat(Number(strFreesellingprice) - Number(strDiscountAmount)).toFixed(2));
+        }
+    }
+
+    function checkCreditDiscountPercentage() {
+        var Dis = $("#CreditDiscountAmount");
+        $("#CDCustomerSellingPrice").val("0.00");
+        if (Dis.val() > 0) {
+            alert("Can't apply credit discount amount with credit discount percentage for the same item..!");
+            $("#CreditDiscountPrc").val("0.00");
+            return;
+        }
+        var DisPer = $("#CreditDiscountPrc");
+        if (DisPer.val() > 100) {
+            $("#CreditDiscountPrc").val("100.00");
+            return;
+        }
+        var strDiscountPrc = $("#CreditDiscountPrc").val();
+        var strFreesellingprice = $("#freesellingprice").val();
+        $("#CDCustomerSellingPrice").val(parseFloat(Number(strFreesellingprice) - (Number(strFreesellingprice) * (Number(strDiscountPrc) / 100))).toFixed(2));
+    }
+
+</script>

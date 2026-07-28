@@ -1,0 +1,14 @@
+.next/
+node_modules/
+out/
+test-results/
+playwright-report/
+playwright/.cache/
+.vercel
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+
+# runtime-audit screenshots
+e2e/_audit_shots_*.png
+test-results/

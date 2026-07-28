@@ -1,0 +1,166 @@
+﻿@model RIT.HMS.Domain.KOTBOTDescription
+@{
+    ViewBag.Title = "DescriptionEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>*@
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("DescriptionEdit", "ProductInstruction", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.KOTBOTDescriptionId)
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>KOT BOT Description </strong> modified successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>KOT BOT Description</strong> modify failed.
+                            </div>
+                        }
+
+
+                        <div class="row">
+
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+
+                                    <div class="x_title">
+                                        <h2>KOT BOT Description - Edit</h2>
+                                        <br />
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            @*<li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="#">Settings 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Settings 2</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>*@
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content">
+                                        <br />
+                                        <form class="form-horizontal form-label-left">
+
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Descriptions</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", Placeholder = "Description" })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Type</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    <select id="Type" name="Type" class="form-control"></select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1 pull-left ">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                                </div>
+                                            </div>
+
+
+                                            <div class="actionBar">
+                                                <div class="msgBox">
+
+                                                    <div class="btn btn-primary pl_add btn-small pull-left">
+                                                        @Html.ActionLink("Clear", "DescriptionEdit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>
+                                                    <div class="btn btn-info pl_add btn-small pull-left">
+                                                        @Html.ActionLink("View All", "DescriptionView", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success">Modify</button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $.getJSON("@Url.Action("GetPrinterTypes", "Product")", function (data) {
+
+        var PrinterTypeId = $("#Type");
+
+        PrinterTypeId.empty();
+        PrinterTypeId.append("<option value='0'>-- Select Printer --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PrinterTypeId.append($('<option />', { value: optionaldata.PrinterTypeId }).html(optionaldata.PrinterTypeName));
+        });
+
+        if ('@ViewBag.Type') {
+            $('#Type').val(@ViewBag.Type).trigger("change");
+        }
+        else {
+            $('#Type').val(0).trigger("change");
+        }
+
+
+    });
+
+</script>

@@ -1,0 +1,355 @@
+﻿
+@{
+    ViewBag.Title = "Create Gift Voucher Promotions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Promotions.css" rel="stylesheet" />
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+
+<div class="right_col" role="main">
+
+
+    <div class="clearfix"></div>
+    <div class="container body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Gift Voucher Promotions <small>Gift vouchers for bill value</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+
+                        <div class="form-horizontal form-group col-md-2">
+
+                            <label class="control-label">Promotion Name</label>
+
+                        </div>
+                        <div class="form-horizontal form-group col-md-4">
+                            <select id="PromotionMasterId" name="PromotionMasterId" class="form-control"></select>
+                        </div>
+
+                        <div class="col-md-6 text-left" style="background-color:#ddd">
+                            <h4>Promotion Details:</h4>
+                            <label id="promotiondet"></label>
+                            <label id="lblpromotiontype" hidden>111</label>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <hr />
+                        <br />
+                        <div class="clearfix"></div>
+                        <div class="col-md-6">
+                            <h4>Bill Value Range</h4>
+
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Bill Value</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input value="0" min="0"  class="form-control text-right" step="0.1" type="number" id="BillValue" name="BillValue" />
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Bill Value To</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input value="0" class="form-control text-right" id="BillValueTo" type="number" step="0.1" name="BillValueTo"/> 
+                                    </div>
+                                </div>*@
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+
+                                </div>                            
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Gift Vouchers</h4>
+                            <div class="form-horizontal form-label-left input_mask">
+                                @*<div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Voucher No </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input class="form-control" id="VoucherNo" name="VoucherNo"/>
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Gift Voucher Amount</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input class="form-control text-right" type="number" min="0" step="0.1" value="0" id="VoucherAmount" name="VoucherAmount" />
+                                    </div>
+                                </div>                                                                                          
+                                                            
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback"></div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <button type="button" id="addgiftvoucher" class="btn btn-primary col-md-6 col-sm-6 col-xs-12 pull-right">Add Voucher</button>
+                                </div>
+                                <div class="clearfix"></div>                              
+                            </div>
+                        </div>
+                        <div class="clearfix col-md-10 center">
+                            @*<table class="table table-bordered" id="tablegiftvouchers">*@
+                            <table id="tablegiftvouchers" class="mstable col-md-6 col-sm-6 col-xs-12">
+                                <thead>
+                                    <tr>
+
+                                        <th>Bill Value From</th>
+                                        <th>Bill Value To</th>
+                                        <th>Voucher No</th>
+                                        <th>Amount</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                            <button class="btn btn-primary" id="btnReset" onclick='Reset();' type="reset">Reset</button>
+                            <button type="submit" id="btnSave" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+<script>
+
+    $.getJSON("@Url.Action("GetDiscountsPromotionMasters", "ProductXYPromotions")", function (data) {
+
+        var PromotionMasterId = $("#PromotionMasterId");
+
+        PromotionMasterId.empty();
+        PromotionMasterId.append("<option value='0'>-- Select a Promotion --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata)
+        {
+            PromotionMasterId.append($('<option />', { value: optionaldata.InvPromotionMasterID }).html(optionaldata.PromotionName));
+        });
+    });
+
+    $("#PromotionMasterId").change(function () {
+        $.getJSON("@Url.Action("GetPromotionType", "ProductXYPromotions")", { promotionmasterid: $("#PromotionMasterId").val() },
+           function (data)
+           {
+              // GetDiscountsPromotionType
+               //document.getElementById("promotiondet").innerText = data.PromotionName;
+               //document.getElementById("lblpromotiontype").innerText = data.PromotionTypeID;
+
+               var tablepromo = document.getElementById("promotiontable");
+               var tablefree = document.getElementById("freeitem");
+               $("#promotiontable").find("tr:not(:first)").remove();
+               $("#freeitem").find("tr:not(:first)").remove();
+
+               $.each(JSON.parse(data), function (index, optionaldata) {
+
+                   document.getElementById("promotiondet").innerText = optionaldata.PromotionName;
+                   document.getElementById("lblpromotiontype").innerText = optionaldata.PromotionTypeId;
+                   //if (optionaldata.ProductType == 1) {
+
+                   //    $(tablepromo).find('tbody').append("<tr><td style='display:none'>" + optionaldata.ProductId + "</td><td>" + optionaldata.ProductCode + "</td><td>" + optionaldata.ProductName + "</td><td style='display:none'>" + optionaldata.ServingUnitId + "</td><td>" + optionaldata.ServingUnit + "</td><td style='display:none'>" + optionaldata.UOMId + "</td><td>" + optionaldata.UOM + "</td><td>" + optionaldata.SellingPrice + "</td><td>" + optionaldata.Quantity + "</td><td><button type='button' id='promotionrow' onclick='RemovePromotion(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                   //} else if (optionaldata.ProductType == 2) {
+
+                   //    $(tablefree).find('tbody').append("<tr><td style='display:none'>" + optionaldata.ProductId + "</td><td>" + optionaldata.ProductCode + "</td><td>" + optionaldata.ProductName + "</td><td style='display:none'>" + optionaldata.ServingUnitId + "</td><td>" + optionaldata.ServingUnit + "</td><td style='display:none'>" + optionaldata.UOMId + "</td><td>" + optionaldata.UOM + "</td><td>" + optionaldata.SellingPrice + "</td><td style='display:none'>" + optionaldata.DiscountType + "</td><td>" + optionaldata.DiscountAmt + "</td><td>" + optionaldata.Quantity + "</td><td><button type='button' id='freeitemrowrow' onclick='RemoveFreeItem(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                   //}
+
+
+               });
+
+
+           });
+    });
+
+
+
+
+
+
+
+
+
+</script>
+
+
+@*HTML Tables Handling*@
+
+
+@*Free Item  Table*@
+<script type="text/javascript">
+    $("body").on("click",
+        "#addgiftvoucher",
+        function () {
+            debugger;
+
+            if ($("#PromotionMasterId").val() == 0) {
+                alert("Seleect a promotion !");
+                return;
+            }
+
+            if ($("#BillValueFrom").val() == 0 || $("#BillValueFrom").val() == null) {
+                alert("Bill Value From required !");
+                return;
+            }
+            if ($("#BillValueTo").val() == 0 || $("#BillValueTo").val() == null) {
+                alert("Bill Value To Required!");
+                return;
+            }
+            if ($("#VoucherNo").val() == 0 || $("#VoucherNo").val() == null) {
+                alert("Voucher No Required!");
+                return;
+            }
+            if ($("#VoucherAmount").val() == 0 || $("#VoucherAmount").val() == null) {
+                alert("Voucher Amount Required!");
+                return;
+            }
+
+
+
+            var table = document.getElementById("tablegiftvouchers");
+            $(table).find('tbody').append("<tr><td style='display:none'>" + $("#PromotionMasterId").val() + "</td><td>" + $("#BillValueFrom").val() + "</td><td>" + $("#BillValueTo").val() + "</td><td>" + $("#VoucherNo").val() + "</td><td>" + $("#VoucherAmount").val() + "</td><td><button type='button' id='freeitemrowrow' onclick='RemoveFreeItem(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+
+          
+
+            @*$.ajax({
+                url: "@Url.Action("GetProductDetails", "ProductXYPromotions")",
+                data: { id: $("#YProductId").val(), servingunitid: $("#YServingUnitId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    var table = document.getElementById("freeitem");
+                    $(table).find('tbody').append("<tr><td style='display:none'>" + data.ProductId + "</td><td>" + data.ProductCode + "</td><td>" + data.ProductName + "</td><td style='display:none'>" + data.ServingUnitId + "</td><td>" + data.ServingUnit + "</td><td style='display:none'>" + data.UOMId + "</td><td>" + data.UOM + "</td><td>" + finalsellingprice + "</td><td style='display:none'>" + discounttype + "</td><td>" + discountvalue + "</td><td>" + $("#freequantity").val() + "</td><td><button type='button' id='freeitemrowrow' onclick='RemoveFreeItem(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                    document.getElementById("freequantity").value = "";
+                    document.getElementById("discountValue").value = "";
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });*@
+
+        });
+
+
+    function RemoveFreeItem(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(3).html();
+        if (confirm("Do you want to delete: " + name + " ?")) {
+            var table = $("#tablegiftvouchers")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>
+
+@*Submit*@
+
+<script>
+
+    $(document).ready(function () {
+        $("body").on("click", "#btnSave", function () {
+
+            if ($('#tablegiftvouchers tr').length == 1) {
+                alert("Add Vouchers!");
+                return;
+            }
+
+           
+            
+
+
+
+
+            debugger;
+            swal({
+                title: "Gift vouchere Promotion",
+                text: "Confirm?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+               function (isConfirm) {
+                   if (isConfirm) {
+
+                       var promotions = new Array();
+                       $("#tablegiftvouchers TBODY TR").each(function () {
+                           var row = $(this);
+                           var promotion = {};
+                           promotion.ProductId = row.find("TD").eq(0).html();
+                           promotion.ProductCode = row.find("TD").eq(1).html();
+                           promotion.ProductName = row.find("TD").eq(2).html();
+                           promotion.ServingUnitId = row.find("TD").eq(3).html();
+                           promotion.ServingUnit = row.find("TD").eq(4).html();
+                           promotion.SellingPrice = row.find("TD").eq(7).html();
+                           promotion.Quantity = row.find("TD").eq(10).html();
+                           promotion.DiscountAmt = 0;
+                           promotion.DiscountType = "N";
+                           promotion.UOM = row.find("TD").eq(6).html();
+                           promotion.UOMId = row.find("TD").eq(5).html();
+                           promotion.PromotionItemType = 1;
+                           promotion.PromotionMasterId = $("#PromotionMasterId").val();
+                           promotions.push(promotion);
+                       });
+
+                     
+
+
+
+                       $.ajax({
+                           type: "POST",
+                           url: "@Url.Action("SubmitPromotions", "DiscountsPromotions")",
+                           data: JSON.stringify(promotions),
+                           contentType: "application/json; charset=utf-8",
+                           dataType: "json",
+                           success: function (res) {
+                               if (res != 0) {
+
+                                   swal({
+                                       title: "",
+                                       text: "Promotion Saved Successfully!",
+                                       type: "success",
+                                       showCancelButton: false,
+                                       confirmButtonClass: "btn-success",
+                                       confirmButtonText: "Ok",
+                                       closeOnConfirm: true
+                                   },
+                                    function () {
+                                        window.location.href = "/DiscountsPromotions/CreateDiscountsPromotion";
+                                    });
+
+                               }
+                               else {
+
+                                   swal("Error", "Promotion save failed!", "error");
+                               }
+                           }
+                       });
+                   }
+               });
+        });
+    });
+</script>
+
+
+@*Reset*@
+
+<script>
+    function Reset() {
+
+        window.location.href = "/GiftVoucherPromotions/CreateGiftVoucherPromotions";
+    };
+</script>

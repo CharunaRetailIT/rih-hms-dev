@@ -1,0 +1,23 @@
+[Unit]
+Description=RIT HMS API (.NET 8, self-contained)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=azureuser
+Group=azureuser
+WorkingDirectory=/opt/hms/api
+EnvironmentFile=/opt/hms/hms.env
+ExecStart=/opt/hms/api/Hms.Api
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/hms/api.log
+StandardError=append:/var/log/hms/api.err
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=false
+
+[Install]
+WantedBy=multi-user.target

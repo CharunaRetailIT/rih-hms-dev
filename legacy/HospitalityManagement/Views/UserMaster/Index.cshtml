@@ -1,0 +1,426 @@
+﻿@model RIT.HMS.Domain.SysUserMaster
+@{
+    ViewBag.Title = "Create Back Office Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Create", "UserMaster", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>User </strong> @ViewBag.UMID saved successfully.
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "0")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>User </strong> @ViewBag.UMID save failed.
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Login for </strong> @ViewBag.EmpName is already exists.
+                                <small>An Employee can have only one user login</small>
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Username @ViewBag.UMID </strong> is already exists.
+                               
+                            </div>
+                        }
+
+                        <div class="row">
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>User Master</h2>
+                                        <br />
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                           
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <br />
+                                        @*<form class="form-horizontal form-label-left">*@
+                                          
+                                            
+                                             <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Employee</label>
+                                                <div class="col-md-3 col-sm-9 col-xs-9">
+                                                  
+                                                    <select id="EmployeeCode" name="EmployeeCode" class="form-control"></select>
+                                                    @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger" })
+
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">User Name</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", MaxLength = 50, Placeholder = "User Name", ID = "UserName" })
+                                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Email</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", Type = "email", Placeholder = "Email" })
+                                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">User Description</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.UserDescription, new { @class = "form-control", MaxLength = 50, Placeholder = "User Description",ID= "UserDescription" })
+                                                    @Html.ValidationMessageFor(model => model.UserDescription, "", new { @class = "text-danger" })
+                                                  
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Password</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", Placeholder = "Password" })
+                                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Confirm Password</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", Placeholder = "Confirm Password",ID= "ConfirmPassword" })
+                                                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">User Group</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                    <select id="UserGroupID" name="UserGroupID" class="form-control"> </select>
+                                                    @Html.ValidationMessageFor(model => model.UserGroupID, "", new { @class = "text-danger" })
+                                                    <div class="text-danger"> @ViewBag.UserGroupError</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">User Cannot Change the Password</label>
+                                                <div class="checkbox col-xs-1 ">
+                                                    @Html.CheckBoxFor(model => model.IsUserCantChangePassword, new { @class = "flat",ID= "IsUserCantChangePassword" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">User Must Change the Password</label>
+                                                <div class="checkbox col-xs-1 ">
+                                                    @Html.CheckBoxFor(model => model.IsUserMustChangePassword, new { @class = "flat",ID= "IsUserMustChangePassword" })
+                                                </div>
+                                            </div>
+                                          
+                                            
+                                                <div class="form-group">
+                                                    @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                    <div class="checkbox col-xs-1 ">
+                                                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat", ID = "IsActive" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                                    <div class="checkbox col-xs-1">
+                                                        @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat", ID = "IsDelete" })
+                                                    </div>*@
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <br />
+                                            <div>
+                                                User Group Permissions
+                                               
+                                            </div>
+
+                                                    <table id="datatablepermissions" class="table table-striped table-bordered bulk_action">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th ></th>*@
+                                                            <th style='display:none'></th>
+                                                            <th><input type="checkbox" id="GrantAll" name="GrantAll" class="chkbox" /> Access  </th>
+                                                            <th>Function</th>
+                                                            <th>Function Description</th>
+                                                            @*<th></th>*@
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody id="permissions">
+
+                                                    </tbody>
+                                                </table>
+
+                                       
+                                                <select id="permissionlist" style="display:none" name="permissionlist"></select>
+                                        
+
+                                                 <div class="actionBar">
+                                                     <div class="msgBox">
+                                                        
+                                                        <div class="btn btn-primary pl_add btn-small pull-left">
+                                                           
+                                                          
+                                                            @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                        </div>
+                                                        <div class="btn btn-info pl_add btn-small pull-left">
+                                                            @Html.ActionLink("View All", "ViewUsers", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                        </div>
+                                                        <input type="submit" value="Submit" class="btn btn-success"/>
+                                                        @*<input type="submit" value="Submit" class="btn btn-success" onclick="myFunction();" />*@
+                                                    
+                                                    </div>
+                                                </div>
+                                        @*</form>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                @*</div>*@
+            }
+
+        </div>
+    </div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {     
+        $('#GrantAll').change(function () {
+            debugger;
+            var length = $("#permissions").children("tr").length;
+            if ($(this).is(":checked")) {                            
+                for (i = 0; i < length ; i++) {
+                    $("#SysUserGroupPermission" + i + "_IsGrant").prop('checked', true);
+                    $("#SysUserGroupPermission" + i + "_IsGrant").val = true;
+                }
+
+            } else
+            {
+                for (i = 0; i < length ; i++) {
+                    $("#SysUserGroupPermission" + i + "_IsGrant").prop('checked', false);
+                    $("#SysUserGroupPermission" + i + "_IsGrant").val = false;
+                }
+            }
+           
+        });
+    });
+</script>
+
+
+
+
+<script>
+
+    $.getJSON("@Url.Action("GetActiveEmployees", "Employee")", function (data) {
+
+        var EmployeeCode = $("#EmployeeCode");
+
+        EmployeeCode.empty();
+        EmployeeCode.append("<option value='0'>-- Select an Employee --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            EmployeeCode.append($('<option />', { value: optionaldata.EmployeeCode }).html(optionaldata.EmployeeName));
+        });
+
+        if ('@ViewBag.EmployeeCode') {
+            $('#EmployeeCode').val('@ViewBag.EmployeeCode').trigger("change");
+        } else {
+            $('#EmployeeCode').val(0).trigger("change");
+        }
+
+
+    });
+
+
+    $.getJSON("@Url.Action("GetActiveUserGroupes", "UserGroup")", function (data) {
+
+        var UserGroup = $("#UserGroupID");
+
+        UserGroup.empty();
+        UserGroup.append("<option value='0'>-- Select a User Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            UserGroup.append($('<option />', { value: optionaldata.SysUserGroupID }).html(optionaldata.UserGroupName));
+        });
+
+        if ('@ViewBag.UserGroupID') {
+            $('#UserGroupID').val(@ViewBag.UserGroupID).trigger("change");
+        } else {
+            $('#UserGroupID').val(0).trigger("change");
+        }
+
+
+    });
+    $(document).ready(function () {
+        $('#UserGroupID').change(function () {
+            var groupid = this.value;
+            GetPermissions(groupid);
+        });
+    });
+
+
+
+    function ft() {
+        //  event.preventDefault();
+        // event.stopPropagation();
+        $("#permissions input:checkbox:checked").map(function () {
+            var functionname = $(this).closest('td').next('td').text();
+            var id = $(this).attr('id');
+            $('#permissionlist').append('<option value="' + id + '">' + functionname + '</option>');
+
+        }).get();
+    }
+
+    function myFunction() {
+
+
+        ft();
+
+        var e = document.getElementById("UserGroupID");
+        var strUser = e.options[e.selectedIndex].value
+
+        var chkIsUserCantChangePassword = $("#IsUserCantChangePassword").is(":checked")
+        var chkIsUserMustChangePassword = $("#IsUserMustChangePassword").is(":checked")
+        var chkactive = $("#IsActive").is(":checked")
+        var chkIsDelete = $("#IsDelete").is(":checked")
+
+        var x = document.getElementById("permissionlist");
+        var j, i;
+
+        for (i = 0; i < x.options.length; i++) {
+
+            console.log(x.options[i].value);
+            j += x.options[i].value + "-";
+
+        }
+
+        $.ajax(
+            {
+                type: "POST",
+                url: "Create/UserMaster",
+
+                data:
+                {
+
+                    EmployeeCode: $("#EmployeeCode").val(),
+                    UserName: $("#UserName").val(),
+                    UserDescription: $("#UserDescription").val(),
+                    Password: $("#Password").val(),
+                    ConfirmPassword: $("#ConfirmPassword").val(),
+                    UserGroupID: strUser,
+                    IsUserCantChangePassword: chkIsUserCantChangePassword,
+                    IsUserMustChangePassword: chkIsUserMustChangePassword,
+                    IsDelete: chkIsDelete,
+                    IsActive: chkactive,
+                    permissionlist: j,
+
+                }
+
+            });
+
+
+    }
+
+    function Check() {
+
+    }
+
+
+    function GetPermissions(id) {
+        $.ajax({
+            url: "/UserGroup/GetAllPermissions",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data: { id: id },
+            dataType: "json",
+            success: function (data) {
+            
+                $("#permissions tr").remove();
+
+                $.each(data, function (index, item)
+                {
+                    debugger;
+                   
+                    var unitindex = $("#permissions").children("tr").length;
+
+                    var unitindexCell = "<td style='display:none' ><input name='SysUserGroupPermission.Index' type='hidden' value='" +
+                        unitindex + "' /></td>";
+
+                    var unitIdCell = "<td style='display:none'><input id='SysUserGroupPermission" + unitindex + "_SysUserGroupPermissionID' class='form-control' name='SysUserGroupPermission[" +
+                        unitindex + "].SysUserGroupPermissionID' type='text' type='hidden' readonly value='" + item.SysUserGroupPermissionID + "' /></td>";
+
+                    var unitIsGrantCell = "<td><input id='SysUserGroupPermission" + unitindex + "_IsGrant' class='chkbox' name='SysUserGroupPermission[" +
+                        unitindex + "].IsGrant'  type='checkbox' checked='checked' value='" + item.IsGrant + "'  /></td>";
+         
+                    var unitNameCell = "<td><input id='SysUserGroupPermission" + unitindex + "_FunctionName' class='form-control' name='SysUserGroupPermission[" +
+                        unitindex + "].FunctionName' type='text' readonly value='" + item.FunctionName + "' /></td>";
+
+                    var unitDescCell = "<td><input id='SysUserGroupPermission" + unitindex + "_FunctionDescription' class='form-control' name='SysUserGroupPermission[" +
+                        unitindex + "].FunctionDescription' type='text' readonly value='" + item.FunctionDescription + "' /></td>";
+                 
+                    var newUnitRow = "<tr id='trpermissions" + unitindex + "'>" +
+                        unitindexCell +
+                        unitIdCell +
+                        unitIsGrantCell +
+                        unitNameCell +
+                        unitDescCell +                         
+                        "</tr>";
+                    $("#permissions").append(newUnitRow);
+                });
+             
+            },
+            error: function (result) {
+                alert("an error occurred");
+            }
+        });
+    }
+</script>
+
+
+
+
+
+
+

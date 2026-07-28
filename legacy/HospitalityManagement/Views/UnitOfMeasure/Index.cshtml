@@ -1,0 +1,133 @@
+﻿@model RIT.HMS.Domain.UnitOfMeasure
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Create", "UnitOfMeasure", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit of Measure</strong> @ViewBag.UnitOfMeasureCode saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit of Measure</strong> @ViewBag.UnitOfMeasureCode save failed.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "3")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit of Measure</strong> @ViewBag.UnitOfMeasureCode already exists.
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Unit of Measure</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Unit of Measure Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.UnitOfMeasureCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 50,
+                                                   Placeholder = "Unit of Measure Code",
+                                                   onkeypress = "return checkCodeTypeInput(event)"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.UnitOfMeasureCode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Unit of Measure Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.UnitOfMeasureName, new { @class = "form-control", MaxLength = 50, Placeholder = "Unit of Measure Name" })
+                                                @Html.ValidationMessageFor(model => model.UnitOfMeasureName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control", MaxLength = 50, Placeholder = "Remark" })
+                                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+
+                                            </div>*@
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewUnitOfMeasures", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+

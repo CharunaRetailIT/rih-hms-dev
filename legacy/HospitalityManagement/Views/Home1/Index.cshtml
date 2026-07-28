@@ -1,0 +1,631 @@
+﻿@model RIT.HMS.Domain.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+    <link href="~/Content/HomeIndex.css" rel="stylesheet" />
+
+@using (Html.BeginForm("", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+
+    
+<body>
+
+    <div class="right_col" role="main">
+        <div class="">
+
+           <div class="pull-left">
+               <h5>Today</h5>
+           </div> 
+         <div class="clearfix"></div>
+
+          <div class="row top_tiles"id="frt" >
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats" id="oneone">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">@Model.POCount</div>
+                        <h3 style="color:black;">New POs</h3>
+                        <p>@DateTime.Now.Date.ToShortDateString()</p>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats" id="onetwo">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">@Model.ProductionCount</div>
+                        <h3 style="color:black;">Productions</h3>
+                        <p>@DateTime.Now.Date.ToShortDateString()</p>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats" id="onetree">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">@Model.TOGCount</div>
+                        <h3 style="color:black;">Stock Transfers</h3>
+                        <p>@DateTime.Now.Date.ToShortDateString()</p>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats" id="onelast">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">0</div>
+                        <h3 style="color:black;">New Signups</h3>
+                        <p>(@DateTime.Today.Date.AddDays(-7).ToShortDateString() - @DateTime.Today.Date.ToShortDateString())</p>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="pull-left">
+                <h5 class="subtit">This Week</h5>
+            </div>
+           
+            <div class="clearfix"></div>
+
+            <div class="row top_tiles" id="frt">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats" id="twoone">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">@Model.POCountThisWeek</div>
+                        <h3 style="color:black;">New POs</h3>
+                        <p>(@DateTime.Today.Date.AddDays(-7).ToShortDateString() - @DateTime.Today.Date.ToShortDateString())</p>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats"  id="twotwo">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">@Model.ProductionCountThisWeek</div>
+                        <h3 style="color:black;">Productions</h3>
+                        <p>(@DateTime.Today.Date.AddDays(-7).ToShortDateString() - @DateTime.Today.Date.ToShortDateString())</p>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats"  id="twotree">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">@Model.ProductionCountThisWeek</div>
+                        <h3 style="color:black;">Stock Transfers</h3>
+                        <p>(@DateTime.Today.Date.AddDays(-7).ToShortDateString() - @DateTime.Today.Date.ToShortDateString())</p>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="color:black;">
+                    <div class="tile-stats"  id="twolast">
+                        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                        <div class="count">0</div>
+                        <h3 style="color:black;">New Signups</h3>
+                        <p>(@DateTime.Today.Date.AddDays(-7).ToShortDateString() - @DateTime.Today.Date.ToShortDateString())</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+           <div class="row">
+                @*<div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Weekly Summary <small>Activity shares</small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li>
+                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="#">Settings 1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Settings 2</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="row" style="border-bottom: 1px solid #E0E0E0; padding-bottom: 5px; margin-bottom: 5px;">
+                                <div class="col-md-7" style="overflow:hidden;">
+                                    <span class="sparkline_one" style="height: 160px; padding: 10px 25px;">
+                                        <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
+                                    </span>
+                                    <h4 style="margin:18px">Weekly sales progress</h4>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row" style="text-align: center;">
+                                        <div class="col-md-4">
+                                            <canvas class="canvasDoughnut" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                                            <h4 style="margin:0">Bounce Rates</h4>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <canvas class="canvasDoughnut" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                                            <h4 style="margin:0">New Traffic</h4>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <canvas class="canvasDoughnut" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                                            <h4 style="margin:0">Device Share</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+
+           <div class="row">
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                   <div class="x_panel">
+                       <div class="x_title">
+                           <h2><small></small></h2>
+                           <ul class="nav navbar-right panel_toolbox">
+                               <li>
+                                   <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                               </li>
+                               @*<li class="dropdown">
+                                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                   <ul class="dropdown-menu" role="menu">
+                                       <li>
+                                           <a href="#">Settings 1</a>
+                                       </li>
+                                       <li>
+                                           <a href="#">Settings 2</a>
+                                       </li>
+                                   </ul>
+                               </li>*@
+                               <li>
+                                   @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                               </li>
+                           </ul>
+                           <div class="clearfix"></div>
+                       </div>
+                       <div class="x_content">
+                           <div class="">
+                               <div id="colcontainer">
+
+                               </div>
+                              
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                   <div class="x_panel">
+                       <div class="x_title">
+                           <h2><small></small></h2>
+                           <ul class="nav navbar-right panel_toolbox">
+                               <li>
+                                   <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                               </li>
+                               @*<li class="dropdown">
+                                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                   <ul class="dropdown-menu" role="menu">
+                                       <li>
+                                           <a href="#">Settings 1</a>
+                                       </li>
+                                       <li>
+                                           <a href="#">Settings 2</a>
+                                       </li>
+                                   </ul>
+                               </li>*@
+                               <li>
+                                   @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                               </li>
+                           </ul>
+                           <div class="clearfix"></div>
+                       </div>
+                       <div class="x_content">
+                           <div class="">
+                               <div id="piecontainer">
+
+                               </div>
+
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+
+}
+
+@*<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>*@
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/Charts/highcharts.js"></script>
+<script src="~/Scripts/Charts/highcharts-more.js"></script>
+<script src="~/Scripts/Charts/exporting.js"></script>
+
+
+
+
+<script>
+   
+    $.ajax({
+        url: "@Url.Action("Top10Productions", "Home")",
+        data: {id:1},
+        type: "GET",
+        dataType: "json",
+        success: function (resp)
+        {  
+           
+            var names = [];
+            var vals = [];
+            var common = [];
+
+            $.each(resp, function (i, item) {
+
+                names.push(item.ProductName);
+                vals.push(item.ProductCount);
+                common.push({ name:item.ProductName, y: item.ProductCount });
+            });
+          
+            Highcharts.setOptions({
+                colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5']
+            });
+
+
+            var chart = Highcharts.chart('colcontainer', {
+
+                title: {
+                    text: 'Top Productions'
+                },
+
+                subtitle: {
+                    text: 'This Month'
+                },
+
+                xAxis: {
+                    categories: names
+
+                },
+
+                series: [{
+                    type: 'column',
+                    colorByPoint: true,
+                    showInLegend: false,
+                    name: "Productions",
+                    data: vals,
+                }]
+
+            });
+
+         
+            Highcharts.setOptions({
+                colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+            });
+
+            Highcharts.chart('piecontainer', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Top Productions (%)'
+                },
+                subtitle: {
+                    text: 'This Month'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Productions',
+                    colorByPoint: true,                   
+                    data: common
+                }]
+            });
+
+        },
+        error: function(error) 
+        {
+          //  alert(error);
+        }
+
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="container body">
+
+        <div class="main_container">
+            <div class="right_col" role="main">
+            
+                <div class="col-md-6 col-xs-12" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Form Validation</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                              <button class="btn btn-default" type="button">Go!</button>
+                          </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Form validation <small>sub title</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <form class="form-horizontal form-label-left" novalidate>
+
+                      <p>For alternative validation library <code>parsleyJS</code> check out in the <a href="form.html">form page</a>
+                      </p>
+                      <span class="section">Personal Info</span>
+
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="both name(s) e.g Jon Doe" required="required" type="text">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="email" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Confirm Email <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="email" id="email2" name="confirm_email" data-validate-linked="email" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="number">Number <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="number" name="number" required="required" data-validate-minmax="10,100" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="website">Website URL <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="url" id="website" name="website" required="required" placeholder="www.website.com" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="occupation">Occupation <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="occupation" type="text" name="occupation" data-validate-length-range="5,20" class="optional form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label for="password" class="control-label col-md-3">Password</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="password" type="password" name="password" data-validate-length="6,8" class="form-control col-md-7 col-xs-12" required="required">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">Repeat Password</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="password2" type="password" name="password2" data-validate-linked="password" class="form-control col-md-7 col-xs-12" required="required">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Telephone <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="tel" id="telephone" name="phone" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Textarea <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <textarea id="textarea" required="required" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button id="send" type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            
+            
+            </div>
+    </div>
+
+ </div>*@
+
+   
+      @*<script src="../vendors/jquery/dist/jquery.min.js"></script>*@
+
+
+
+    <!-- Bootstrap -->
+    @*<script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- validator -->
+    <script src="../vendors/validator/validator.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>    
+
+  <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="../vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>*@

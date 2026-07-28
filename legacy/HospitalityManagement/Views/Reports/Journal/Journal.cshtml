@@ -1,0 +1,461 @@
+﻿@model RIT.HMS.Domain.ViewModels.Reports.JournalViewModel
+@{
+    ViewBag.Title = "RPTSalesRegister";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Report.css" rel="stylesheet" />
+
+
+
+
+@using (Html.BeginForm("RPTRecipts", "Report", FormMethod.Post, new { @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Journal Report<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="row">
+                                <div class="form-horizontal form-label-left col-md-7">
+                                    <div class="form-group">
+                                        <label class="control-label  col-md-2 col-sm-2 col-xs-2">Date From</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-4">
+                                            @Html.TextBoxFor(model => model.DateFrom, new
+                                           {
+                                               @class = "form-control",
+                                               @id = "DateFrom",
+                                               @Type = "date",
+                                               @Value = Model.DateFrom.ToString("yyyy-MM-dd"),
+                                               Placeholder = "From Date"
+                                           })
+                                            @Html.ValidationMessageFor(model => model.DateFrom, "", new { @class = "text-danger" })
+                                        </div>
+                                        <label class="control-label  col-md-2 col-sm-2 col-xs-2">To</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-4">
+                                            @Html.TextBoxFor(model => model.DateTo, new
+                                           {
+                                               @class = "form-control",
+                                               @id = "DateTo",
+                                               @Type = "date",
+                                               @Value = Model.DateTo.ToString("yyyy-MM-dd"),
+                                               Placeholder = "From Date"
+                                           })
+                                            @Html.ValidationMessageFor(model => model.DateTo, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group">
+                                        <label class="control-label  col-md-2 col-sm-2 col-xs-2">Location</label>
+                                        <div class="col-md-10 col-sm-10 col-xs-10">
+                                            <select id="LocationId" name="LocationId" class="form-control"></select>
+                                            @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-2">Unit</label>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                            <select id="UnitNo" name="UnitNo" class="form-control"></select>
+                                            @Html.ValidationMessageFor(model => model.UnitNo, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Recipt</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="ReciptNo" name="ReciptNo" class="select2 form-control"></select>
+                                            </div>
+                                        </div>*@
+                                </div>
+                                <div class="clearfix"></div>
+                                <div>
+                                    <div class="form-group ">
+                                        <div class="col-md-3 col-sm-9 col-xs-9 pull-right">
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                            <div class="btn-group">
+
+                                                <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="#" onclick="$('#printcontent').tableExport({ type: 'excel', escape: 'false' });">
+                                                            <img src='~/Content/Images/icons/xls.png' width="10" /> XLS
+                                                        </a>
+                                                    </li>
+                                                    <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" /> PDF</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="clearfix"></div>
+                            <br />
+                            <div class="x_content">
+                                <table id="datatable-responsive" class="mstable">
+                                    <thead>
+                                        <tr>
+                                            <th>Recipt Number</th>
+                                            <th>Date</th>
+                                            <th>Unit No</th>
+                                            <th>Z No</th>
+                                            <th></th>
+
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (var item in Model.InvRecipts)
+                                        {
+                                            <tr>
+                                                <td>@item.ReciptNo</td>
+                                                <td>@item.Date.ToShortDateString()</td>
+                                                <td>@item.UnitNo</td>
+                                                <td>@item.Zno</td>
+                                                @*<td>
+                                                        <a href="javascript:void(0);"
+                                                           class="anchorDetail"
+                                                           data-id="@item.TransactionDetId">Print</a>
+                                                    </td>*@
+
+
+                                                <td>
+                                                    <a href="javascript:void(0);"
+                                                       class="anchorDetail"
+                                                       data-id="@item.TransactionDetId"
+                                                       data-reciptno="@item.ReciptNo"
+                                                       data-date="@item.Date.ToShortDateString()"
+                                                       data-unitno="@item.UnitNo"
+                                                       data-zno="@item.Zno"
+                                                       data-locationid="@item.LocationId">
+                                                        Print
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            @*<div id="printcontent">
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-12">
+                                        <div style="font-weight:bold">
+                                            <div class="col-md-4" style="text-align:left">Vat Reg No:@Model.VatRegNo</div>
+                                            <div class="col-md-4" style="text-align:left">Recipt No:@Model.ReciptNo</div>
+
+
+                                            <div class="col-md-4" style="text-align:left">Catering Mode :@Model.CateringMode</div>
+                                            <div class="col-md-4" style="text-align:left">Guest: @Model.NoOfGuests</div>
+
+                                            <div class="col-md-4" style="text-align:left">Cashier:@Model.Cashier</div>
+                                            <div class="col-md-4" style="text-align:left">Unit:@Model.UnitNo</div>
+                                        </div>
+                                            <hr />
+                                            <br />
+
+                                        <table class="col-md-8">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th style="text-align:right">Price</th>
+                                                    <th style="text-align:right">Qty</th>
+                                                    <th style="text-align:right">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            @if (Model.InvProducts.Count != 0 || Model.InvProducts != null)
+                                            {
+                                            <tbody>
+                                                @foreach (var p in Model.InvProducts) {
+                                                <tr>
+                                                    <td>@p.ProductName</td>
+                                                    <td style="text-align:right">@p.Price.ToString("n2")</td>
+                                                    <td style="text-align:right">@p.Qty.ToString("n2")</td>
+                                                    <td style="text-align:right">@p.Amount.ToString("n2")</td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                            }
+
+                                            <tfoot style="font-weight:bold">
+                                                <tr style="color:white;">
+                                                    <td>.</td>
+                                                    <td>.</td>
+                                                    <td>.</td>
+                                                    <td>.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sub Total:</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="text-align:right">@Model.SubTotal.ToString("n2")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Advance Note No:
+                                                    </td>
+                                                    <td>@Model.AdvanceNoteNo</td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Net Total:</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="text-align:right">@Model.NetTotal.ToString("n2")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cash:</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="text-align:right">@Model.Cash.ToString("n2")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Balance:</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="text-align:right">@Model.Balance.ToString("n2")</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+
+                                      <div class="clearfix"></div>
+                                        <div style="font-weight:bold">
+                                            <div class="col-md-8">
+                                                <hr />
+                                                <div class="col-md-4">No of Items:@Model.InvProducts.Count().ToString("n2")</div>
+                                                <div class="col-md-4">No Of Pices:@Model.InvProducts.Sum(i => i.Qty).ToString("n2")</div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="col-md-4">Date:@Model.Date.ToShortDateString()</div>
+                                                <div class="col-md-4">Time:@Model.Time</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div id='myModal' class='modal'>
+                            <div class="col-md-12">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div id='myModalContent'>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+}
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+@*<script>
+        var TeamDetailPostBackURL = '/Report/Print';
+        $(function () {
+            $(".anchorDetail").click(function () {
+                debugger;
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: TeamDetailPostBackURL,
+                    contentType: "application/json; charset=utf-8",
+                    data: { "id": id},
+                    datatype: "json",
+                    success: function (data) {
+                        debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+    </script>*@
+
+<script>
+    var TeamDetailPostBackURL = '/Report/Print';
+
+    $(function () {
+        $(".anchorDetail").click(function () {
+            var $buttonClicked = $(this);
+
+            // Extract all required data attributes
+            var reciptNo = $buttonClicked.data('reciptno');
+            var date = $buttonClicked.data('date');
+            var unitNo = $buttonClicked.data('unitno');
+            var zno = $buttonClicked.data('zno');
+            var locationId = $buttonClicked.data('locationid'); // corrected: case-sensitive
+
+            var options = { backdrop: "static", keyboard: true };
+
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: {
+                    id: 0,
+                    reciptNo: reciptNo,
+                    date: date,
+                    unitNo: unitNo,
+                    zno: zno,
+                    LocationId: locationId
+                },
+                dataType: "html", // important if returning a partial view/modal
+                success: function (data) {
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+</script>
+
+
+
+@*<script>
+        $(document).ready(function () {
+            $('#datatable-responsive').dataTable({
+                "bPaginate": false
+            });
+        });
+    </script>*@
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var LocationID = $("#LocationId");
+
+        LocationID.empty();
+        LocationID.append("<option value='0'>-- Select A Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            LocationID.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@Model.LocationId') {
+            $('#LocationId').val(@Model.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });
+
+    $("#LocationId").change(
+   function () {
+       var loc = this.value;
+
+       $.getJSON("@Url.Action("GetReciptsByLocId", "Report")", { locid: loc, },
+           function (data) {
+               var Recipt = $("#ReciptNo");
+               Recipt.empty();
+
+               $.each(JSON.parse(data), function (index, optionaldata) {
+                   Recipt.append($('<option />', { value: optionaldata.Receipt }).html(optionaldata.Receipt));
+               });
+           });
+
+       $.getJSON("@Url.Action("GetUnitNumbersByLocId", "Report")", { locid: loc, },
+           function (data) {
+               var UnitNo = $("#UnitNo");
+               UnitNo.empty();
+               UnitNo.append("<option value='0'>-- All Units --</option>");
+               $.each(JSON.parse(data), function (index, optionaldata) {
+                   UnitNo.append($('<option />', { value: optionaldata.UnitNo }).html(optionaldata.UnitNo));
+               });
+           });
+   });
+
+
+
+    $.getJSON("@Url.Action("GetUnitNumbers", "Report")", function (data) {
+
+        var UnitNo = $("#UnitNo");
+
+        UnitNo.empty();
+        UnitNo.append("<option value='0'>-- All Units --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            UnitNo.append($('<option />', { value: optionaldata.UnitNo }).html(optionaldata.UnitNo));
+
+        });
+
+        if ('@Model.UnitNo') {
+            $('#UnitNo').val(@Model.UnitNo).trigger("change");
+        } else {
+            $('#UnitNo').val(0).trigger("change");
+        }
+
+
+    });
+
+
+
+</script>
+@*<script>
+            document.getElementById('FromDate').Value=@ViewBag.FromDate;
+    </script>*@
+<script type="text/javascript">
+    function PrintDiv() {
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+</script>
+
+
+
+
+

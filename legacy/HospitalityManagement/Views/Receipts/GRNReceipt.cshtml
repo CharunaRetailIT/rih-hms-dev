@@ -1,0 +1,185 @@
+﻿@model RIT.HMS.Domain.Transactions.PurchaseHeader
+@{
+    ViewBag.Title = "Print GRN";
+    Layout = null;
+}
+
+@using (Html.BeginForm("CreateGRN", "GRN", FormMethod.Get, new
+{
+    @class = "form-horizontal",
+    
+}))
+
+
+
+{
+
+<div class="right_col" role="main"> 
+        <div class="clearfix"></div>
+        <div class="row">   
+                
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+
+                    <div id="printcontent">
+                        <div class="x_title" style="text-align:center">
+                            <h2>GRN Receipt</h2>
+                            <br />
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <div>
+                            <table align="left">
+                                <tr >
+                                    <td>
+                                        <label class="control-label">Company: @Model.Company </label>
+                                    </td>
+                                    <td width="10%">
+
+                                    </td> 
+                                    <td>
+                                        <label class="control-label">Location: @Model.Location </label>
+                                    </td>                                  
+                                </tr>
+                              
+                                <tr>
+                                    <td>
+                                        <label class="control-label">Doc #: @Model.DocumentNo </label>
+                                    </td>
+                                    <td width="10%"></td> 
+                                    <td>
+                                        <label class="control-label">Doc Date: @Model.CreatedDate </label>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <label class="control-label">Create User: @Model.CreatedUser </label>
+                                    </td>
+                                    <td width="10%"></td> 
+                                    <td>
+                                        <label class="control-label">Print Date: @DateTime.Now </label>
+                                    </td>    
+                                </tr>
+                              
+                            </table>
+                           </div>
+                            <br />
+                          <div class="clearfix"></div>
+                           
+
+                            <br />
+
+                            <div class="table-responsive">
+
+                                @if (Model.GRNDetail != null)
+                                {
+
+
+                                    <table id="tblstock" class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                            <tr class="headings">
+                                                <th class="column-title col-md-3">Product Id</th>
+                                                <th class="column-title col-md-3">Product Code</th>
+                                                <th class="column-title col-md-3">Product Name</th>
+                                                <th class="column-title col-md-3">PO Quantity </th>
+                                                <th class="column-title col-md-3">GRN Quantity </th>
+                                                <th class="column-title col-md-3">Discounts</th>
+                                                <th class="column-title col-md-3">Cost Price</th>
+                                                <th class="column-title col-md-3">Selling Price</th>
+                                                <th class="column-title col-md-3">Tax</th>
+                                                
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            @foreach (var item in Model.GRNDetail)
+                                            {
+                                                <tr class="even pointer">
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductID)</td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductID)</td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.OrderQty)</td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.GRNQuantity) </td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.Discount) </td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.CostPrice) </td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.SellingPrice) </td>
+                                                    <td class="">@Html.DisplayFor(modelItem => item.TotalTax) </td>
+                                                   
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td>Tot Cost Price: @Model.TotCostPrice</td>
+                                                <td>Tot Selling Price: @Model.TotSellingPrice</td>
+                                                <td>Tot Discounts : @Model.TotDiscounts</td>
+                                                <td>Tot Tax : @Model.TotalTax</td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+
+                                }
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+              
+
+                <div class="actionBar">
+                    <div class="msgBox">
+                        <button type="submit" class="btn btn-primary pull-right">Back</button>                      
+                        <div class="btn-group">                       
+                            <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                        <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                    </a>
+                                </li>
+                                <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+</div>
+
+}
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function PrintDiv() {
+        var divContents = document.getElementById("printcontent").innerHTML;
+        var printWindow = window.open('', '', 'height=200,width=400');
+        printWindow.document.write('<html><head><title></title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(divContents);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+
+        $(document).ready(function () {
+            $('#printcontent').DataTable();
+        });
+    }
+</script>
+
+
+

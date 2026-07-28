@@ -1,0 +1,581 @@
+﻿@model RIT.HMS.Domain.Employee
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.EmployeeID);
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Employee</strong> @ViewBag.EmployeeCode modified successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Employee</strong> @ViewBag.EmployeeCode failed to modify.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Can't be select Active and Delete options in the same time..!
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Employee - Edit</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                              
+
+
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+                                      
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Employee Code*</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.EmployeeCode,
+                                                   new
+                                                   {
+                                                       @class = "form-control",
+                                                       MaxLength = 5,
+                                                       Placeholder = "Code",
+                                                       @readonly = true
+                                                   }
+                                               )
+                                                @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @{ bool disableEmployeeMandatoryField = Session["DisableEmpoyeeMandoryField"] != null && (bool)Session["DisableEmpoyeeMandoryField"]; }
+                                            @if (disableEmployeeMandatoryField)
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">EPF No </label> 
+                                            }
+                                            else
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">EPF No *</label>
+                                            }
+
+
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.EpfNo,
+                                                   new
+                                                   {
+                                                       @class = "form-control",
+                                                       MaxLength = 50,
+                                                       Placeholder = "EPF No"
+                                                   }
+                                               )
+
+                                                @if (!disableEmployeeMandatoryField)
+                                                {
+
+                                                    @Html.ValidationMessageFor(model => model.EpfNo, "", new { @class = "text-danger pull-left" })
+
+                                                }
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Title</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <select id="EmployeeTitle" name="EmployeeTitle" class="form-control">
+                                                    @*<option value="0">-Title-</option>*@
+                                                    <option value="Mr">Mr.</option>
+                                                    <option value="Mrs">Mrs.</option>
+                                                    <option value="Mrs">Ms.</option>
+                                                    <option value="Miss">Miss.</option>
+                                                    <option value="Dr">Dr.</option>
+                                                    <option value="Rev">Rev.</option>
+                                                </select>
+
+                                                @Html.ValidationMessageFor(model => model.EmployeeTitle, "", new { @class = "text-danger pull-left" })
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Name *</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.EmployeeName, new { @class = "form-control", Placeholder = "Name" })
+                                                @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Male</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.RadioButtonFor(m => m.Gender, "Male", new { @checked = "checked" })
+                                                </div>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Female</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.RadioButtonFor(m => m.Gender, "Female")
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 01 *</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 01 </label>
+
+                                            }
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.Address1, new { @class = "form-control", Placeholder = "Address 01" })
+
+                                                @if (!disableEmployeeMandatoryField)
+                                                {
+                                                    @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger pull-left" })
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+
+
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 02 *</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 02 </label>
+
+                                            }
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.Address2, new { @class = "form-control", MaxLength = 20, Placeholder = "Address 02" })
+                                                @if (!disableEmployeeMandatoryField)
+                                                {
+                                                    @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger pull-left" })
+                                                }
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 03</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Address3, new { @class = "form-control", MaxLength = 20, Placeholder = "Address 03" })
+                                                @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">DOB *</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">DOB </label>
+
+                                            }
+                                            <div class="col-md-9 col-sm-9">
+                                                @Html.TextBoxFor(model => model.DOB, new
+                                           {
+                                               @class = "form-control pull-left",
+                                               Type = "date",
+                                               @Value = Model.DOB.ToString("yyyy-MM-dd"),
+                                               @Style = "width:50%",
+                                               Placeholder = "DOB"
+                                           })
+                                                @if (!disableEmployeeMandatoryField)
+                                                {
+                                                    @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger pull-left" })
+                                                }
+                                            </div>
+
+                                        </div>
+
+                                        @*<div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-3">Designation</label>
+            <div class="col-md-9 col-sm-9 col-xs-9">
+                @Html.TextBoxFor(model => model.Designation, new { @class = "form-control", Placeholder = "Designation" })
+                @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger pull-left" })
+            </div>
+        </div>*@
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Designation</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                <select id="Designation" name="Designation" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+                                        <br />
+
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location*</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="LocationId" name="LocationId" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Department *</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="DepartmentID" name="DepartmentID" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.DepartmentID, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Employee Group*</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="EmployeeGroupID" name="EmployeeGroupID" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.EmployeeGroupID, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Photograph</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 pull-left">
+                                                <input type="file" id="Photograph" name="Photograph" class="flat pull-left" />
+                                                @Html.ValidationMessageFor(model => model.Photograph, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                            <div class="pull-left col-xs-2">
+                                                @ViewBag.FileName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">NIC *</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">NIC </label>
+
+                                            }
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            @Html.TextBoxFor(model => model.NIC, new { @class = "form-control", MinLength = 10, MaxLength = 12, Placeholder = "NIC", pattern = "^([0-9]{9}[x|X|v|V]|[0-9]{12})$" })
+
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+
+                                                @Html.ValidationMessageFor(model => model.NIC, "", new { @class = "text-danger pull-left" })
+                                            }
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Passport</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Passport, new { @class = "form-control", Placeholder = "Passport" })
+                                                @Html.ValidationMessageFor(model => model.Passport, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Telephone</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @*@Html.TextBoxFor(model => model.Telephone, new { @class = "form-control", Placeholder = "Telephone" })
+                        @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })*@
+
+
+                                                @Html.TextBoxFor(model => model.Telephone, new
+                                           {
+                                               @class = "form-control",
+                                               min = 0,
+                                               Type = "text",
+                                               Placeholder = "Telephone",
+                                               MaxLength = 10,
+                                               onkeypress = "validateInputForNumbers(event)"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger pull-left", MinLength = 10 })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Mobile *</label>
+                                            }
+                                            else
+                                            {
+
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Mobile </label>
+                                            }
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            @*@Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", Placeholder = "Mobile" })
+        @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })*@
+
+                                            @Html.TextBoxFor(model => model.Mobile, new
+                                       {
+                                           @class = "form-control",
+                                           min = 0,
+                                           Type = "text",
+                                           Placeholder = "Mobile",
+                                           MaxLength = 10,
+                                           onkeypress = "validateInputForNumbers(event)"
+                                       })
+                                            @if (!disableEmployeeMandatoryField)
+                                            {
+                                                @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger pull-left", MinLength = 10 })
+                                            }
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">E Mail</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", Type = "email", Placeholder = "E Mail" })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+                                        <br /><br />
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                                </div>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Delete</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Edit", null, new { })'" />
+                                            </div>
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewEmployees", null, new { })'" />
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Modify</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function validateInputForNumbers(evt) {
+        debugger;
+        var theEvent = evt || window.event;
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+</script>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#LocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+        });
+
+        if ('@ViewBag.LocationId') {
+            $('#LocationId').val(@ViewBag.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });
+
+
+    $.getJSON("@Url.Action("GetActivePOSUserGroupes", "UserGroup")", function (data) {
+
+        var Designation = $("#Designation");
+
+        Designation.empty();
+        Designation.append("<option value='0'>-- Select a Designation --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            Designation.append($('<option />', { value: optionaldata.POSUserGroupId }).html(optionaldata.POSUserGroupName));
+        });
+
+        if ('@ViewBag.Designation') {
+            $('#Designation').val(@ViewBag.Designation).trigger("change");
+        } else {
+            $('#Designation').val(0).trigger("change");
+        }
+
+    }
+    );
+
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+    $.getJSON("@Url.Action("GetActiveInterDepartments", "InterDepartment")",
+        function (data)
+        {
+
+            var departmentGroupDropDown = $("#DepartmentID");
+            //var CompanyCodelist = $("#CompanyID");
+
+            departmentGroupDropDown.empty();
+            departmentGroupDropDown.append("<option value='0'>-- Select a Department--</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata)
+            {
+                departmentGroupDropDown.append($('<option />', { value: optionaldata.InterDepartmentId }).html(optionaldata.InterDepartmentName));
+            });
+
+            if ('@ViewBag.DepartmentID') {
+                $('#DepartmentID').val(@ViewBag.DepartmentID).trigger("change");
+            } else {
+                $('#DepartmentID').val(0).trigger("change");
+            }
+        });
+
+    $("#LocationId").change(function () {
+        var locid = this.value;
+
+        $.getJSON("@Url.Action("GetActiveInterDepartmentsByLocationId", "InterDepartment")", { id: locid },
+            function (data) {
+
+                var DepartmentId = $("#DepartmentID");
+
+                DepartmentId.empty();
+                DepartmentId.append("<option value='0'>-- Select a Department --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    DepartmentId.append($('<option />', { value: optionaldata.InterDepartmentId }).html(optionaldata.InterDepartmentName));
+                });
+
+                @*if ('@ViewBag.CategoryId') {
+                    $('#CategoryId').val(@ViewBag.CategoryId).trigger("change");
+                } else {
+                    $('#CategoryId').val(0).trigger("change");
+            }*@
+            });
+    });
+    document.getElementById("EmployeeTitle").selectedIndex = @ViewBag.sel;
+
+   // document.getElementById("Designation").selectedIndex = @ViewBag.EmployeeGroupID;
+
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveEmployeeGroups", "EmployeeGroup")", function (data) {
+
+        var employeeGroupDropDown = $("#EmployeeGroupID");
+
+        employeeGroupDropDown.empty();
+        employeeGroupDropDown.append("<option value='0'>-- Select a Employee Group--</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            employeeGroupDropDown.append($('<option />', { value: optionaldata.EmployeeGroupID }).html(optionaldata.EmployeeGroupName));
+        });
+
+        if ('@ViewBag.EmployeeGroupID') {
+            $('#EmployeeGroupID').val(@ViewBag.EmployeeGroupID).trigger("change");
+        } else {
+            $('#EmployeeGroupID').val(0).trigger("change");
+        }
+    });
+
+</script>

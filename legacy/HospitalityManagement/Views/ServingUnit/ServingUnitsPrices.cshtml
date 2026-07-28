@@ -1,0 +1,297 @@
+﻿
+@model RIT.HMS.Domain.ViewModels.ServingUnitPricesViewModel
+@{
+    ViewBag.Title = "Serving Units Price Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+
+
+<body class="nav-md">
+    <div class="right_col" role="main" id="bgt">
+        <div class="">
+            <div class="clearfix"></div>
+            @using (Html.BeginForm("UpdatePrices", "ServingUnitsPrices", FormMethod.Post,
+    new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+
+            {
+                <div class="row">
+                    <!-- form input mask -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel" id="test1">
+                            <form class="form-horizontal form-label-left">
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="x_panel">
+                                        <div class="x_title">
+                                            <h2>Serving Units<small>Prices</small></h2>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content">
+                                            @if (@ViewBag.Message == "1")
+                                            {
+                                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong>Prices updated sucessfully</strong>
+                                                </div>
+                                                <br />
+                                            }
+                                            else if (@ViewBag.Message == "2")
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong>Can not update prices</strong>
+                                                </div>
+                                                <br />
+                                            }
+
+
+                                            <div class="clearfix"></div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 col-sm-3 col-xs-3">Product</label>
+                                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                                    @*@Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })*@
+                                                    <select id="ProductId" name="ProductId" class="form-control select2"></select>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                <label class="col-md-3 col-sm-3 col-xs-3">Serving Unit</label>
+                                                @*<div class="col-md-4 col-sm-4 col-xs-4">*@
+                                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                                    @*@Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })*@
+                                                    @*<select id="ServingUnitId" name="ServingUnitId" class="form-control"></select>*@
+                                                    <select id="ServingUnit" name="ServingUnit" class="form-control"></select>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                @*<label class="control-label col-md-3 col-sm-3 col-xs-3">Cost Price *</label>*@
+                                                <label class="col-md-3 col-sm-3 col-xs-3">Cost Price</label>
+                                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                                    @Html.TextBoxFor(model => model.CostPrice, new { @class = "form-control", id= "CostPrice" })
+                                                    @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger pull-left" })
+
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                @*<label class="control-label col-md-3 col-sm-3 col-xs-3">Selling Price *</label>*@
+                                                <label class="col-md-3 col-sm-3 col-xs-3">Selling Price</label>
+                                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                                    @Html.TextBoxFor(model => model.SellingPrice, new { @class = "form-control", id = "SellingPrice" })
+                                                    @Html.ValidationMessageFor(model => model.SellingPrice, "", new { @class = "text-danger pull-left" })
+
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <hr />
+                                            <div class="clerfix"></div>
+                                            @*<div id="divtable">
+                                                    <table id="datatable-responsive1" class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display:none">LocationId</th>
+                                                                <th>Location</th>
+                                                                <th>Serving Unit</th>
+                                                                <th>Cost Price</th>
+                                                                <th>Selling Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="locwisesu">
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div tabindex="0">
+                                    @*<div class="ln_solid"></div>*@ <br />
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <button type="submit" class="btn btn-success">Update Prices</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    // load ProductId ddl
+
+    var allactiveproducts = @Html.Raw(Json.Encode(ViewBag.productdata));
+    var itemID = $("#ProductId");
+    itemID.empty();
+    itemID.append("<option value='0'>-- Select a Product --</option>");
+    $.each(allactiveproducts, function (index, optionaldata) {
+        itemID.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+    });
+    if ('@ViewBag.ProductId') {
+        $('#ProductId').val(@ViewBag.ProductId).trigger("change");
+    } else {
+        $('#ProductId').val(0).trigger("change");
+    }
+    //------------------------------------------
+    // load sereving units
+
+    @*$.getJSON("@Url.Action("GetServingUnits", "ServingUnitsPrices")",
+    function (data) {
+        var ServingUnitId = $('#ServingUnitId');
+        ServingUnitId.empty();
+        ServingUnitId.append("<option value='0'>-- Select Serving unit --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            ServingUnitId.append($('<option />', { value: optionaldata.ServingUnitId }).html(optionaldata.ServingUnitName));
+        });
+        if ('@ViewBag.ServingUnitId') {
+            $('#ServingUnitId').val(@ViewBag.ServingUnitId).trigger("change");
+        } else {
+            $('#ServingUnitId').val(0).trigger("change");
+        }
+    });*@
+    //by Aruna load Serving unit
+    @*$("#ProductId").change(function () {
+        var ProductId = this.value;
+
+        $.getJSON("@Url.Action("GetServingUnitsByPrdId", "ServingUnitsPrices")", { id: ProductId },
+            function (data) {
+
+                var ServingUnitId = $('#ServingUnitId');
+                ServingUnitId.empty();
+                ServingUnitId.append("<option value='0'>-- Select Serving unit --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    ServingUnitId.append($('<option />', { value: optionaldata.ServingUnitId }).html(optionaldata.ServingUnitName));
+                });
+                if ('@ViewBag.ServingUnitId') {
+                    $('#ServingUnitId').val(@ViewBag.ServingUnitId).trigger("change");
+                } else {
+                    $('#ServingUnitId').val(0).trigger("change");
+                }
+        });
+    });*@
+
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#ServingUnitId').change(function()
+        {
+            if($('#ProductId').val()==0 || $('#ProductId').val()==null)
+            {
+                return;
+            }
+
+
+            $.ajax({
+                type: "GET",
+                url: "/ServingUnitsPrices/GetServingUnitsByPrdId",
+                data: { id: $('#ProductId').val(), unit:$('#ServingUnitId option:selected').text() },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger
+                    $("#locwisesu tr").remove();
+
+                    $.each(data, function (i, item) {
+                        debugger;
+
+                        var unitindex = $("#locwisesu").children("tr").length;
+                        var unitindexCell = "<td style='display:none'><input name='ServingUnitsDetail.Index' value='" +
+                            item.LocationId + "' /></td>";
+
+                        var unitLocIdCell = "<td style='display:none;'><input id='ServingUnitsDetail[" + item.LocationId + "]_LocationId'  class='form-control'  name='ServingUnitsDetail[" +
+                            item.LocationId + "].LocationId' type='text' value='" + item.LocationId + "' /></td>";
+
+                        var unitLocDescCell = "<td><input id='ServingUnitsDetail[" + item.LocationId + "]_Location'  class='form-control'  name='ServingUnitsDetail[" +
+                            item.LocationId + "].Location' type='text' readonly value='" + item.Location + "' /></td>";
+
+                        if(item.ServingUnit=="N/A"){
+                            var unitServingUnitCell = "<td><input id='ServingUnitsDetail[" + item.LocationId + "]_ServingUnit'  class='form-control'  name='ServingUnitsDetail[" +
+                                item.LocationId + "].ServingUnit' type='text' readonly value='" + $('#ServingUnitId option:selected').text() + "' /></td>";
+                        }else
+                        {
+                            var unitServingUnitCell = "<td><input id='ServingUnitsDetail[" + item.LocationId + "]_ServingUnit'  class='form-control'  name='ServingUnitsDetail[" +
+                                item.LocationId + "].ServingUnit' type='text' readonly value='" + item.ServingUnit + "' /></td>";
+                        }
+                        var unitCostPriceCell = "<td><input id='ServingUnitsDetail[" + item.LocationId + "]_CostPrice'  class='form-control'  name='ServingUnitsDetail[" +
+                            item.LocationId + "].CostPrice' type='number' style='text-align:right;' step='0.0001' min='0'  oninput='javascript: if (this.value.length >9) this.value = this.value.slice(0, 5);' value='" + item.CostPrice + "' /></td>";
+
+                        var unitSellingPriceCell = "<td><input id='ServingUnitsDetail[" + item.LocationId + "]_SellingPrice'  class='form-control'  name='ServingUnitsDetail[" +
+                            item.LocationId + "].SellingPrice' type='number'  style='text-align:right;' step='0.0001' min='0'  oninput='javascript: if (this.value.length >9) this.value = this.value.slice(0, 5);'  value='" + item.SellingPrice + "' /></td>";
+
+                        var newUnitRow = "<tr id='trSUnit" + item.LocationId + "'>" +
+                           unitindexCell +
+                           unitLocIdCell +
+                           unitLocDescCell +
+                           unitServingUnitCell +
+                           unitCostPriceCell +
+                           unitSellingPriceCell +"</tr>";
+
+                        $("#locwisesu").append(newUnitRow);
+
+                    });
+                }
+            });
+
+        });
+        //By Aruna load serving unit by passing productID
+        $("#ProductId").change(function () {
+            var ProductId = this.value;
+
+            $.getJSON("@Url.Action("GetServingUnitsByPrductId", "ServingUnitsPrices")", { id: ProductId },
+                function (data) {
+
+                    var ServingUnitId = $('#ServingUnit');
+                    ServingUnitId.empty();
+                    ServingUnitId.append("<option value='0'>-- Select Serving unit --</option>");
+
+                    $.each(JSON.parse(data), function (index, optionaldata) {
+                        ServingUnitId.append($('<option />', { value: optionaldata.ServingUnit }).html(optionaldata.ServingUnit));
+                    });
+                    @*if ('@ViewBag.ServingUnitId') {
+                        $('#ServingUnitId').val(@ViewBag.ServingUnitId).trigger("change");
+                    } else {
+                        $('#ServingUnitId').val(0).trigger("change");
+                    }*@
+                });
+        });
+
+        $("#ServingUnit").change(function () {
+            var ServingUnit = this.value;
+            var ProductId = $("#ProductId option:selected").val();
+         //   debugger;
+           $.getJSON("@Url.Action("GetSellingAndCostPriceByServUnitPrdId", "ServingUnitsPrices")", { id: ProductId,unit: ServingUnit},
+                function (data) {
+                 //   debugger;
+                     
+                    $.each(JSON.parse(data), function (index, optionaldata) {
+                      //  debugger;
+
+                        //console.log(optionaldata.CostPrice);
+
+                        $("#CostPrice").val(optionaldata.CostPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        $("#SellingPrice").val(optionaldata.SellingPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+                    });
+                   
+            });
+    });
+
+    });
+
+</script>

@@ -1,0 +1,193 @@
+﻿@model RIT.HMS.Domain.SysUserGroup
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Edit", "UserGroup", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.SysUserGroupID)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>User Group</strong> @ViewBag.UserGroupCode modified successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "0")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>User Group</strong> @ViewBag.UserGroupCode failed to modify.
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>User Group - Edit</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                      
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">User Group Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.UserGroupCode,
+                                               new {
+                                                   @class = "form-control",
+                                                   MaxLength = 50,
+                                                   Placeholder = "User Group Code",
+                                                   @readonly =true
+                                               })
+                                                @Html.ValidationMessageFor(model => model.UserGroupCode, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">User Group Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.UserGroupName, new { @class = "form-control", MaxLength = 50, Placeholder = "User Group Name" })
+                                                @Html.ValidationMessageFor(model => model.UserGroupName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">User Description</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.UserDescription, new { @class = "form-control", MaxLength = 50, Placeholder = "User Description" })
+                                                @Html.ValidationMessageFor(model => model.UserDescription, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>*@
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Password</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.PasswordFor(model => model.Password, new { @class = "form-control", MaxLength = 50, Placeholder = "Password" })
+                                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>*@
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Confirm Password</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", MaxLength = 50, Placeholder = "Confirm Password" })
+                                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>*@
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">User Group ID</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="SysUserGroupID" name="SysUserGroupID" class="form-control"
+                                                        data-val="true"
+                                                        data-val-regex="Please select a valid User Group"
+                                                        data-val-regex-pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$"
+                                                        data-val-required="Please select a valid User Group"></select>
+                                            </div>
+                                        </div>*@
+
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsUserCannotChangePassword</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsUserCantChangePassword, new { @class = "flat" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsUserMustChangePassword</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsUserMustChangePassword, new { @class = "flat" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                            </div>
+                                        </div>*@
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                            </div>
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Reset", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewUserGroups", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Modify</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    @*$.getJSON("@Url.Action("GetUserGroup", "UserGroup")", function (data) {
+
+        var companyDropDown = $("#SysUserGroupID");
+
+        usergroupDropDown.empty();
+        usergroupDropDown.append("<option value='0'>-- Select the User Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            usergroupDropDown.append($('<option />', { value: optionaldata.SysUserGroupID }).html(optionaldata.UserGroupName));
+        });*@
+
+        if ('@ViewBag.SysUserGroupID') {
+            $('#SysGroupOfCompanyId').val(@ViewBag.SysUserGroupID).trigger("change");
+        } else {
+            $('#SysUserGroupID').val(0).trigger("change");
+        }
+
+
+    //});
+
+
+</script>
+
+
+

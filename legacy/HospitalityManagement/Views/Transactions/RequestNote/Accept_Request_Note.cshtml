@@ -1,0 +1,895 @@
+﻿
+@model RIT.HMS.Domain.Transactions.RequestNoteAccptanceHeader
+@{
+    ViewBag.Title = "Request_Notes_Acceptance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body" novalidate>
+    <div class="main_container">
+
+
+        @using (Html.BeginForm("", "RequestNote", FormMethod.Post, new { id = "AcceptRequestNotes", @class = "form-horizontal", enctype = "multipart/form-data" }))
+
+
+
+        {
+
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+
+                @*@if (@ViewBag.Message == "1")
+                    {
+
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Mearge PO</strong> Sucessfully Saved.
+                        </div>
+                    }
+
+                    else if (@ViewBag.Message == "0")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Mearge PO</strong> Authentication Error
+                        </div>
+                    }*@
+                <div class="row">
+                    <!-- form input mask -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel trn-xpanel">
+                            <div class="x_title1">
+                                <h2>Approve Request Note</h2>
+                                <br />
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+
+                                <div class="form-horizontal col-md-12 trn-header">
+                                    @*<br />*@
+
+                                    @{ // Calculate the first day of the current month
+                                        var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd");
+
+                                        var dateFromValue = ViewBag.DateFrom as string;
+
+                                        // If the session value is null or empty, fallback to the calculated first day of the month
+                                        var dateFromUse = string.IsNullOrEmpty(dateFromValue) ? firstDayOfMonth : dateFromValue;
+
+
+
+                                        var today = DateTime.Now.ToString("yyyy-MM-dd");
+
+                                        var dateToValue = ViewBag.DateTo as string;
+
+                                        // If the session value is null or empty, fallback to the calculated first day of the month
+                                        var dateToUse = string.IsNullOrEmpty(dateToValue) ? today : dateToValue;
+
+
+
+
+
+
+                                        }
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-4">From Date <span class="required">*</span></label>
+                                        <div class="col-md-3 col-sm-3">
+                                            <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@dateFromUse" />
+                                        </div>
+
+                                        <label class="control-label col-md-2 col-sm-4">To Date <span class="required">*</span></label>
+                                        <div class="col-md-3 col-sm-3">
+                                            <input type="date" class="form-control" id="DateTo" name="DateTo" value="@dateToUse" />
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-4">From Location</label>
+                                        <div class="col-md-3 col-sm-3">
+                                            <select id="LocationId" name="LocationId" class="form-control"></select>
+                                        </div>
+
+                                        <label class="control-label col-md-2 col-sm-4">To Location</label>
+                                        <div class="col-md-3 col-sm-3">
+                                            <select id="LocationIdTo" name="LocationIdTo" class="form-control"></select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-4">Status</label>
+                                        <div class="col-md-3 col-sm-3">
+                                            <select id="drpStatus" name="drpStatus" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                @*<div style="overflow-y: auto; max-height: 500px;">*@
+                                <div style="overflow-y: auto; max-height: 500px; border: 1px solid #ddd; padding: 5px;">
+                                    <!-- Added border for visibility -->
+                                    <table id="tblTOG" class="mstable" style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th id="typeid" style="display:none">Type Id</th>
+                                                <th id="create-date">Create Date</th>
+                                                <th id="expected-delivery-date">Expected Delivery Date</th>
+                                                <th id="from-location">From Location</th>
+                                                <th id="to-location">To Location</th>
+                                                <th id="request-note-no">Request Note No</th>
+                                                <th id="status">Status</th>
+                                                <th id="select">Edit | Approve | Cancel</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="togitems">
+                                            <tr data-request-note-no="1">
+                                                <td style="display:none"></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br />
+
+
+                            </div>
+                                @*<div class="actionBar">
+        <div class="msgBox">
+
+            <div class="btn btn-primary pl_add btn-small pull-left">
+            @*    @Html.ActionLink("Clear", "CreatePO", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                                @*<button type="submit" formaction="Create" style="font-size: 14px;font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Sans-Serif';" id="btnsubmit" class="btn btn-success pull-left">Create POn</button>
+        </div>*@
+
+                                @*  <input type ="submit" id="btnsubmit" class="btn btn-success" value="Create PO" />*@
+                                @*<input type="button" id="btnsubmit" class="btn btn-success" value="Create PO" />*@
+
+                                @*  </div>*@
+                                @*  </div> *@
+                                @*<div class="actionBar">
+            <div class="msgBox">
+
+
+                <button type="button" formaction="Create" id="btnsubmit" class="btn btn-success fa-pull-right">Create PO</button>
+                <div class="btn btn-primary pl_add btn-small pull-right">
+                    @Html.ActionLink("Clear", "/Merge_PO", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                </div>
+            </div>
+        </div>*@
+                            </div>
+                    </div>
+                </div>
+                <div class="se-pre-con"></div>
+                <div id='myModal' class='modal'>
+                    <div class="col-md-12">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div id='myModalContent'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+
+</div>
+
+<script>
+    // Function to be executed when the page loads
+    // Function to handle the event
+    function handleStatusChange(event) {
+        var selectedValue = event.target.value;
+        console.log("Dropdown value changed to:", selectedValue);
+
+        // Example: You can add additional logic here
+        if (!selectedValue) {
+            selectedValue = '0'; // Default to zero if no value is selected
+            event.target.value = selectedValue;
+        }
+    }
+
+    // Function to trigger the change event programmatically
+    function triggerChangeEvent() {
+        var statusElement = document.getElementById("drpStatus");
+        var event = new Event('change');
+        statusElement.dispatchEvent(event);
+    }
+
+    window.onload = function () {
+        var statusElement = document.getElementById("drpStatus");
+
+        // Add an event listener to handle the change event
+        statusElement.addEventListener('change', handleStatusChange);
+
+        // Trigger the change event programmatically
+        triggerChangeEvent();
+    };
+</script>
+
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnsubmit",
+        function () {
+            //debugger;
+
+            //if ($("#LocationId").val() == 0 || $("#LocationId").val() == null) {
+            //    alert("Select a From location!");
+            //    return;
+            //}
+
+
+            //if ($("#LocationIdTo").val() == 0 || $("#LocationIdTo").val() == null) {
+            //    alert("Select a To location!");
+            //    return;
+            //}
+
+
+
+
+
+
+        });</script>
+
+<script>
+
+
+
+
+     $.getJSON("@Url.Action("GetActiveShowRoomLocations", "Location")", function (data)
+    {
+        var poLocationId = $("#LocationId");
+
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- All From Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata)
+        {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+
+         var poLocationIdTo = $("#LocationIdTo");
+
+         poLocationIdTo.empty();
+         poLocationIdTo.append("<option value='0'>--All To Locations --</option>");
+
+         $.each(JSON.parse(data), function (index, optionaldata) {
+             poLocationIdTo.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+         });
+
+
+
+         var drpStatus = $("#drpStatus");
+
+         drpStatus.empty();
+         drpStatus.append("<option value='0'> All Status</option>");
+         drpStatus.append("<option value='1'> Pending Approve </option>");
+         drpStatus.append("<option value='2'> Approved </option>");
+         drpStatus.append("<option value='3'> Canceled </option>");
+
+
+
+
+
+
+
+
+        @*if ('@ViewBag.poLocationId') {
+            $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }*@
+    });
+
+    $.getJSON("@Url.Action("GetActiveShowRoomLocations", "Location")", function (data)
+    {
+        var poLocationId = $("#ToLocationId");
+
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- All From Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata)
+        {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+
+        var poLocationIdTo = $("#LocationIdTo");
+
+        poLocationIdTo.empty();
+        poLocationIdTo.append("<option value='0'>-- All To Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poLocationIdTo.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+
+
+          var isHeadOffice = @Html.Raw(Json.Encode(Convert.ToBoolean(Session["IsHeadOffice"])));
+        var locationId = '@ViewBag.locationId'; // Ensure locationId is correctly formatted
+
+        if (!isHeadOffice) {
+                var locationElement = document.getElementById("LocationId");
+                if (locationElement) {
+                    locationElement.disabled = true;
+                    locationElement.value = locationId; // Set the value from ViewBag
+                }
+            }
+
+        if ('@ViewBag.SelectFromLocation') {
+             var SelectFromlocationId = '@ViewBag.SelectFromLocation';
+
+             var locationElementFrom = document.getElementById("LocationId");
+             if (locationElementFrom) {
+
+                 locationElementFrom.value = SelectFromlocationId; // Set the value from ViewBag
+             }
+         }
+
+
+          if ('@ViewBag.SelectToLocation') {
+             var SelectTolocationId = '@ViewBag.SelectToLocation';
+
+              var locationElementTo = document.getElementById("LocationIdTo");
+              if (locationElementTo) {
+
+                  locationElementTo.value = SelectTolocationId; // Set the value from ViewBag
+             }
+         }
+
+
+        var drpStatus = $("#drpStatus");
+
+        drpStatus.empty();
+        drpStatus.append("<option value='0'> All Status</option>");
+        drpStatus.append("<option value='1'> Pending Approve </option>");
+        drpStatus.append("<option value='2'> Approved </option>");
+        drpStatus.append("<option value='3'> Canceled </option>");
+
+
+
+
+          if ('@ViewBag.SelectAppStatus') {
+             var Select_AppStatus = '@ViewBag.SelectAppStatus';
+
+             var drpStatusElement = document.getElementById("drpStatus");
+             if (drpStatusElement) {
+
+                 drpStatusElement.value = Select_AppStatus; // Set the value from ViewBag
+             }
+         }
+
+
+
+
+
+
+   @*if ('@ViewBag.poLocationId') {
+       $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+   } else {
+       $('#LocationId').val(0).trigger("change");
+    }*@
+    });
+
+    @*$("#LocationId").change(
+function () {
+    var requestid = this.value;
+    $.getJSON("@Url.Action("GetMergePORequestData", "Merge_PO_Request")", { id: requestid, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+        function (data) {
+
+
+        });
+});*@
+
+</script>
+
+<script>
+
+    const dateToInput = document.getElementById('DateTo');
+    dateToInput.addEventListener('change', function () {
+
+
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+        var requestidTo = document.getElementById("LocationIdTo").value;
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+
+        //var requestid = document.getElementById("LocationId").value;
+
+        //    var requestidTo = document.getElementById("LocationIdTo").value;
+        //    var AppStatus = document.getElementById("drpStatus").value;
+
+            $.ajax({
+                url: "@Url.Action("GetMergePORequestData", "Merge_PO_Request")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td style='width:15%' id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+                        var ExpectedDeliveryDateCell = `<td style='width:15%' id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+
+                        var unitFromLocationCell = `<td style='width:15%' id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td style='width:25%' id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td style='width:15%' id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td style='width:15%' id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+            //            var unitEditCell = (item.Approve === "Approved" || item.Approve === "Canceled")
+            //? `<td style='width:15%;  color: blue; font-weight: bold;'><span>Disable</span></td>`
+            //: `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var unitEditCell = `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell}  ${ExpectedDeliveryDateCell}      ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell}${unitEditCell}</tr>`;
+
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    alert("Item data mapping error");
+                }
+            });
+
+    });
+
+
+    const dateFromInput = document.getElementById('DateFrom');
+    dateFromInput.addEventListener('change', function () {
+
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+        var requestidTo = document.getElementById("LocationIdTo").value;
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+
+        }
+
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+
+        }
+
+            $.ajax({
+                url: "@Url.Action("GetMergePORequestData", "Merge_PO_Request")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td style='width:15%' id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeliveryDateCell = `<td style='width:15%' id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+
+                        var unitFromLocationCell = `<td style='width:15%' id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td style='width:25%' id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td style='width:15%' id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td style='width:15%' id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+            //            var unitEditCell = (item.Approve === "Approved" || item.Approve === "Canceled")
+            //? `<td style='width:15%;  color: blue; font-weight: bold;'><span>Disable</span></td>`
+            //: `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var unitEditCell = `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell}   ${ExpectedDeliveryDateCell}     ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell}${unitEditCell}</tr>`;
+
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    alert("Item data mapping error");
+                }
+            });
+    });
+
+
+
+
+
+
+
+
+
+
+    $(document).ready(function () {
+        $('#LocationId').on("change", function () {
+
+            var requestid = document.getElementById("LocationId").value;
+
+            if (!requestid) {
+                requestid = '0'; // Default to zero
+
+            }
+            var requestidTo = document.getElementById("LocationIdTo").value;
+            if (!requestidTo) {
+                requestidTo = '0'; // Default to zero
+
+            }
+
+
+            var AppStatus = document.getElementById("drpStatus").value;
+
+            if (!AppStatus) {
+                AppStatus = '0'; // Default to zero
+
+            }
+
+            $.ajax({
+                url: "@Url.Action("GetMergePORequestData", "Merge_PO_Request")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td style='width:15%' id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeliveryDateCell = `<td style='width:15%' id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+                        var unitFromLocationCell = `<td style='width:15%' id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td style='width:25%' id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td style='width:15%' id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td style='width:15%' id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+            //            var unitEditCell = (item.Approve === "Approved" || item.Approve === "Canceled")
+            //? `<td style='width:15%;  color: blue; font-weight: bold;'><span>Disable</span></td>`
+            //: `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var unitEditCell = `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell}  ${ ExpectedDeliveryDateCell}     ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell}${unitEditCell}</tr>`;
+
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+
+        ///
+        $('#LocationIdTo').on("change", function () {
+
+            var requestid = document.getElementById("LocationId").value;
+
+            if (!requestid) {
+                requestid = '0'; // Default to zero
+
+            }
+            var requestidTo = document.getElementById("LocationIdTo").value;
+            if (!requestidTo) {
+                requestidTo = '0'; // Default to zero
+
+            }
+
+
+            var AppStatus = document.getElementById("drpStatus").value;
+
+            if (!AppStatus) {
+                AppStatus = '0'; // Default to zero
+
+            }
+
+            $.ajax({
+                url: "@Url.Action("GetMergePORequestData", "Merge_PO_Request")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td style='width:15%' id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+
+                        var ExpectedDeliveryDateCell = `<td style='width:15%' id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+
+
+                        var unitFromLocationCell = `<td style='width:15%' id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td style='width:25%' id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td style='width:15%' id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td style='width:15%' id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+            //            var unitEditCell = (item.Approve === "Approved" || item.Approve === "Canceled")
+            //? `<td style='width:15%;  color: blue; font-weight: bold;'><span>Disable </span></td>`
+            //: `<td style='width:15%; color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+                        var unitEditCell = `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell}  ${ExpectedDeliveryDateCell}     ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell}${unitEditCell}</tr>`;
+
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+        ///
+
+        $('#drpStatus').on("change", function () {
+
+
+            var requestid = document.getElementById("LocationId").value;
+
+            if (!requestid) {
+                requestid = '0'; // Default to zero
+
+            }
+            var requestidTo = document.getElementById("LocationIdTo").value;
+            if (!requestidTo) {
+                requestidTo = '0'; // Default to zero
+
+            }
+
+
+            var AppStatus = document.getElementById("drpStatus").value;
+
+            if (!AppStatus) {
+                AppStatus = '0'; // Default to zero
+
+            }
+
+
+            $.ajax({
+                url: "@Url.Action("GetMergePORequestData", "Merge_PO_Request")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td style='width:15%' id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeliveryDateCell = `<td style='width:15%' id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+
+
+
+                        var unitFromLocationCell = `<td style='width:15%' id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td style='width:25%' id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td style='width:15%' id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td style='width:15%' id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+            //            var unitEditCell = (item.Approve === "Approved" || item.Approve === "Canceled")
+            //? `<td style='width:15%;  color: blue; font-weight: bold;'><span>Disable</span></td>`
+            //: `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var unitEditCell = `<td style='width:15%;  color: blue; font-weight: bold;'><a href='#' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell} ${ExpectedDeliveryDateCell}      ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell}${unitEditCell}</tr>`;
+
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+
+
+        /////
+
+
+
+
+
+
+
+        // Define editRow function outside of AJAX success callback
+        window.editRow = function (index) {
+            var requestnoteHeaderId = $(`#${index}_requestnoteheaderid`).text();
+            var createDate = $(`#${index}_CreateDate`).text();
+            var location = $(`#${index}_Location`).text();
+            var toLocation = $(`#${index}_ToLocation`).text();
+            var documentNo = $(`#${index}_DocumentNo`).text();
+            var documentStatus = $(`#${index}_DocumentStatus`).text();
+
+            console.log("Editing row with index: " + index);
+            console.log("Request Note Header ID: " + requestnoteHeaderId);
+            console.log("Create Date: " + createDate);
+            console.log("Location: " + location);
+            console.log("To Location: " + toLocation);
+            console.log("Document No: " + documentNo);
+            console.log("Document Status: " + documentStatus);
+
+            //window.location.href = `/RequestNote/EditPendingRequerst?documentNo=${documentNo}`;
+            window.location.href = `/RequestNote/EditPendingRequerst?requestnoteHeaderId=${requestnoteHeaderId}`;
+
+        };
+
+        $("body").on("click", "#btnsubmit", function () {
+            var POmodes = [];
+            $("#tblTOGs tbody tr").each(function () {
+                var row = $(this);
+                var POMode = {};
+                POMode.DocumentNo = row.find("td").eq(2).text(); // Assuming DocumentNo is in the third column (index 2)
+
+                var isChecked = row.find("input[type='checkbox']").prop("checked");
+                POMode.IsActive = isChecked;
+
+                POmodes.push(POMode);
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/RequestNote/Create",
+                data: JSON.stringify(POmodes),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    alert(r);
+                    window.location.href = "/RequestNote/Accept_Request_Note";
+                },
+                error: function () {
+                    alert("No Records Found");
+                    window.location.href = "/RequestNote/Accept_Request_Note";
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .mstable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .mstable thead {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 1000;
+        }
+
+        .mstable th, .mstable td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .mstable th {
+            font-weight: bold;
+        }
+
+
+</style>
+
+
+
+
+
+
+

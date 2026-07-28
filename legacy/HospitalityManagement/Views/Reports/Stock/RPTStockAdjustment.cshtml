@@ -1,0 +1,252 @@
+﻿@model IEnumerable< RIT.HMS.Domain.ViewModels.Reports.StockAdjustmentReportViewModel>
+@{
+    ViewBag.Title = "RPT Stock Adjustment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Report.css" rel="stylesheet" />
+@using (Html.BeginForm("StockAdjustmentReport", "StockAdjustment", FormMethod.Post, new { @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Stock Adjustment Report<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                            <div class="x_content">
+                            <br />
+                                <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <input type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" id="DateFrom" name="DateFrom" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date To </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <input type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" id="DateTo" name="DateTo" />
+                                        </div>
+                                    </div>                               
+                                </div>                                
+                                <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Location </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <select id="LocationId" name="LocationId" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Doc No </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <select id="DocumentId" name="DocumentId" class="form-control select2"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                    <div class="clearfix"></div>
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                            <div class="btn-group">
+                                                <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                                <ul class="dropdown-menu">
+
+                                                    <li>
+                                                        @*<a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                                            <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                        </a>*@
+                                                        <div class="btn btn-primary pl_add btn-small pull-left">
+                                                            @Html.ActionLink("Export to Excel", "ExportToExcel", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                        </div>
+                                                    </li>
+                                                    <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                    <div class="clearfix"></div>
+
+                                    <div id="printcontent">
+
+                                        <div class="clearfix"></div>
+                                        <br />
+                                        <div class="col-md-12">
+
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <br /><br />
+
+                                        <div class="table-responsive">
+                                            
+                                            @if (Model != null)
+                                            {
+                                            <table id="tblstock" class="table table-striped jambo_table bulk_action">
+                                                <thead>
+                                                    <tr class="headings">
+                                                        <th></th>
+                                                        <th class="column-title">Product Code</th>
+                                                        <th class="column-title">Product</th>
+                                                        <th class="column-title">Old Stock</th>
+                                                        <th class="column-title">Adjusted Stock</th>
+                                                        <th class="column-title">New Stock</th>
+                                                        <th class="column-title">Type</th>
+                                                        <th class="column-title">Reason</th>
+                                                        <th class="column-title">Cost Price</th>
+                                                        <th class="column-title">Cost Value</th>
+                                                    </tr>
+                                                </thead>
+                                                @foreach (var head in Model)
+                                                {
+                                                    decimal Totalcost = 0,TotalQtyOld=0, TotalQtyNew=0; //variable declaretion inside cshtml
+                                                    @*<thead>*@
+                                                    <tr style="background-color:lightgray; width:200%" class="headings">
+                                                        <td>@(Model.ToList().IndexOf(head)+1)</td>
+                                                        <td>Location:@Html.DisplayFor(modelItem => head.Location)</td>
+                                                        <td>Date:@Html.DisplayFor(modelItem => head.DocumentDate)</td>
+                                                        <td>Document No:@Html.DisplayFor(modelItem => head.DocumentNo)</td>
+                                                    </tr>
+                                                    @*</thead>*@
+
+                                                    <tbody>
+                                                       
+                                                        
+                                                        @foreach (var item in head.Detail)
+                                                        {
+                                                            
+                                                        <tr class="even pointer">
+                                                            <td>@HospitalityManagement.Common.HMSExtensions.IntToRoman(head.Detail.IndexOf(item)+1)</td>
+                                                            <td class="">@Html.DisplayFor(k => item.ProductCode)</td>
+                                                            <td class="">@Html.DisplayFor(k => item.ProductName)</td>
+                                                            <td style="text-align:right">@item.CurrentStock.ToString("n2")</td>
+                                                            <td style="text-align:right">@item.AdjustStock.ToString("n2")</td>
+                                                            <td style="text-align:right">@item.NewStock.ToString("n2")</td>
+                                                            <td class="">@Html.DisplayFor(k => item.BaseType)</td>
+                                                            <td class="">@Html.DisplayFor(k => item.Reason)</td>
+                                                            <td style="text-align:right">@item.CostPrice.ToString("n2")</td>
+                                                            <td style="text-align:right">@item.costvalue.ToString("n2")</td>
+                                                        </tr>
+                                                            Totalcost += @item.AdjustStock * @item.CostPrice;//calculating total cost
+                                                            TotalQtyOld += item.CurrentStock;
+                                                            TotalQtyNew += @item.NewStock;
+                                                        }
+                                                    </tbody>
+                                                    <tr style="background-color:lightgray; width:200%" class="headings">
+                                                        <td>Document Total  : </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td style="text-align:right">@TotalQtyOld.ToString("n2")</td> @*All total QTY old*@
+                                                        <td></td>
+                                                        <td style="text-align:right">@TotalQtyNew.ToString("n2")</td> @*All total New*@
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td style="text-align:right">@Totalcost.ToString("n2")</td> @*Total cost document number wise*@
+                                                    </tr>
+                                                }
+                                                <tr style="background-color:lightgray; width:200%" class="headings">
+                                                    <td >All value Total: </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="text-align:right">@ViewBag.TotalQTyOld.ToString("n2")</td> @*All total QTY old*@
+                                                    <td></td>
+                                                    <td style="text-align:right">@ViewBag.TotalQTyNew.ToString("n2")</td> @*All total QTY new*@
+                                                    <td style="text-align:right">TotalQTy : @ViewBag.TotalQty.ToString("n2")</td> @*All total QTY*@
+                                                    <td></td>
+                                                    <td style="text-align:right">@ViewBag.TotalCost.ToString("n2")</td> @*All total cost*@
+                                                    
+                                                </tr>
+                                            </table>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var poLocationId = $("#LocationId");
+
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.poLocationId') {
+            $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });
+
+
+    $("#LocationId").change(
+      function () {
+          var loc = this.value;
+
+          $.getJSON("@Url.Action("GetDocNoByLocId", "StockAdjustment")", { locid: loc, frm: $("#DateFrom").val(), to: $("#DateTo").val() },
+
+           function (data) {
+
+               var DocNo = $("#DocumentId");
+
+               DocNo.empty();
+               DocNo.append("<option value='0'>-- Select a Document --</option>");
+
+               $.each(JSON.parse(data), function (index, optionaldata) {
+                   DocNo.append($('<option />', { value: optionaldata.StockAdjustmentHeaderId }).html(optionaldata.DocumentNo));
+
+               });            
+           });
+      });
+</script>
+
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+            //var divContents = document.getElementById("printcontent").innerHTML;
+            //var printWindow = window.open('', '', 'height=200,width=400');
+            //printWindow.document.write('<html><head><title></title>');
+            //printWindow.document.write('</head><body >');
+            //printWindow.document.write(divContents);
+            //printWindow.document.write('</body></html>');
+            //printWindow.document.close();
+            //printWindow.print();
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+            //$(document).ready(function () {
+            //    $('#printcontent').DataTable();
+            //});
+        }
+</script>
+

@@ -1,0 +1,652 @@
+﻿@model RIT.HMS.Domain.Transactions.CustomProductionNoteHeader
+@{
+    ViewBag.Title = "Custom Production Note";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body" novalidate>
+    <div class="main_container">
+        @using (Html.BeginForm("Create", "CustomProduction", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Custom Production</strong> @ViewBag.PCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong> Atlease one material required! </strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Custom Production</strong> @ViewBag.PCode save failed..
+                        </div>
+                    }
+
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Custom Production Note</h2>
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>Production Note</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small>Receipes</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-3">
+                                                    <span class="step_no">3</span>
+                                                    <span class="step_descr">
+                                                        Step 3<br />
+                                                        <small>Production Summary</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12 trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-10">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Doc # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                            @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Advance Note No <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="ReciptId" class="form-control select2" name="ReciptId"></select>
+                                                            @*@Html.ValidationMessageFor(model => model.ReciptId, "", new { @class = "text-danger pull-left" })*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Production Loc <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @*<input id="ProcessLoc" type="text" class="form-control" name="ProcessLoc" readonly />*@
+                                                            <select id="ProcessLocId" name="ProcessLocId" class="form-control"></select>
+                                                            @*<input id="ProcessLocId" type="text" class="form-control" name="ProcessLocId" readonly style="display:none" />*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Pickup Loc <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @*<input id="PickupLoc" type="text" class="form-control" name="PickupLoc" readonly />*@
+                                                            <select id="PickupLocId" name="PickupLocId" class="form-control"></select>
+                                                            @*<input id="PickupLocId" type="text" class="form-control" name="PickupLocId" readonly style="display:none" />*@
+                                                        </div>
+                                                    </div>                                                 
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Note <span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-9 col-sm-6 col-xs-12">
+                                                            @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", MaxLength = 200, Placeholder = "Note", style = "resize: none;", @readonly = "readonly" })
+                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-2">
+                                            <div class="col-md-12 trn-detail">
+                                                <br />
+                                                <div class="clearfix"></div>
+                                                <div class="form-group">
+
+                                                    @*<div id="buttons">*@
+                                                        <table id="Product" class="table table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width:10%">
+                                                                        Product
+                                                                    </td>
+                                                                    <td style="width:50%">
+                                                                        <select id="ProductId" class="form-control" style="width:100%" name="ProductId"></select>
+                                                                    </td>
+                                                                    <td style="width:10%">
+                                                                       Quantity
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <input id="ProductQty" name="ProductQty" type="number" readonly class="form-control col-md-2 col-xs-6" value="0" />     
+                                                                    </td>
+                                                                    <td style="width:20%"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="width:10%">
+                                                                        Materials
+                                                                    </td>
+                                                                    <td style="width:50%">
+                                                                        <select id="MaterialId" class="select2" style="width:100%" name="MaterialId"></select>
+                                                                    </td>
+                                                                    <td style="width:10%">
+                                                                        Quantity:
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <input id="MaterialQty" name="MaterialQty" type="number" step="any" class="form-control col-md-2 col-xs-6" value="0" />                                                                       
+                                                                    </td>
+                                                                    <td style="width:20%">
+                                                                        <input type="button" id="btnAddReceipeItems" class="btn btn-round btn-info" value="+" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    @*</div>*@
+                                                    @*<div id="btnAddReOrderItems"></div>                                                      
+                                                    <div id="btnAddRequestItems"></div>*@
+
+                                                    <br />
+                                                    <div class="clearfix"></div>
+                                                    <div class="text-info"><b>Recipe</b></div>                                                  
+                                                    <table id="tblProductions" class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display:none">index</th>
+                                                                <th style="display:none">Product Id</th>
+                                                                <th>Product</th>
+                                                                <th>Product Qty</th>
+                                                                <th style="display:none">Material Id</th>
+                                                                <th>Material</th>
+                                                                <th>Material Qty</th>
+                                                                <th>Cost Value (Material)</th>                                                              
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="receipeitems">
+                                                            @*@if (Model.TOGDetail != null)
+                                                            {
+                                                                foreach (var togDetail in Model.TOGDetail)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@togDetail.ProductId</td>
+                                                                        <td>@togDetail.ProductName</td>
+                                                                        <td>@togDetail.OrderQty</td>
+                                                                        <td>@togDetail.CostPrice</td>
+                                                                        <td>@togDetail.SellingPrice</td>
+                                                                    </tr>
+
+                                                                }
+                                                            }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-3">
+                                            <div class="col-md-12 trn-footer">
+                                                <br />
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                         Tot. Cost Price<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <input id="TotalCostPrice" name="TotalCostPrice" class="form-control" readonly />                                            
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                @*<div class="col-md-6">
+                                                    
+                                                </div>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="btnallClear btn pull-left">
+                                                @Html.ActionLink("Clear", "Index", null, new
+                                           {
+                                               @style = "font-size: 12px;color:white;" +
+                                                         "font-family: 'Lucida Sans Unicode', " +
+                                                         "'Lucida Grande', Sans-Serif;text-decoration: none"
+                                           })
+                                            </div>
+                                            <button type="submit" id="1" formaction="Create" class="btnallSubmit btn pull-left">Submit Production Note</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="se-pre-con"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function SwitchWizard ()
+    {
+        //alert('@Convert.ToBoolean(Session["CPWizadUI"])');
+        if('@Convert.ToBoolean(Session["CPWizadUI"])'=='False'){
+            //debugger;
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+        }
+    });
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        // direct loaders
+        $.getJSON("@Url.Action("GetActiveRecipts", "CustomProduction")", function (data) {
+            var ReciptId = $("#ReciptId");
+            ReciptId.empty();
+            ReciptId.append("<option value='0'>-- Select an Advance Note --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                ReciptId.append($('<option />', { value: optionaldata.InvAdvanceNoteHedID }).html(optionaldata.AdNoteNo+'A'));
+            });
+            if ('@ViewBag.ReciptId') {
+                $('#ReciptId').val(@ViewBag.ReciptId).trigger("change");
+            } else {
+                $('#ReciptId').val(0).trigger("change");
+            }
+
+        });
+
+
+        $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+            var ProcessLocId = $("#ProcessLocId");
+            ProcessLocId.empty();
+            ProcessLocId.append("<option value='0'>-- Select a Location --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                ProcessLocId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+            });
+            if ('@ViewBag.ProcessLocId') {
+                $('#ProcessLocId').val(@ViewBag.ProcessLocId).trigger("change");
+            } else {
+                $('#ProcessLocId').val(0).trigger("change");
+            }
+        });
+
+        $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+            var PickupLocId = $("#PickupLocId");
+            PickupLocId.empty();
+            PickupLocId.append("<option value='0'>-- Select a Location --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                PickupLocId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+            });
+            if ('@ViewBag.PickupLocId') {
+                $('#PickupLocId').val(@ViewBag.PickupLocId).trigger("change");
+            } else {
+                $('#PickupLocId').val(0).trigger("change");
+            }
+        });
+        // direct loaders
+
+        $("#ReciptId").change(
+         function () {
+             debugger;
+             var rec = this.value;
+             if (rec == 0) { return; }
+
+             $.getJSON("@Url.Action("GetReciptById", "CustomProduction")", { reciptid: rec },
+             function (data) {
+                 debugger;
+                 $('#ProcessLoc').val(data.ProcessLocName);
+                 $('#PickupLoc').val(data.PickupLocName);
+                 $('#Remark').val(data.Remark);
+                 //$('#ProcessLocId').val(data.ProcessLoc);
+                 //$('#PickupLocId').val(data.PickupLoc);
+                 $('#ProcessLocId').val(data.ProcessLoc).trigger("change");
+                 $('#PickupLocId').val(data.PickupLoc).trigger("change");
+
+             });
+
+             $.getJSON("@Url.Action("GetMaterialsByRecProcessLoc", "CustomProduction")", { reciptid: rec },
+              function (data) {
+                  var MaterialId = $("#MaterialId");
+                  MaterialId.empty();
+                  MaterialId.append("<option value='0'>-- Select a Material --</option>");
+                  $.each(JSON.parse(data), function (index, optionaldata) {
+                      MaterialId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode + ' - ' + optionaldata.ProductName));
+                  });
+                  if ('@ViewBag.MaterialId') {
+                      $('#MaterialId').val(@ViewBag.MaterialId).trigger("change");
+                  } else {
+                      $('#MaterialId').val(0).trigger("change");
+                  }
+              });
+
+             $.getJSON("@Url.Action("GetAdvanceNoteDetByRecId", "CustomProduction")", { reciptid: rec },
+              function (data) {
+                  var ProductId = $("#ProductId");
+                  ProductId.empty();
+                  ProductId.append("<option value='0'>-- Select a Product --</option>");
+                  $.each(JSON.parse(data), function (index, optionaldata) {
+                      ProductId.append($('<option />', { value: optionaldata.ProductID }).html(optionaldata.Descrip));
+                  });
+                  if ('@ViewBag.ProductId') {
+                      $('#ProductId').val(@ViewBag.ProductId).trigger("change");
+                  } else {
+                      $('#ProductId').val(0).trigger("change");
+                  }
+              });
+         });
+
+        $("#ProcessLocId").change(
+        function () {
+            debugger;
+            var plocid = this.value;
+            if (plocid == 0) { return; }
+
+            $.getJSON("@Url.Action("GetMaterialsByProcessLoc", "CustomProduction")", { processlocid: plocid },
+             function (data) {
+                 var MaterialId = $("#MaterialId");
+                 MaterialId.empty();
+                 MaterialId.append("<option value='0'>-- Select a Material --</option>");
+                 $.each(JSON.parse(data), function (index, optionaldata) {
+                     MaterialId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode + ' - ' + optionaldata.ProductName));
+                 });
+                 if ('@ViewBag.MaterialId') {
+                     $('#MaterialId').val(@ViewBag.MaterialId).trigger("change");
+                 } else {
+                     $('#MaterialId').val(0).trigger("change");
+                 }
+             });
+        });
+
+        $("#ProductId").change(
+        function () {
+           debugger;
+           var prd = this.value;
+           if (prd == 0) { return; }
+
+           $.getJSON("@Url.Action("GetProductDataByPrdId", "CustomProduction")", { productid: prd, advnote: $("#ReciptId option:selected").text() },
+           function (data) {
+               debugger;
+               $('#ProductQty').val(data.Qty);
+
+           });
+       });
+    });
+</script>
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddReceipeItems",
+        function () {
+
+            debugger;
+            if ($("#ReciptId").val() == 0 || $("#ReciptId").val() == null) {
+                alert("Select a Recipt!");
+                return;
+            }
+
+            if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                alert("Select a Product!");
+                return;
+            }
+
+            if ($("#MaterialId").val() == 0 || $("#MaterialId").val() == null) {
+                alert("Select a Material!");
+                return;
+            }
+
+            if ($("#MaterialQty").val() == 0 || $("#MaterialQty").val() == "")
+            {
+                alert("Material Quantity can not be 0 or empty");
+                return;
+            }
+
+           
+            $.ajax({
+                url: "@Url.Action("GetMaterialDataByLocIdMatId", "CustomProduction")",
+                data: {
+                    locid: $("#ProcessLocId").val(),   
+                    materialid: $("#MaterialId").val(),
+                   // qty: $("#MaterialQty").val(),                                  
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (resp) {
+                    data = resp;
+
+                    if (data.ProductId == 0)
+                    {
+                        alert("No Sub unit assigned for: " + $("#MaterialId option:selected").text());
+                        return;
+                    }
+
+                    //$("#receipeitems tr").remove();
+                   // $.each(data, function (i, item) {
+
+                        debugger;
+                        var table = document.getElementById("receipeitems");
+                        var hasitem = '0';
+
+                        // checking already exists
+                        for (var r = 0, n = table.rows.length; r < n; r++)
+                        {
+
+                            var itemidcell = table.rows[r].cells[4].innerHTML;
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var itemidex = itemidcell.match(regex)[1];
+                            if (itemidex == $("#MaterialId").val()) {
+                                hasitem = '1';
+                            }
+                        }
+                        if (hasitem == '1') {
+                            alert("Material:" + $("#MaterialId option:selected").text() + " already exists!");
+                            return;
+                        }
+
+
+                        if (($("#MaterialQty").val() / data.SubUnitValue) > (data.Stock))
+                        {
+                            alert("No enough quantity for material: " + $("#MaterialId option:selected").text() + ". Existing quantity is: " + data.Stock);
+                           //return;
+
+                        }
+
+                        @*@{
+                        Model.CustomProductionNoteDetail.Add(new RIT.HMS.Domain.Transactions.CustomProductionNoteDetail());
+                        }*@
+
+                        var unitindex = $("#receipeitems").children("tr").length;
+                        var unitindexCell = "<td style='display:none'><input name='CustomProductionNoteDetail.Index'  value='" +
+                            unitindex + "' /></td>";
+
+                        var unitPIdCell = "<td style='display:none'><input id='CustomProductionNoteDetail[" + unitindex + "]_ProductId' class='form-control' name='CustomProductionNoteDetail[" +
+                            unitindex + "].ProductId' type='text' readonly value=" + $("#ProductId").val() + " /></td>";
+                   
+                        var unitPDescCell = "<td ><input id='CustomProductionNoteDetail[" + unitindex + "]_ProductName' class='form-control' name='CustomProductionNoteDetail[" +
+                            unitindex + "].ProductName' type='text' readonly value='" + $("#ProductId option:selected").text() + "' /></td>";
+                     
+                        var unitPQtyCell = "<td ><input id='CustomProductionNoteDetail[" + unitindex + "]_ProductQty'  class='form-control' type='text'  name='CustomProductionNoteDetail[" +
+                            unitindex + "].ProductQty'  readonly value=" + $("#ProductQty").val() + " /></td>";
+
+                        var unitMIdCell = "<td style='display:none'><input id='CustomProductionNoteDetail[" + unitindex + "]_MaterialId' class='form-control' name='CustomProductionNoteDetail[" +
+                            unitindex + "].MaterialId' type='text' readonly value=" + $("#MaterialId").val() + " /></td>";
+
+                        var unitDescCell = "<td ><input id='CustomProductionNoteDetail[" + unitindex + "]_MaterialName'  class='form-control'   name='CustomProductionNoteDetail[" +
+                            unitindex + "].MaterialName'  readonly value='" + $("#MaterialId option:selected").text() + "' /></td>";
+                  
+                        var unitMQtyCell = "<td ><input id='CustomProductionNoteDetail[" + unitindex + "]_MaterialQty'  class='form-control'   name='CustomProductionNoteDetail[" +
+                            unitindex + "].MaterialQty'  readonly value=" + Number($("#MaterialQty").val() / data.SubUnitValue).toFixed(2) + " /></td>";
+                   
+                        var unitCostPriceCell = "<td><input id='CustomProductionNoteDetail[" + unitindex + "]_MaterialCostPrice'  class='form-control'  name='CustomProductionNoteDetail[" +
+                            unitindex + "].MaterialCostPrice' type='text' readonly value=" + Number((data.AvgCost * $("#MaterialQty").val()) / data.SubUnitValue).toFixed(2) + " /></td>";
+                   
+                        var prdCostPriceCell = "<td style='display:none' ><input id='CustomProductionNoteDetail[" + unitindex + "]_ProductCostPrice'  class='form-control'  name='CustomProductionNoteDetail[" +
+                            unitindex + "].ProductCostPrice' type='text' readonly value=" + 0 + " /></td>";
+                    
+                        var unitRemoveCell = "<td><input id='btnRemoveReceipeItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trreceipeitem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitPIdCell +
+                            unitPDescCell +
+                            unitPQtyCell +
+                            unitMIdCell +
+                            unitDescCell +
+                            unitMQtyCell +                         
+                            unitCostPriceCell +                          
+                         //   prdCostPriceCell+                      
+                            unitRemoveCell + "</tr>";
+                        $("#receipeitems").append(newUnitRow);
+                       // $("#ProductQty").val('');
+                   // });
+
+                     debugger;
+                    var table = document.getElementById("receipeitems");                 
+                    var totcp = 0.0;
+                   
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+                       // var cpval = $("#CustomProductionNoteDetail[' + r + ']_MaterialCostPrice").val();
+                        var cpvalue = document.getElementById('CustomProductionNoteDetail[' + r + ']_MaterialCostPrice').value;
+                        //var cpcell = table.rows[r].cells[7].innerHTML;
+                        //var cpvalue = Number(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+                        totcp += Number(cpvalue);
+                    }
+                    
+                    $("#TotalCostPrice").val(Number(totcp).toFixed(2));
+
+
+                  //  SummerizeTable();
+
+                },
+                error: function (error) {
+                  //  alert("No Sub unit assigned for: " + $("#MaterialId option:selected").text());
+                }
+            });
+
+        });
+
+    function removeUnitRow(id) {
+        debugger;
+        if (confirm("Do you want to delete? ")) {
+            var controlToBeRemoved = "#trreceipeitem" + id;
+            $(controlToBeRemoved).remove();
+
+            var table = document.getElementById("receipeitems");
+
+          
+            var totcp = 0;           
+            var totqty = 0;
+            for (var r = 0, n = table.rows.length; r < n; r++) {              
+                var cpvalue = document.getElementById('CustomProductionNoteDetail[' + r + ']_MaterialCostPrice').value;             
+                totcp += Number(cpvalue);
+            }
+
+            $("#TotalCostPrice").val(Number(totcp).toFixed(2));
+
+            //for (var r = 0, n = table.rows.length; r < n; r++)
+            //{
+                
+            //    var cpcell = table.rows[r].cells[7].innerHTML;
+            //    var cpvalue = Number(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(2);
+            //    totcp += Number(cpvalue);             
+            //}
+            //$("#TotalCostPrice").val(Number(totcp).toFixed(2));
+          
+
+        }
+
+    }
+</script>
+
+<script>
+    function SummerizeTable()
+    {
+        var table = document.getElementById("receipeitems");
+        $(table).each(function () {
+            $(table).find('td').each(function () {
+                var $this = $(this);
+                var col = $this.index();
+                var html = $this.html();
+                var row = $(this).parent()[0].rowIndex;
+                var span = 1;
+                var cell_above = $($this.parent().prev().children()[col]);
+                while (cell_above.html() === html) {
+                    span += 1;
+                    cell_above_old = cell_above;
+                    cell_above = $(cell_above.parent().prev().children()[col]);
+                }
+                if (span > 1) {
+                    // console.log(span);
+                    $(cell_above_old).attr('rowspan', span);
+                    $this.hide();
+                }
+
+            });
+        });
+    }
+</script>
+

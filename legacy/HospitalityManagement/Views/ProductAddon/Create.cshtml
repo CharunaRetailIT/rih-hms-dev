@@ -1,0 +1,503 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Addons>
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Create", "ProductAddon", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Addons </strong> saved successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Addons</strong> save failed.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>ProductAddons</strong> @ViewBag.ProductAddonCode already exists.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "4")
+                        {
+                            <div id="vb4" class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Cannot submit without product details</strong>
+                            </div>
+                        }
+
+                        <div class="row">
+
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+
+                                    <div class="x_title">
+                                        <h2>Product Addons</h2>
+                                        <br />
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            @*<li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="#">Settings 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Settings 2</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>*@
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content">
+                                        <br />
+                                        <form class="form-horizontal form-label-left">
+
+                                            @*<div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Item/ Product</label>
+                                                    <div class="col-md-3 col-sm-9 col-xs-9">
+                                                        <select id="ProductId" name="ProductId" class="form-control"></select>
+                                                    </div>
+                                                </div>*@
+
+
+
+
+                                            <div class="form-group">
+                                                @*Item Table*@
+                                                @*<br />*@
+                                                <div class="col-md-12">
+                                                    <table id="buttons" class="table table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width:10%" align="right">
+                                                                    Item/Product
+                                                                </td>
+                                                                <td>
+                                                                    <select id="ProductId" class="form-control select2" style="width:100%" name="ProductId"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right">
+                                                                    Addon
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <select id="AddonId" class="form-control select2" style="width:100%" name="AddonId"></select>
+                                                                </td>
+                                                                <td style="width:10%" align="right"></td>
+                                                                <td style="width:20%">
+                                                                    Show on Bill
+                                                                    <input type="checkbox" id="ShowOnBill" name="ShowOnBill" class="icheckbox_flat-blue" />
+                                                                </td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width:10%" align="right">
+                                                                    Addon Quantity
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" style="text-align:right;" step="any" min="0" value="0" onkeyup="checkAddonQty()"
+                                                                           oninput="javascript: if (this.value.length >9) this.value = this.value.slice(0, 5);"
+                                                                           id="AddonQuantity" class="form-control" />
+                                                                </td>
+
+                                                                <td style="width:10%" align="right">
+                                                                    Addon Selling Price
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <input type="number" style="text-align:right;" step="0.0001" min="0" value="0" id="AddonSellingPrice" class="form-control" />
+                                                                    <small>Selling price 0 means addon price not adding to product</small>
+                                                                </td>
+                                                                <td style="width:10%" align="right">
+                                                                    <input type="button" id="btnAddItem" class="btn btn-round btn-info" value="+" />
+                                                                </td>
+                                                                <td style="width:20%"></td>
+                                                                <td></td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                                <br />
+
+
+                                                <div class="text-info"><b>Product Addons</b></div>
+
+                                                <table id="tblProductAddons" class="table table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th>idx</th>*@
+                                                            @*<th>Department Id</th>*@
+                                                            <th style="display:none">Product Id</th>
+                                                            <th>Product Desc</th>
+                                                            <th style="display:none">Addon Id</th>
+                                                            <th>Addon Desc</th>
+                                                            <th style="text-align:right;">Addon Qty</th>
+                                                            <th style="text-align:right;">Addon Price</th>
+                                                            <th>Show On Bill</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="addons">
+                                                        @*@if (Model.Addons != null)
+                                                            {
+                                                                @foreach (var productAddons in Model.Addons)
+                                                                {
+
+                                                                    <tr>
+
+                                                                        <td>@productAddons.AddonsId</td>
+                                                                        <td>@productAddons.ProductId</td>
+                                                                        <td>@productAddons.ProductAddonId</td>
+                                                                        <td>@productAddons.DepartmentId</td>
+
+
+                                                                        <td></td>
+                                                                    </tr>
+
+                                                                }
+
+                                                            }*@
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <hr />
+
+
+
+                                            <div class="actionBar">
+                                                <div class="msgBox">
+
+
+                                                    <div class="pull-left">
+                                                        <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Create", null, new { })'" />
+                                                    </div>
+                                                    <div class="pull-left">
+                                                        <input type="button" class="btn btn-primary" value="Back To Products" onclick="location.href='@Url.Action("ViewAddonBasedProducts", null, new { })'" />
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success">Submit</button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</body>
+</html>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $.getJSON("@Url.Action("GetNotRawProducts", "Product")", function (data) {
+
+        var itemId = $("#ProductId");
+
+
+        itemId.empty();
+        itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode + "-" + optionaldata.ProductName));
+
+        });
+
+        if ('@ViewBag.ProductId') {
+            $('#ProductId').val(@ViewBag.ProductId).trigger("change");
+        } else {
+            $('#ProductId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+
+<script>
+
+    $.getJSON("@Url.Action("GetAddons", "Product")", function (data) {
+
+        var itemId = $("#AddonId");
+
+
+        itemId.empty();
+        itemId.append("<option value='0'>-- Select an Addon --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode + "-" + optionaldata.ProductName + '(' + optionaldata.UOM + ')'));
+
+        });
+
+        if ('@ViewBag.AddonId') {
+            $('#AddonId').val(@ViewBag.AddonId).trigger("change");
+        } else {
+            $('#AddonId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var departmentGroupDropDown = $("#DepartmentId");
+
+        departmentGroupDropDown.empty();
+        departmentGroupDropDown.append("<option value='0'>-- Select a Department--</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            departmentGroupDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+
+        if ('@ViewBag.DepartmentId') {
+            $('#DepartmentId').val(@ViewBag.DepartmentId).trigger("change");
+        } else {
+            $('#DepartmentId').val(0).trigger("change");
+        }
+    });
+
+
+</script>
+
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddItem",
+        function () {
+
+            if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                alert("Select a Product !");
+                return;
+            }
+
+            if ($("#AddonId").val() == 0 || $("#AddonId").val() == null) {
+                alert("Select a Addon !");
+                return;
+            }
+
+            if ($("#AddonSellingPrice").val() == "") {
+                alert("Invalid Selling Price!");
+                return;
+            }
+
+            if ($("#AddonQuantity").val() == 0 || $("#AddonQuantity").val() == "") {
+                alert("Addon Quantity Is a must!");
+                return;
+            }
+
+            $.getJSON("@Url.Action("GetProductAddons", "ProductAddon")", { productid: $("#ProductId").val(), productAddonId: $("#AddonId").val() },
+           function (data) {
+               if (data == true)
+               {
+                   alert("Addon already exists for this product!");
+                   return;
+               }
+               else
+               {
+                   var ProductId = $("#ProductId").val();
+                   var AddonId = $("#AddonId").val();
+                   var addonDesc = $("#AddonId option:selected").text();
+                   var productDesc = $("#ProductId option:selected").text();
+                   var AddonQty = $("#AddonQuantity").val();
+                   var AddonSP = $("#AddonSellingPrice").val();
+                   var ShowOnBill = document.getElementById('ShowOnBill').checked;
+                   var isshowonbill;
+                   if (ShowOnBill == true) {
+                       isshowonbill = "Yes";
+                   } else {
+                       isshowonbill = "No";
+                   }
+
+                   var table = document.getElementById("addons");
+                   var hasitem = '0';
+
+                   // checking already exists
+                   for (var r = 0, n = table.rows.length; r < n; r++) {
+
+                       var PrdDesc = table.rows[r].cells[1].innerHTML;
+                       var AddonDesc = table.rows[r].cells[3].innerHTML;
+
+                       if (productDesc == PrdDesc && addonDesc == AddonDesc) {
+                           hasitem = '1';
+                       }
+
+                   }
+                   if (hasitem == '1') {
+                       alert("Already added!");
+                       return;
+                   }
+
+                   var unitindex = $("#addons").children("tr").length;
+
+                   var unitindexCell = "<td style='display:none'> <input name='Addons.Index' type='hidden' class='text01 form-control' value='" +
+                       unitindex + "' /></td>";
+
+                   var unitProductIdCell = "<td style='display:none'> <input id='Addons" + unitindex + "_ProductId' class='text02 form-control' name='Addons[" +
+                       unitindex + "].ProductId' type='text' readonly value='" + ProductId + "' /> </td>";
+
+                   var unitProductDescCell = "<td><input id='Addons" + unitindex + "_ProductDesc' class='text03 form-control'    name='Addons[" +
+                       unitindex + "].ProductDesc' value='" + productDesc + "'></input></td>";
+
+                   var unitaddonIdCell = "<td style='display:none'> <input id='Addons" + unitindex + "_ProductAddonId'  class='text04 form-control'  name='Addons[" +
+                       unitindex + "].ProductAddonId' type='text' readonly value='" + AddonId + "' /> </td>";
+
+                   var unitaddonDescCell = "<td> <input id='Addons" + unitindex + "_AddonDesc' class='text05 form-control'  name='Addons[" +
+                       unitindex + "].AddonDesc' value='" + addonDesc + "' /> </td>";
+
+                   var unitaddonQtyCell = "<td><input id='Addons" + unitindex + "_AddonQuantity'  class='text06 form-control' style='text-align:right'  name='Addons[" +
+                       unitindex + "].AddonQuantity' type='number' step='0.0001' min='0' readonly value='" + parseFloat(AddonQty).toFixed(3) + "' /></td>";
+
+                   var unitaddonSPCell = "<td><input id='Addons" + unitindex + "_AddonSellingPrice'  class='text07 form-control' style='text-align:right'  name='Addons[" +
+                       unitindex + "].AddonSellingPrice' type='text' readonly value='" + AddonSP + "' /></td>";
+
+
+                   var unitShowOnBillCell = "<td><input id='Addons" + unitindex + "_IsShowOnBill'  class='text08 form-control'  name='Addons[" +
+                       unitindex + "].IsShowOnBill' type='text' readonly value='" + isshowonbill + "' /></td>";
+
+                   //var unitDeptIdCell = "<td><input id='Addons" + unitindex + "_DepartmentId'  class='form-control'  name='Addons[" +
+                   //    unitindex + "].DepartmentId' type='text' readonly value='" + DeptId + "' /></td>";
+
+
+                   var unitRemoveCell = "<td><input id='btnAddItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                         unitindex + ");' /></td>";
+
+
+                   var newUnitRow = "<tr id='trAddons" + unitindex + "'>" +
+                       //unitDeptIdCell +
+                       unitProductIdCell +
+                       unitProductDescCell +
+                       unitaddonIdCell +
+                       unitaddonDescCell +
+                       unitaddonQtyCell +
+                       unitaddonSPCell +
+                       unitShowOnBillCell +
+                       unitRemoveCell + "</tr>";
+                   $("#addons").append(newUnitRow);
+
+                   $('#vb4').hide();
+
+               }
+
+           });
+
+        });
+
+</script>
+
+
+<script>
+
+    function removeUnitRow(id) {
+
+        if (confirm("Do you want to delete? ")) {
+            var controlToBeRemoved = "#trAddons" + id;
+            $(controlToBeRemoved).remove();
+            ReSetIndexNumber();
+            //var table = document.getElementById("Addons");
+
+
+        }
+
+    }
+
+    function ReSetIndexNumber() {
+        var table = $("#tblProductAddons tbody");
+
+        table.find('tr').each(function (i, el) {
+            var $tds = $(this).find('td')
+            console.log(i);
+
+            $tds.eq(0).find(".text01").val(i);
+            $tds.eq(0).find(".text02").attr("id", "Addons" + i + "_ProductId");
+            $tds.eq(0).find(".text02").attr("name", "Addons[" + i + "].ProductId");
+            $tds.eq(1).find(".text03").attr("id", "Addons" + i + "_ProductDesc");
+            $tds.eq(1).find(".text03").attr("name", "Addons[" + i + "].ProductDesc");
+            $tds.eq(2).find(".text04").attr("id", "Addons" + i + "_ProductAddonId");
+            $tds.eq(2).find(".text04").attr("name", "Addons[" + i + "].ProductAddonId");
+
+            $tds.eq(3).find(".text05").attr("id", "Addons" + i + "_AddonDesc");
+            $tds.eq(3).find(".text05").attr("name", "Addons[" + i + "].AddonDesc");
+            $tds.eq(4).find(".text06").attr("id", "Addons" + i + "_AddonQuantity");
+            $tds.eq(4).find(".text06").attr("name", "Addons[" + i + "].AddonQuantity");
+            $tds.eq(5).find(".text07").attr("id", "Addons" + i + "_AddonSellingPrice");
+            $tds.eq(5).find(".text07").attr("name", "Addons[" + i + "].AddonSellingPrice");
+            $tds.eq(6).find(".text08").attr("id", "Addons" + i + "_IsShowOnBill");
+            $tds.eq(6).find(".text08").attr("name", "Addons[" + i + "].IsShowOnBill");
+
+        });
+    }
+
+</script>
+
+<script type="text/javascript">
+    function checkAddonQty() {
+        debugger;
+        if ($("#AddonQuantity").val() == null || $("#AddonQuantity").val() == "") {
+
+            document.getElementById("AddonQuantity").value = "0";
+            return;
+        }
+    };
+</script>

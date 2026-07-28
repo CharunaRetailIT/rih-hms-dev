@@ -1,0 +1,121 @@
+# RIT HMS — self-contained test/staging stack.
+#   postgres ─ bootstrap (one-shot: create + migrate hms_control)
+#            └ api (ASP.NET Core 8) ─ web (Next.js) ─ caddy (reverse proxy + TLS)
+#
+# Bring up:   ./infra/gen-secrets.sh   # writes ./.env with fresh secrets
+#             docker compose up -d --build
+# Config:     ./.env  (gitignored — see infra/.env.example for the template)
+# Runbook:    docs/deploy.md
+name: rit-hms
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Not published to the host. Reach it with: docker compose exec postgres psql -U postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  # One-shot: create hms_control + apply control-plane migrations (0001, 0026).
+  # Idempotent — safe to re-run on every `up`. Exits 0; the API waits for it.
+  bootstrap:
+    image: postgres:16
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGUSER: ${POSTGRES_USER:-postgres}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      CONTROL_DB: ${CONTROL_DB:-hms_control}
+      MIG_DIR: /db/postgres/migrations
+    volumes:
+      - ./db/postgres:/db/postgres:ro
+      - ./infra/bootstrap.sh:/bootstrap.sh:ro
+    entrypoint: ["bash", "/bootstrap.sh"]
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      bootstrap:
+        condition: service_completed_successfully
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://0.0.0.0:5000
+      # Control plane + per-tenant template (the factory swaps {tenant_db}).
+      ConnectionStrings__ControlDb: "Host=postgres;Port=5432;Database=${CONTROL_DB:-hms_control};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__TenantTemplateDb: "Host=postgres;Port=5432;Database={tenant_db};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD}"
+      # FRESH secrets — the API refuses to boot in Production if these match the dev defaults.
+      Jwt__Issuer: ${JWT_ISSUER:-rit-hms}
+      Jwt__Audience: ${JWT_AUDIENCE:-rit-hms-api}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?set JWT_SIGNING_KEY in .env}
+      Secrets__MasterKey: ${SECRETS_MASTER_KEY:?set SECRETS_MASTER_KEY in .env}
+      # Platform-admin allowlist (cross-tenant control-plane ops). Indexed = string[] element 0.
+      Platform__AdminEmails__0: ${PLATFORM_ADMIN_EMAIL:?set PLATFORM_ADMIN_EMAIL in .env}
+      # Public URL used to build the magic-link in logs/emails — must be browser-reachable.
+      App__WebBaseUrl: ${PUBLIC_BASE_URL:?set PUBLIC_BASE_URL in .env}
+      # No live PickMe key yet — keep the poller off (sandbox/mock path only).
+      Aggregators__PickMe__PollingEnabled: "false"
+      Provisioning__MigrationsPath: /app/db/postgres/migrations
+    healthcheck:
+      # Readiness — gates web/caddy on the control DB actually being reachable.
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5000/health/ready || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      # SSR fetches + the Next rewrite target the API service inside the compose network.
+      API_BASE_URL: http://api:5000
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      web:
+        condition: service_started
+      api:
+        condition: service_healthy
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    environment:
+      # 'http://' = listen on :80 for any host, HTTP only (no TLS) — right for an IP test box.
+      # Set to a domain (e.g. hms.example.com) for automatic HTTPS via Let's Encrypt.
+      SITE_ADDRESS: ${SITE_ADDRESS:-http://}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@example.com}
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,175 @@
+﻿@*@model IEnumerable<HospitalityManagement.Models.ViewModels.Reports.StockAdjustmentReportViewModel>*@
+
+@{
+    ViewBag.Title = "Day End";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+<style>
+  .submit-progress {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 6em;
+  padding-top: 2.3em;
+
+  /* The following rules are the ones most likely to change */
+  width: 20em;
+  /* Set 'margin-left' to a negative number
+
+     that is 1/2 of 'width' */
+
+  margin-left: -10em;
+  padding-left: 2.1em;
+  background-color: black;
+  color: white;
+}
+</style>
+
+<style>
+    .submit-progress-bg {
+        background-color: lightgray;
+        opacity: .5;
+    }
+</style>
+
+
+
+
+
+    <div class="container body">
+
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+
+                    <div class="alert alert-success alert-dismissible fade in" id="success" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Day End </strong> Processed Sucessfully.
+                    </div>
+
+
+                    <div class="alert alert-danger alert-dismissible fade in" id="failed" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Day End</strong> Process Failed.
+                    </div>
+
+
+
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Day End<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="row">
+
+                                <div class="form-horizontal form-label-left col-md-7">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+                                            <input type="date" class="form-control" id="DateFrom" name="DateFrom" value=@DateTime.Now.ToString("yyyy-MM-dd") />
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-3 col-xs-3">To</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+                                            <input type="date" class="form-control" id="DateTo" name="DateTo" value=@DateTime.Now.ToString("yyyy-MM-dd") />
+
+                                        </div>
+                                    </div>                                 
+                                </div>
+
+                                <div class="form-horizontal form-label-left col-md-5">
+
+                                    <div class="form-group">                                        
+                                        <div class="col-md-3 col-sm-9 col-xs-9">
+
+                                            @*<button type="submit" class="btn btn-success">Process Day End</button>*@
+                                            <button type="submit"
+                                                    id="submitButton"
+                                                    class="btnallSubmit btn pull-left"
+                                                    onclick="return DisplayProgressMessage(this, 'Processing...');">
+
+                                                Process Day End
+
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <br />
+                            <div class="clearfix"></div>
+
+                            <div class="submit-progress hidden">
+
+                                <label>Please wait while Processing Day End...</label>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+
+<script>
+
+    document.getElementById("success").hidden = true;
+    document.getElementById("failed").hidden = true;
+
+    function DisplayProgressMessage(ctl, msg)
+    {
+
+      $(ctl).prop("disabled", true).text(msg);
+      $(".submit-progress").removeClass("hidden");
+      $("body").addClass("submit-progress-bg");
+
+   
+
+      $.ajax({
+          url: "@Url.Action("ProcessDayEnd", "DayEnd")",
+          data: { datefrom: document.getElementById("DateFrom").value, dateto: document.getElementById("DateTo").value },
+          type: "POST",
+          dataType: "json",
+          success: function (resp)
+          {
+
+              if (resp == "1") {
+
+                  $(ctl).prop("disabled", false).text("Process Day End");
+                  $(".submit-progress").addClass("hidden");
+                  $("body").removeClass("submit-progress-bg");
+                  document.getElementById("success").hidden = false;
+
+
+
+              } else
+              {
+                  document.getElementById("Failed").hidden = false;
+              }
+
+          }
+      });
+   
+
+  };
+
+</script>

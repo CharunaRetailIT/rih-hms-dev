@@ -1,0 +1,192 @@
+﻿@model RIT.HMS.Domain.RstSubCategory
+@{
+    ViewBag.Title = "Sub Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Create", "SubCategory", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Sub Category </strong> @ViewBag.SubCatCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Sub Category</strong> @ViewBag.SubCatCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Sub Category</strong> @ViewBag.SubCatCode already exists.
+                    </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>Sub Category</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                  
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        @if (ViewBag.SubCatDependency == "1")
+                                        {
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Category</label>
+                                                <div class="col-md-3 col-sm-9 col-xs-9">
+                                                    <select id="RstCategoryID" name="RstCategoryID" class="form-control"></select>
+                                                    @Html.ValidationMessageFor(model => model.RstCategoryID, "", new { @class = "text-danger pull-left" })
+                                                </div>
+                                            </div>
+                                        }
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Category Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RstSubCategoryCode,
+                                               new {
+                                                   @class = "form-control",
+                                                   MaxLength = 10,
+                                                   Placeholder = "Sub Category Code",
+                                                   onkeypress = "return checkCodeTypeInput(event)"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.RstSubCategoryCode, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Category Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RstSubCategoryName, new { @class = "form-control", MaxLength = 50, Placeholder = "Sub Category Name" })
+                                                @Html.ValidationMessageFor(model => model.RstSubCategoryName, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Category Image</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <input type="file" id="Photograph" name="Photograph" class="flat pull-left" />
+                                                @Html.ValidationMessageFor(model => model.Photograph, "", new { @class = "text-danger pull-left" })
+                                                @ViewBag.FileName
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", Placeholder = "Remark" })
+                                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                            </div>*@
+                                        </div>
+                                        <div class="form-group">
+                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                            </div>*@
+                                        </div>
+
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewSubCategories", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@*</body>
+    </html>*@
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveCategories", "Category")", function (data) {
+
+        var CategoryDropDown = $("#RstCategoryID");
+
+        CategoryDropDown.empty();
+        CategoryDropDown.append("<option value='0'>-- Select a Category --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            debugger;
+            CategoryDropDown.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryCode + '-' + optionaldata.RstCategoryName));
+        });
+
+        if ('@ViewBag.RstCategoryID') {
+            $('#RstCategoryID').val(@ViewBag.RstCategoryID).trigger("change");
+        } else {
+            $('#RstCategoryID').val(0).trigger("change");
+        }
+
+
+    });
+
+</script>

@@ -1,0 +1,329 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Receipe>
+@{
+    ViewBag.Title = "Recipes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+<h2></h2>
+@using (Html.BeginForm("", "Receipe", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_content">
+                            <br />
+                            <div class="clerfix">
+                                <div class="pull-left">
+                                    <input type="button" class="btn btn-info" value="Create New Recipe" onclick="location.href='@Url.Action("CreateReceipe", null, new { })'" />
+                                    
+                                </div>
+                                <div class="pull-right">                                   
+                                    @if (ViewBag.Update == "1")
+                                    {
+                                        <input type="button" id="UpdateAllRecipes" name="UpdateAllRecipes" class="btn btn-warning" value="Update All Recipes" />
+                                    }
+                                    @*<div class="btn-group">
+                                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" id="btnPrint" onclick="PrintDiv();">
+                                                    <img src='~/Content/Images/icons/pdf.png' width="10" />
+                                                    Print/PDF
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>*@
+                                </div>
+                            </div>
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Recipes<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="">
+
+                                    </div>
+                                    <div class="pull-right">
+                                        <input type="submit" value="Download Data" formaction="HMSRecipes" class="btn btn-primary">
+                                    </div>
+                                </div><div class="clerfix"></div><br />
+                                <div class="x_content">
+                                    <br />
+                                    @*<table id="datatable-responsive"
+                                        class="table table-striped table-bordered dt-responsive nowrap">*@
+                                    <div id="printcontent">
+                                    <table id="datatable-responsive" class="mstable col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                                        <thead>
+                                            <tr>
+                                                <th style="display:none">Location Id</th>
+                                                <th style="display:none">Product Id</th>
+                                                <th>Location</th>
+                                                <th>Product</th>
+                                                <th>Create Date</th>
+                                                <th>Serving Unit</th>
+                                                <th>Product Qty</th>
+                                                <th>Recipe Cost Price</th>
+                                                <th>Recipe Selling Price</th>
+                                                <th style="display:none"></th>
+                                                <th></th>
+                                                <th></th>
+                                                @if (ViewBag.Update == "1")
+                                                {
+                                                <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td style="display:none">@item.LocationId</td>
+                                                    <td style="display:none">@item.ProductId</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.LocationName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                    <td>@item.CreatedDate.ToShortDateString()</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ServingUnitName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ProductQty)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.TotCostPrice)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.TotSellingPrice)</td>
+                                                 
+                                                    <td style="display:none">@item.ProductServingUnitId</td>
+                                                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.ProductId, suid = item.ProductServingUnitId, spqty = item.ProductQty, locationid = item.LocationId })</td>                                                  
+                                                    @if (item.IsActive)
+                                                    {
+                                                        <td>
+                                                            <input type="button" class="btn btn-danger btn-sm" value="Inactive" id="InactiveRecipe" name="InactiveRecipe" />
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <input type="button" class="btn btn-success btn-sm" value="Active" id="ActiveRecipe" name="ActiveRecipe" />
+                                                        </td>
+                                                    }
+                                                   
+                                                    @if (ViewBag.Update == "1")
+                                                    {
+                                                    <td>
+                                                        <input type="button" class="btn btn-warning btn-sm" value="Update Recipe" id="UpdateRecipe" name="UpdateRecipe" />
+                                                    </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        @*<tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="display:none"></td>
+                                                <td style="display:none"></td>
+                                                <td>
+                                                    @if (ViewBag.Update == "1")
+                                                    {
+                                                        <input type="button" id="UpdateAllRecipes" name="UpdateAllRecipes" class="btn btn-warning" value="Update All Recipes" />
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </tfoot>*@
+
+                                    </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">                      
+                            <input type="button" class="btn btn-info" value="Create New Recipe" onclick="location.href='@Url.Action("CreateReceipe", null, new { })'" />
+                        </div>
+                        <div class="pull-right">    
+                            @if (ViewBag.Update == "1")
+                            {
+                            <input type="button" id="UpdateAllRecipes" name="UpdateAllRecipes" class="btn btn-warning" value="Update All Recipes"/>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+}
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $("body").on("click", "#InactiveRecipe", function ()
+    {
+        debugger;
+        var row = $(this).closest("TR");
+        var locationid = $("TD", row).eq(0).html();
+        var productid = $("TD", row).eq(1).html();
+        var recipeqty = $("TD", row).eq(6).html();
+        var servingunit = $("TD", row).eq(5).html();
+        var servingunitid = $("TD", row).eq(9).html();
+        // alert("aaaa" + name);
+        if (confirm("Do you want to Inactive the recipe? "))
+        {
+            $.ajax({
+                url: "@Url.Action("InactiveRecipe", "Receipe")",
+                data: {locationid:locationid, productid: productid, recipeqty: recipeqty, servingunit: servingunitid },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+                if (resp != null || resp != "") {
+                    alert("Recipe Inactivated Sucessfully..!");
+                    window.location.href = "/Receipe//ViewReceipes";
+
+                } else {
+                    alert("Update Failed");
+                }
+            }
+        });
+    }
+    });
+
+    $("body").on("click", "#ActiveRecipe", function ()
+    {
+        debugger;
+        var row = $(this).closest("TR");
+        var locationid = $("TD", row).eq(0).html();
+        var productid = $("TD", row).eq(1).html();
+        var recipeqty = $("TD", row).eq(6).html();
+        var servingunit = $("TD", row).eq(5).html();
+        var servingunitid = $("TD", row).eq(9).html();
+        // alert("aaaa" + name);
+        if (confirm("Do you want to Active the recipe? "))
+        {
+            $.ajax({
+                url: "@Url.Action("ActiveRecipe", "Receipe")",
+                data: {locationid:locationid, productid: productid, recipeqty: recipeqty, servingunit: servingunitid },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+                if (resp != null || resp != "") {
+                    alert("Recipe Activated Sucessfully..!");
+                    window.location.href = "/Receipe//ViewReceipes";
+
+                } else {
+                    alert("Update Failed");
+                }
+            }
+        });
+    }
+    });
+       $("body").on("click", "#UpdateRecipe", function ()
+       {
+           debugger;
+           var row = $(this).closest("TR");
+           var productid = $("TD", row).eq(1).html();
+           var recipeqty = $("TD", row).eq(6).html();
+           var servingunit = $("TD", row).eq(5).html();
+           var servingunitid = $("TD", row).eq(9).html();
+           // alert("aaaa" + name);
+           if (confirm("Do you want to update recipe? "))
+           {
+               $.ajax({
+                   url: "@Url.Action("UpdateRecipe", "Receipe")",
+                   data: { productid: productid, recipeqty: recipeqty, servingunit: servingunitid },
+                   type: "GET",
+                   dataType: "json",
+                   success: function (resp) {
+                       data = resp;
+                       if (resp != null || resp != "") {
+                           alert(resp+" Material(s) Updated..!");
+
+                       } else {
+                           alert("Update Failed");
+                       }
+                   }
+               });
+           }
+
+
+       });
+
+
+    $("body").on("click", "#UpdateAllRecipes", function ()
+    {
+        debugger;
+        
+        if (confirm("Do you want to update recipe? "))
+        {
+            $.ajax({
+                url: "@Url.Action("UpdateAllRecipes", "Receipe")",
+                data: {},
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+                if (resp != null || resp != "") {
+                    alert(resp+" Recipe(s) Updated..!");
+
+                } else {
+                    alert("Update Failed");
+                }
+            }
+        });
+    }
+
+
+    });
+</script>
+
+
+<script type="text/javascript">
+
+  
+    function PrintDiv()
+    {    
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+    }
+
+
+</script>

@@ -1,0 +1,336 @@
+﻿@model RIT.HMS.Domain.StewardsMaster
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Create", "StewardsMaster", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Steward</strong> @ViewBag.StewardCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Steward</strong> @ViewBag.StewardCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Steward</strong> @ViewBag.StewardCode already exists.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Can't be select Active and Delete options in the same time..!
+                        </div>
+                    }
+
+                    else if (@ViewBag.Message == "6")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Please entere a valid card number.
+                        </div>
+                    }
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Steward</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Steward Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.StewardCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 5,
+                                                   Placeholder = "Code",
+                                                   onkeyup = "CheckStewardCode()",
+                                                   onkeypress = "return checkCodeTypeInput(event)"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.StewardCode, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                            <font color="red" class="col-md-5">
+                                                <label id="validatecode" name="validatecode" style="font:small-caption"></label>
+                                            </font>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Title</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <select id="StewardTitle" name="StewardTitle" class="form-control">
+                                                    @*<option value="0">-Title-</option>*@
+                                                    <option value="Mr">Mr.</option>
+                                                    <option value="Mrs">Mrs.</option>
+                                                    <option value="Mrs">Ms.</option>
+                                                    <option value="Miss">Miss.</option>
+                                                    <option value="Dr">Dr.</option>
+                                                    <option value="Rev">Rev.</option>
+                                                </select>
+                                                @Html.ValidationMessageFor(model => model.StewardTitle, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.StewardName, new { @class = "form-control", Placeholder = "Name", autocomplete = "false" })
+                                                @Html.ValidationMessageFor(model => model.StewardName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 01</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.Address1, new { @class = "form-control", Placeholder = "Address 01" })
+                                                @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 02</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+
+                                                @Html.TextBoxFor(model => model.Address2, new { @class = "form-control", MaxLength = 20, Placeholder = "Address 02" })
+                                                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger pull-left" })
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 03</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Address3, new { @class = "form-control", MaxLength = 20, Placeholder = "Address 03" })
+                                                @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">DOB</label>
+                                            <div class="col-md-9 col-sm-9">
+                                                @Html.TextBoxFor(model => model.DOB, new { @id = "DOB", @class = "form-control pull-left", Type = "date", @Style = "width:50%", Placeholder = "DOB" })
+                                                @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">NIC</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.NIC, new { @class = "form-control", MininumLength = 10, MaxLength = 12, Placeholder = "NIC" })
+                                                @Html.ValidationMessageFor(model => model.NIC, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Passport</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Passport, new { @class = "form-control", Placeholder = "Passport" })
+                                                @Html.ValidationMessageFor(model => model.Passport, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <br />
+
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Telephone</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Telephone, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Telephone",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 10,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Mobile</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Mobile, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Mobile",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 10,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Fax</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Fax, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Fax",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 10,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">E Mail</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Email, new
+                                           {
+                                               @class = "form-control",
+                                               Type = "email",
+                                               Placeholder = "E Mail",
+                                               MaxLength = 100,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Target</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Target, new { @class = "form-control", Placeholder = "Target", autocomplete = "false" })
+                                                @Html.ValidationMessageFor(model => model.Target, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Commission</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Commission, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Commission",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 20,
+                                               Value = "0",
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Commission, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+
+                                                <label class="control-label col-md-4 col-sm-3 col-xs-3">IsDeliveryPerson</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsDeliveryPerson, new { })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+
+                                                <label class="control-label col-md-4 col-sm-3 col-xs-3">IsKarokeGirl</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsKarokeGirl, new { })
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+
+                                                <label class="control-label col-md-4 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Create", null, new { })'" />
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewStewards", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Submit</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+

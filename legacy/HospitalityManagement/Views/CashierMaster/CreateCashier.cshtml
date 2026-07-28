@@ -1,0 +1,385 @@
+﻿@model RIT.HMS.Domain.CashierPermission
+@{
+    ViewBag.Title = "Create Back Office Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("CreateCashier", "CashierMaster", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "0")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cashier</strong> @ViewBag.Cashier save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cashier</strong> @ViewBag.Cashier saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cashier</strong> @ViewBag.Cashier saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cashier</strong> Can't be select Active and Delete options in same time..!
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cashier</strong> Password is already exists..!
+                        </div>
+                    }
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>POS Users</h2>
+                                    <br />
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Location</label>
+                                        <div class="col-md-3 col-sm-9 col-xs-9">
+                                            <select id="LocationId" name="LocationId" class="form-control"></select>
+                                            @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Employee</label>
+                                        <div class="col-md-3 col-sm-9 col-xs-9">
+                                            <select id="EmployeeId" name="EmployeeId" class="form-control select2"></select>
+                                            @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Password</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control", Placeholder = "Password" })
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Confirm Password</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", Placeholder = "Confirm Password", ID = "ConfirmPassword" })
+                                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">POS User Group</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            <select id="UserGroupID" name="UserGroupID" class="form-control"> </select>
+                                            @*@Html.ValidationMessageFor(model => model., "", new { @class = "text-danger" })*@
+                                            <div class="text-danger"> @ViewBag.UserGroupError</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                        <div class="checkbox col-xs-1 ">
+                                            @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat", ID = "IsActive", })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                        <div class="checkbox col-xs-1">
+                                            @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat", ID = "IsDelete" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br />
+                                <div>
+                                    User Group Permissions
+                                </div>
+                                <table id="datatablepermissions" class="table table-striped table-bordered bulk_action">
+                                    <thead>
+                                        <tr>
+                                            @*<th ></th>*@
+                                            <th style='display:none'></th>
+                                            @*<th>Access</th>*@
+                                            <th><input type="checkbox" id="GrantAll" name="GrantAll" class="chkbox" /> Access</th>
+                                            <th>Function</th>
+                                            <th>Function Description</th>
+                                            <th>Value</th>
+                                            <th>Max Value</th>
+                                            @*<th></th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="permissions">
+                                    </tbody>
+                                </table>
+                                <select id="permissionlist" style="display:none" name="permissionlist"></select>
+                                <div class="actionBar">
+                                    <div class="msgBox">
+                                        <div class="btn btn-primary pl_add btn-small pull-left">
+                                            @Html.ActionLink("Clear", "CreateCashier", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                        </div>
+                                        <div class="btn btn-info pl_add btn-small pull-left">
+                                            @Html.ActionLink("View All", "ViewCashiers", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                        </div>
+                                        <input type="submit" value="Submit" class="btn btn-success" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#GrantAll').change(function () {
+            debugger;
+            var length = $("#permissions").children("tr").length;
+            if ($(this).is(":checked")) {
+                for (i = 0; i < length ; i++) {
+                    $("#CashierGroupPermissions" + i + "_IsGrant").prop('checked', true);
+                    $("#CashierGroupPermissions" + i + "_IsGrant").val = true;
+                }
+
+            } else
+            {
+                for (i = 0; i < length ; i++) {
+                    $("#CashierGroupPermissions" + i + "_IsGrant").prop('checked', false);
+                    $("#CashierGroupPermissions" + i + "_IsGrant").val = false;
+                }
+            }
+
+        });
+    });
+</script>
+<script>
+
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#LocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.locationId') {
+            $('#LocationId').val(@ViewBag.locationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActiveEmployees", "Employee")", function (data) {
+
+        var EmployeeCode = $("#EmployeeId");
+
+        EmployeeCode.empty();
+        EmployeeCode.append("<option value='0'>-- Select an Employee --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            EmployeeCode.append($('<option />', { value: optionaldata.EmployeeID }).html(optionaldata.EmployeeName));
+        });
+
+        if ('@ViewBag.EmployeeCode') {
+            $('#EmployeeId').val('@ViewBag.EmployeeCode').trigger("change");
+        } else {
+            $('#EmployeeId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActivePOSUserGroupes", "UserGroup")", function (data) {
+
+        var UserGroup = $("#UserGroupID");
+
+        UserGroup.empty();
+        UserGroup.append("<option value='0'>-- Select a User Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            UserGroup.append($('<option />', { value: optionaldata.POSUserGroupId }).html(optionaldata.POSUserGroupName));
+        });
+
+        if ('@ViewBag.POSUserGroupID') {
+            $('#UserGroupID').val(@ViewBag.POSUserGroupID).trigger("change");
+        } else {
+            $('#UserGroupID').val(0).trigger("change");
+        }
+
+    });
+
+    $('#UserGroupID').change(function () {
+        var groupid = this.value;
+        GetPermissions(groupid);
+    });
+
+    function ft() {
+        //  event.preventDefault();
+        // event.stopPropagation();
+        $("#permissions input:checkbox:checked").map(function () {
+            var functionname = $(this).closest('td').next('td').text();
+            var id = $(this).attr('id');
+            $('#permissionlist').append('<option value="' + id + '">' + functionname + '</option>');
+
+        }).get();
+    }
+
+    function myFunction() {
+
+        //ft();
+
+        var e = document.getElementById("UserGroupID");
+        var strUser = e.options[e.selectedIndex].value
+
+        var chkIsUserCantChangePassword = $("#IsUserCantChangePassword").is(":checked")
+        var chkIsUserMustChangePassword = $("#IsUserMustChangePassword").is(":checked")
+        var chkactive = $("#IsActive").is(":checked")
+        var chkIsDelete = $("#IsDelete").is(":checked")
+
+        var x = document.getElementById("permissionlist");
+        var j, i;
+
+        for (i = 0; i < x.options.length; i++)
+        {
+            console.log(x.options[i].value);
+            j += x.options[i].value + "-";
+        }
+
+        $.ajax(
+            {
+                type: "POST",
+                url: "Create/UserMaster",
+                data:
+                {
+                    EmployeeCode: $("#EmployeeCode").val(),
+                    UserName: $("#UserName").val(),
+                    UserDescription: $("#UserDescription").val(),
+                    Password: $("#Password").val(),
+                    ConfirmPassword: $("#ConfirmPassword").val(),
+                    UserGroupID: strUser,
+                    IsUserCantChangePassword: chkIsUserCantChangePassword,
+                    IsUserMustChangePassword: chkIsUserMustChangePassword,
+                    IsDelete: chkIsDelete,
+                    IsActive: chkactive,
+                    permissionlist: j,
+                }
+            });
+    }
+
+    function GetPermissions(id) {
+        $.ajax({
+            url: "/UserGroup/GetAllPOSPermissions",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data: { id: id, employeeid: $('#EmployeeId').val() },
+            dataType: "json",
+            success: function (data) {
+
+                $("#permissions tr").remove();
+
+                $.each(data, function (index, item) {
+
+                    //alert(item.IsGrant);
+
+                    var unitindex = $("#permissions").children("tr").length;
+
+                    var unitindexCell = "<td style='display:none' ><input name='CashierGroupPermissions.Index' type='hidden' value='" +
+                        unitindex + "' /></td>";
+
+                    var unitIdCell = "<td style='display:none'><input id='CashierGroupPermissions" + unitindex + "_SysUserGroupPermissionID' class='form-control' name='CashierGroupPermissions[" +
+                        unitindex + "].SysUserGroupPermissionID' type='text' type='hidden' readonly value='" + item.SysUserGroupPermissionID + "' /></td>";
+
+                    //var unitIsGrantCell = "<td><input id='CashierGroupPermissions" + unitindex + "_IsGrant' class='chkbox' name='CashierGroupPermissions[" +
+                    //   unitindex + "].IsGrant'  type='checkbox' value='" + item.IsGrant + "'  /></td>";
+                    var unitIsGrantCell;
+
+                    if (item.IsGrant)
+                    {
+                        unitIsGrantCell = "<td><input id='CashierGroupPermissions" + unitindex + "_IsGrant' checked class='checkbox' name='CashierGroupPermissions[" +
+                        unitindex + "].IsGrant'  type='checkbox' value='" + item.IsGrant + "'  /></td>";
+                    } else
+                    {
+                        unitIsGrantCell = "<td><input id='CashierGroupPermissions" + unitindex + "_IsGrant' class='checkbox' name='CashierGroupPermissions[" +
+                        unitindex + "].IsGrant'  type='checkbox' value='true'  /></td>";
+                    }
+
+                    var unitNameCell = "<td><input id='CashierGroupPermissions" + unitindex + "_FunctionName' class='form-control' name='CashierGroupPermissions[" +
+                       unitindex + "].FunctionName' type='text' readonly value='" + item.FunctionName + "' /></td>";
+
+                    var unitDescCell = "<td><input id='CashierGroupPermissions" + unitindex + "_FunctionDescription' class='form-control' name='CashierGroupPermissions[" +
+                       unitindex + "].FunctionDescription' type='text' readonly value='" + item.FunctionDescription + "' /></td>";
+
+                    var unitValueCell = "<td><input id='CashierGroupPermissions" + unitindex + "_Value' class='form-control' name='CashierGroupPermissions[" +
+                        unitindex + "].Value' type='number' step='1' size='5'  value='" + item.Value + "' /></td>";
+
+                    var unitMaxValueCell = "<td><input id='CashierGroupPermissions" + unitindex + "_MaxValue' class='form-control' name='CashierGroupPermissions[" +
+                        unitindex + "].MaxValue' type='number' step='1' size='5'  value='" + item.Value + "' /></td>";
+
+                    var unitCuserCell = "<td style='display:none'><input id='CashierGroupPermissions" + unitindex + "_CreatedUser' class='form-control' name='CashierGroupPermissions[" +
+                        unitindex + "].CreatedUser' type='text' readonly value='1' /></td>";
+                    var unitMuserCell = "<td style='display:none'><input id='CashierGroupPermissions" + unitindex + "_ModifiedUser' class='form-control' name='CashierGroupPermissions[" +
+                        unitindex + "].ModifiedUser' type='text' readonly value='1' /></td>";
+
+                    var newUnitRow = "<tr id='trpermissions" + unitindex + "'>" +
+                          unitindexCell +
+                          unitIdCell +
+                          unitIsGrantCell +
+                          unitNameCell +
+                          unitDescCell +
+                          unitValueCell +
+                          unitMaxValueCell +
+                          unitCuserCell +
+                          unitMuserCell +
+                          "</tr>";
+                    $("#permissions").append(newUnitRow);
+                });
+            },
+            error: function (result)
+            {
+                alert("an error occurred");
+            }
+        });
+    }
+</script>

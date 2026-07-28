@@ -1,0 +1,223 @@
+﻿  @model IEnumerable<RIT.HMS.Domain.ViewModels.Reports.ProductStockViewModel>
+
+    @{
+        ViewBag.Title = "RPTStockDetails";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+
+    @using (Html.BeginForm("RPTStockDetails", "Product", FormMethod.Post, new { @class = "" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container body">
+            <div class="main_container">
+                <div class="right_col" role="main">
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Stock <small>Details</small></h2>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <br />
+
+                                <div class="col-md-12">
+                                    <div class="form-horizontal form-label-left col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Product</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="ProductId" name="ProductId" class="form-control select2"></select>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location</label>
+                                            <div class="col-md-6 col-sm-9 col-xs-9">
+                                                <select id="LocationId" name="LocationId" class="form-control"></select>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        
+
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+                         
+                                        <br />
+                                        <br />
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                            <div class="col-md-6 col-sm-9 col-xs-9">
+                                                <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                                    <ul class="dropdown-menu">
+
+                                                        <li>
+                                                            <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                                                <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                            </a>
+                                                        </li>
+                                                        <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+
+
+                                <br />
+                                <div class="clearfix"></div>
+                               
+                                <div id="printcontent">
+
+                                    <div id="summary" class="pull-left text-info">
+                                        @ViewBag.ReportSummary
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <br />
+
+                                    <div class="table-responsive">
+
+                                        @if (Model != null)
+                                        {
+
+
+                                            <table id="tblstock" class="table table-striped jambo_table bulk_action">
+                                                <thead>
+                                                    <tr class="headings">
+                                                        <th class="column-title">Location</th>
+                                                        <th class="column-title">Product Id </th>
+                                                        <th class="column-title">Product Code</th>
+                                                        <th class="column-title">Product Name </th>
+                                                        <th class="column-title">Stock </th>
+
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <tr class="even pointer">
+                                                            <td class="">@Html.DisplayFor(modelItem => item.Location)</td>
+                                                            <td class="">@Html.DisplayFor(modelItem => item.ProductId)</td>
+                                                            <td class="">@Html.DisplayFor(modelItem => item.ProductCode) </td>
+                                                            <td class="">@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                            <td class="">@Html.DisplayFor(modelItem => item.ProductDbStock)</td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+
+                                            </table>
+
+
+                                        }
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+
+
+
+
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+            var poLocationId = $("#LocationId");
+
+            poLocationId.empty();
+            poLocationId.append("<option value='0'>-- All Locations --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+            });
+
+            if ('@ViewBag.poLocationId') {
+                $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+            } else {
+                $('#LocationId').val(0).trigger("change");
+            }
+
+
+        });
+    </script>
+
+    <script>
+
+        $.getJSON("@Url.Action("GetActiveProducts", "Product")", function (data) {
+
+            var itemId = $("#ProductId");
+
+
+            itemId.empty();
+            itemId.append("<option value='0'>-- All Products --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+            });
+
+            if ('@ViewBag.itemIdselect') {
+                $('#ProductId').val(@ViewBag.itemIdselect).trigger("change");
+            } else {
+                $('#ProductId').val(0).trigger("change");
+            }
+
+
+        });
+    </script>
+
+
+
+
+
+
+<script type="text/javascript">
+        function PrintDiv() {
+            var divContents = document.getElementById("printcontent").innerHTML;
+            var printWindow = window.open('', '', 'height=200,width=400');
+            printWindow.document.write('<html><head><title></title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+
+            $(document).ready(function () {
+                $('#printcontent').DataTable();
+            });
+        }
+</script>

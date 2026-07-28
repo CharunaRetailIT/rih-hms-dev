@@ -1,0 +1,163 @@
+﻿@model HospitalityManagement.Models.BudgetOutlet
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Create", "BudgetOutlet", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Budget Outlet Wise</strong> @ViewBag.Budget Outlet Wise saved successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "0")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Budget Outlet Wise</strong> @ViewBag.Budget Outlet Wise save failed.
+                            </div>
+                        }
+                        <div class="row">
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Budget Outlet Wise</h2>
+                                        <br />
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <br />
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Location *</label>
+                                                    <div class="col-md-3 col-sm-3 col-xs-3 text-left">
+                                                        @*<select id="LocationCode" class="form-control" name="LocationCode"></select>*@
+                                                        <select id="locationID" class="form-control" name="locationID"></select>
+                                                        @Html.ValidationMessageFor(model => model.locationID, "", new { @class = "text-danger pull-left" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Budget Type *</label>
+                                                <div class="col-md-3 col-sm-3 col-xs-3 text-left">
+                                                    <select id="BudgetType" name="BudgetType" class="form-control">
+                                                        <option value="0"></option>
+                                                        <option value="1">Daily</option>
+                                                        <option value="2">Weekly</option>
+                                                        <option value="3">Monthly</option>
+                                                        <option value="4">Quarterly</option>
+                                                        <option value="5">Yearly</option>
+                                                    </select>
+                                                    @Html.ValidationMessageFor(model => model.BudgetType, "", new { @class = "text-danger pull-left" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">No.Of Date/Week/Month/Year *</label>
+                                                <div class="col-md-3 col-sm-3 col-xs-3 text-left">
+                                                    @Html.TextBoxFor(model => model.NoofDMWY, new { @class = "form-control", @type = "number", MaxLength = 50, Placeholder = "0" })
+                                                    @Html.ValidationMessageFor(model => model.NoofDMWY, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Starting Date</label>
+                                                <div class="col-md-3 col-sm-3">
+                                                    @Html.TextBoxFor(model => model.StartingDate, new
+                                               {
+                                                   @id = "StartingDate",
+                                                   @class = "form-control pull-left",
+                                                   Type = "date",
+                                                   @Style = "width:50%",
+                                                   Placeholder = "StartingDate",
+                                                   @Value = string.Format("{0:yyyy-MM-dd}", DateTime.Now),
+                                               })
+                                                    @Html.ValidationMessageFor(model => model.StartingDate, "", new { @class = "text-danger pull-left" })
+                                                </div>
+                                            </div>
+                                            @*<div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-3">End Date</label>
+            <div class="col-md-3 col-sm-3">
+                @Html.TextBoxFor(model => model.EndDate, new
+           {
+               @id = "EndDate",
+               @class = "form-control pull-left",
+               Type = "date",
+               @Style = "width:50%",
+               Placeholder = "EndDate",
+               @Value = string.Format("{0:yyyy-MM-dd}", DateTime.Now),
+           })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger pull-left" })
+            </div>
+        </div>*@
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Total Budget *</label>
+                                                <div class="col-md-3 col-sm-3 col-xs-3 text-left">
+                                                    @Html.TextBoxFor(model => model.totalbudget, new { @class = "form-control", @type = "number", MaxLength = 50, Placeholder = "0" })
+                                                    @Html.ValidationMessageFor(model => model.totalbudget, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        LocationCodeload();
+
+        function LocationCodeload() {
+            $.getJSON("@Url.Action("GetActiveLocations", "BudgetOutlet")", function (data) {
+                var LocationCode = $("#locationID");
+                LocationCode.empty();
+                LocationCode.append("<option value='0'>-- Select Location --</option>");
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    LocationCode.append($('<option />', { value: optionaldata.LocationCode }).html(optionaldata.LocationCode));
+                });
+                if ('@ViewBag.LocationCode') {
+
+                    $('#locationID').val(@ViewBag.LocationCode).trigger("change");
+                } else {
+                    $('#locationID').val(0).trigger("change");
+                }
+            });
+        }
+    });
+</script>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

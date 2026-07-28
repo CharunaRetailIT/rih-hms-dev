@@ -1,0 +1,354 @@
+﻿@*@model RIT.HMS.Domain.Transactions.InvGiftVoucherMaster*@
+@model   HospitalityManagement.Models.Transactions.InvGiftVoucherMaster
+@*@model List<RIT.HMS.Domain.Transactions.InvGiftVoucherMaster>*@
+@*@model IEnumerable<RIT.HMS.Domain.Transactions.InvGiftVoucherMaster>*@
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            @*@using (Html.BeginForm("Create", "GiftvoucherGroup", FormMethod.Post, new { @class = "form-horizontal" }))*@
+            @using (Html.BeginForm("", "GiftVoucherMaster", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>GiftVoucher Master Saved Successfully.</strong>
+                            </div>
+                        }
+
+                        else if (@ViewBag.Message == "0")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>GiftVoucher Master Save failed</strong>
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "4")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>GiftVoucher Master Already exist</strong>
+                            </div>
+                        }
+
+                        <div class="row">
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Gift Voucher Master</h2>
+                                        <br />
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <br />
+
+                                        <div class="form-horizontal form-label-left col-md-6">
+
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">
+                                                            GiftVoucher Group<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                            <select id="GiftVoucherGroupCode" class="form-control" name="GiftVoucherGroupCode"></select>
+                                                            @*<input type="hidden" id="selectedOption" name="SelectedOption" />*@
+                                                            @Html.HiddenFor(model => model.GiftVoucherGroupCodehidden, new { id = "GiftVoucherGroupCode1" })
+                                                        </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">
+                                                        Book<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        <select id="BookCode" class="form-control" name="BookCode"></select>
+
+                                                        @Html.HiddenFor(model => model.BookCodehidden, new { id = "GiftVoucherGroupCode2" })
+                                                    </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher Value</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.GiftVoucherValue, new { @class = "form-control", MaxLength = 50, Placeholder = "Gift Voucher Value", id = "txtGiftVoucherValue", @readonly = "readonly" })
+                                                    @*@Html.ValidationMessageFor(model => model.GiftVoucherValue, "", new { @class = "text-danger" })*@
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">No of Vouchers *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.VoucherCount, new { id = "txtGiftVoucherCount", @class = "form-control", MaxLength = 50, Placeholder = "No of Vouchers" })
+                                                    @Html.ValidationMessageFor(model => model.VoucherCount, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Serial Format</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.VoucherSerial, new { id = "txtVoucherSerial", @class = "form-control", MaxLength = 50, Placeholder = "Serial Format", @readonly = "readonly" })
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">No of Vouchers on Book *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.PageCount, new { id = "txtPageCount", @class = "form-control", MaxLength = 50, Placeholder = "No of Vouchers on Book", @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(model => model.PageCount, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Serial Length *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.SerialLength, new { id = "txtSerialLength", @class = "form-control", MaxLength = 50, Placeholder = "Serial Length", @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(model => model.SerialLength, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Strting No *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.StartingNo, new { id = "txtStartingNo", @class = "form-control", MaxLength = 50, Placeholder = "Strting No", @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(model => model.StartingNo, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Voucher Prefix</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.VoucherPrefix, new { id = "txtVoucherPrefix", @class = "form-control", MaxLength = 50, Placeholder = "Voucher Prefix", @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(model => model.VoucherPrefix, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Precentage of Coupon *</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @*<div class="input-group">*@
+                                                        @Html.TextBoxFor(model => model.GiftVoucherPercentage, new { id = "txtGiftVoucherPercentage", @class = "form-control", MaxLength = 50, Placeholder = "Precentage of Coupon", @readonly = "readonly" })
+
+                                                        @Html.ValidationMessageFor(model => model.GiftVoucherPercentage, "", new { @class = "text-danger" })
+                                                    @*</div>*@
+                                                    <span class="input-group-btn">
+                                                        <input type="submit" value="Generate" formaction="HMSGVGenarate" class="btn btn-primary pull-right " style="margin-right: -1px;margin-top: 5px;">
+                                                    </span>
+                                                </div>
+                                                <br />
+                                            </div>
+                                            <br />
+
+                                        </div>
+                                        <div class="x_content">
+                                            <br />
+                                           
+                                            <table id="datatable-responsive" class="mstable col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Voucher No</th>
+                                                        <th>Voucher Serial</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (ViewBag.ItemList != null)
+                                                    {
+                                                        foreach (var item in ViewBag.ItemList)
+                                                        {
+                                                            <tr>
+                                                                <td><span>@item.VoucherNo</span></td>
+                                                                <td><span>@item.VoucherSerial</span></td>
+                                                            </tr>
+
+
+                                                        }
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="form-group">
+
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            @*<div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewCustomerCategories", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>*@
+                                            @*<button type="submit" class="btn btn-success">Submit</button>*@
+                                            @*<input type="submit" value="Generate" formaction="HMSGVGenarate" class="btn btn-primary">*@
+                                            <input type="submit" value="Submit" formaction="Create" class="btn btn-primary pull-left">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+
+        Giftvouchergroupload();
+        GVbookload();
+
+        $('#GiftVoucherGroupCode').click(function (e) {
+            e.preventDefault(); // Prevent form submission
+            $('#GiftVoucherGroupCode').change(function () {
+                var selectedValue = $(this).val();
+                $('#GiftVoucherGroupCode1').val(selectedValue);//value assign to the hidden variable
+            });
+        });
+
+        $('#BookCode').click(function (e) {
+            e.preventDefault(); // Prevent form submission
+            $('#BookCode').change(function () {
+                var selectedValue = $(this).val();
+                $('#GiftVoucherGroupCode2').val(selectedValue);//value assign to the hidden variable when dropdown select
+            });
+        });
+
+    });
+
+    var Giftvouchergroupload = function () {
+
+        $.getJSON("@Url.Action("GetGiftvoucherGroup", "GiftVoucherMaster")", function (data) {
+            var GiftVoucherGroupCode = $("#GiftVoucherGroupCode");
+            GiftVoucherGroupCode.empty();
+            GiftVoucherGroupCode.append("<option value='0'>-- Select Group --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                GiftVoucherGroupCode.append($('<option />', { value: optionaldata.GiftVoucherGroupCode }).html(optionaldata.GiftVoucherGroupCode));
+                
+
+            });
+            if ('@ViewBag.GiftVoucherGroupCode') {
+
+                $('#GiftVoucherGroupCode').val(@ViewBag.GiftVoucherGroupCode).trigger("change");
+                
+            } else {
+                $('#GiftVoucherGroupCode').val(0).trigger("change");
+                
+            }
+
+        });
+    }
+
+    @*$("#GiftVoucherGroupCode").change(function () {
+                    var GroupCode = this.value;
+
+                    $.getJSON("@Url.Action("GetGiftvoucherGroup", "GiftVoucherMaster")", { gvGroupCode: GroupCode },
+                        function (data) {
+
+                            //var txtGiftVoucherValue = $("#txtGiftVoucherValue");
+                            //$.each(JSON.parse(data), function (index, optionaldata) {
+                            //    txtGiftVoucherValue.append($('<option />', { value: optionaldata.BookCode }).html(optionaldata.GiftVoucherValue));
+                            //});
+                            //$("#txtGiftVoucherValue").val(giftvoucherBook.GiftVoucherValue);
+                            var giftvoucherBooks = JSON.parse(data);
+                            $("#txtGiftVoucherGroupCode").val(giftvoucherBooks.GiftVoucherGroupCode);
+
+                            $.each(giftvoucherBooks, function (index, giftvoucherBook) {
+
+                            });
+
+                        });
+                });*@
+
+
+    var GVbookload = function () {
+
+        $.getJSON("@Url.Action("GetGiftvoucherBook", "GiftVoucherMaster")", function (data) {
+            var BookCode = $("#BookCode");
+            BookCode.empty();
+            BookCode.append("<option value='0'>-- Select Book --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                BookCode.append($('<option />', { value: optionaldata.BookCode }).html(optionaldata.BookName));
+            });
+            if ('@ViewBag.BookCode') {
+                $('#BookCode').val(@ViewBag.BookCode).trigger("change");
+            } else {
+                $('#BookCode').val(0).trigger("change");
+            }
+        });
+    }
+
+    $("#BookCode").change(function () {
+        var bokid = this.value;
+
+        $.getJSON("@Url.Action("GetGiftvoucherBookDetails", "GiftVoucherMaster")", { GvBookCode: bokid },
+            function (data) {
+
+                //var txtGiftVoucherValue = $("#txtGiftVoucherValue");
+                //$.each(JSON.parse(data), function (index, optionaldata) {
+                //    txtGiftVoucherValue.append($('<option />', { value: optionaldata.BookCode }).html(optionaldata.GiftVoucherValue));
+                //});
+                //$("#txtGiftVoucherValue").val(giftvoucherBook.GiftVoucherValue);
+                var giftvoucherBooks = JSON.parse(data);
+
+                $("#txtVoucherSerial").val(giftvoucherBooks.SerialFormat);
+                $("#txtGiftVoucherValue").val(giftvoucherBooks.giftvoucherBook[0].GiftVoucherValue);
+                $("#txtGiftVoucherCount").val(giftvoucherBooks.giftvoucherBook[0].PageCount);
+                $("#txtSerialLength").val(giftvoucherBooks.giftvoucherBook[0].SerialLength);
+                $("#txtStartingNo").val(giftvoucherBooks.giftvoucherBook[0].StartingNo);
+                $("#txtVoucherPrefix").val(giftvoucherBooks.giftvoucherBook[0].BookPrefix);
+                $("#txtGiftVoucherPercentage").val(giftvoucherBooks.giftvoucherBook[0].GiftVoucherPercentage);
+                $("#txtPageCount").val(giftvoucherBooks.giftvoucherBook[0].PageCount);
+
+                $.each(giftvoucherBooks, function (index, giftvoucherBook) {
+
+
+
+                });
+
+            });
+    });
+
+
+</script>

@@ -1,0 +1,823 @@
+﻿
+@{
+    ViewBag.Title = "Combo Pack BundleItem Promotion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+
+<div class="right_col" role="main">
+
+
+    <div class="clearfix"></div>
+    <div class="container body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Combo Pack BundleItem Promotion</h2>
+                        @*<small>Special Prices for Bundle Items</small></h2>*@
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <div class="form-horizontal form-label-left input_mask">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Promotion Name</label>
+                                        <div class="col-md-7 col-sm-7 col-xs-12">
+                                            <select id="PromotionMasterId" name="PromotionMasterId" class="form-control"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Bundle Name</label>
+                                        <div class="col-md-7 col-sm-7 col-xs-12">
+                                            <input type="text" class="form-control"
+                                                   id="BundleName" placeholder="Bundle Name">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 text-left" style="background-color:#ddd">
+                                    @*<h4>Promotion Details:</h4>*@
+                                    @*<label id="promotiondet"></label>*@
+                                    <label id="lblpromotiontype" hidden>0</label>
+                                    @*<div id="buttondiv">
+                                        <button type='button' id='promoitems' class='btn btn-primary btn-xs'> View Promotion Items </button>
+                                    </div>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr />
+                        <br />
+                        <div class="clearfix"></div>
+                        <div class="col-md-12">
+
+
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="col-md-7">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Promotion Item </label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                            <select class="form-control select2 productid" id="ProductId" name="ProductId"> </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Serving Unit</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                            <select class="form-control" id="ServingUnitId" name="ServingUnitId"> </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                        Selling Price
+                                        <input type="number" class="form-control has-feedback-left text-right" value="0"
+                                               id="sellingprice" placeholder="Selling Price">
+
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                        Quantity
+                                        <input type="number" min="0" value="0" class="form-control text-right" id="promotionqty" placeholder="Quantity">
+
+                                        @*@using (Html.BeginForm())
+
+                                        {
+                                        @Html.Hidden("hdnfield", (object)ViewBag.Message)
+                                        }*@
+
+
+                                        @*<input type="hidden" id="ValidMsg" value="@ViewBag.Message" />*@
+
+                                        @*@Html.Hidden("ValidMsg", (string)ViewBag.Message)*@
+                                       @* @Html.TextBox("ValidMsg", (string)ViewBag.Message)*@
+                                      
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <button type="button" id="addpromotionitem" class="btn btn-primary col-md-6 col-sm-6 col-xs-12 pull-right">Add Item</button>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-5">
+
+                                    <div class="pull-left">
+                                        <input type="radio" name="pricefor" id="priceforbundle" checked="checked" value="B" />
+                                        Price For Combopack Discount %
+                                    </div>
+                                    <div class="">
+                                        <input type="radio" name="pricefor" id="priceforitem" value="I" />
+                                        Prices For Combopack Discount Amount
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <br />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Discount %</label>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                            <input type="number" min="0" value="0" class="form-control has-feedback-left text-right" id="bundleprice" placeholder="Discount %">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Discount Amount</label>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                            <input type="number" min="0" value="0" class="form-control has-feedback-left text-right" id="bundleprice1" placeholder="Discount Amount">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+
+
+                                <table id="promotiontable" class="mstable">
+                                    <thead>
+                                        <tr>
+                                            <th style="display:none">Item Id</th>
+                                            <th>Item Code</th>
+                                            <th>Desc</th>
+                                            <th style="display:none">Serving Unit Id</th>
+                                            <th>Serving Unit</th>
+                                            <th style="display:none">UOMId</th>
+                                            @*<th>UOM</th>*@
+                                            @*<th>Discount % Or Discount Amout</th>*@
+                                            <th>Qty</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                            <button class="btn btn-primary" id="btnReset" onclick='Reset();' type="reset">Reset</button>
+                            <button type="submit" id="btnSave" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+
+
+<script>
+
+    $.getJSON("@Url.Action("GetComboPackBundlePromotionMasters", "ProductXYPromotions")", function (data) {
+
+        var PromotionMasterId = $("#PromotionMasterId");
+
+        PromotionMasterId.empty();
+        PromotionMasterId.append("<option value='0'>-- Select a Promotion --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata)
+        {
+            console.log(data.isActive);
+            PromotionMasterId.append($('<option />', { value: optionaldata.InvPromotionMasterID }).html(optionaldata.PromotionName + " LocationID " + optionaldata.LocationID));
+        });
+    });
+
+    $("#PromotionMasterId").change(function ()
+    {
+        $.getJSON("@Url.Action("GetPromotionType", "ProductXYPromotions")", { promotionmasterid: $("#PromotionMasterId").val() },
+           function (data)
+           {
+               debugger;
+               var tablepromo = document.getElementById("promotiontable");
+
+               $("#promotiontable").find("tr:not(:first)").remove();
+
+                   debugger;
+                   document.getElementById("promotiondet").innerText = data.productId;
+                   document.getElementById("lblpromotiontype").innerText = data.ProductCode;
+
+           });
+    });
+
+    $.getJSON("@Url.Action("GetPromotionItems", "ProductXYPromotions")", function (data) {
+
+        var ProductId = $("#ProductId");
+
+        ProductId.empty();
+        ProductId.append("<option value='0'>-- Select a Product --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            ProductId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+        });
+    });
+
+    $(document).ready(function () {
+
+        $("#ProductId").change(function () {
+
+            $.getJSON("@Url.Action("GetServingUnits", "ProductXYPromotions")", { id: $("#ProductId").val() },
+               function (data) {
+                   var ServingUnitId = $("#ServingUnitId");
+
+                   ServingUnitId.empty();
+                   ServingUnitId.append("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+
+                   var ln = JSON.parse(data).length;
+
+                   if (ln > 1) {
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                       });
+
+                   }
+                   else {
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                           ServingUnitId.val(optionaldata.ProductServingUnitId).trigger("change");
+                       });
+
+                   }
+
+
+                   //$.each(JSON.parse(data), function (index, optionaldata) {
+                   //    ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                   //});
+               });
+        });
+
+        $("#ServingUnitId").change(function ()
+        {
+
+            $.getJSON("@Url.Action("GetComboPackProductDetails", "ProductXYPromotions")", { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val() },
+            function (data)
+            {
+                   document.getElementById("sellingprice").value = data.SellingPrice;
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+@*HTML Tables Handling*@
+@*Promotion Table*@
+<script type="text/javascript">
+    $("body").on("click", "#addpromotionitem",
+        function () {
+            debugger;
+
+            //Console.log(("#ValidMsg").val());
+
+            if ($("#PromotionMasterId").val() == 0 || $("#PromotionMasterId").val() == null) {
+                alert("Select a Promotion !");
+                return;
+            }
+
+            else if ($("#BundleName").val() == 0 || $("#BundleName").val() == null) {
+                alert("Bundle Name Required !");
+                return;
+            }
+
+            else if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                alert("Select an Item !");
+                return;
+            }
+
+
+
+            else if ($("#ServingUnitId").val() == 0 || $("#ServingUnitId").val() == null) {
+                alert("Select a Serving Unit !");
+                return;
+            }
+
+            else if ($("#promotionqty").val() == 0 || $("#promotionqty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+            else if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+
+                alert("Already exists promotion for this entered item. !");
+                return;
+            }
+            else if ($("#priceforbundle").prop("checked") && $("#bundleprice").val() == 0) {
+                alert("Combopack Bundle Discount % Required.!");
+                return;
+            }
+
+            else if ($("#priceforitem").prop("checked") && $("#bundleprice1").val() == 0) {
+                alert("Combopack Bundle Discount Amount Required.!");
+                return;
+            }
+            else if ($("#priceforitem").prop("checked") && $("#bundleprice1").val() > $("#sellingprice").val())
+            {
+                alert("Please Check Enterd Discount Amount In Your Selling Price.!");
+                return; 
+            }
+
+            else if ($("#priceforbundle").prop("checked") && $("#bundleprice").val() > 100) {
+                alert("Cannot Enterd Discount Presentage Morthan 100.!");
+                return;
+            }
+            else if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+
+                alert("Already exists promotion for this entered item. !");
+                return;
+            }
+
+
+
+            var itemId = $("#ProductId").val();
+            var itemsellingprice = 0;
+
+            if ($("#priceforbundle").prop("checked"))
+            {
+                itemsellingprice = $("#bundleprice").val();
+
+            } else {
+                itemsellingprice = $("#bundleprice1").val();
+            }
+
+            ///////////////////////
+
+
+            $.ajax({
+                url: "@Url.Action("PromotionValidation", "ProductXYPromotions")",
+                data: { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val(), PromotionID: $("#PromotionMasterId").val() },
+            type: "GET",
+            dataType: "json",
+
+            success: function (resp) {
+                data = resp;
+                let myValue = "X";
+                myValue = data.ValidationErrorMsg;
+
+
+                if (myValue === "X")
+                {
+                    $.ajax({
+                url: "@Url.Action("GetComboProductDetails", "ProductXYPromotions")",
+                data: { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val(), PromotionID: $("#PromotionMasterId").val() },
+                type: "GET",
+                dataType: "json",
+
+            });
+
+
+            $.ajax({
+                url: "@Url.Action("GetComboPackProductDetails", "ProductXYPromotions")",
+                data: { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    var table = document.getElementById("promotiontable");
+
+                    
+                        $(table).find('tbody').append("<tr><td style='display:none'>" + data.ProductId + "</td><td>" + data.ProductCode + "</td><td>" + data.ProductName + "</td><td style='display:none'>" + data.ServingUnitId + "</td><td>" + data.ServingUnit + "</td><td style='display:none'>" + data.UOMId + "</td><td>" + $("#promotionqty").val() + "</td><td><button type='button' id='promotionrow' onclick='RemovePromotion(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                        document.getElementById("promotionqty").value = "";
+                        $("#BundleName").prop("disabled", true);
+                   
+                  
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+            }
+        else
+        {
+                    alert(data.ValidationErrorMsg);
+
+        }
+
+        }
+
+
+        });
+
+
+
+
+            //////////////////////////////
+
+
+
+
+        });
+
+
+    $("body").on("click", "#promoitems",
+     function () {
+         debugger;
+         var promomasterid = $("#PromotionMasterId").val();
+         var promotiontypeid = document.getElementById("lblpromotiontype").innerText;
+         if (promomasterid == "0") {
+             alert("Select a Promotion");
+             return;
+         }
+         debugger;
+
+         window.location.href = "ViewPromotionItems?promotionmasterid=" + promomasterid;
+
+     });
+
+    function RemovePromotion(button) {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(2).html();
+        if (confirm("Do you want to delete: " + name + " ?")) {
+
+            var table = $("#promotiontable")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>
+
+
+@*<script type="text/javascript">
+    $("body").on("click", "#addpromotionitem",
+        function () {
+            debugger;
+
+
+
+
+            if ($("#PromotionMasterId").val() == 0 || $("#PromotionMasterId").val() == null) {
+                alert("Select a Promotion !");
+                return;
+            }
+
+            else if ($("#BundleName").val() == 0 || $("#BundleName").val() == null) {
+                alert("Bundle Name Required !");
+                return;
+            }
+
+            else if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                alert("Select an Item !");
+                return;
+            }
+
+
+
+            else if ($("#ServingUnitId").val() == 0 || $("#ServingUnitId").val() == null) {
+                alert("Select a Serving Unit !");
+                return;
+            }
+
+            else if ($("#promotionqty").val() == 0 || $("#promotionqty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+            else if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+
+                alert("Already exists promotion for this entered item. !");
+                return;
+            }
+
+
+
+
+
+
+
+            var itemId = $("#ProductId").val();
+            var itemsellingprice = 0;
+
+            if ($("#priceforbundle").prop("checked")) {
+                itemsellingprice = 0;
+
+            } else {
+                itemsellingprice = $("#sellingprice").val();
+            }
+
+
+
+            $.ajax({
+                url: "@Url.Action("PromotionValidation", "ProductXYPromotions")",
+                data: { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val(), PromotionID: $("#PromotionMasterId").val() },
+            type: "GET",
+            dataType: "json",
+
+            success: function (resp) {
+                data = resp;
+                let myValue = "X";
+                myValue = data.ValidationErrorMsg;
+
+
+                if (myValue === "X")
+                {
+                    $.ajax({
+                        url: "@Url.Action("GetComboPackProductDetails", "ProductXYPromotions")",
+                        data: { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val() },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (resp) {
+                        data = resp;
+
+                        var table = document.getElementById("promotiontable");
+                        $(table).find('tbody').append("<tr><td style='display:none'>" + data.ProductId + "</td><td>" + data.ProductCode + "</td><td>" + data.ProductName + "</td><td style='display:none'>" + data.ServingUnitId + "</td><td>" + data.ServingUnit + "</td><td style='display:none'>" + data.UOMId + "</td><td>" + data.UOM + "</td><td>" + itemsellingprice + "</td><td>" + $("#promotionqty").val() + "</td><td><button type='button' id='promotionrow' onclick='RemovePromotion(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                        document.getElementById("promotionqty").value = "";
+                        $("#BundleName").prop("disabled", true);
+                    },
+                    error: function (error) {
+                        alert("Item data mapping error");
+                    }
+                });
+                }
+                else
+                {
+                    alert(data.ValidationErrorMsg);
+
+                }
+
+            }
+
+
+        });
+
+
+
+        });
+
+
+    $("body").on("click", "#promoitems",
+     function () {
+         debugger;
+         var promomasterid = $("#PromotionMasterId").val();
+         var promotiontypeid = document.getElementById("lblpromotiontype").innerText;
+         if (promomasterid == "0") {
+             alert("Select a Promotion");
+             return;
+         }
+         debugger;
+
+         window.location.href = "ViewPromotionItems?promotionmasterid=" + promomasterid;
+
+     });
+
+    function RemovePromotion(button) {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(2).html();
+        if (confirm("Do you want to delete: " + name + " ?")) {
+
+            var table = $("#promotiontable")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>*@
+
+
+
+@*Submit*@
+
+
+<script>
+
+    $(document).ready(function ()
+    {
+
+        debugger;
+
+        if ('@Model.DifferentPricesForItems' == 'True')
+        {
+            $("#bundleprice").prop("disabled", true);
+            $("#sellingprice").prop("disabled", false);
+        }
+        if ('@Model.SinglePriceForAllItems' == 'True')
+        {
+            $("#bundleprice").prop("disabled", false);
+            $("#sellingprice").prop("disabled", true);
+        }
+
+
+
+        if ($("#priceforbundle").prop("checked"))
+        {
+            $("#bundleprice1").prop("disabled", true);
+            $("#sellingprice").prop("disabled", true);
+            
+           
+        }
+
+        if ($("#priceforitem").prop("checked"))
+        {
+            $("#bundleprice").prop("disabled", true);
+            $("#bundleprice1").prop("disabled", false);
+            $("#bundleprice1").text() == 0;
+           
+        }
+  
+
+        debugger;
+        $('input[type=radio][name=pricefor]').change(function ()
+        {
+            debugger;
+
+            //if ($('#promotiontable TBODY TR').length > 0)
+            //{
+            //    alert("Bundle price and item price can not be granted to same bundle!");
+            //    return;
+            //}
+
+
+            if (this.value == 'B')
+            {
+                $("#bundleprice1").prop("disabled", true);
+                $("#sellingprice").prop("disabled", true);
+                $("#bundleprice").prop("disabled", false);
+                  
+            }
+            else if (this.value == 'I')
+            {
+                $("#bundleprice").prop("disabled", true);
+                $("#sellingprice").prop("disabled", true);
+                $("#bundleprice1").prop("disabled", false);
+                $("#bundleprice1").text() == 0;
+              
+            }
+
+        });
+
+
+
+        $("body").on("click", "#btnSave", function ()
+        {
+
+            if ($("#PromotionMasterId").val() == 0 || $("#PromotionMasterId").val()==null) {
+                alert("Select A Promotion.!");
+                return;
+            }
+
+
+            if ($("#priceforbundle").prop("checked") && $("#bundleprice").val() == 0)
+            {
+                alert("Combopack Bundle Discount % Required.!");
+                return;
+            }
+
+            if ($("#priceforitem").prop("checked") && $("#bundleprice1").val() == 0)
+            {
+                alert("Combopack Bundle Discount Amount Required.!");
+                return;
+            }
+
+            //if ($("#priceforitem").prop("checked") && $("#sellingprice").val() > $("#bundleprice1").val())
+            //{
+            //    alert("Please Check Enterd Discount Amount In Your Selling Price.!");
+            //    return;
+            //}
+
+            if ($("#priceforbundle").prop("checked") && $("#bundleprice").val() > 100) {
+                alert("Cannot Enterd Discount Presentage Morthan 100.!");
+                return;
+            }
+
+            if ($('#promotiontable TBODY TR').length == 0)
+            {
+                alert("Add Items To Bundle.!");
+                return;
+            }
+
+            var pb = false;
+            var pi = false;
+            if ($("#priceforbundle").prop("checked")) {
+                pb = true;
+            }
+            if ($("#priceforitem").prop("checked"))
+            {
+                pi = true;
+            }
+            var promotype = document.getElementById("lblpromotiontype").innerText;
+                    debugger;
+                    swal({
+                        title: "Item Bundle Promotion",
+                        text: "Confirm?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                       function (isConfirm)
+                       {
+                           if (isConfirm)
+                           {
+
+                               var promotions = new Array();
+                               $("#promotiontable TBODY TR").each(function ()
+                               {
+                                   var row = $(this);
+                                   var promotion = {};
+                                   promotion.PromotionMasterId = $("#PromotionMasterId").val();
+                                   promotion.IsAllowDiscountPresentage = pb;
+                                   promotion.IsAllowDiscountAmount = pi;
+                                   promotion.ProductId = row.find("TD").eq(0).html();
+                                   promotion.ServingUnitId = row.find("TD").eq(3).html();
+                                   promotion.Quantity = row.find("TD").eq(6).html();
+                                   promotion.DiscountValue = row.find("TD").eq(7).html();
+                                   if ($("#bundleprice").val() > 0)
+                                   {
+                                       promotion.BundleSellingPrice = $("#bundleprice").val();
+                                       
+                                   }
+                                   else
+                                   {
+                                       promotion.BundleSellingPrice = $("#bundleprice1").val();
+                                   }
+                                   promotion.BundleName = $("#BundleName").val();
+
+                                   promotions.push(promotion);
+                               });
+
+
+                               $.ajax({
+                                   type: "POST",
+                                   url: "@Url.Action("SubmitCombopackBundleItemPromotion", "BundleItemPromotions")",
+                                   data:JSON.stringify(promotions),
+                                   contentType: "application/json; charset=utf-8",
+                                   dataType: "json",
+                                   success: function (res)
+                                  
+                                   {
+                                       
+                                           if (res != 0)
+                                           { 
+                                                   swal({
+                                                       title: "",
+                                                       text: "Promotion Saved Successfully!",
+                                                       type: "success",
+                                                       showCancelButton: false,
+                                                       confirmButtonClass: "btn-success",
+                                                       confirmButtonText: "Ok",
+                                                       closeOnConfirm: true
+                                                   },
+                                                    function () {
+                                                        window.location.href = "/BundleItemPromotions/CombopackBundleItemPromotion";
+                                                    });
+                                               
+                                           }
+                                           else
+                                           {
+
+                                               swal("Error", "Promotion save failed or Already Have!", "error");
+                                           }
+                                     
+
+                                   }
+                               });
+
+                           }
+                       });
+                });
+    });
+</script>
+
+
+@*Reset*@
+
+<script>
+    function Reset() {
+
+        window.location.href = "/BundleItemPromotions/CombopackBundleItemPromotion";
+    };
+</script>
+
+@*Check Promotion Type*@
+
+<script>
+   function CheckPromotionType ()
+   {
+
+           $.ajax({
+               url: "@Url.Action("GetPromotionType", "ProductXYPromotions")",
+               data: { id: $("#PromotionMasterId").val() },
+               type: "GET",
+               dataType: "json",
+               success: function (resp) {
+               data = resp;
+              return data.InvPromotionTypeID;
+           },
+           error: function (error) {
+               alert("Item data mapping error");
+           }
+       });
+    }
+
+</script>
+

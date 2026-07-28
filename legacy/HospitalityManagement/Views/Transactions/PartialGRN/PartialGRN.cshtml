@@ -1,0 +1,1636 @@
+﻿@model HospitalityManagement.Models.Transactions.PurchaseHeader
+
+@{
+    ViewBag.Title = "Create Partial GRN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+@*<html lang="en">*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+
+
+</head>
+
+
+
+@if (ViewBag.Message != null)
+{
+    <script>
+
+        $(document).ready(function () {
+
+            alert('@ViewBag.ErrorMessage');
+
+        });
+
+    </script>
+
+}
+<div class="container body">
+    <div class="main_container">
+        @*@using (Html.BeginForm("CreatePO", "PO", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))*@
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GRN</strong> @ViewBag.GRNCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GRN</strong> @ViewBag.GRNCode save failed.
+                        </div>
+                    }
+
+                    <div class="actionBar">
+                        <div class="msgBox">
+
+                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                @Html.ActionLink("Clear", "CreateGRN", null, new
+                           {
+                               @style = "font-size: 12px;color:white;" +
+                                                            "font-family: 'Lucida Sans Unicode', " +
+                                                            "'Lucida Grande', Sans-Serif;text-decoration: none"
+                           })
+                            </div>
+                            <div class="btn btn-info pl_add btn-small pull-left">
+                                @Html.ActionLink("View Temp GRN(s)", "ViewAllGRN", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                            </div>
+                            <button type="submit" formaction="CreateGRN" class="btn btn-success pull-left">Submit GRN</button>
+                            <button type="submit" formaction="TempSaveGRN" class="btn btn-primary pull-left">Temporary Save GRN</button>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Partial GRN</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>Step 1 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small>Step 2 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-3">
+                                                    <span class="step_no">3</span>
+                                                    <span class="step_descr">
+                                                        Step 3<br />
+                                                        <small>Step 3 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-4">
+                                                    <span class="step_no">4</span>
+                                                    <span class="step_descr">
+                                                        Step 4<br />
+                                                        <small>Step 4 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12">
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Doc # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                            @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Mode <span class="required">*</span>
+                                                        </label>
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.GRNType, "Manual", new { @id = "Manual", @checked = true })
+                                                                Manual
+
+                                                            </div> <div class="clearfix"></div>
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.GRNType, "POBased", new { @id = "Auto" })
+                                                                PO Based
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Supplier <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="SupplierId" class="form-control" name="SupplierId" required="required"></select>
+                                                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Supplier Invoice No
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            @*<input id="SupplierInvoiceNo" name="SupplierInvoiceNo" type="text" required="required"
+                                                                class="form-control col-md-6 col-xs-6">*@
+
+                                                            @Html.TextBoxFor(model => model.SupplierInvoiceNo, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           min = 0,
+                                                           MaxLength = 20,
+
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.SupplierInvoiceNo, "", new { @class = "text-danger" })
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="GRNLocationId" class="form-control" name="GRNLocationId" required="required"></select>
+                                                            @Html.ValidationMessageFor(model => model.GRNLocationId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Currency  <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="CurrencyID" class="form-control" name="CurrencyID"></select>
+                                                            @Html.ValidationMessageFor(model => model.CurrencyID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Currency Rate <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-3 col-sm-6">
+
+                                                            @Html.TextBoxFor(model => model.CurrencyRate, new
+                                                       {
+                                                           type = "number",
+                                                           step = 0.01,
+                                                           @class = "form-control",
+                                                           value = "0",
+                                                           min = "0",
+                                                           onkeypress = "return event.charCode >= 46",
+                                                           oninput = "javascript: if (this.value.length >6) this.value = this.value.slice(0, 5);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.CurrencyRate, "", new { @class = "text-danger" })
+
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Method <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="PaymentMethodId" class="form-control" name="PaymentMethodId"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentMethodId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Term <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="PaymentTermId" class="form-control" name="PaymentTermId"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentTermID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            GRNDate <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+
+                                                            @Html.TextBoxFor(model => model.GRNDate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           @Type = "date",
+                                                           @Value = Model.GRNDate.ToString("yyyy-MM-dd"),
+                                                           Placeholder = "Expected Date"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.GRNDate, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="step-2">
+
+
+                                            <div class="form-group">
+                                                <div id="buttons">
+                                                    <table id="buttons" class="table table table-striped">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width:10%">
+                                                                    Item/Material (UOM)
+                                                                </td>
+                                                                <td>
+                                                                    <select id="ItemId" class="form-control select2" style="width:90%" name="ItemId"></select>
+                                                                </td>
+                                                                <td style="width:10%">
+                                                                    Quantity
+                                                                </td>
+                                                                <td style="width:20%">
+                                                                    <input id="RecQty" name="RecQty" type="number" min='0' onkeypress='return event.charCode >= 46'
+                                                                           @*onkeyup="checkProductQuantity()"*@
+                                                                           oninput="javascript: if (this.value.length >5) this.value = this.value.slice(0, 5);"
+                                                                           class="form-control col-md-2 col-xs-6">
+                                                                    <font color="red"><label id="validateqty" name="validateqty" style="font:small-caption"></label></font>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="button" id="btnAddPOItem" class="btn btn-round btn-info" value="+" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="btnAddReOrderItems">
+                                                    <table id="buttons1" class="table table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width:10%">
+                                                                    Purchase Order
+                                                                </td>
+                                                                <td>
+                                                                    <select id="POID" name="POID" class="form-control select2" style="width:90%"></select>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="button" id="btnAddGRNItem" class="btn btn-round btn-info" value="+" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="btnAddRequestItems">
+
+                                                </div>
+
+
+                                                <div class="text-info"><b>GRN Items</b></div>
+
+                                                <table id="tblRecepies" class="table table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th>idx</th>*@
+                                                            <th style="display:none">Item Id</th>
+                                                            <th>Item</th>
+                                                            <th>Quantity</th>
+                                                            <th>GRN Quantity</th>
+                                                            <th>Free Qty</th>
+                                                            <th>Discount</th>
+                                                            <th>Cost Price (Unit)</th>
+                                                            <th>Cost Value</th>
+                                                            <th>Selling Price (Unit)</th>
+                                                            <th>Tax</th>
+                                                            @*<th>Tax</th>*@
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="grnitems">
+                                                        @if (Model.GRNDetail != null)
+                                                        {
+                                                            foreach (var grnDetail in Model.GRNDetail)
+                                                            {
+
+                                                                @*<tr>
+
+                                                                    <td style="display:none">@grnDetail.ProductID</td>
+                                                                     <td>@grnDetail.ProductName</td>
+                                                                     <th style="display:none">OrderQty</th>
+                                                                     <td>@grnDetail.UOM</td>
+                                                                     <td>@grnDetail.GRNQuantity</td>
+                                                                     <td>@grnDetail.FreeQty</td>
+                                                                     <td>@grnDetail.Discount</td>
+                                                                     <td>@grnDetail.CostPrice</td>
+                                                                     <td>@grnDetail.SellingPrice</td>
+                                                                     <td>@grnDetail.TotalTax</td>
+
+                                                                     </tr>*@
+
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <hr />
+                                            <div id="summary" class="col-lg-12">
+
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-5 col-sm-6">
+                                                            Total Selling Price <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input id="TotSellingPrice" name="TotSellingPrice" readonly="readonly" value="0" class="form-control">
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-5 col-sm-6">
+                                                            Total Cost Value <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input id="TotCostPrice" name="TotCostPrice" type="number" readonly="readonly" value="0" class="form-control">
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-5 col-sm-6">
+                                                            Total Discounts <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input id="TotDiscounts" name="TotDiscounts" type="number" readonly="readonly" value="0" class="form-control">
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-5 col-sm-6">
+                                                            Total Tax <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input id="TotalTax" name="TotalTax" type="number" readonly="readonly" value="0" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="step-3">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Gross Amount<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                        @Html.TextBoxFor(model => model.GrossAmount, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                        @Html.ValidationMessageFor(model => model.GrossAmount, "", new { @class = "text-danger" })
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Discount Amount<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+
+                                                        @Html.TextBoxFor(model => model.DiscountAmount, new
+                                                   {
+                                                       @class = "form-control",
+                                                       min = 0,
+                                                       Type = "number",
+                                                       decimals = "4",
+                                                       step = 0.01,
+                                                       onkeyup = "checkdiscounts()",
+                                                       oninput = "javascript: if (this.value.length >10) this.value = this.value.slice(0,10);"
+                                                   })
+                                                        @Html.ValidationMessageFor(model => model.DiscountAmount, "", new { @class = "text-danger" })
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Discount Percentage<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                        @Html.TextBoxFor(model => model.DiscountPercentage, new
+                                                   {
+                                                       @class = "form-control",
+                                                       min = 0,
+                                                       Type = "number",
+                                                       decimals = "4",
+                                                       step = "any",
+                                                       oninput = "javascript: if (this.value.length > 10) this.value = this.value.slice(0,10);"
+                                                   })
+                                                        @Html.ValidationMessageFor(model => model.DiscountPercentage, "", new { @class = "text-danger" })
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Other Chargers<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                        @Html.TextBoxFor(model => model.OtherChargers, new
+                                                   {
+                                                       @class = "form-control",
+                                                       min = 0,
+                                                       Type = "number",
+                                                       decimals = "4",
+                                                       step = "any",
+                                                       oninput = "javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);",
+                                                       onkeyup = "checkOtherChargers()",
+
+                                                       //onkeyup = "change()",
+                                                   })
+                                                        @Html.ValidationMessageFor(model => model.OtherChargers, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Total Tax Amount<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                        @Html.TextBoxFor(model => model.TotalTax, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Total Tax" })
+                                                        @Html.ValidationMessageFor(model => model.TotalTax, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Net Amount<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                        @Html.TextBoxFor(model => model.NetAmount, new { type = "number", @class = "form-control", @readonly = true })
+                                                        @Html.ValidationMessageFor(model => model.NetAmount, "", new { @class = "text-danger" })
+                                                        <input data-val="true" id="NetAmountHidden" name="NetAmountHidden" type="hidden" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div id="step-4">
+
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Ref No<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.ReferenceNo, new { type = "text", @class = "form-control", MaxLength = 20 })
+                                                    @Html.ValidationMessageFor(model => model.ReferenceNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Remark<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextAreaFor(model => model.Remark, new { type = "text", @class = "form-control", MaxLength = 200 })
+                                                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "CreateGRN", null, new
+                                           {
+                                               @style = "font-size: 12px;color:white;" +
+                                                            "font-family: 'Lucida Sans Unicode', " +
+                                                            "'Lucida Grande', Sans-Serif;text-decoration: none"
+                                           })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View Temp GRN(s)", "ViewAllGRN", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" formaction="CreateGRN" class="btn btn-success pull-left">Submit GRN</button>
+                                            <button type="submit" formaction="TempSaveGRN" class="btn btn-primary pull-left">Temporary Save GRN</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="se-pre-con"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<script>
+    if(@ViewBag.POHeaderId!=null){
+
+        var TeamDetailPostBackURL = '/GRN/Print';
+
+        $(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": @Model.PurchaseHeaderId },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+
+    }
+</script>
+
+<script type="text/javascript">
+    function checkOtherChargers() {
+
+        var otherchargers = document.getElementById('OtherChargers').value;
+
+        if (otherchargers != 0) {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(otherchargers));
+        } else {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(otherchargers));
+        }
+
+    }
+
+    function checkdiscounts() {
+
+        var discountamount = document.getElementById('DiscountAmount').value;
+
+        if (discountamount != 0) {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) -
+                                                            Number(discountamount));
+        } else {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(discountamount));
+        }
+
+    }
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetCurrenciesForTransactions", "Currency")", function (data) {
+
+        var currencyId = $("#CurrencyID");
+
+        currencyId.empty();
+        currencyId.append("<option value='0'>-- Select Currency Type --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            currencyId.append($('<option />', { value: optionaldata.CurrencyId }).html(optionaldata.CurrencyDescription));
+
+        });
+
+        if ('@ViewBag.CurrencyId') {
+            $('#CurrencyID').val(@ViewBag.CurrencyId).trigger("change");
+        } else {
+            $('#CurrencyID').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetSuppliers", "Supplier")", function (data) {
+
+        var supplierId = $("#SupplierId");
+
+
+        supplierId.empty();
+        supplierId.append("<option value='0'>-- Select a Supplier --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            supplierId.append($('<option />', { value: optionaldata.SupplierID }).html(optionaldata.SupplierName));
+
+        });
+
+        if ('@ViewBag.supplierId') {
+            $('#SupplierId').val(@ViewBag.supplierId).trigger("change");
+        } else {
+            $('#SupplierId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#GRNLocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.locationId') {
+            $('#GRNLocationId').val(@ViewBag.locationId).trigger("change");
+        } else {
+            $('#GRNLocationId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePOs", "PO")", function (data) {
+
+        var poDropDown = $("#POID");
+        //var CompanyCodelist = $("#CompanyID");
+
+        poDropDown.empty();
+        poDropDown.append("<option value='0'>-- Select a PO--</option>");
+        //CompanyCodelist.append("<option value='0'>-- Select a Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poDropDown.append($('<option />', { value: optionaldata.PurchaseOrderHeaderId }).html(optionaldata.DocumentNo));
+
+        });
+
+        if ('@ViewBag.POID') {
+            $('#POID').val(@ViewBag.POID).trigger("change");
+        } else {
+            $('#POID').val(0).trigger("change");
+        }
+
+
+    });
+
+
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePaymentTerms", "GRN")", function (data) {
+
+        var paymentTermId = $("#PaymentTermId");
+
+
+        paymentTermId.empty();
+        paymentTermId.append("<option value='0'>-- Select a Payment Term --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            paymentTermId.append($('<option />', { value: optionaldata.PaymenttermId }).html(optionaldata.PaymentTermName));
+
+        });
+
+        if ('@ViewBag.PaymentTermId') {
+            $('#PaymentTermId').val(@ViewBag.PaymentTermId).trigger("change");
+        } else {
+            $('#PaymentTermId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePaytmentMethods", "PO")", function (data) {
+
+        var paymentMethodsId = $("#PaymentMethodId");
+
+
+        paymentMethodsId.empty();
+        paymentMethodsId.append("<option value='0'>-- Select a Payment Method --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            paymentMethodsId.append($('<option />', { value: optionaldata.PaymentMethodId }).html(optionaldata.PaymentMethodName));
+
+        });
+
+        if ('@ViewBag.paymentMethodsId') {
+            $('#PaymentMethodId').val(@ViewBag.paymentMethodsId).trigger("change");
+        } else {
+            $('#PaymentMethodId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+
+    $("#GRNLocationId").change(function () {
+        var grnlocid = this.value;
+
+
+        $.getJSON("@Url.Action("GetLocationProducts", "PO")", { locid: grnlocid },
+       function (data) {
+
+           var itemId = $("#ItemId");
+
+
+           itemId.empty();
+           itemId.append("<option value='0'>-- Select an Item --</option>");
+
+
+           $.each(JSON.parse(data),
+           function (index, optionaldata)
+               {
+               itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName + "(" + optionaldata.UOMDesc + ")"));
+
+               }
+           );
+
+           if ('@ViewBag.itemIdselect') {
+               $('#itemIdselect').val(@ViewBag.itemIdselect).trigger("change");
+           } else {
+               $('#itemIdselect').val(0).trigger("change");
+           }
+
+
+       });
+    });
+</script>
+
+
+@*PO  handling*@
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddGRNItem",
+        function () {
+            //Reference the Name and Country TextBoxes.
+
+            if ($("#POID").val() == 0 || $("#POID").val() == null) {
+                alert("Select a PO !");
+                return;
+            }
+
+            var POID = $("#POID").val();
+            var DocumentNo = $("#POID option:selected").text();
+            // alert($("#DocumentID").val());
+
+            $.ajax({
+                url: "@Url.Action("GetDataTest", "GRN")",
+                data: { id: $("#POID").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    //   alert(data.DocumentNo + '' + data.itemId + '' + data.OrderQty);
+                    $("#grnitems tr").remove();
+
+                    $.each(data, function (i, item) {
+
+
+                            @{
+                                Model.GRNDetail.Add(new HospitalityManagement.Models.Transactions.PurchaseDetail());
+                            }
+
+
+
+                        var unitindex = $("#grnitems").children("tr").length;
+                        var unitindexCell = "<td style='display:none'><input name='GRNDetail.Index' type='hidden' value='" +
+                            unitindex + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='GRNDetail" + unitindex + "_ProductID' class='form-control' name='GRNDetail[" +
+                            unitindex + "].ProductID' type='text' readonly value='" + item.ProductId + "' /></td>";
+
+                        var unitDescCell = "<td id='GRNDetail" + unitindex + "_ProductName'   name='GRNDetail[" +
+                            unitindex + "].ProductName'> " + item.ItemDesc + " </td>";
+
+                        var unitQtyCell = "<td style='display:none' ><input id='GRNDetail" + unitindex + "_OrderQty' type='hidden'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].OrderQty' step='0.0001' min='0' readonly value='" + item.Qty + "' /></td>";
+
+                        var unitUOMCell = "<td id='GRNDetail" + unitindex + "_UOM'   name='GRNDetail[" + unitindex + "].UOM'>" + item.UOM + "</td>";
+
+                        var unitGRNQuantityCell = "<td><input id='GRNDetail" + unitindex + "_GRNQuantity' onkeyup='checkGRNQty(" + unitindex + ")'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].GRNQuantity' type='number' step='0.0001' min='0'  value='" + item.Qty + "' /></td>";
+
+                        var unitFreeQtyCell = "<td><input id='GRNDetail" + unitindex + "_FreeQty'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].FreeQty' type='number' step='0.0001' min='0' MaxLength ='10' value='" + item.FreeQty + "' /></td>";
+
+                        var unitDiscountCell = "<td><input id='GRNDetail" + unitindex + "_Discount'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].Discount' type='number' step='0.0001' min='0' value='" + item.Discounts + "'  onkeyup='itemDiscount(" + unitindex + ")' /></td>";
+
+                        var unitSellingPriceCell = "<td><input id='GRNDetail" + unitindex + "_SellingPrice'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].SellingPrice' type='text' value='" + parseFloat(item.SellingPrice).toFixed(2) + "' /></td>";
+
+                        var unitCostPriceCell = "<td><input id='GRNDetail" + unitindex + "_CostPrice'   class='form-control' onkeyup='SetCostValue(" + unitindex + ")'  name='GRNDetail[" +
+                            unitindex + "].CostPrice' type='text' value='" + parseFloat(item.CostPrice).toFixed(2) + "' /></td>";
+
+                        var unitCostValueCell = "<td><input id='GRNDetail" + unitindex + "_CostValue' readonly class='form-control'   name='GRNDetail[" +
+                            unitindex + "].CostValue' type='text' value='" + item.CostValue + "' /></td>";
+
+                        var unitCostValueCellHidden = "<td style='display:none'><input id='GRNDetail" + unitindex + "_CostValueHidden' readonly class='form-control'  name='GRNDetail[" +
+                            unitindex + "].CostValueHidden' type='text' value='" + item.CostValue + "' /></td>";
+
+                        var unitTaxCell = "<td><input id='GRNDetail" + unitindex + "_TotalTax'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].TotalTax' readonly type='text' value='" + parseFloat(item.TaxAmount).toFixed(2) + "' /></td>";
+
+                        var unitSellingPriceHiddenCell = "<td style='display:none'><input id='GRNDetail" + unitindex + "_SellingPriceHidden'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].SellingPriceHidden' type='text' value='" + parseFloat(item.SellingPrice).toFixed(2) + "' /></td>";
+
+
+                        var unitRemoveCell = "<td><input id='btnAddGRNItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ");' /></td>";
+
+                        var newUnitRow = "<tr id='trGRNItem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+                            unitQtyCell +
+                            unitUOMCell +
+                            unitGRNQuantityCell +
+                            unitFreeQtyCell +
+                            unitDiscountCell +
+                            unitCostPriceCell +
+                            unitCostValueCell +
+                            unitSellingPriceCell +
+                            unitTaxCell +
+                            unitSellingPriceHiddenCell +
+                            unitCostValueCellHidden +
+                            unitRemoveCell + "</tr>";
+
+                        $("#grnitems").append(newUnitRow);
+
+                    });
+
+                    var table = document.getElementById("grnitems");
+                    calcTotal(table);
+
+
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+    function removeUnitRow(id) {
+
+        if (confirm("Do you want to delete? "))
+        {
+            var controlToBeRemoved = "#trGRNItem" + id;
+            $(controlToBeRemoved).remove();
+
+            var table = document.getElementById("grnitems");
+
+            calcTotal(table);
+        }
+
+    }
+
+
+</script>
+
+<script>
+    function calcTotal(table) {
+        var totsp = 0.0;
+        var totcp = 0.0;
+        var totdis = 0.0;
+        var tottax = 0.0;
+        var sellingval=0;
+        var costval = 0.0;
+
+        for (var r = 0, n = table.rows.length; r < n; r++)
+        {
+
+
+
+
+
+            var spvalue =document.getElementById('GRNDetail' + r + '_SellingPrice').value;
+            totsp += Number(spvalue);
+
+            var cpvalue =document.getElementById('GRNDetail' + r + '_CostPrice').value;
+            totcp += Number(cpvalue);
+
+            var costvalue =document.getElementById('GRNDetail' + r + '_CostValue').value;
+            costval += Number(costvalue);
+
+            var taxvalue =document.getElementById('GRNDetail' + r + '_TotalTax').value;
+            tottax += Number(taxvalue);
+
+            var qtyvalue =document.getElementById('GRNDetail' + r + '_GRNQuantity').value;
+            sellingval+=spvalue*qtyvalue;
+
+
+
+
+        }
+
+
+        document.getElementById("TotSellingPrice").value = parseFloat(sellingval).toFixed(2);
+        document.getElementById("TotCostPrice").value = parseFloat(costval).toFixed(2);
+        document.getElementById("TotalTax").value = parseFloat(tottax).toFixed(2);
+
+        document.getElementById("GrossAmount").value = parseFloat(
+            //Number(document.getElementById("TotDiscounts").value) +
+            Number(document.getElementById("TotCostPrice").value)
+
+        ).toFixed(2);
+
+
+        document.getElementById("NetAmount").value = parseFloat((tottax +
+                //Number(document.getElementById("TotSellingPrice").value))
+             Number(document.getElementById("TotCostPrice").value))
+            //    -
+            //Number(document.getElementById("TotDiscounts").value)
+        ).toFixed(2);
+
+        document.getElementById("NetAmountHidden").value = parseFloat(document.getElementById("NetAmount").value).toFixed(2);
+    }
+</script>
+
+@*Item Handling*@
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddPOItem",
+        function () {
+
+            //Reference the Name and Country TextBoxes.
+
+            if ($("#GRNLocationId").val() == 0 || $("#GRNLocationId").val() == null) {
+                alert("Select a GRN Location !");
+                return;
+            }
+
+            if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+                alert("Select an Item !");
+                return;
+            }
+            if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+            var itemId = $("#ItemId").val();
+            var itemDesc = $("#ItemId option:selected").text().split(" ")[0];
+
+
+            $.ajax({
+                url: "@Url.Action("ApplyTaxes", "PO")",
+                data: { id: $("#ItemId").val(), qty: $("#RecQty").val(), polocid: $("#GRNLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+
+                    if (data.CostPrice == 0 && data.SellingPrice == 0) {
+                        alert("Item: " + itemDesc + " is not exists in  location: " + $("#GRNLocationId option:selected").text());
+
+                        return;
+                    }
+
+
+                    @{
+                        Model.GRNDetail.Add(new HospitalityManagement.Models.Transactions.PurchaseDetail());
+                    }
+
+                    var table = document.getElementById("grnitems");
+                    var hasitem = '0';
+
+                    // checking already exists
+                    for (var r = 0, n = table.rows.length; r < n; r++) {
+
+                        var itemidcell = table.rows[r].cells[1].innerHTML;
+                        var regex = /value="(\d+(\.\d)*)/i;
+                        var itemidex = itemidcell.match(regex)[1];
+                        if (itemidex == itemId) {
+                            hasitem = '1';
+                        }
+
+                    }
+
+
+                    if (hasitem == '0') {
+                        var unitindex = $("#grnitems").children("tr").length;
+
+                        var unitindexCell = "<td style='display:none'><input name='GRNDetail.Index' type='text' value='" +
+                            unitindex + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='GRNDetail" + unitindex + "_ProductID' class='form-control' name='GRNDetail[" +
+                            unitindex + "].ProductID' type='text' readonly value='" + data.ItemId + "' /></td>";
+
+                        var unitDescCell = "<td id='GRNDetail" + unitindex + "_ProductName'    name='GRNDetail[" +
+                            unitindex + "].ProductName'> " + data.ItemDesc + "</td>";
+
+                        var unitQtyCell = "<td style='display:none' ><input id='GRNDetail" + unitindex + "_OrderQty' type='hidden'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].OrderQty'  readonly value='" + data.RecQty + "' /></td>";
+
+                        var unitUOMCell = "<td id='GRNDetail" + unitindex + "_UOM'    name='GRNDetail[" +
+                            unitindex + "].UOM'>" + data.UOM + "</td>";
+
+                        var unitGRNQuantityCell = "<td><input id='GRNDetail" + unitindex + "_GRNQuantity' onkeyup='checkGRNQty(" + unitindex + ")'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].GRNQuantity' type='number' step='0.0001' min='0'  value='" + data.RecQty + "' /></td>";
+
+                        var unitFreeQtyCell = "<td><input id='GRNDetail" + unitindex + "_FreeQty'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].FreeQty' type='number' min='0' MaxLength ='10' value='0'  /></td>";
+
+                        var unitDiscountCell = "<td><input id='GRNDetail" + unitindex + "_Discount'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].Discount' type='number' step='0.0001' min='0'  value='" + data.Discounts + "' onkeyup='itemDiscount(" + unitindex + ")'  /></td>";
+
+                        var unitSellingPriceCell = "<td><input id='GRNDetail" + unitindex + "_SellingPrice'   class='form-control'  name='GRNDetail[" +
+                            unitindex + "].SellingPrice' type='text' step='0.0001' min='0'  value='" + data.SellingPrice + "' /></td>";
+
+                        var unitCostPriceCell = "<td><input id='GRNDetail" + unitindex + "_CostPrice'  class='form-control' onkeyup='SetCostValue(" + unitindex + ")' name='GRNDetail[" +
+                            unitindex + "].CostPrice' type='text' step='0.0001' min='0'  onkeypress = 'return preventTypeMinus(event)' value='" + data.CostPrice + "' /></td>";
+
+                        var unitCostValueCell = "<td><input id='GRNDetail" + unitindex + "_CostValue' readonly class='form-control'  name='GRNDetail[" +
+                            unitindex + "].CostValue' type='text' value='" + data.CostValue + "' /></td>";
+
+                        var unitCostValueCellHidden = "<td style='display:none'><input id='GRNDetail" + unitindex + "_CostValueHidden' readonly class='forms-control'  name='GRNDetail[" +
+                            unitindex + "].CostValueHidden' type='text' value='" + data.CostValue + "' /></td>";
+
+                        var unitTaxCell = "<td><input id='GRNDetail" + unitindex + "_TotalTax'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].TotalTax' type='text' readonly value='" + parseFloat(data.TaxAmount).toFixed(2) + "' /></td>";
+
+                        var unitSellingPriceHiddenCell = "<td style='display:none'><input id='GRNDetail" + unitindex + "_SellingPriceHidden'  class='form-control'  name='GRNDetail[" +
+                            unitindex + "].SellingPriceHidden' type='text' value='" + data.SellingPrice + "' /></td>";
+
+
+                        var unitRemoveCell = "<td><input id='btnAddGRNItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            unitindex + ")' /></td>";
+
+                        var newUnitRow = "<tr id='trGRNItem" + unitindex + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+                            unitQtyCell +
+                            unitUOMCell +
+                            unitGRNQuantityCell +
+                            unitFreeQtyCell +
+                            unitDiscountCell +
+                            unitCostPriceCell +
+                            unitCostValueCell +
+                            unitSellingPriceCell +
+                            unitTaxCell +
+                            unitSellingPriceHiddenCell +
+                            unitCostValueCellHidden +
+                            unitRemoveCell + "</tr>";
+
+                        $("#grnitems").append(newUnitRow);
+
+                    }
+
+                    else if (hasitem == '1')
+                    {
+                        if (confirm("Do you want to Override item? ")) {
+                            // itemOverride(newoddrUnitRow, itemId);
+
+
+                            var orrtable = document.getElementById("grnitems");
+                            var regex = /value="(\d+(\.\d)*)/i;
+                            var indexval;
+
+                            for (var r = 0, n = orrtable.rows.length; r < n; r++) {
+                                var idcell = orrtable.rows[r].cells[1].innerHTML;
+                                var idval = idcell.match(regex)[1];
+                                if (idval == itemId) {
+
+                                    var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                                    indexval = indexcell.match(regex)[1];
+
+                                }
+
+                            }
+
+
+
+
+                            document.getElementById('GRNDetail' + indexval + '_OrderQty').value=data.RecQty;
+                            document.getElementById('GRNDetail' + indexval + '_GRNQuantity').value=data.RecQty;
+                            document.getElementById('GRNDetail' + indexval + '_UOM').value=data.UOM;
+                            document.getElementById('GRNDetail' + indexval + '_SellingPrice').value=data.SellingPrice;
+                            document.getElementById('GRNDetail' + indexval + '_CostPrice').value=data.CostPrice;
+                            document.getElementById('GRNDetail' + indexval + '_CostValue').value=data.CostValue;
+                            document.getElementById('GRNDetail' + indexval + '_SellingPriceHidden').value=data.SellingPrice;
+                            document.getElementById('GRNDetail' + indexval + '_TotalTax').value=data.TaxAmount;
+
+
+
+                            //var controlToBeRemoved = "#trGRNItem" + indexval;
+                            //$(controlToBeRemoved).remove();
+
+                            //var unitindexCell1 = "<td  style='display:none'><input name='GRNDetail.Index' type='text' value='" +
+                            //    indexval + "' /></td>";
+
+                            //var unitIdCell1 = "<td style='display:none'><input id='GRNDetail" + indexval + "_ProductID' class='form-control' name='GRNDetail[" +
+                            //    indexval + "].ProductID' type='text' readonly value='" + data.ItemId + "' /></td>";
+
+                            //var unitDescCell1 = "<td id='GRNDetail" + indexval + "_ProductName'  name='GRNDetail[" +
+                            //    indexval + "].ProductName'>" + data.ItemDesc + "</td>";
+
+                            //var unitQtyCell1 = "<td style='display:none' ><input id='GRNDetail" + indexval + "_OrderQty' type='hidden'  class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].OrderQty'  readonly value='" + data.RecQty + "' /></td>";
+
+                            //var unitUOMCell1 = "<td id='GRNDetail" + indexval + "_UOM'   name='GRNDetail[" +
+                            //    indexval + "].UOM'>" + data.UOM + "</td>";
+
+                            //var unitGRNQuantityCell = "<td><input id='GRNDetail" + indexval + "_GRNQuantity' onkeyup='checkGRNQty(" + indexval + ")'  class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].GRNQuantity' type='number' step='0.0001' min='0'  value='" + data.RecQty + "' /></td>";
+
+
+                            //var unitFreeQtyCell1 = "<td><input id='GRNDetail" + indexval + "_FreeQty'  class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].FreeQty' type='number' min='0' MaxLength ='10' value='0'  /></td>";
+
+                            //var unitDiscountCell1 = "<td><input id='GRNDetail" + indexval + "_Discount'  class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].Discount' type='number' min='0' value='" + data.Discounts + "'  onkeyup='itemDiscount(" + indexval + ")' /></td>";
+
+                            //var unitSellingPriceCell1 = "<td><input id='GRNDetail" + indexval + "_SellingPrice'   class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].SellingPrice' type='text' value='" + data.SellingPrice + "' /></td>";
+
+                            //var unitCostPriceCell1 = "<td><input id='GRNDetail" + indexval + "_CostPrice'   class='form-control' onkeyup='SetCostValue(" + indexval + ")'   name='GRNDetail[" +
+                            //    indexval + "].CostPrice' type='text' value='" + data.CostPrice + "' /></td>";
+
+                            //var unitCostValueCell1 = "<td><input id='GRNDetail" + indexval + "_CostValue' readonly class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].CostValue' type='text' value='" + data.CostValue + "' /></td>";
+
+                            //var unitCostValueCellHidden1 = "<td style='display:none'><input id='GRNDetail" + indexval + "_CostValueHidden' readonly class='form-control'  name='GRNDetail[" +
+                            //    unitindex + "].CostValueHidden' type='text' value='" + data.CostValue + "' /></td>";
+
+                            //var unitTaxCell1 = "<td><input id='GRNDetail" + indexval + "_TotalTax'  class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].TotalTax' type='text' readonly value='" + parseFloat(data.TaxAmount).toFixed(2) + "' /></td>";
+
+                            //var unitSellingPriceHiddenCell1 = "<td style='display:none'><input id='GRNDetail" + indexval + "_SellingPriceHidden'  class='form-control'  name='GRNDetail[" +
+                            //    indexval + "].SellingPriceHidden' type='text' value='" + data.SellingPrice + "' /></td>";
+
+                            //var unitRemoveCell1 = "<td><input id='btnAddGRNItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            //    indexval + ");' /></td>";
+
+                            //var newUnitRow1 = "<tr id='trGRNItem" + indexval + "'>" +
+                            //    unitindexCell1 +
+                            //    unitIdCell1 +
+                            //    unitDescCell1 +
+                            //    unitQtyCell1 +
+                            //    unitUOMCell1 +
+                            //    unitGRNQuantityCell +
+                            //    unitFreeQtyCell1 +
+                            //    unitDiscountCell1 +
+                            //    unitCostPriceCell1 +
+                            //    unitCostValueCell1 +
+                            //    unitSellingPriceCell1 +
+                            //    unitTaxCell1 +
+                            //    unitSellingPriceHiddenCell1 +
+                            //    unitCostValueCellHidden1 +
+                            //    unitRemoveCell1 + "</tr>";
+
+                            //$("#grnitems").append(newUnitRow1);
+                        }
+
+                    }
+                    //end checking if exists
+
+                    var table = document.getElementById("grnitems");
+                    calcTotal(table);
+
+
+
+
+                    document.getElementById("RecQty").value = "";
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+
+
+    function itemOverride(orrow, id) {
+
+
+        var orrtable = document.getElementById("poitems");
+        var regex = /value="(\d+(\.\d)*)/i;
+        var indexval;
+
+        for (var r = 0, n = orrtable.rows.length; r < n; r++) {
+            var idcell = orrtable.rows[r].cells[1].innerHTML;
+            var idval = idcell.match(regex)[1];
+            if (idval == id) {
+
+                var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                indexval = indexcell.match(regex)[1];
+
+            }
+
+        }
+        var controlToBeRemoved = "#trPOItem" + indexval;
+        $(controlToBeRemoved).remove();
+
+        $("#poitems").append("<tr id='trPOItem" + indexval + "'>" + "<td style='display:none' ><input name='PODetail.Index' type='hidden' value='" +
+                        indexval + "' /></td>" + orrow + "<td><input id='btnAddPOItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                        indexval + ");' /></td></tr>");
+
+
+    }
+
+</script>
+
+<script>
+    function itemDiscount(i) {
+
+
+
+        //document.getElementById('GRNDetail' + i + '_CostValue').value = (Number(document.getElementById('GRNDetail' + i + '_CostValueHidden').value) -
+        //                                                                 Number(document.getElementById('GRNDetail' + i + '_Discount').value)
+        //                                                                 );
+
+
+        //document.getElementById('GRNDetail' + i + '_CostValue').value = (Number(document.getElementById('GRNDetail' + i + '_CostValueHidden').value) -
+        //                                                                 Number(document.getElementById('GRNDetail' + i + '_Discount').value)
+        //                                                                 );
+
+        var costprice = Number(document.getElementById('GRNDetail' + i + '_CostPrice').value);
+
+        var qty = Number(document.getElementById('GRNDetail' + i + '_GRNQuantity').value);
+
+        var discounts = Number(document.getElementById('GRNDetail' + i + '_Discount').value)
+
+        document.getElementById('GRNDetail' + i + '_CostValue').value = (costprice * qty) - discounts;
+
+        //var dp;
+
+        //if (document.getElementById('GRNDetail' + i + '_Discount').value != "" || document.getElementById('GRNDetail' + i + '_Discount').value != 0) {
+
+        //    dp = (document.getElementById('GRNDetail' + i + '_SellingPriceHidden').value) -
+        //         (document.getElementById('GRNDetail' + i + '_Discount').value);
+
+        //    document.getElementById('GRNDetail' + i + '_SellingPrice').value = parseFloat(dp).toFixed(2);
+
+        //}
+        //else
+        //{
+        //    document.getElementById('GRNDetail' + i + '_SellingPrice').value = document.getElementById('GRNDetail' + i + '_SellingPriceHidden').value;
+
+        //}
+
+
+        var table = document.getElementById("grnitems");
+        //document.getElementById('TotSellingPrice').value = 0;
+        //document.getElementById('TotDiscounts').value = 0;
+        var dis = 0;
+        var costvalue = 0;
+        var taxamount = 0;
+
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+
+            //var val1 = Number(document.getElementById('TotSellingPrice').value);
+            //var val2 = Number(document.getElementById('GRNDetail' + r + '_SellingPrice').value);
+
+            //var val3 = Number(document.getElementById('TotDiscounts').value);
+
+            dis += Number(document.getElementById('GRNDetail' + r + '_Discount').value);
+            costvalue += Number(document.getElementById('GRNDetail' + r + '_CostValue').value);
+            taxamount += Number(document.getElementById('GRNDetail' + r + '_TotalTax').value);
+
+        }
+
+        //   document.getElementById('TotSellingPrice').value = parseFloat(val1 + val2).toFixed(2);
+        document.getElementById('TotDiscounts').value = parseFloat(dis).toFixed(2);
+        document.getElementById('TotCostPrice').value = parseFloat(costvalue).toFixed(2);
+        document.getElementById('TotalTax').value = parseFloat(taxamount).toFixed(2);
+
+        document.getElementById('NetAmount').value = Number(document.getElementById('TotCostPrice').value) + Number(document.getElementById('TotalTax').value);
+
+
+
+    }
+</script>
+
+<script>
+    function checkGRNQty(i) {
+
+        var pid = document.getElementById('GRNDetail' + i + '_ProductID').value;
+        var q1 = document.getElementById('GRNDetail' + i + '_GRNQuantity').value;
+        var q2 = document.getElementById('GRNDetail' + i + '_OrderQty').value;
+
+        if (q1 == "" || q1 == null) {
+            q1 = 0;
+
+        }
+        if (Number(parseFloat(q1).toFixed(3)) > Number(parseFloat(q2).toFixed(3))) {
+
+            alert("GRN QTY can only Reduce!");
+            document.getElementById('GRNDetail' + i + '_GRNQuantity').value = q2;
+
+            $.ajax({
+                url: "@Url.Action("ApplyTaxes", "PO")",
+                data: { id: pid, qty: q2, polocid: $("#GRNLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+
+                    data = resp;
+
+
+                    //  document.getElementById('GRNDetail' + i + '_SellingPrice').value=data.SellingPrice;
+                    document.getElementById('GRNDetail' + i + '_CostValue').value = data.CostValue;
+                    //   document.getElementById('GRNDetail' + i + '_SellingPriceHidden').value=data.SellingPrice;
+                    document.getElementById('GRNDetail' + i + '_TotalTax').value = data.TaxAmount;
+
+                    document.getElementById('GRNDetail' + i + '_CostPrice').value = data.CostPrice;
+                    document.getElementById('GRNDetail' + i + '_SellingPrice').value = data.SellingPrice;
+
+                    var table = document.getElementById("grnitems");
+
+                    document.getElementById("TotCostPrice").value = 0;
+                    document.getElementById("TotSellingPrice").value = 0;
+                    document.getElementById("TotalTax").value = 0;
+
+                    var cp = 0;
+                    var sp = 0;
+                    var tp = 0;
+                    for (var r = 0, n = table.rows.length; r < n; r++) {
+                        cp += Number(document.getElementById('GRNDetail' + r + '_CostValue').value);
+                        //  sp+=Number(document.getElementById('GRNDetail' + r + '_SellingPrice').value);
+                        tp += Number(document.getElementById('GRNDetail' + r + '_TotalTax').value);
+
+                    }
+
+                    document.getElementById("TotCostPrice").value = cp;
+                    //    document.getElementById("TotSellingPrice").value=sp;
+                    document.getElementById("TotalTax").value = tp;
+
+
+                    document.getElementById("GrossAmount").value = parseFloat(
+                        Number(document.getElementById("TotCostPrice").value)
+                        ).toFixed(2);
+
+
+                    document.getElementById("NetAmount").value = parseFloat((tp +
+                         Number(document.getElementById("TotCostPrice").value))
+                    ).toFixed(2);
+
+
+                }
+            });
+
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("ApplyTaxes", "PO")",
+                data: { id: pid, qty: q1, polocid: $("#GRNLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+
+                    data = resp;
+
+                    //document.getElementById('GRNDetail' + i + '_SellingPrice').value=data.SellingPrice;
+                    document.getElementById('GRNDetail' + i + '_CostValue').value = data.CostValue;
+                    //document.getElementById('GRNDetail' + i + '_SellingPriceHidden').value=data.SellingPrice;
+                    document.getElementById('GRNDetail' + i + '_TotalTax').value = data.TaxAmount;
+
+                    document.getElementById('GRNDetail' + i + '_CostPrice').value = data.CostPrice;
+                    document.getElementById('GRNDetail' + i + '_SellingPrice').value = data.SellingPrice;
+
+
+                    var table = document.getElementById("grnitems");
+
+                    document.getElementById("TotCostPrice").value = 0;
+                    //document.getElementById("TotSellingPrice").value=0;
+                    document.getElementById("TotalTax").value = 0;
+                    var cp = 0;
+                    var sp = 0;
+                    var tp = 0;
+                    for (var r = 0, n = table.rows.length; r < n; r++) {
+                        cp += Number(document.getElementById('GRNDetail' + r + '_CostValue').value);
+                        //sp+=Number(document.getElementById('GRNDetail' + r + '_SellingPrice').value);
+                        tp += Number(document.getElementById('GRNDetail' + r + '_TotalTax').value);
+
+                    }
+
+                    document.getElementById("TotCostPrice").value = cp;
+                    //document.getElementById("TotSellingPrice").value=sp;
+                    document.getElementById("TotalTax").value = tp;
+
+
+                    document.getElementById("GrossAmount").value = parseFloat(
+                    Number(document.getElementById("TotCostPrice").value)
+
+                    ).toFixed(2);
+
+
+                    document.getElementById("NetAmount").value = parseFloat((tp +
+                     Number(document.getElementById("TotCostPrice").value))
+                    ).toFixed(2);
+
+
+
+
+                }
+            });
+        }
+
+
+
+
+    }
+
+</script>
+
+<script>
+    function SetCostValue(i) {
+
+        var quantity = document.getElementById('GRNDetail' + i + '_GRNQuantity').value;
+        var costprice = document.getElementById('GRNDetail' + i + '_CostPrice').value;
+        var productid = document.getElementById('GRNDetail' + i + '_ProductID').value;
+        document.getElementById('GRNDetail' + i + '_CostValue').value = (Number(quantity) * Number(costprice));
+
+        document.getElementById('GRNDetail' + i + '_TotalTax').value = data.TaxAmount;
+        //   ProductID
+
+
+
+        $.ajax({
+            url: "@Url.Action("ApplyNewTaxes", "PO")",
+            data: { id: productid, qty: quantity, polocid: $("#GRNLocationId").val(), newcostprice: costprice },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+
+                data = resp;
+
+                document.getElementById('GRNDetail' + i + '_TotalTax').value = data.TaxAmount;
+
+                var table = document.getElementById("grnitems");
+
+                document.getElementById("TotCostPrice").value = 0;
+                document.getElementById("TotSellingPrice").value = 0;
+                document.getElementById("TotalTax").value = 0;
+                var cp = 0;
+                var sp = 0;
+                var tp = 0;
+                for (var r = 0, n = table.rows.length; r < n; r++) {
+                    cp += Number(document.getElementById('GRNDetail' + r + '_CostValue').value);
+                    tp += Number(document.getElementById('GRNDetail' + r + '_TotalTax').value);
+
+                }
+
+                document.getElementById("TotCostPrice").value = cp;
+                document.getElementById("TotalTax").value = tp;
+
+
+                document.getElementById("GrossAmount").value = parseFloat(
+                    Number(document.getElementById("TotCostPrice").value)
+                    ).toFixed(2);
+
+
+                document.getElementById("NetAmount").value = parseFloat((tp +
+                     Number(document.getElementById("TotCostPrice").value))
+                ).toFixed(2);
+
+            }
+        });
+
+
+
+
+
+
+    }
+</script>
+
+
+

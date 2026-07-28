@@ -1,0 +1,92 @@
+﻿
+@model IEnumerable<RIT.HMS.Domain.SysCompany>
+@{
+    ViewBag.Title = "Companies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+<h2></h2>
+
+<body class="nav-md">
+
+    <div class="right_col" role="main" id="bgt">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel" id="test1">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Companies<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                   
+                                    <table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Name</th>
+                                                <th>Group Of Company</th>
+                                                <th>Contact No</th>
+                                                <th>IsActive</th>
+                                                <th></th>
+                                                @*<th></th>*@
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.CompanyCode)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.CompanyName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.GroupOfCompanyName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                                                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.SysCompanyID })</td>
+                                                    @*<td>@Html.ActionLink("View", "Details", new { id = item.SysGroupOfCompanyId })</td>*@
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">
+                           @if (Convert.ToBoolean(Session["CreateCompanies"]) == true)
+                           {
+                            <input type="button" class="btn btn-info" value="Add Company" onclick="location.href='@Url.Action("Index", null, new { })'" />
+                           }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+

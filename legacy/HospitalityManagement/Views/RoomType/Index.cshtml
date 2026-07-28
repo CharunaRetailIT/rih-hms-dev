@@ -1,0 +1,265 @@
+﻿@model RIT.HMS.Domain.RstRoomType
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System </title>
+
+
+</head>
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Create", "RoomType", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room Type</strong> @ViewBag.RoomTypeCode saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room Type</strong> @ViewBag.RoomTypeCode save failed.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "3")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Room Type</strong> @ViewBag.RoomTypeCode already exists.
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Room Type</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                      
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Type Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RoomTypeCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 50,
+                                                   onkeypress = "return checkCodeTypeInput(event)",
+                                                   Placeholder = "Room Type Code"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.RoomTypeCode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Type Name</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.RoomTypeName, new { @class = "form-control", MaxLength = 50, Placeholder = "Room Type Name" })
+                                                @Html.ValidationMessageFor(model => model.RoomTypeName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Bed Type</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.BedType, new { @class = "form-control", MaxLength = 50, Placeholder = "Bed Type" })
+                                                @Html.ValidationMessageFor(model => model.BedType, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Max Adult</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.MaxAdult, new { @class = "form-control", MaxLength = 50, Placeholder = "Max Adult" })
+                                                @Html.ValidationMessageFor(model => model.MaxAdult, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Max Child</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.MaxChild, new { @class = "form-control", MaxLength = 50, Placeholder = "Max Child" })
+                                                @Html.ValidationMessageFor(model => model.MaxChild, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Max Infant</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.MaxInfant, new { @class = "form-control", MaxLength = 50, Placeholder = "Inter-Com No" })
+                                                @Html.ValidationMessageFor(model => model.MaxInfant, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">AC</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsAC, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Smoking</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsSmoking, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">MiniBar</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsMiniBar, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+                                       
+
+
+                                        @*<table>
+                                            <tr>
+                                                <td>*@
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Normal View</label>
+                                                        <div class="checkbox col-xs-1 pull-left ">
+                                                            @Html.CheckBoxFor(model => model.IsNormalView, new { @class = "flat" })
+
+                                                        </div>
+                                                    </div>
+                                                @*</td>
+                                                <td>*@
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Ocean View</label>
+                                                        <div class="checkbox col-xs-1 pull-left ">
+                                                            @Html.CheckBoxFor(model => model.IsOceanView, new { @class = "flat" })
+
+                                                        </div>
+                                                    </div>
+                                                @*</td>
+                                                <td>*@
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Landside</label>
+                                                        <div class="checkbox col-xs-1 pull-left ">
+                                                            @Html.CheckBoxFor(model => model.IsLandside, new { @class = "flat" })
+
+                                                        </div>
+                                                    </div>
+                                                @*</td>
+                                                <td>*@
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Balcony</label>
+                                                        <div class="checkbox col-xs-1 pull-left ">
+                                                            @Html.CheckBoxFor(model => model.IsBalcony, new { @class = "flat" })
+
+                                                        </div>
+                                                    </div>
+                                                @*</td>
+                                            </tr>
+                                        </table>*@
+
+
+                                        <div class="form-group">
+                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+
+                                            </div>*@
+                                        </div>
+                                        <div class="form-group">
+                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+
+                                            </div>*@
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewRoomTypes", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>*@
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+
+
+@*<script>
+        $.getJSON("@Url.Action("GetGroupOfCompanies", "GroupOfCompany")", function (data) {
+
+            var companyDropDown = $("#SysGroupOfCompanyId");
+
+            companyDropDown.empty();
+            companyDropDown.append("<option value='0'>-- Select a Group of Company --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                companyDropDown.append($('<option />', { value: optionaldata.SysGroupOfCompanyId }).html(optionaldata.GroupOfCompanyName));
+            });
+
+            if ('@ViewBag.SysGroupOfCompanyId') {
+                $('#SysGroupOfCompanyId').val(@ViewBag.SysGroupOfCompanyId).trigger("change");
+            } else {
+                $('#SysGroupOfCompanyId').val(0).trigger("change");
+            }
+
+
+        });
+
+    </script>*@
+
+

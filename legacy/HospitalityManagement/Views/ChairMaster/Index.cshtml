@@ -1,0 +1,192 @@
+﻿@model RIT.HMS.Domain.ChairMaster
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System </title>
+
+
+</head>
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Create", "ChairMaster", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          
+
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Chair</strong> @ViewBag.ChairCode saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Chair</strong> @ViewBag.ChairCode save failed.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "3")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Chair</strong> @ViewBag.ChairCode already exists.
+                                </div>
+                            }
+
+
+
+
+
+
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Chair Master</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                      
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Chair Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ChairCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 50,
+                                                   Placeholder = "Chair Code",
+                                                   onkeypress = "return checkCodeTypeInput(event)"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.ChairCode, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Table ID</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                <select id="TableID" name="TableID" class="form-control"
+                                                        data-val="true"
+                                                        data-val-regex="Please select a valid Room Type"
+                                                        data-val-regex-pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$"
+                                                        data-val-required="Please select a valid Room Type"></select>
+                                                @Html.ValidationMessageFor(model => model.TableID, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Chair Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ChairName, new { @class = "form-control", MaxLength = 50, Placeholder = "Chair Name" })
+                                                @Html.ValidationMessageFor(model => model.ChairName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Ticket ID</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TicketID, new { @class = "form-control", MaxLength = 50, Placeholder = "Ticket ID" })
+                                                @Html.ValidationMessageFor(model => model.TicketID, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="form-group">
+                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+
+                                            </div>*@
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewChairs", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $.getJSON("@Url.Action("GetActiveTables", "TableMaster")", function (data) {
+
+        var tableDropDown = $("#TableID");
+        //var CompanyCodelist = $("#CompanyID");
+
+        tableDropDown.empty();
+        tableDropDown.append("<option value='0'>-- Select a Table--</option>");
+        //CompanyCodelist.append("<option value='0'>-- Select a Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            tableDropDown.append($('<option />', { value: optionaldata.TableMasterID }).html(optionaldata.TableName));
+
+        });
+
+        if ('@ViewBag.TableID') {
+            $('#TableID').val(@ViewBag.TableID).trigger("change");
+        } else {
+            $('#TableID').val(0).trigger("change");
+        }
+
+
+    });
+
+
+</script>

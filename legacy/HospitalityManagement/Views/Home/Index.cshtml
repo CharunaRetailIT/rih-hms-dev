@@ -1,0 +1,2406 @@
+﻿@model RIT.HMS.Domain.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<link href="~/Scripts/ClockPicker/jquery-clockpicker.css" rel="stylesheet" />
+<link href="~/Scripts/ClockPicker/jquery-clockpicker.min.css" rel="stylesheet" />
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+
+<style>
+
+   .highcharts-figure, .highcharts-data-table table {
+    min-width: 360px; 
+    max-width: 800px;
+    margin: 1em auto;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+.highcharts-data-table th {
+	font-weight: 600;
+    padding: 0.5em;
+}
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+    padding: 0.5em;
+}
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+
+
+</style>
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+</head>
+
+<body>
+
+    <div class="right_col" role="main" style="background-color:lightgray">
+        @*<div class="jumbotron">*@
+            <div id='loader' style='display: none;' class="se-pre-con"></div>
+            <div><span class="pull-left">Common Filters</span></div>
+            <div class="clearfix"></div>
+            <br />
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label class="pull-left">Location</label>
+                        @Html.DropDownList("LocationId", (IEnumerable<SelectListItem>)ViewBag.LocationId, new
+                       {
+                           @class = "form-control",
+                           onchange = "locationchange(event)"
+                       })
+                        @*<select class="form-control" id="LocationId" name="LocationId" onchange="locationchange(event)"></select>*@
+                    </div>
+                    <div class="col-md-4">
+                        <label class="pull-left">Date From</label>
+                        <input type="date" class="form-control" id="DateFrom" value="@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")" onchange="datefromchange(event)">
+                        @*<input type="date" class="form-control" id="DateFrom" value="@DateTime.Now.ToString("2020-01-01")">*@
+                    </div>
+                    <div class="col-md-4">
+                        <label class="pull-left">Date To</label>
+                        <input type="date" class="form-control" id="DateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" onchange="datetochanger(event)">
+                    </div>
+                </div><br /><div class="clearfix"></div><br />
+
+            </div>
+            <br /><div class="clearfix"></div><br /><br />
+
+            @*start of first chart*@
+
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                @*Chart filters*@
+                <div class="form-row content">
+                    <div class="col-md-4">
+                        <label class="pull-left">Customer Group</label>
+                        @Html.DropDownList("CustomerGroupIdrevenueandcost", (IEnumerable<SelectListItem>)ViewBag.CustomerGroupIds, new
+                   {
+                       @class = "form-control"
+                   })
+                        @*<select class="form-control" id="CustomerGroupIdrevenueandcost" name="CustomerGroupIdrevenueandcost"></select>*@
+                    </div>
+                    <div class="col-md-4">
+                        <label class="pull-left">Selection Type</label>
+                        <select class="form-control" id="TypeIdrevenueandcost" name="TypeIdrevenueandcost">
+                            <option>Daily</option>
+                            <option>Weekly</option>
+                            <option>Monthly</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pull-right">
+                            <label style="color:white">.</label>
+                            <button class="btn btn-primary form-control" id="btnFilterrevenueandcost" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div><div class="clearfix"></div><hr />
+                <div id="revenueandcost">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-4 pull-right">
+                    <label class="pull-left">View data &nbsp;</label>
+                    <div class="input-group pull-left">
+                        <select class="form-control" id="RevCostDeptId" name="RevCostDeptId"></select>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+                <br />
+            </div>
+            <div class="clearfix"></div><br />
+            <br />
+            @*End of First Graph*@
+
+
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                @*KOT BOT None*@
+
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label class="pull-left">Customer Group</label>
+                        @Html.DropDownList("CustomerGroupIdkotbotnone", (IEnumerable<SelectListItem>)ViewBag.CustomerGroupIds, new
+                   {
+                       @class = "form-control"
+                   })
+                        @*<select class="form-control" id="CustomerGroupIdkotbotnone" name="CustomerGroupIdkotbotnone"></select>*@
+                    </div>
+                    <div class="col-md-4">
+                        <label class="pull-left">Selection Type</label>
+                        <select class="form-control" id="TypeIdkotbotnone" name="TypeIdkotbotnone">
+                            <option>Daily</option>
+                            <option>Weekly</option>
+                            <option>Monthly</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pull-right">
+                            <br />
+                            <button class="btn btn-primary form-control" id="btnFilterkotbotnone" type="submit">Filter</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+                </div>
+                <div class="clerfix"></div><div class="clerfix"></div>
+                <div id="kotbotnone">
+
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-2 pull-right">
+                        <label class="pull-left">View &nbsp; </label>
+                        <div class="input-group pull-left">
+                            <select class="form-control" id="KotBotNoneId" name="KotBotNoneId">
+                                <option> All </option>
+                                <option> None </option>
+                                <option> KOT </option>
+                                <option> BOT </option>
+                            </select>
+
+                        </div>
+
+                    </div>
+                    @*<div class="pull-right col-md-3">
+                        <button id="backKotBotNone" class="pull-right"><<</button>
+                    </div>*@
+                </div>
+                <div class="clearfix"></div><br />
+            </div>
+            <div class="clearfix"></div>
+            <br /><br />
+
+            @*End of KOT BOT None*@
+
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                <div class="col-md-3">
+                    <label class="pull-left">Customer Group</label>
+                    @Html.DropDownList("CustomerGroupIdOrderTypeBreakdown", (IEnumerable<SelectListItem>)ViewBag.CustomerGroupIds, new
+               {
+                   @class = "form-control"
+               })
+                    @*<select class="form-control" id="CustomerGroupIdOrderTypeBreakdown" name="CustomerGroupIdOrderTypeBreakdown"></select>*@
+                </div>
+
+                <div class="col-md-2">
+                    <label class="pull-left" style="color:white">.</label>
+                    <button class="btn btn-primary form-control" id="btnFiltercontainerOrderTypeBreakdown" type="submit">Filter</button>
+                </div>
+
+                <div class="col-md-3"></div>
+                <div class="col-md-2"></div><br />
+                <div class="clerfix"></div><br />
+            </div>
+            <div class="clerfix"></div>
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                <div class="clerfix"></div>
+                <div class="col-md-6">
+                    <div id="containerOrderTypeBreakdown">
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="containerOrderTypeBreakdownColumn">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                <div class="col-md-3">
+                    <label class="pull-left">View &nbsp;</label>
+                    <div class="input-group pull-right">
+                        <select class="form-control" id="CateringMoodId" name="CateringMoodId"></select>
+                    </div>
+                </div><div class="clearfix"></div>
+                @*<div class="col-md-2">
+                    <button id="backcontainerOrderTypeBreakdown" class="pull-right"><<</button>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-2"></div><div class="clearfix"></div>*@
+                <br />
+            </div>
+            <div class="clearfix"></div>
+            <br />
+
+            @*List of least and most orderders - dept wise/ Drill down - product wise pie*@
+
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                <div class="col-md-3">
+                    <label class="pull-left">Customer Group</label>
+                    @Html.DropDownList("CustomerGroupIdcontainerLeastAndMostOrderes", (IEnumerable<SelectListItem>)ViewBag.CustomerGroupIds, new
+               {
+                   @class = "form-control"
+               })
+                    @*<select class="form-control" id="CustomerGroupIdcontainerLeastAndMostOrderes" name="CustomerGroupIdcontainerLeastAndMostOrderes"></select>*@
+                </div>
+                <div class="col-md-3">
+                    <label class="pull-left medium"># of Products On Drill Down</label>
+                    <select class="form-control" id="RecordCount" name="RecordCount">
+                        <option>10</option>
+                        <option selected>20</option>
+                        <option>30</option>
+                        <option>40</option>
+                        <option>50</option>
+                    </select>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-2">
+                    <label class="pull-left" style="color:white">.</label>
+                    <button class="btn btn-primary form-control" id="btnFiltercontainerLeastAndMostOrderes" type="submit">Filter</button>
+                </div>
+            </div>
+            <div class="clerfix"></div>
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+
+                <div id="containerLeastAndMostOrderes">
+
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+            <br />
+
+            @* HourlySales Line Chart*@
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                <br />
+                @*Chart filters*@
+                <div class="form-row content">
+                    <div class="col-md-4">
+                        <label class="pull-left">Time From:</label>
+                        <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                            <input type="text" class="form-control" id="TimeFromHourlySales" value="00:00" name="TimeFromHourlySales">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+
+                    </div><div class="clerfix"></div>
+                    <div class="col-md-4">
+                        <label class="pull-left">To:</label>
+                        <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                            <input type="text" class="form-control" value="23:00" id="TimeToHourlySales" name="TimeToHourlySales">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+
+                    </div><div class="clerfix"></div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pull-right">
+                            <button class="btn btn-primary form-control" id="btnFilterHourlySales" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div><div class="clearfix"></div><hr />
+                <div id="containerHourlySales">
+                </div>
+                <div class="clearfix"></div>
+
+                <br />
+            </div>
+            <div class="clearfix"></div><br />
+            <br />
+
+
+        @* HourlySales Tablular Chart*@
+        <div class="col-md-12 col-lg-12 col-sm-12 row">
+            <br />
+            @*Chart filters*@
+            <div class="form-row content">               
+                <div class="col-md-4">
+                    <label class="pull-left">Date:</label>
+                    <div class="input-group clockpicker1" data-placement="left" data-align="top" data-autoclose="true">
+                        <input type="date" class="form-control" id="DateFromHourlySalesTabular" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="clerfix"></div>
+                <div class="col-md-4"></div>              
+                <div class="clerfix"></div>
+                <div class="col-md-4">
+                    <div class="col-md-4 pull-right">
+                        <button class="btn btn-primary form-control" id="btnFilterHourlySalesTabular" type="submit">Filter</button>
+                    </div>
+                </div>
+            </div><div class="clearfix"></div><hr />
+            <div id="containerHourlySalesTabular">
+               @*<div style="color:black" ><h4>Hourly Sales - Weekly</h4></div>
+                <label id="lblhourleysalestabular" style="color:black"></label><br />*@
+                @*<div>
+                    <table class="mstable col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                        <thead id="HourlySalestabularTable">
+                            <tr>
+                                <th>Hour</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                                <th>Saturday</th>
+                                <th>Sunday</th>
+                            </tr>
+                        </thead>
+                        <tbody id="HourlySalestabular">
+                            
+                        </tbody>
+                    </table>
+                </div>*@
+            </div>
+            <div class="clearfix"></div>
+
+            <br />
+        </div>
+        <div class="clearfix"></div><br />
+        <br />
+
+            @*Time Consumption Bar Chart *@
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                <br />
+                @*Chart filters*@
+                <div class="form-row content">
+                    <div class="col-md-3">
+                        <label class="pull-left">Time From:</label>
+                        <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                            <input type="text" class="form-control" id="TimeFromTimeConsumption" value="00:00" name="TimeFromTimeConsumption">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+
+                    </div><div class="clerfix"></div>
+                    <div class="col-md-3">
+                        <label class="pull-left">To:</label>
+                        <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                            <input type="text" class="form-control" value="23:00" id="TimeToTimeConsumption" name="TimeToTimeConsumption">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+
+                    </div><div class="clerfix"></div>
+                    <div class="col-md-3">
+                        <label class="pull-left">Catering Mode:</label>
+                        <div class="input-group" data-placement="left" data-align="top" data-autoclose="true">
+                            <select id="MoodeTimeConsumption" name="MoodeTimeConsumption" class="form-control"></select>
+                        </div>
+                    </div><div class="clerfix"></div>
+                    <div class="col-md-3">
+                        <div class="col-md-4 pull-right">
+                            <button class="btn btn-primary form-control" id="btnFilterTimeConsumption" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div><div class="clearfix"></div><hr />
+                <div id="containerTimeConsumption">
+                </div>
+                <div class="clearfix"></div>
+
+                <br />
+            </div>
+            <div class="clearfix"></div><br />
+            <br />
+
+            @* Food Cost (Day Wise) Bar Chart *@
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                @*Chart filters*@
+                <div class="form-row content">
+                    <div class="col-md-4">
+                       
+                    </div>
+                    <div class="col-md-4">
+                       
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pull-right">
+                            <label style="color:white">.</label>
+                            <button class="btn btn-primary form-control" id="btnFilterFoodCost" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div><div class="clearfix"></div><hr />
+                <div id="FoodCost">
+                </div>
+                <div class="clearfix"></div>
+
+                <br />
+            </div>
+
+            <div class="clearfix"></div><br />
+            <br />
+            @* Food Cost (Department Wise) Bar Chart *@
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                @*Chart filters*@
+                <div class="form-row content">
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pull-right">
+                            <label style="color:white">.</label>
+                            <button class="btn btn-primary form-control" id="btnFilterDeptWiseFoodCost" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div><div class="clearfix"></div><hr />
+                <div id="DeptWiseFoodCost">
+                </div>
+                <div class="clearfix"></div>
+
+                <br />
+            </div>
+
+            <div class="clearfix"></div><br />
+            <br />
+
+            @* Drill Down Waistage summary and view product wise column chart *@
+            <div class="col-md-12 col-lg-12 col-sm-12 row">
+                @*Chart filters*@
+                <div class="form-row content">
+                    <div class="col-md-4">
+                        <label class="pull-left">Order Type</label>
+                        <select class="form-control" id="OrderTypeIdwaistagesummary" name="OrderTypeIdwaistagesummary">
+                            <option>All</option>
+                            <option>None</option>
+                            <option>KOT</option>
+                            <option>BOT</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="pull-left">Selection Type</label>
+                        <select class="form-control" id="TypeIdwaistagesummary" name="TypeIdwaistagesummary">
+                            <option>Daily</option>
+                            <option>Weekly</option>
+                            <option>Monthly</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pull-right">
+                            <label style="color:white">.</label>
+                            <button class="btn btn-primary form-control" id="btnFilterwaistagesummary" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div><div class="clearfix"></div><hr />
+                <div id="waistagesummary">
+                </div>
+                <div class="clearfix"></div>
+
+                <br />
+            </div>
+            <div class="clearfix"></div><br />
+            <br />
+        @*</div>*@
+    </div>
+  
+    
+</body>
+</html>
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/ClockPicker/jquery-clockpicker.js"></script>
+<script src="~/Scripts/ClockPicker/jquery-clockpicker.min.js"></script>
+<script type="text/javascript">
+$('.clockpicker').clockpicker();
+</script>
+
+<script src="~/Scripts/Charts/8.2.0/highcharts.js"></script>
+<script src="~/Scripts/Charts/Latest/heatmap.js"></script>
+<script src="~/Scripts/Charts/8.2.0/data.js"></script>
+<script src="~/Scripts/Charts/8.2.0/data.js"></script>
+<script src="~/Scripts/Charts/8.2.0/drilldown.js"></script>
+<script src="~/Scripts/Charts/8.2.0/exporting.js"></script>
+<script src="~/Scripts/Charts/8.2.0/export-data.js"></script>
+<script src="~/Scripts/Charts/8.2.0/accessibility.js"></script>
+
+@*<script src="~/Scripts/Charts/Latest/highcharts.js"></script>
+    <script src="~/Scripts/Charts/Latest/heatmap.js"></script>
+    <script src="~/Scripts/Charts/Latest/data.js"></script>
+    <script src="~/Scripts/Charts/Latest/drilldown.js"></script>
+    <script src="~/Scripts/Charts/Latest/exporting.js"></script>
+    <script src="~/Scripts/Charts/Latest/export-data.js"></script>
+    <script src="~/Scripts/Charts/Latest/accessibility.js"></script>*@
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+
+
+<script>
+function thousands_separators(num)
+  {
+    var num_parts = num.toString().split(".");
+    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num_parts.join(".");
+  }
+</script>
+
+@*Selectors*@
+
+<script>
+    debugger
+
+    var LicenseMessage = '@TempData["LicenseMessage"]';
+    if (LicenseMessage) {
+        swal('License Key', LicenseMessage, 'info');
+    }
+
+    //  $.getJSON("@Url.Action("GetActiveCustomerCategories", "Customer")", function (data) {
+
+    // var CustomerCategoryId = $("#CustomerGroupId");
+    // var CustomerGroupIdrevenueandcost = $("#CustomerGroupIdrevenueandcost"); kotbotnone
+    // var CustomerGroupIdkotbotnone = $("#CustomerGroupIdkotbotnone");
+    // var CustomerGroupIdOrderTypeBreakdown = $("#CustomerGroupIdOrderTypeBreakdown");
+    //  var CustomerGroupIdcontainerLeastAndMostOrderes = $("#CustomerGroupIdcontainerLeastAndMostOrderes");
+
+    //  CustomerCategoryId.empty();
+    //  CustomerGroupIdrevenueandcost.empty();
+    //  CustomerGroupIdkotbotnone.empty();
+    //   CustomerGroupIdOrderTypeBreakdown.empty();
+    //  CustomerGroupIdcontainerLeastAndMostOrderes.empty();
+
+    //  CustomerCategoryId.append("<option value='0'>-- All Customer Groups --</option>");
+    //   CustomerGroupIdrevenueandcost.append("<option value='0'>-- All Customer Groups --</option>");
+    //  CustomerGroupIdkotbotnone.append("<option value='0'>-- All Customer Groups --</option>");
+    //  CustomerGroupIdOrderTypeBreakdown.append("<option value='0'>-- All Customer Groups --</option>");
+    // CustomerGroupIdcontainerLeastAndMostOrderes.append("<option value='0'>-- All Customer Groups --</option>");
+
+    // $.each(JSON.parse(data), function (index, optionaldata) {
+    //   CustomerCategoryId.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+    //     CustomerGroupIdrevenueandcost.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+    //     CustomerGroupIdkotbotnone.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+    //     CustomerGroupIdOrderTypeBreakdown.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+    //       CustomerGroupIdcontainerLeastAndMostOrderes.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+
+    // });
+
+    // });
+
+
+    $.getJSON("@Url.Action("GetActiveCateringMoods", "CateringMood")", function (data) {
+
+        var CateringMoodId = $("#CateringMoodId");
+        var MoodeTimeConsumption = $("#MoodeTimeConsumption");
+        CateringMoodId.empty();
+        MoodeTimeConsumption.empty();
+        CateringMoodId.append("<option value='0'>-- All Catering Modes --</option>");
+        MoodeTimeConsumption.append("<option value='0'>-- All --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CateringMoodId.append($('<option />', { value: optionaldata.CateringMoodID }).html(optionaldata.CateringMoodName));
+            MoodeTimeConsumption.append($('<option />', { value: optionaldata.CateringMoodID }).html(optionaldata.CateringMoodName));
+
+        });
+
+
+    });
+
+
+
+    @*$.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#LocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.LocationId') {
+            $('#LocationId').val(@ViewBag.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });*@
+
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var departmentDropDown = $("#RevCostDeptId");
+
+        departmentDropDown.empty();
+        departmentDropDown.append("<option value='0'>-- Select a department --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            departmentDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+        });
+
+        if ('@ViewBag.RevCostDeptId') {
+            $('#RevCostDeptId').val(@ViewBag.RevCostDeptId).trigger("change");
+        } else {
+            $('#RevCostDeptId').val(0).trigger("change");
+        }
+    });
+
+
+</script>
+
+
+@*changers*@
+
+<script>
+
+    // common filter changers
+    function datefromchange(e) {
+        RevenueAndCost('s');
+        OrderTypesVariation('s');
+        OrderTypeBreakdown('s');
+        LeastAndMostOrders('s');
+        Waistage('s');
+        TimeConsumption('s');
+        HourlySales('s');
+        FoodCost('s');
+        DeptWiseFoodCost('s');
+    }
+
+    function datetochanger(e) {
+        RevenueAndCost('s');
+        OrderTypesVariation('s');
+        OrderTypeBreakdown('s');
+        LeastAndMostOrders('s');
+        Waistage('s');
+        TimeConsumption('s');
+        HourlySales('s');
+        FoodCost('s');
+        DeptWiseFoodCost('s');
+    }
+
+    function locationchange(e) {
+        RevenueAndCost('s');
+        OrderTypesVariation('s');
+        OrderTypeBreakdown('s');
+        LeastAndMostOrders('s');
+        Waistage('s');
+        TimeConsumption('s');
+        HourlySales('s');
+        FoodCost('s');
+        DeptWiseFoodCost('s');
+       // alert(e.target.value);
+    }
+
+
+    // end common filter changers
+
+
+    // change RevCostDeptId
+
+    $("#RevCostDeptId").change(function ()
+    {
+        var diptid = this.value;
+        var locationid;
+        var custgroupid;
+        if ($('#LocationId').val() == null || $('#CustomerGroupId').val() == null) {
+
+            locationid = 0;
+            custgroupid = 0;
+        } else {
+            locationid = $('#LocationId').val();
+            custgroupid = $('#CustomerGroupId').val();
+        }
+
+        var datefrom = $('#DateFrom').val();
+        var dateto = $('#DateTo').val();
+        var typeid = $('#TypeIdrevenueandcost').val();
+        var url = $(this).attr('href') + 'RevenueAndCostRowData?locationid=' + locationid + '&datefrom=' + datefrom + '&dateto=' + dateto + '&customergroupid=' + custgroupid + '&selectiontypeid=' + typeid + '&deptid=' + diptid;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+    });
+
+
+    // KotBotNoneId
+    $("#KotBotNoneId").change(function () {
+        var KotBotNoneId = this.value;
+        SingleOrderType(KotBotNoneId);
+    });
+
+    $("#CateringMoodId").change(function () {
+        var CateringmodeId = this.value;
+       // debugger;
+        DeptOrderTypeWiseSales(CateringmodeId);
+    });
+</script>
+
+
+@*Clicks*@
+
+<script>
+
+    $("body").on("click",
+    "#btnFilterrevenueandcost",
+    function () {
+        RevenueAndCost('s');
+    });
+
+
+    $("body").on("click",
+        "#btnFilterkotbotnone",
+        function () {
+            OrderTypesVariation('f');
+        });
+
+    $("body").on("click",
+       "#btnFiltercontainerOrderTypeBreakdown",
+       function () {
+           OrderTypeBreakdown('f');
+       });
+
+    $("body").on("click",
+      "#btnFiltercontainerLeastAndMostOrderes",
+      function () {
+          debugger;
+          LeastAndMostOrders('f');
+      });
+
+    $("body").on("click",
+     "#btnFilterwaistagesummary",
+     function () {
+         debugger;
+         Waistage('s');
+     });
+
+    $("body").on("click",
+    "#btnFilterHourlySales",
+    function () {
+        debugger;
+        HourlySales('s');
+    });
+
+    $("body").on("click",
+   "#btnFilterTimeConsumption",
+   function () {
+       debugger;
+       TimeConsumption('s');
+   });
+
+    $("body").on("click",
+    "#btnFilterFoodCost",
+    function () {
+        debugger;
+        FoodCost('s');
+    });
+
+    $("body").on("click",
+   "#btnFilterDeptWiseFoodCost",
+   function () {
+       debugger;
+       DeptWiseFoodCost('s');
+   });
+
+    $("body").on("click",
+   "#btnFilterHourlySalesTabular",
+   function () {
+       debugger;
+       HourlySalesTabular('s');
+   });
+
+    //backs
+
+
+    $("body").on("click",
+     "#backKotBotNone",
+     function () {
+         OrderTypesVariation('s');
+     });
+
+    $("body").on("click",
+    "#backcontainerOrderTypeBreakdown",
+    function () {
+        debugger;
+        OrderTypeBreakdown('s');
+
+    });
+</script>
+
+
+@*1. ph Revenue VS Cost*@
+<script>
+
+    // debugger;
+
+    // for on load
+    RevenueAndCost('f');
+    function RevenueAndCost(mood)  // Graph Revenue VS Cost
+    {
+        //debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+        if (mood == 'f') {
+            locationid = 0;
+            customercategoryid = 0;
+        } else if(mood=='s')
+        {
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupIdrevenueandcost").val();
+        }
+
+        var df = $("#DateFrom").val();
+        var dt = $("#DateTo").val();
+        var t = $("#TypeId").val();
+
+            $.ajax({
+            url: "@Url.Action("RevenueAndCost", "Home")",
+                data: {
+                    locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+                    customergroupid: customercategoryid, selectiontypeid: $("#TypeIdrevenueandcost").val()
+                },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+               // debugger;
+                
+                $("#loader").show();
+            },
+
+            success: function (resp)
+            {
+
+                var days = [];
+                var nett = [];
+                var cost = [];
+
+                $.each(resp, function (i, item) {
+
+                    days.push(item.day);
+                    nett.push(item.Nett);
+                    cost.push(item.Cost);
+                });
+
+
+                Highcharts.chart('revenueandcost', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Revenue And Cost Variation'
+                    },
+                    subtitle: {
+                        text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val() + ' (' + $("#TypeIdrevenueandcost").val()+')'
+                    },
+                    xAxis: {
+
+                        categories: days
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Rs'
+                        }
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            },
+                            enableMouseTracking: false
+                        }
+                    },
+                    series: [{
+                        name: 'Revenue',
+                        data: nett
+                    }, {
+                        name: 'Cost',
+                        data: cost
+                    }]
+                });
+
+            },
+            complete:function(data){
+                // Hide image container
+                $("#loader").hide();
+            },
+
+            error: function (error)
+            {
+                //  alert(error);
+            }
+        });
+
+    }
+
+
+</script>
+
+@*2.derTypesVariation*@
+<script>
+
+    //debugger;
+    OrderTypesVariation('f');
+    function OrderTypesVariation(mood)
+    {
+
+       // debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+        if (mood == 'f') {
+            locationid = 0;
+            customercategoryid = 0;
+        } else if(mood=='s')
+        {
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupIdkotbotnone").val();
+        }
+
+        var df = $("#DateFrom").val();
+        var dt = $("#DateTo").val();
+        var t = $("#TypeIdkotbotnone").val();
+
+        $.ajax({
+            url: "@Url.Action("OrderTypesVariation", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+            customergroupid: customercategoryid, selectiontypeid: $("#TypeIdkotbotnone").val()
+            },
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+           // debugger;
+
+            $("#loader").show();
+        },
+        success: function (resp)
+        {
+
+            var days = [];
+            var kotcount = [];
+            var botcount = [];
+            var nonecount = [];
+
+            $.each(resp, function (i, item) {
+
+                days.push(item.recdate);
+                kotcount.push(item.KOTCount);
+                botcount.push(item.BOTCount);
+                nonecount.push(item.NoneCount);
+            });
+
+
+
+        Highcharts.chart('kotbotnone', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Order Types Variation'
+            },
+            subtitle: {
+                text: 'KOT BOT & None'
+            },
+            xAxis: {
+                categories: days
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Orders'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                x: -30,
+                verticalAlign: 'top',
+                y: 25,
+                floating: true,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'KOT',
+                data: kotcount
+            }, {
+                name: 'BOT',
+                data: botcount
+            }, {
+                name: 'None',
+                data: nonecount
+            }]
+        });
+
+        },
+        complete: function (data) {
+            // Hide image container
+            $("#loader").hide();
+        },
+   error: function (error) {
+            //  alert(error);
+  }
+});
+
+    }
+</script>
+
+
+@*2.1 singleOrderType (For Kot BOT Change event)   *@
+<script>
+
+
+    function SingleOrderType(ordertype)
+    {
+
+       // debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupIdkotbotnone").val();
+
+            $.ajax({
+                url: "@Url.Action("OrderTypesWiseProducts", "Home")",
+                data: {
+                locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+                customergroupid: customercategoryid, ordertypeid: ordertype, charttypeid: $("#TypeIdkotbotnone").val()
+            },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+               // debugger;
+
+                $("#loader").show();
+            },
+            success: function (resp)
+            {
+
+
+             //   debugger;
+                var days = [];
+                var kotcount = [];
+                var botcount = [];
+                var nonecount = [];
+                var base = [];
+
+                var level01 = [];
+
+                var value;
+                $.each(resp, function (i, item) {
+
+                    days.push(item.recdate);
+                    kotcount.push(item.KOTCount);
+                    botcount.push(item.BOTCount);
+                    nonecount.push(item.NoneCount);
+
+                    if (ordertype == "KOT") {
+                        base.push({ name: item.recdate, y: item.KOTCount, drilldown: item.recdate });
+                    }
+                    if (ordertype == "BOT") {
+                        base.push({ name: item.recdate, y: item.BOTCount, drilldown: item.recdate });
+                    }
+                    if (ordertype == "None") {
+                        base.push({ name: item.recdate, y: item.NoneCount, drilldown: item.recdate });
+                    }
+                    //  debugger;
+
+                    var products = [];
+                    $.each(item.Products.filter(p => p.recdate == item.recdate), function (i, prd)
+                    {
+
+                            products.push([prd.Product, prd.Nett]);
+
+                    });
+                    var newproducts = [];
+                    newproducts.push.apply(newproducts, products);
+
+
+                    level01.push({ name: item.recdate, id: item.recdate, data: newproducts });
+
+                    //debugger;
+                });
+
+
+            Highcharts.chart('kotbotnone', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Order Type - ' + ordertype
+            },
+            subtitle: {
+                text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val()
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Orders / Rs'
+                }
+
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                       // format: '{point.y:.1f}%'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+            },
+
+            series: [
+                {
+                    name: "Orders",
+                    colorByPoint: true,
+                    data: base,
+                }
+            ],
+            drilldown: {
+                series: level01
+            }
+        });
+
+            },
+            complete: function (data) {
+                // Hide image container
+                $("#loader").hide();
+            },
+            error: function (error) {
+                //  alert(error);
+            }
+            });
+    }
+
+</script>
+
+
+@*3 OrderTypeBreakdown - Din in Take Away etc / PIE and Drildown Column*@
+<script>
+
+    OrderTypeBreakdown('f');
+    function OrderTypeBreakdown(mood)
+    {
+
+
+       // debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+        if (mood == 'f') {
+            locationid = 0;
+            customercategoryid = 0;
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupIdOrderTypeBreakdown").val();
+        }
+
+        $.ajax({
+            url: "@Url.Action("OrderTypeBreakdown", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+            customergroupid: customercategoryid
+            },
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+          //  debugger;
+
+            $("#loader").show();
+        },
+        success: function (resp)
+        {
+
+            var ordertypes = [];
+            $.each(resp, function (i, item) {
+
+                ordertypes.push({ name: item.OrderType, y: item.Nett});
+            });
+
+        Highcharts.chart('containerOrderTypeBreakdown', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+
+            },
+            title: {
+                text: 'Order Types, Breakdown'
+            },
+            subtitle: {
+                text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val()
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: ordertypes
+            }]
+        });
+
+
+
+
+        },
+        complete: function (data) {
+            // Hide image container
+            $("#loader").hide();
+        },
+        error: function (error) {
+            //  alert(error);
+        }
+        });
+    }
+
+
+
+    function DeptOrderTypeWiseSales(mood)
+    {
+
+
+        //debugger;
+
+
+
+        locationid = $("#LocationId").val();
+        customercategoryid = $("#CustomerGroupIdOrderTypeBreakdown").val();
+
+
+        $.ajax({
+            url: "@Url.Action("DeptOrderTypeWiseSales", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+            customergroupid: customercategoryid, cateringmodeid: mood
+            },
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+           // debugger;
+
+            $("#loader").show();
+        },
+        success: function (resp)
+        {
+
+            var ordertypes = [];
+            var ordertypescolumns = [];
+            var ordertypescolumnslevel01 = [];
+
+
+            $.each(resp, function (i, item) {
+
+                ordertypes.push({ name: item.DeptName, y: item.Nett });
+                ordertypescolumns.push({ name: item.DeptName, y: item.Nett, drilldown: item.DeptName });
+            //    debugger;
+
+                var deptprd=[];
+                deptprd.push.apply(deptprd, item.Products.filter(p => p.DeptID == item.DeptId));
+                var products = [];
+                $.each(item.Products.filter(p => p.DeptID == item.DeptId), function (i, prd) {
+
+                products.push([prd.ProductName, prd.Nett]);
+
+                });
+
+                var newArray = [];
+                newArray.push.apply(newArray, products);
+
+             //   debugger;
+                ordertypescolumnslevel01.push({ name: item.DeptName, id: item.DeptName, data: newArray });
+
+
+            });
+
+            Highcharts.chart('containerOrderTypeBreakdown', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+
+                },
+                title: {
+                    text: 'Departments Wise Sales'
+                },
+                subtitle: {
+                    text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val()
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Brands',
+                    colorByPoint: true,
+                    data: ordertypes
+                }]
+            });
+
+
+            // Create the chart
+            Highcharts.chart('containerOrderTypeBreakdownColumn', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Departments Wise Sales'
+                },
+                subtitle: {
+                    text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val()
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true
+                    }
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Rs'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true
+                           // format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+                },
+
+                series: [
+                    {
+                        name: "Departments",
+                        colorByPoint: true,
+                        data: ordertypescolumns
+                    }
+                ],
+                drilldown: {
+                    series: ordertypescolumnslevel01
+                }
+            });
+
+
+
+
+        },
+        complete: function (data) {
+            // Hide image container
+            $("#loader").hide();
+        },
+        error: function (error) {
+            //  alert(error);
+        }
+    });
+    }
+
+
+
+</script>
+
+@*5. Least and Most Orders Pie / Drill Down*@
+<script>
+    LeastAndMostOrders('f');
+
+    function LeastAndMostOrders(mood)
+    {
+
+       // debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+        if (mood == 'f') {
+            locationid = 0;
+            customercategoryid = 0;
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupIdcontainerLeastAndMostOrderes").val();
+        }
+
+        $.ajax({
+            url: "@Url.Action("DeptWiseSale", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+            customergroupid: customercategoryid, recordcount: $("#RecordCount").val()
+            },
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+           // debugger;
+
+            $("#loader").show();
+        },
+        success: function (resp)
+        {
+
+            var depts = [];
+            var deptproducts = [];
+            $.each(resp, function (i, item) {
+
+                depts.push({ name: item.DeptName, y: item.Nett, drilldown: item.DeptName });
+
+
+
+               // debugger;
+
+                //var deptprd = [];
+                //deptprd.push.apply(deptprd, item.Products.filter(p => p.DeptID == item.DeptId));
+                var products = [];
+                $.each(item.Products.filter(p => p.DeptID == item.DeptId), function (i, prd) {
+
+                    products.push([prd.ProductName, prd.Nett]);
+
+                });
+
+                var newArray = [];
+                newArray.push.apply(newArray, products);
+
+               // debugger;
+                deptproducts.push({ name: item.DeptName, id: item.DeptName, data: newArray });
+
+            });
+
+
+
+
+        // Create the chart
+        Highcharts.chart('containerLeastAndMostOrderes', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Department Wise Sales'
+            },
+            subtitle: {
+                text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val()
+            },
+
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                },
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y:.1f}%'
+                    }
+                }, pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                   showInLegend: true,
+
+                }
+
+            },
+
+
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            },
+
+            series: [
+                {
+                    name: "Departments",
+                    colorByPoint: true,
+                    data: depts
+                }
+            ],
+            drilldown: {
+                series: deptproducts
+            }
+        });
+
+
+        },
+        complete: function (data) {
+            // Hide image container
+            $("#loader").hide();
+        },
+        error: function (error) {
+            //  alert(error);
+        }
+        });
+    }
+</script>
+
+
+@*7.Drill Down on waistge summary - view product wise*@
+
+<script>
+
+  //  debugger;
+    Waistage('f');
+    function Waistage(mood)
+    {
+
+        var locationid;
+        if (mood == 'f') {
+            locationid = 0;
+
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+
+        }
+
+        $.ajax({
+            url: "@Url.Action("WaistageSummary", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+            charttype: $("#TypeIdwaistagesummary").val(), ordertype: $("#OrderTypeIdwaistagesummary").val()
+            },
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+           // debugger;
+
+            $("#loader").show();
+        },
+        success: function (resp)
+        {
+
+            var summary = [];
+            var detail = [];
+            $.each(resp, function (i, item) {
+
+                summary.push({ name: item.recdate, y: item.Nett, drilldown: item.recdate });
+
+              //  debugger;
+
+                var products = [];
+                $.each(item.Products.filter(p => p.recdate == item.recdate), function (i, prd) {
+
+                    products.push([prd.Product.trim(), prd.Nett]);
+
+                });
+
+                var newArray = [];
+                newArray.push.apply(newArray, products);
+
+             //   debugger;
+                detail.push({ name: item.recdate, id: item.recdate, data: newArray });
+
+            });
+
+
+            Highcharts.chart('waistagesummary', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Wastage Summary'
+                },
+                subtitle: {
+                    text: 'From ' + $("#DateFrom").val() + ' To ' + $("#DateTo").val()
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true
+                    }
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Rs'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+                },
+
+                series: [
+                {
+                    name: "Wastage",
+                    colorByPoint: true,
+                    data: summary
+                }
+                ],
+                drilldown: {
+                    series: detail
+                }
+            });
+
+        },
+        complete: function (data) {
+            // Hide image container
+            $("#loader").hide();
+        },
+        error: function (error) {
+            //  alert(error);
+        }
+    });
+    }
+
+
+</script>
+
+
+@*Hourly Sales*@
+
+<script>
+
+   // debugger;
+   HourlySales('f');
+    function HourlySales(mood) {
+     //   debugger;
+        var locationid;
+        if (mood == 'f') {
+            locationid = 0;
+
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+
+        }
+
+        $.ajax({
+            url: "@Url.Action("HourlySales", "Home")",
+            data: {
+                locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+                timefrom: $("#TimeFromHourlySales").val(), timeto: $("#TimeToHourlySales").val()
+            },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+              //  debugger;
+                $("#loader").show();
+            },
+            success: function (resp) {
+              //  debugger;
+                var y = [];
+                var x = [];
+                $.each(resp, function (i, item) {
+                   // debugger;
+                    x.push(item.RecTime);
+                    y.push(item.Nett);
+                    //   debugger;
+                  //  days.push(item.day);
+                });
+
+                Highcharts.chart('containerHourlySales', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Hourly Sales'
+                    },
+                    subtitle: {
+                        text: 'From ' + $("#DateFrom").val() + ' ' + $("#TimeFromHourlySales").val() + ' To ' + $("#DateTo").val() + ' ' + $("#TimeToHourlySales").val()
+                    },
+                    xAxis: {
+                        categories: x
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Rs'
+                        }
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            },
+                            enableMouseTracking: false
+                        }
+                    },
+                    series: [{
+                        name: 'Hours',
+                        data: y
+                    }]
+                });
+
+
+            },
+            complete: function (data) {
+                // Hide image container
+                $("#loader").hide();
+            },
+            error: function (error) {
+                //  alert(error);
+            }
+        });
+    }
+
+
+</script>
+
+
+
+@*Hourly Sales Tabular*@
+
+<script>
+
+   // debugger;
+   HourlySalesTabular('f');
+   function HourlySalesTabular(mood) {
+       debugger;
+        var locationid;
+        if (mood == 'f') {
+            locationid = 0;
+
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+
+        }
+
+        debugger;
+        function getPointCategoryName(point, dimension) {
+            var series = point.series,
+                isY = dimension === 'y',
+                axis = series[isY ? 'yAxis' : 'xAxis'];
+            return axis.categories[point[isY ? 'y' : 'x']];
+        }
+
+
+        $.ajax({
+            url: "@Url.Action("HourlySalesTabular", "Home")",
+            data: {
+                locationid: locationid, datefrom: $("#DateFromHourlySalesTabular").val()
+               
+            },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+               // debugger;
+                $("#loader").show();
+            },
+            success: function (resp)
+            {
+                //debugger;              
+                //$("#HourlySalestabular tr").remove();
+                //$("#lblhourleysalestabular").text("");
+                //$.each(resp, function (i, item)
+                //{
+                   
+                //    $("#lblhourleysalestabular").text("Starts From: " + item.ActualDate + " (" + item.ActualDay + ").");
+                //    var hourcell = "<td>" + item.RecTime + "</td>";
+                //    var mondaycell = "<td style='text-align:right' >" + thousands_separators(item.Monday) + "</td>";
+                //    var tuesdaycell = "<td style='text-align:right'>" + thousands_separators(item.Tuesday) + "</td>";
+                //    var wendsdayell = "<td style='text-align:right'>" + thousands_separators(item.Wednesday) + "</td>";
+                //    var thursdaycell = "<td style='text-align:right'>" + thousands_separators(item.Thursday) + "</td>";
+                //    var fridaycell = "<td style='text-align:right'>" + thousands_separators(item.Friday) + "</td>";
+                //    var saturdaycell = "<td style='text-align:right'>" + thousands_separators(item.Saturday) + "</td>";
+                //    var sundaycell = "<td style='text-align:right'>" + thousands_separators(item.Sunday) + "</td>";
+
+                //    var newUnitRow = "<tr id='trHourlySaleTabular'>" +
+                //            hourcell +
+                //            mondaycell +
+                //            tuesdaycell +
+                //            wendsdayell +
+                //            thursdaycell +
+                //            fridaycell +
+                //            saturdaycell +
+                //            sundaycell + "</tr>";
+
+                //    $("#HourlySalestabular").append(newUnitRow);
+
+                //});
+                debugger;
+
+                var y = [];
+                var x = [];
+                var d = [];
+                $.each(resp, function (i, item)
+                {
+                  //  x.push(item.RecTime);
+                    y.push(item.RecTime);
+                    d.push([0,item.RowIDx,item.Monday]);
+                });
+                $.each(resp, function (i, item) {
+                  
+                    d.push([1, item.RowIDx, item.Tuesday]);
+                });
+                $.each(resp, function (i, item) {
+                   
+                    d.push([2, item.RowIDx, item.Wednesday]);
+                });
+                $.each(resp, function (i, item) {
+                   
+                    d.push([3, item.RowIDx, item.Thursday]);
+                });
+                $.each(resp, function (i, item) {
+                  
+                    d.push([4, item.RowIDx, item.Friday]);
+                });
+                $.each(resp, function (i, item) {
+                  
+                    d.push([5, item.RowIDx, item.Saturday]);
+                });
+                $.each(resp, function (i, item) {
+                   
+                    d.push([6, item.RowIDx, item.Sunday]);
+                });
+               
+               
+                debugger;
+                Highcharts.chart('containerHourlySalesTabular', {
+
+                    chart: {
+                        type: 'heatmap',
+                        marginTop: 40,
+                        marginBottom: 80,
+                        plotBorderWidth: 1
+                    },
+
+
+                    title: {
+                        text: 'Hourly Sales - Weekly'
+                    },
+                  
+                    xAxis: {
+                        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                    },
+
+                    yAxis: {
+                        categories: y,
+                        title: null,
+                        reversed: true
+                    },
+
+                    accessibility: {
+                        point: {
+                            descriptionFormatter: function (point) {
+                                var ix = point.index + 1,
+                                    xName = getPointCategoryName(point, 'x'),
+                                    yName = getPointCategoryName(point, 'y'),
+                                    val = point.value;
+                                return ix + '. ' + xName + ' sales ' + yName + ', ' + val + '.';
+                            }
+                        }
+                    },
+
+                    colorAxis: {
+                        min: 0,
+                        minColor: '#FFFFFF',
+                        maxColor: Highcharts.getOptions().colors[0]
+                    },
+
+                    legend: {
+                        align: 'right',
+                        layout: 'vertical',
+                        margin: 0,
+                        verticalAlign: 'top',
+                        y: 25,
+                        symbolHeight: 280
+                    },
+
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + getPointCategoryName(this.point, 'x') + '</b> sold items value of <br><b>' +
+                                this.point.value + '</b> on <br><b>' + getPointCategoryName(this.point, 'y') + '</b>';
+                        }
+                    },
+
+                    series: [{
+                        name: 'Sales per employee',
+                        borderWidth: 1,
+                        //data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16], [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115], [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120], [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96], [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30], [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84], [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+                        data:d,
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000'
+                        }
+                    }],
+
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                            chartOptions: {
+                                yAxis: {
+                                    labels: {
+                                        formatter: function () {
+                                            return this.value.charAt(0);
+                                        }
+                                    }
+                                }
+                            }
+                        }]
+                    }
+
+                });
+            },
+            complete: function (data) {
+                // Hide image container
+                $("#loader").hide();
+            },
+            error: function (error) {
+                //  alert(error);
+            }
+        });
+    }
+
+
+</script>
+
+@*Time Consumption*@
+
+<script>
+
+  //  debugger;
+    TimeConsumption('f');
+    function TimeConsumption(mood) {
+     //   debugger;
+        var locationid;
+        if (mood == 'f') {
+            locationid = 0;
+            cateringmodeid = 0;
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+            cateringmodeid = $("#MoodeTimeConsumption").val();
+        }
+
+
+        $.ajax({
+            url: "@Url.Action("TimeConsumption", "Home")",
+            data: {
+                locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+                timefrom: $("#TimeFromTimeConsumption").val(), timeto: $("#TimeToTimeConsumption").val(),
+                mode: cateringmodeid
+            },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+              //  debugger;
+
+                $("#loader").show();
+            },
+            success: function (resp)
+            {
+             //   debugger;
+                var y = [];
+                var x = [];
+                var xy = [];
+                $.each(resp, function (i, item) {
+                  //  debugger;
+                    x.push(item.Receipt);
+                    y.push(item.value);
+                    xy.push({ name: item.Receipt, y: item.value, drilldown: item.Receipt });
+                    //   debugger;
+                  //  days.push(item.day);
+                });
+
+              
+               
+
+                // Create the chart
+                Highcharts.chart('containerTimeConsumption', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Order Time Consumption'
+                    },
+                    subtitle: {
+                        text: 'From ' + $("#DateFrom").val() + ' ' + $("#TimeFromTimeConsumption").val() + ' To ' + $("#DateTo").val() + ' ' + $("#TimeToTimeConsumption").val()
+                    },
+                    accessibility: {
+                        announceNewData: {
+                            enabled: true
+                        }
+                    },
+                    xAxis: {
+                        type: 'category'
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Time (min)'
+                        }
+
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            borderWidth: 0,
+                            dataLabels: {
+                                enabled: true
+                                // format: '{point.y:.1f}%'
+                            }
+                        }
+                    },
+
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+                    },
+
+                    series: [
+                        {
+                            name: "Departments",
+                            colorByPoint: true,
+                            data: xy
+                        }
+                    ]
+                    //,
+                    //drilldown: {
+                    //    series: xy
+                    //}
+                });
+
+            },
+            complete: function (data) {
+                // Hide image container
+                $("#loader").hide();
+            },
+            error: function (error) {
+                //  alert(error);
+            }
+        });
+    }
+
+
+</script>
+
+@*Food Cost - Day Wise (Bar Chart)*@
+
+<script>
+
+    FoodCost('f');
+    function FoodCost(mood)
+    {
+        debugger;
+        var locationid;
+        if (mood == 'f') {
+            locationid = 0;
+
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+
+        }
+
+        $.ajax({
+            url: "@Url.Action("FoodCost", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val()
+   
+            },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function ()
+            {
+           
+            $("#loader").show();
+        },
+        success: function (resp)
+        {          
+              debugger;
+            var y = [];
+            var x = [];
+            var xy = [];
+            $.each(resp, function (i, item) {
+                  debugger;
+                x.push(item.RecDate);
+                y.push(item.Value);
+                xy.push({ name: item.RecDate, y: item.Value });
+                 debugger;
+                // days.push(item.day);
+            });
+
+
+
+
+            // Create the chart
+            Highcharts.chart('FoodCost', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Food Cost'
+                },
+                subtitle: {
+                    text: 'From ' + $("#DateFrom").val() +  ' To ' + $("#DateTo").val()
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true
+                    }
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: '(%)'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true
+                            // format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b>%<br/>'
+                },
+
+                series: [
+                    {
+                        name: "Date",
+                        colorByPoint: true,
+                        data: xy
+                    }
+                ]
+                //,
+                //drilldown: {
+                //    series: xy
+                //}
+            });
+
+        },
+        complete: function (data) {
+          
+            $("#loader").hide();
+        },
+        error: function (error) {
+           
+        }
+    });
+    }
+
+
+</script>
+
+@*Food Cost - Dept Wise (Bar Chart)*@
+
+<script>
+
+    DeptWiseFoodCost('f');
+    function DeptWiseFoodCost(mood)
+    {
+
+        var locationid;
+        if (mood == 'f') {
+            locationid = 0;
+
+        } else if (mood == 's') {
+            locationid = $("#LocationId").val();
+
+        }
+
+        $.ajax({
+            url: "@Url.Action("DeptWiseFoodCost", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val()
+
+            },
+            type: "GET",
+            dataType: "json",
+            beforeSend: function ()
+            {
+
+            $("#loader").show();
+        },
+        success: function (resp)
+        {
+            //   debugger;
+            var y = [];
+            var x = [];
+            var xy = [];
+            $.each(resp, function (i, item) {
+                  debugger;
+                x.push(item.DeptName);
+                y.push(item.Value);
+                xy.push({ name: item.DeptName, y: item.Value });
+                 debugger;
+                // days.push(item.day);
+            });
+
+
+
+
+            // Create the chart
+            Highcharts.chart('DeptWiseFoodCost', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Dept. Wise Food Cost'
+                },
+                subtitle: {
+                    text: 'From ' + $("#DateFrom").val() +  ' To ' + $("#DateTo").val()
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true
+                    }
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: '(%)'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true
+                            // format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b>%<br/>'
+                },
+
+                series: [
+                    {
+                        name: "Date",
+                        colorByPoint: true,
+                        data: xy
+                    }
+                ]
+                //,
+                //drilldown: {
+                //    series: xy
+                //}
+            });
+
+        },
+        complete: function (data) {
+
+            $("#loader").hide();
+        },
+        error: function (error) {
+
+        }
+    });
+    }
+
+
+</script>

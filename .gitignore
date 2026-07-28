@@ -1,36 +1,112 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ============================================================================
+# rit-hms .gitignore
+# ASP.NET MVC 5 / .NET Framework 4.5.2 solution + tooling
+# ============================================================================
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# --- .NET build output ---
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.pdb
+*.dll.config
+*.exe.config
 
-# testing
-/coverage
+# --- NuGet packages (restore from packages.config) ---
+packages/
+*.nupkg
+.nuget/
 
-# next.js
-/.next/
-/out/
+# --- Visual Studio / Rider / VS Code ---
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.ncrunchproject
+*.ncrunchsolution
+*.dotsettings.user
+*.DotSettings.user
 
-# production
-/build
+# --- Compiled outputs ---
+*.exe
+*.msi
+*.tlb
+*.tli
+*.tlh
+*.tmp_proj
 
-# misc
-.DS_Store
+# --- Test results ---
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# --- Local config overrides (NEVER commit secrets) ---
+Web.local.config
+Web.*.local.config
+App.local.config
+appsettings.local.json
+appsettings.Production.json
+*.local.config
+.env
+.env.local
+.env.*.local
+
+# --- Aggregator / partner credentials (Sprint 2+) ---
+secrets/
+credentials/
+*.pfx
+*.p12
+*.key
 *.pem
 
-# debug
+# --- Customer-specific data (must never enter Git) ---
+*.dbf
+App_Data/ACTIVATIONKEY*
+App_Data/*.mdf
+App_Data/*.ldf
+**/version upgrade*.sql
+**/backup*.bak
+**/*_BACKUP_*.sql
+
+# --- Archives (use real package management instead) ---
+*.rar
+*.7z
+*.zip
+*.tar.gz
+
+# --- Front-end deps (we will modernise this in Sprint 7+) ---
+node_modules/
+bower_components_local/
+build/
+dist/
+.cache/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-.env
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+Desktop.ini
 
-# vercel
-.vercel
+# --- Editor swap / backup ---
+*.swp
+*~
+*.bak
+*.orig
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# --- Migration artefacts we don't want to track ---
+# (Keep the Migrations/*.cs files — they ARE source.)
+**/Migrations/_Scripts/
+
+# --- Generated reports / exports ---
+**/Reports/Generated/
+**/Exports/
+
+# --- ReSharper / R# ---
+_ReSharper*/
+*.suo
+*.cache

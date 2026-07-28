@@ -1,0 +1,64 @@
+﻿@model RIT.HMS.Domain.Transactions.InvStructureChanges
+
+@{
+    //ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    <div class="container body">
+        <div class="main_container">
+            @Html.AntiForgeryToken()
+
+            <div class="right_col" role="main">
+                <h4>StructureChanges</h4>
+                <hr />
+                @if (@ViewBag.Message == "3")
+                {
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>StructureChanges</strong> Sucessfully run the Structure.
+                    </div>
+                }
+
+                else if (@ViewBag.Message == "0")
+                {
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>StructureChanges</strong> Authentication Error
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="form-horizontal form-label-left col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Authenticator code *</label>
+                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                @Html.TextBoxFor(model => model.Password, new { @class = "form-control", MaxLength = 50, Placeholder = "Eg:ddMMyyyyHHmm " })
+                             
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                        
+                    </div>
+                   
+                </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -1,0 +1,710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4812A61B-9A5C-4CE3-AF92-DAEF838C4D15}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HMSOrderTaker</RootNamespace>
+    <AssemblyName>HMSOrderTaker</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\HospitalityManagement\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\STOS\Cart\Cart.css" />
+    <Content Include="Content\STOS\css\bootstrap.min.css" />
+    <Content Include="Content\STOS\css\CustomScroll.css" />
+    <Content Include="Content\STOS\css\font-awesome.min.css" />
+    <Content Include="Content\STOS\css\responsive.css" />
+    <Content Include="Content\STOS\css\style %28Mohammad Rocky%27s conflicted copy 2017-03-20%29.css" />
+    <Content Include="Content\STOS\css\style.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.bootstrap.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.bootstrap.min.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.bootstrap4.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.foundation.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.foundation.min.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.jqueryui.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.jqueryui.min.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.semanticui.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\dataTables.semanticui.min.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\jquery.dataTables.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\css\jquery.dataTables.min.css" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\images\sort_asc.png" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\images\sort_asc_disabled.png" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\images\sort_both.png" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\images\sort_desc.png" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\images\sort_desc_disabled.png" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.bootstrap.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.bootstrap.min.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.bootstrap4.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.bootstrap4.min.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.foundation.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.foundation.min.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.jqueryui.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.jqueryui.min.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.semanticui.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\dataTables.semanticui.min.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\jquery.dataTables.js" />
+    <Content Include="Content\STOS\DataTables\DataTables-1.10.16\js\jquery.dataTables.min.js" />
+    <Content Include="Content\STOS\DataTables\datatables.css" />
+    <Content Include="Content\STOS\DataTables\datatables.js" />
+    <Content Include="Content\STOS\DataTables\datatables.min.css" />
+    <Content Include="Content\STOS\DataTables\datatables.min.js" />
+    <Content Include="Content\STOS\DataTables\datatables.net-bs4\css\dataTables.bootstrap4.css" />
+    <Content Include="Content\STOS\DataTables\datatables.net-bs4\js\dataTables.bootstrap4.js" />
+    <Content Include="Content\STOS\DataTables\datatables\license.txt" />
+    <Content Include="Content\STOS\DataTables\datatables\media\css\jquery.dataTables.min.css" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\favicon.ico" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\sort_asc.png" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\sort_asc_disabled.png" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\sort_both.png" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\sort_desc.png" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\sort_desc_disabled.png" />
+    <Content Include="Content\STOS\DataTables\datatables\media\js\jquery.dataTables.min.js" />
+    <Content Include="Content\STOS\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\STOS\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\STOS\img\about-item\about-item-1.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-2.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-3.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-1.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-2.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-3.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-4.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-5.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-6.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-7.jpg" />
+    <Content Include="Content\STOS\img\about-item\about-item-ms-8.jpg" />
+    <Content Include="Content\STOS\img\banner\banner-bg-1.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-gallery\blog-g-1.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-gallery\blog-g-2.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-gallery\blog-g-3.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-1.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-2.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-3.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-4.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-5.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-6.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-7.jpg" />
+    <Content Include="Content\STOS\img\blog\blog-list\blog-list-8.jpg" />
+    <Content Include="Content\STOS\img\blog\Blog_Details-1.jpg" />
+    <Content Include="Content\STOS\img\blog\Blog_Details-par.jpg" />
+    <Content Include="Content\STOS\img\blog\Blog_Details-par2.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-blog\recent-blog-1.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-blog\recent-blog-2.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-blog\recent-blog-3.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-post-1.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-post\recent-post-1.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-post\recent-post-2.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-post\recent-post-3.jpg" />
+    <Content Include="Content\STOS\img\blog\recent-post\recent-post-4.jpg" />
+    <Content Include="Content\STOS\img\booking-table-bg.jpg" />
+    <Content Include="Content\STOS\img\chef\chef-1.jpg" />
+    <Content Include="Content\STOS\img\chef\chef-2.jpg" />
+    <Content Include="Content\STOS\img\chef\chef-3.jpg" />
+    <Content Include="Content\STOS\img\chef\chef-4.jpg" />
+    <Content Include="Content\STOS\img\comment-user\comment-1.png" />
+    <Content Include="Content\STOS\img\comment-user\comment-2.png" />
+    <Content Include="Content\STOS\img\comment-user\comment-3.png" />
+    <Content Include="Content\STOS\img\Crafting-Table-icon.png" />
+    <Content Include="Content\STOS\img\dining_room-512.png" />
+    <Content Include="Content\STOS\img\feature\feature-1.jpg" />
+    <Content Include="Content\STOS\img\feature\feature-2.jpg" />
+    <Content Include="Content\STOS\img\feature\feature-3.jpg" />
+    <Content Include="Content\STOS\img\gallery\f-w-gallery\f-w-gallery-1.jpg" />
+    <Content Include="Content\STOS\img\gallery\f-w-gallery\f-w-gallery-2.jpg" />
+    <Content Include="Content\STOS\img\gallery\f-w-gallery\f-w-gallery-3.jpg" />
+    <Content Include="Content\STOS\img\gallery\f-w-gallery\f-w-gallery-4.jpg" />
+    <Content Include="Content\STOS\img\gallery\f-w-gallery\f-w-gallery-5.jpg" />
+    <Content Include="Content\STOS\img\gallery\f-w-gallery\f-w-gallery-6.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-1.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-2.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-3.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-4.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-5.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-6.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-7.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-8.jpg" />
+    <Content Include="Content\STOS\img\gallery\our-ms-gallery\gallery-ms-9.jpg" />
+    <Content Include="Content\STOS\img\home-slider\01_Home.jpg" />
+    <Content Include="Content\STOS\img\home-slider\slider-1.jpg" />
+    <Content Include="Content\STOS\img\home-slider\slider-2.jpg" />
+    <Content Include="Content\STOS\img\logo-1.png" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-1.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-2.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-3.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-4.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-5.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-6.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-7.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-8.jpg" />
+    <Content Include="Content\STOS\img\menu-grid\Menu_Grid-9.jpg" />
+    <Content Include="Content\STOS\img\next-event\next-event-1.jpg" />
+    <Content Include="Content\STOS\img\next-event\next-event-bg.jpg" />
+    <Content Include="Content\STOS\img\popular_menu_bg.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-1.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-10.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-2.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-3.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-4.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-5.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-6.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-7.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-8.jpg" />
+    <Content Include="Content\STOS\img\recype\recype-9.jpg" />
+    <Content Include="Content\STOS\img\service-icon\service-1.png" />
+    <Content Include="Content\STOS\img\service-icon\service-2.png" />
+    <Content Include="Content\STOS\img\service-icon\service-3.png" />
+    <Content Include="Content\STOS\img\service-icon\service-4.png" />
+    <Content Include="Content\STOS\js\bootstrap.min.js" />
+    <Content Include="Content\STOS\js\contact.js" />
+    <Content Include="Content\STOS\js\gmaps.min.js" />
+    <Content Include="Content\STOS\js\jquery-2.1.4.min.js" />
+    <Content Include="Content\STOS\js\jquery.form.js" />
+    <Content Include="Content\STOS\js\jquery.validate.min.js" />
+    <Content Include="Content\STOS\js\min\google-map.min.js" />
+    <Content Include="Content\STOS\js\min\theme.min.js" />
+    <Content Include="Content\STOS\js\min\video_player.min.js" />
+    <Content Include="Content\STOS\js\theme.js" />
+    <Content Include="Content\STOS\js\video_player.js" />
+    <Content Include="Content\STOS\Login\Script\adminlte.min.js" />
+    <Content Include="Content\STOS\Login\Script\bootstrap.bundle.min.js" />
+    <Content Include="Content\STOS\Login\Script\jquery.js" />
+    <Content Include="Content\STOS\Login\Script\jquery.min.js" />
+    <Content Include="Content\STOS\Login\Style\adminlte.min.css" />
+    <Content Include="Content\STOS\Login\Style\all.min.css" />
+    <Content Include="Content\STOS\Login\Style\icheck-bootstrap.min.css" />
+    <Content Include="Content\STOS\ModelPopUp\ModelPopUp.css" />
+    <Content Include="Content\STOS\ProductDetails\css\bootstrap.min.css" />
+    <Content Include="Content\STOS\ProductDetails\css\elegant-icons.css" />
+    <Content Include="Content\STOS\ProductDetails\css\font-awesome.min.css" />
+    <Content Include="Content\STOS\ProductDetails\css\jquery-ui.min.css" />
+    <Content Include="Content\STOS\ProductDetails\css\nice-select.css" />
+    <Content Include="Content\STOS\ProductDetails\css\owl.carousel.min.css" />
+    <Content Include="Content\STOS\ProductDetails\css\slicknav.min.css" />
+    <Content Include="Content\STOS\ProductDetails\css\style.css" />
+    <Content Include="Content\STOS\ProductDetails\fonts\ElegantIcons.svg" />
+    <Content Include="Content\STOS\ProductDetails\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\STOS\ProductDetails\img\banner\banner-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\banner\banner-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\blog-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\blog-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\blog-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\blog-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\blog-5.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\blog-6.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\details\details-author.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\details\details-hero.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\details\details-pic.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\sidebar\sr-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\sidebar\sr-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\blog\sidebar\sr-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\breadcrumb.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\cart\cart-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\cart\cart-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\cart\cart-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\categories\cat-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\categories\cat-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\categories\cat-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\categories\cat-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\categories\cat-5.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-5.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-6.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-7.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\featured\feature-8.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\hero\banner.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\language.png" />
+    <Content Include="Content\STOS\ProductDetails\img\latest-product\lp-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\latest-product\lp-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\latest-product\lp-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\logo.png" />
+    <Content Include="Content\STOS\ProductDetails\img\payment-item.png" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\product-details-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\product-details-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\product-details-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\product-details-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\product-details-5.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\thumb-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\thumb-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\thumb-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\details\thumb-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\discount\pd-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\discount\pd-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\discount\pd-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\discount\pd-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\discount\pd-5.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\discount\pd-6.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-1.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-10.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-11.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-12.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-2.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-3.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-4.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-5.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-6.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-7.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-8.jpg" />
+    <Content Include="Content\STOS\ProductDetails\img\product\product-9.jpg" />
+    <Content Include="Content\STOS\ProductDetails\js\bootstrap.min.js" />
+    <Content Include="Content\STOS\ProductDetails\js\jquery-3.3.1.min.js" />
+    <Content Include="Content\STOS\ProductDetails\js\jquery-ui.min.js" />
+    <Content Include="Content\STOS\ProductDetails\js\jquery.nice-select.min.js" />
+    <Content Include="Content\STOS\ProductDetails\js\jquery.slicknav.js" />
+    <Content Include="Content\STOS\ProductDetails\js\main.js" />
+    <Content Include="Content\STOS\ProductDetails\js\mixitup.min.js" />
+    <Content Include="Content\STOS\ProductDetails\js\owl.carousel.min.js" />
+    <Content Include="Content\STOS\QtyBtn\qtybtn.css" />
+    <Content Include="Content\STOS\select2\dist\css\select2.min.css" />
+    <Content Include="Content\STOS\select2\dist\css\style.css" />
+    <Content Include="Content\STOS\select2\dist\css\style.min.css" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\af.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ar.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\az.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\bg.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\bs.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\build.txt" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ca.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\cs.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\da.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\de.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\dsb.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\el.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\en.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\es.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\et.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\eu.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\fa.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\fi.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\fr.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\gl.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\he.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\hi.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\hr.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\hsb.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\hu.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\hy.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\id.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\is.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\it.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ja.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\km.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ko.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\lt.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\lv.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\mk.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ms.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\nb.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\nl.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\pl.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ps.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\pt-BR.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\pt.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ro.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\ru.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\sk.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\sl.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\sr-Cyrl.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\sr.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\sv.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\th.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\tk.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\tr.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\uk.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\vi.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\zh-CN.js" />
+    <Content Include="Content\STOS\select2\dist\js\i18n\zh-TW.js" />
+    <Content Include="Content\STOS\select2\dist\js\select2.full.min.js" />
+    <Content Include="Content\STOS\select2\dist\js\select2.min.js" />
+    <Content Include="Content\STOS\vendors\bootatrap-date-time\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\STOS\vendors\bootatrap-date-time\bootstrap-datetimepicker.min.js" />
+    <Content Include="Content\STOS\vendors\bootstrap-selector\bootstrap-select.css" />
+    <Content Include="Content\STOS\vendors\bootstrap-selector\bootstrap-select.js" />
+    <Content Include="Content\STOS\vendors\countdown\countdown.demo.css" />
+    <Content Include="Content\STOS\vendors\countdown\jquery.countdown.js" />
+    <Content Include="Content\STOS\vendors\counter-up\jquery.counterup.min.js" />
+    <Content Include="Content\STOS\vendors\counter-up\waypoints.min.js" />
+    <Content Include="Content\STOS\vendors\instafeed\instafeed.min.js" />
+    <Content Include="Content\STOS\vendors\isotope\imagesloaded.pkgd.min.js" />
+    <Content Include="Content\STOS\vendors\isotope\isotope.pkgd.min.js" />
+    <Content Include="Content\STOS\vendors\js-calender\zabuto_calendar.min.css" />
+    <Content Include="Content\STOS\vendors\js-calender\zabuto_calendar.min.js" />
+    <Content Include="Content\STOS\vendors\linears-icon\fonts\Linearicons-Free.svg" />
+    <Content Include="Content\STOS\vendors\linears-icon\style.css" />
+    <Content Include="Content\STOS\vendors\material-icon\css\materialdesignicons.min.css" />
+    <Content Include="Content\STOS\vendors\material-icon\fonts\materialdesignicons-webfont.svg" />
+    <Content Include="Content\STOS\vendors\owl-carousel\assets\owl.carousel.css" />
+    <Content Include="Content\STOS\vendors\owl-carousel\owl.carousel.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\assets\coloredbg.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\gridtile.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\gridtile_3x3.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\gridtile_3x3_white.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\gridtile_white.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\loader.gif" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\fb.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\fr.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\ig.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\post.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\revolution_slide1.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\revolution_slide2.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\tw.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\vm.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\wc.png" />
+    <Content Include="Content\STOS\vendors\revolution\assets\sources\yt.png" />
+    <Content Include="Content\STOS\vendors\revolution\css\closedhand.cur" />
+    <Content Include="Content\STOS\vendors\revolution\css\layers.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\ares.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\custom.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\dione.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\erinyen.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\gyges.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\hades.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\hebe.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\hephaistos.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\hermes.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\hesperiden.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\metis.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\persephone.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\uranus.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation-skins\zeus.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\navigation.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\openhand.cur" />
+    <Content Include="Content\STOS\vendors\revolution\css\settings-ver.5.3.1.css" />
+    <Content Include="Content\STOS\vendors\revolution\css\settings.css" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\css\helper.css" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\css\pe-icon-7-stroke.css" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.svg" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\revicons\revicons.svg" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.actions.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.carousel.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.kenburn.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.layeranimation.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.migration.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.navigation.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.parallax.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.slideanims.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\revolution.extension.video.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.actions.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.carousel.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.kenburn.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.layeranimation.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.migration.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.navigation.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.parallax.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.slideanims.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\revolution.extension.video.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\jquery.themepunch.enablelog.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\jquery.themepunch.revolution.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\jquery.themepunch.tools.min.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\source\jquery.themepunch.enablelog.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\source\jquery.themepunch.revolution.js" />
+    <Content Include="Content\STOS\vendors\revolution\js\source\jquery.themepunch.tools.min.js" />
+    <Content Include="Content\STOS\vendors\tweet\carousel.js" />
+    <Content Include="Content\STOS\vendors\tweet\min\scripts.min.js" />
+    <Content Include="Content\STOS\vendors\tweet\tweet-carousel.css" />
+    <Content Include="Content\STOS\vendors\tweet\tweetie.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\HMSOrderTaker.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Sessions.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\STOSOrder\BookTable.cshtml" />
+    <Content Include="Views\STOSOrder\Cart.cshtml" />
+    <Content Include="Views\STOSOrder\MenuGrid.cshtml" />
+    <Content Include="Views\STOSOrder\MenuList.cshtml" />
+    <Content Include="Views\STOSOrder\ProductCategory.cshtml" />
+    <Content Include="Views\STOSOrder\ProductDepartment.cshtml" />
+    <Content Include="Views\STOSOrder\ProductDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\STOS\STOSOrderController.cs" />
+    <Compile Include="Controllers\STOS\STOSSysUserController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="Content\STOS\css\style.css %28Mohammad Rocky%27s conflicted copy 2017-03-20%29.map" />
+    <Content Include="Content\STOS\css\style.css.map" />
+    <Content Include="Content\STOS\DataTables\datatables\media\images\Sorting icons.psd" />
+    <Content Include="Content\STOS\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\STOS\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\STOS\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\STOS\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\STOS\fonts\FontAwesome.otf" />
+    <Content Include="Content\STOS\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\STOS\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\STOS\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\STOS\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-Bold.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-ExtraBold.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-Hairline.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-Light.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-Regular.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-SemiBold.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Montserrat-UltraLight.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\MYRIADPRO-SEMIBOLD.woff" />
+    <Content Include="Content\STOS\fonts\theme-font\Raleway-Heavy.woff" />
+    <Content Include="Content\STOS\ProductDetails\fonts\ElegantIcons.eot" />
+    <Content Include="Content\STOS\ProductDetails\fonts\ElegantIcons.ttf" />
+    <Content Include="Content\STOS\ProductDetails\fonts\ElegantIcons.woff" />
+    <Content Include="Content\STOS\ProductDetails\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\STOS\ProductDetails\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\STOS\ProductDetails\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\STOS\ProductDetails\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\STOS\ProductDetails\fonts\FontAwesome.otf" />
+    <Content Include="Content\STOS\ProductDetails\sass\style.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_base.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_blog-details.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_blog-sidebar.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_blog.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_breadcrumb.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_checkout.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_contact.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_footer.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_header.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_hero.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_home-page.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_mixins.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_responsive.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_shop-details.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_shop-grid.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_shoping-cart.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_sidebar.scss" />
+    <Content Include="Content\STOS\ProductDetails\sass\_variable.scss" />
+    <Content Include="Content\STOS\scss\style.scss" />
+    <Content Include="Content\STOS\scss\_banner.scss" />
+    <Content Include="Content\STOS\scss\_blog.scss" />
+    <Content Include="Content\STOS\scss\_button.scss" />
+    <Content Include="Content\STOS\scss\_contact.scss" />
+    <Content Include="Content\STOS\scss\_event.scss" />
+    <Content Include="Content\STOS\scss\_feature.scss" />
+    <Content Include="Content\STOS\scss\_footer.scss" />
+    <Content Include="Content\STOS\scss\_gallery.scss" />
+    <Content Include="Content\STOS\scss\_header.scss" />
+    <Content Include="Content\STOS\scss\_predefin.scss" />
+    <Content Include="Content\STOS\scss\_service.scss" />
+    <Content Include="Content\STOS\scss\_slider %28Mohammad Rocky%27s conflicted copy 2017-03-20%29.scss" />
+    <Content Include="Content\STOS\scss\_slider.scss" />
+    <Content Include="Content\STOS\scss\_variables.scss" />
+    <Content Include="Content\STOS\vendors\linears-icon\fonts\Linearicons-Free.eot" />
+    <Content Include="Content\STOS\vendors\linears-icon\fonts\Linearicons-Free.ttf" />
+    <Content Include="Content\STOS\vendors\linears-icon\fonts\Linearicons-Free.woff" />
+    <Content Include="Content\STOS\vendors\linears-icon\fonts\Linearicons-Free.woff2" />
+    <Content Include="Content\STOS\vendors\material-icon\fonts\materialdesignicons-webfont.eot" />
+    <Content Include="Content\STOS\vendors\material-icon\fonts\materialdesignicons-webfont.ttf" />
+    <Content Include="Content\STOS\vendors\material-icon\fonts\materialdesignicons-webfont.woff" />
+    <Content Include="Content\STOS\vendors\material-icon\fonts\materialdesignicons-webfont.woff2" />
+    <Content Include="Content\STOS\vendors\revolution\assets\svg\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\assets\svg\svg.zip" />
+    <Content Include="Content\STOS\vendors\revolution\css\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\font-awesome\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\css\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\fonts\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.eot" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.ttf" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\pe-icon-7-stroke\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\revicons\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\revicons\revicons.eot" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\revicons\revicons.ttf" />
+    <Content Include="Content\STOS\vendors\revolution\fonts\revicons\revicons.woff" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\js\extensions\source\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\js\index.php" />
+    <Content Include="Content\STOS\vendors\revolution\js\source\index.php" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\STOSSysUser\UserLogin.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\STOSOrder\TabView\BookTable.cshtml" />
+    <Content Include="Views\STOSOrder\TabView\ProductDepartment.cshtml" />
+    <Content Include="Views\STOSOrder\ServingUnits.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\STOS\img\New folder\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RIT.HMS.HMSOrderTaker.BLL\RIT.HMS.HMSOrderTaker.BLL.csproj">
+      <Project>{f9f53f23-9794-456a-abb6-914a53931655}</Project>
+      <Name>RIT.HMS.HMSOrderTaker.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RIT.HMS.HMSOrderTaker.Domain\RIT.HMS.HMSOrderTaker.Domain.csproj">
+      <Project>{c4c005fb-f167-4686-9a55-ad4a29b80c05}</Project>
+      <Name>RIT.HMS.HMSOrderTaker.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>39703</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:39309/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

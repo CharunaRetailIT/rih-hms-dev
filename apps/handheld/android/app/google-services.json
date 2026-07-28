@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701155706679",
+    "project_id": "rit-hms-service",
+    "storage_bucket": "rit-hms-service.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701155706679:android:d66a9872ee6edbcbcdfcb2",
+        "android_client_info": {
+          "package_name": "lk.retailit.rit_handheld"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBl53zUsIxl3TGnMDY5h-2uZvFGpcVJ_QQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,48 @@
+# RIT HMS — incubator nginx vhost (HTTP-only template).
+# Deploy: copy to /etc/nginx/sites-available/hms.retailit.lk, symlink into
+# sites-enabled, `sudo nginx -t`, reload. Then run certbot to add HTTPS:
+#   sudo certbot --nginx -d hms.retailit.lk --redirect ...
+# (certbot rewrites this file in place to add the :443 server + the 80->443 redirect.)
+#
+# API on 127.0.0.1:8002, Next.js standalone server on 127.0.0.1:8003.
+upstream hms_backend  { server 127.0.0.1:8002; keepalive 16; }
+upstream hms_frontend { server 127.0.0.1:8003; keepalive 16; }
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name hms.retailit.lk;
+
+    # --- Backend API (.NET) ---
+    location /api/ {
+        proxy_pass         http://hms_backend;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   Connection        "";
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_buffering    off;   # SSE (kitchen display stream) must not buffer
+        proxy_cache        off;
+    }
+
+    # API health (mounted at root, not under /api)
+    location = /health  { proxy_pass http://hms_backend; access_log off; }
+    location   /health/ { proxy_pass http://hms_backend; access_log off; }
+
+    # --- Next.js app (standalone Node server) ---
+    location / {
+        proxy_pass         http://hms_frontend;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   Connection        "";
+        proxy_read_timeout 300s;
+    }
+
+    client_max_body_size 25M;
+}

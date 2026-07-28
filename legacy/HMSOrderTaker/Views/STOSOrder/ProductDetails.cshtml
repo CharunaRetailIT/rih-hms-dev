@@ -1,0 +1,235 @@
+﻿@model RIT.HMS.HMSOrderTaker.Domain.Product
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="~/Content/STOS/img/express-favicon.png" type="image/x-icon" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Smart Order Management System</title>
+    <!-- Icon css link -->
+    <link href="~/Content/STOS/vendors/material-icon/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/linears-icon/style.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="~/Content/STOS/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/CustomScroll.css" rel="stylesheet" />
+    <!-- Extra plugin css -->
+    <link href="~/Content/STOS/vendors/bootstrap-selector/bootstrap-select.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/bootatrap-date-time/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/owl-carousel/assets/owl.carousel.css" rel="stylesheet">
+
+    <link href="~/Content/STOS/css/style.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/responsive.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/STOS/ProductDetails/css/style.css" type="text/css">
+    <style>
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        /*//////////BACK SIDE BTN/////////*/
+        .icon-bar {
+            position: fixed;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+            .icon-bar a {
+                display: block;
+                text-align: center;
+                padding: 10px;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 15px;
+                font-style: italic;
+            }
+
+                .icon-bar a:hover {
+                    background-color: #000;
+                }
+
+        .backsidebtn {
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader absolute-center">
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+        </div>
+    </div>
+
+    <!--================ Frist hader Area =================-->
+    <!--================ Frist hader Area =================-->
+    <div class="first_header">
+
+        <div class="container">
+            <div class="row">
+                <div style="text-align:center" class="col-md-4">
+
+                    @*<button style="float:left;margin-top:10px;background-color:white;" type="button" class="btn btn-default btn-circle"><i class="glyphicon glyphicon-chevron-left"></i></button>*@
+
+                </div>
+                <div style="text-align:center" class="col-md-4">
+
+                    @*<h2 style="color:white;padding:10px;">Item Detail</h2>*@
+                    <div class="s_black_title">
+                        <h3>Item Detail</h3>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="header_social">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================Banner Area =================-->
+    <!--================End Banner Area =================-->
+    <!--================End Our feature Area =================-->
+    <!-- Product Details Section Begin -->
+
+    @if (Model != null)
+    {
+
+
+        <section class="product-details spad">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="product__details__pic">
+                            <div class="product__details__pic__item">
+                                <img class="product__details__pic__item--large"
+                                     src="../../Content/STOS/ProductDetails/img/product/details/product-details-1.jpg" alt="">
+                            </div>
+                            <div class="product__details__pic__slider owl-carousel">
+                                <img data-imgbigurl="../../Content/STOS/ProductDetails/img/product/details/product-details-2.jpg"
+                                     src="../../Content/STOS/ProductDetails/img/product/details/thumb-1.jpg" alt="">
+                                <img data-imgbigurl="../../Content/STOS/ProductDetails/img/product/details/product-details-3.jpg"
+                                     src="../../Content/STOS/ProductDetails/img/product/details/thumb-2.jpg" alt="">
+                                <img data-imgbigurl="../../Content/STOS/ProductDetails/img/product/details/product-details-5.jpg"
+                                     src="../../Content/STOS/ProductDetails/img/product/details/thumb-3.jpg" alt="">
+                                <img data-imgbigurl="../../Content/STOS/ProductDetails/img/product/details/product-details-4.jpg"
+                                     src="../../Content/STOS/ProductDetails/img/product/details/thumb-4.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="product__details__text">
+                            <h3>@Model.ProductName</h3>
+
+                            <div class="product__details__price">Rs @Model.MaxPrice</div>
+                            <p>
+                                Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
+                                vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
+                                quam vehicula elementum sed sit amet dui. Proin eget tortor risus.
+                            </p>
+                            <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="text" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="/STOSOrder/Cart" class="primary-btn">ADD TO CARD</a>
+                            <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                            <ul>
+                                <li><b>Availability</b> <span>In Stock</span></li>
+
+                                <li><b>Weight</b> <span>0.5 kg</span></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    }
+
+    <!--================End Our feature Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================Back Btn =================-->
+    <div class="icon-bar">
+        <!-- <a href="/FingerScan/Index" class="backsidebtn"><i class="fa fa-angle-double-left"></i></a>       -->
+        <a href="javascript:GetMenuItem(@ViewBag.Catid,@ViewBag.Deptid)" class="backsidebtn">Back</a>
+    </div>
+    <!--================End Back Btn =================-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="~/Content/STOS/js/jquery-2.1.4.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="~/Content/STOS/js/bootstrap.min.js"></script>
+    <!-- Extra plugin js -->
+    <script src="~/Content/STOS/vendors/bootstrap-selector/bootstrap-select.js"></script>
+    <script src="~/Content/STOS/vendors/bootatrap-date-time/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/STOS/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="~/Content/STOS/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="~/Content/STOS/vendors/isotope/isotope.pkgd.min.js"></script>
+    <script src="~/Content/STOS/vendors/countdown/jquery.countdown.js"></script>
+    <script src="~/Content/STOS/vendors/js-calender/zabuto_calendar.min.js"></script>
+
+    <script src="~/Content/STOS/js/theme.js"></script>
+
+
+
+    <!-- Js Plugins -->
+    <script src="~/Content/STOS/ProductDetails/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/bootstrap.min.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/jquery.nice-select.min.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/jquery-ui.min.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/jquery.slicknav.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/mixitup.min.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/owl.carousel.min.js"></script>
+    <script src="~/Content/STOS/ProductDetails/js/main.js"></script>
+</body>
+</html>
+
+<script>
+    function GetMenuItem(categoryid,departmentid) {
+        window.location.href = '/STOSOrder/MenuList?categoryid=' + categoryid + '&departmentid=' + departmentid;
+    }
+</script>

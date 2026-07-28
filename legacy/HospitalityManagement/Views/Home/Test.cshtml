@@ -1,0 +1,761 @@
+﻿@model RIT.HMS.Domain.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<body>
+    <div class="right_col" role="main">
+        <div><span class="pull-left">Filters ttt</span></div>
+        <div class="clearfix"></div>
+        <br />
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <label class="pull-left">Location</label>
+                    <select class="form-control" id="LocationId" name="LocationId"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="pull-left">Date From</label>
+                    <input type="date" class="form-control" id="DateFrom" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-4">
+                    <label class="pull-left">Date To</label>
+                    <input type="date" class="form-control" id="DateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+            </div><br /><div class="clearfix"></div><br />
+            <div class="form-row">
+                <div class="col-md-4">
+                    <label class="pull-left">Customer Group</label>
+                    <select class="form-control" id="CustomerGroupId" name="CustomerGroupId"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="pull-left">Selection Type</label>
+                    <select class="form-control" id="TypeId" name="TypeId">
+                        <option>Daily</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-4 pull-right">
+                        <label>.</label>
+                        <button class="btn btn-primary form-control" id="btnFilter" type="submit">Filter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br /><div class="clearfix"></div><br /><br />
+        <div class="col-md-12 col-lg-12 col-sm-12 row">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <select class="form-control" id="RevCostDeptId" name="RevCostDeptId"></select>
+                </div>
+            </div> <div class="clearfix"></div>
+            <div id="revenueandcost">
+
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <br />
+
+        <div class="col-md-12 col-lg-12 col-sm-12 row">
+            @*KOT BOT None*@
+
+            <div class="form-row">
+                <div class="col-md-3">
+                    <select class="form-control" id="KotBotNoneId" name="KotBotNoneId">
+                        <option>None</option>
+                        <option>KOT</option>
+                        <option>BOT</option>
+                    </select>
+                </div> 
+                <div class="clearfix"></div>
+                <div class="col-md-9">
+                    <button id="backKotBotNone" class="fa fa-close pull-right"></button>
+                </div><div class="clearfix"></div>
+            </div>
+            <div id="kotbotnone">
+
+            </div>
+
+
+            <div id="kotbotnonea">
+
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+</body>
+
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+
+@*<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>*@
+
+<script src="~/Scripts/Charts/Latest/highcharts.js"></script>
+<script src="~/Scripts/Charts/Latest/data.js"></script>
+<script src="~/Scripts/Charts/Latest/drilldown.js"></script>
+<script src="~/Scripts/Charts/Latest/exporting.js"></script>
+<script src="~/Scripts/Charts/Latest/export-data.js"></script>
+<script src="~/Scripts/Charts/Latest/accessibility.js"></script>
+
+
+@*<script src="~/Scripts/Charts/highcharts.js"></script>
+<script src="~/Scripts/Charts/data.js"></script>
+<script src="~/Scripts/Charts/drilldown.js"></script>
+<script src="~/Scripts/Charts/exporting.js"></script>
+<script src="~/Scripts/Charts/export-data.js"></script>
+<script src="~/Scripts/Charts/highcharts-more.js"></script>
+<script src="~/Scripts/Charts/accessibility.js"></script>*@
+
+
+
+
+<script>
+    $.getJSON("@Url.Action("GetActiveCustomerCategories", "Customer")", function (data) {
+
+        var CustomerCategoryId = $("#CustomerGroupId");
+        CustomerCategoryId.empty();
+        CustomerCategoryId.append("<option value='0'>-- All Customer Groups --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CustomerCategoryId.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+
+        });
+
+        if ('@ViewBag.CustomerCategoryId') {
+            $('#CustomerGroupId').val(@ViewBag.CustomerCategoryId).trigger("change");
+        } else {
+            $('#CustomerGroupId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#LocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.LocationId') {
+            $('#LocationId').val(@ViewBag.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var departmentDropDown = $("#RevCostDeptId");
+
+        departmentDropDown.empty();
+        departmentDropDown.append("<option value='0'>-- Select a department for view row data --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            departmentDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+        });
+
+        if ('@ViewBag.RevCostDeptId') {
+            $('#RevCostDeptId').val(@ViewBag.RevCostDeptId).trigger("change");
+        } else {
+            $('#RevCostDeptId').val(0).trigger("change");
+        }
+    });
+
+    // change RevCostDeptId
+
+    $("#RevCostDeptId").change(function () {
+        var diptid = this.value;
+
+
+        debugger;
+        var locationid = $('#LocationId').val();
+        var datefrom = $('#DateFrom').val();
+        var dateto = $('#DateTo').val();
+        var custgroupid = $('#CustomerGroupId').val();
+        var typeid = $('#TypeId').val();
+
+        var url = $(this).attr('href') + 'RevenueAndCostRowData?locationid=' + locationid + '&datefrom=' + datefrom + '&dateto=' + dateto + '&customergroupid=' + custgroupid + '&selectiontypeid=' + typeid + '&deptid='+diptid;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+
+
+    });
+
+
+    // KotBotNoneId
+    $("#KotBotNoneId").change(function () {
+        var KotBotNoneId = this.value;
+        // Create the chart
+
+        debugger;
+
+        Highcharts.chart('kotbotnone', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Browser market shares. January, 2018'
+            },
+            subtitle: {
+                text: 'Click the columns to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total percent market share'
+                }
+
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:.1f}%'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            },
+
+            series: [
+                {
+                    name: "Browsers",
+                    colorByPoint: true,
+                    data: [
+                        {
+                            name: "Chrome",
+                            y: 62.74,
+                            drilldown: "Chrome"
+                        },
+                        {
+                            name: "Firefox",
+                            y: 10.57,
+                            drilldown: "Firefox"
+                        },
+                        {
+                            name: "Internet Explorer",
+                            y: 7.23,
+                            drilldown: "Internet Explorer"
+                        },
+                        {
+                            name: "Safari",
+                            y: 5.58,
+                            drilldown: "Safari"
+                        },
+                        {
+                            name: "Edge",
+                            y: 4.02,
+                            drilldown: "Edge"
+                        },
+                        {
+                            name: "Opera",
+                            y: 1.92,
+                            drilldown: "Opera"
+                        },
+                        {
+                            name: "Other",
+                            y: 7.62,
+                            drilldown: null
+                        }
+                    ]
+                }
+            ],
+            drilldown: {
+                series: [
+                    {
+                        name: "Chrome",
+                        id: "Chrome",
+                        data: [
+                            [
+                                "v65.0",
+                                0.1
+                            ],
+                            [
+                                "v64.0",
+                                1.3
+                            ],
+                            [
+                                "v63.0",
+                                53.02
+                            ],
+                            [
+                                "v62.0",
+                                1.4
+                            ],
+                            [
+                                "v61.0",
+                                0.88
+                            ],
+                            [
+                                "v60.0",
+                                0.56
+                            ],
+                            [
+                                "v59.0",
+                                0.45
+                            ],
+                            [
+                                "v58.0",
+                                0.49
+                            ],
+                            [
+                                "v57.0",
+                                0.32
+                            ],
+                            [
+                                "v56.0",
+                                0.29
+                            ],
+                            [
+                                "v55.0",
+                                0.79
+                            ],
+                            [
+                                "v54.0",
+                                0.18
+                            ],
+                            [
+                                "v51.0",
+                                0.13
+                            ],
+                            [
+                                "v49.0",
+                                2.16
+                            ],
+                            [
+                                "v48.0",
+                                0.13
+                            ],
+                            [
+                                "v47.0",
+                                0.11
+                            ],
+                            [
+                                "v43.0",
+                                0.17
+                            ],
+                            [
+                                "v29.0",
+                                0.26
+                            ]
+                        ]
+                    },
+                    {
+                        name: "Firefox",
+                        id: "Firefox",
+                        data: [
+                            [
+                                "v58.0",
+                                1.02
+                            ],
+                            [
+                                "v57.0",
+                                7.36
+                            ],
+                            [
+                                "v56.0",
+                                0.35
+                            ],
+                            [
+                                "v55.0",
+                                0.11
+                            ],
+                            [
+                                "v54.0",
+                                0.1
+                            ],
+                            [
+                                "v52.0",
+                                0.95
+                            ],
+                            [
+                                "v51.0",
+                                0.15
+                            ],
+                            [
+                                "v50.0",
+                                0.1
+                            ],
+                            [
+                                "v48.0",
+                                0.31
+                            ],
+                            [
+                                "v47.0",
+                                0.12
+                            ]
+                        ]
+                    },
+                    {
+                        name: "Internet Explorer",
+                        id: "Internet Explorer",
+                        data: [
+                            [
+                                "v11.0",
+                                6.2
+                            ],
+                            [
+                                "v10.0",
+                                0.29
+                            ],
+                            [
+                                "v9.0",
+                                0.27
+                            ],
+                            [
+                                "v8.0",
+                                0.47
+                            ]
+                        ]
+                    },
+                    {
+                        name: "Safari",
+                        id: "Safari",
+                        data: [
+                            [
+                                "v11.0",
+                                3.39
+                            ],
+                            [
+                                "v10.1",
+                                0.96
+                            ],
+                            [
+                                "v10.0",
+                                0.36
+                            ],
+                            [
+                                "v9.1",
+                                0.54
+                            ],
+                            [
+                                "v9.0",
+                                0.13
+                            ],
+                            [
+                                "v5.1",
+                                0.2
+                            ]
+                        ]
+                    },
+                    {
+                        name: "Edge",
+                        id: "Edge",
+                        data: [
+                            [
+                                "v16",
+                                2.6
+                            ],
+                            [
+                                "v15",
+                                0.92
+                            ],
+                            [
+                                "v14",
+                                0.4
+                            ],
+                            [
+                                "v13",
+                                0.1
+                            ]
+                        ]
+                    },
+                    {
+                        name: "Opera",
+                        id: "Opera",
+                        data: [
+                            [
+                                "v50.0",
+                                0.96
+                            ],
+                            [
+                                "v49.0",
+                                0.82
+                            ],
+                            [
+                                "v12.1",
+                                0.14
+                            ]
+                        ]
+                    }
+                ]
+            }
+        });
+    });
+
+
+
+</script>
+
+<script>
+
+    debugger;
+    $("body").on("click",
+      "#btnFilter",
+      function () {
+          RevenueAndCost('s');
+          OrderTypesVariation('s');
+      });
+
+    $("body").on("click",
+     "#backKotBotNone",
+     function () {
+       //  RevenueAndCost('s');
+         OrderTypesVariation('s');
+
+     });
+
+
+
+
+    // for on load
+    RevenueAndCost('f');
+
+
+    function RevenueAndCost(mood)  // Graph Revenue VS Cost
+    {
+        debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+        if (mood == 'f') {
+            locationid = 0;
+            customercategoryid = 0;
+        } else if(mood=='s')
+        {
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupId").val();
+        }
+
+        var df = $("#DateFrom").val();
+        var dt = $("#DateTo").val();
+        var t = $("#TypeId").val();
+
+            $.ajax({
+            url: "@Url.Action("RevenueAndCost", "Home")",
+                data: {
+                    locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+                    customergroupid:customercategoryid, selectiontypeid: $("#TypeId").val()
+                },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+
+                var days = [];
+                var nett = [];
+                var cost = [];
+
+                $.each(resp, function (i, item) {
+
+                    days.push(item.day);
+                    nett.push(item.Nett);
+                    cost.push(item.Cost);
+                });
+
+
+                Highcharts.chart('revenueandcost', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Revenue And Cost Variation'
+                    },
+                    subtitle: {
+                        // text: 'Source: WorldClimate.com'
+                    },
+                    xAxis: {
+
+                        categories: days
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Rs'
+                        }
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            },
+                            enableMouseTracking: false
+                        }
+                    },
+                    series: [{
+                        name: 'Revenue',
+                        data: nett
+                    }, {
+                        name: 'Cost',
+                        data: cost
+                    }]
+                });
+
+            },
+            error: function (error)
+            {
+                //  alert(error);
+            }
+        });
+
+    }
+
+
+</script>
+
+
+<script>
+
+    debugger;
+    OrderTypesVariation('f');
+    function OrderTypesVariation(mood)
+    {
+
+        debugger;
+
+        var locationid;
+        var customercategoryid = 0;
+        if (mood == 'f') {
+            locationid = 0;
+            customercategoryid = 0;
+        } else if(mood=='s')
+        {
+            locationid = $("#LocationId").val();
+            customercategoryid = $("#CustomerGroupId").val();
+        }
+
+        var df = $("#DateFrom").val();
+        var dt = $("#DateTo").val();
+        var t = $("#TypeId").val();
+
+        $.ajax({
+            url: "@Url.Action("OrderTypesVariation", "Home")",
+            data: {
+            locationid: locationid, datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(),
+            customergroupid:customercategoryid, selectiontypeid: $("#TypeId").val()
+            },
+        type: "GET",
+        dataType: "json",
+        success: function (resp)
+        {
+
+            var days = [];
+            var kotcount = [];
+            var botcount = [];
+            var nonecount = [];
+
+            $.each(resp, function (i, item) {
+
+                days.push(item.recdate);
+                kotcount.push(item.KOTCount);
+                botcount.push(item.BOTCount);
+                nonecount.push(item.NoneCount);
+            });
+
+
+
+        Highcharts.chart('kotbotnone', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Order Types Variation'
+            },
+            subtitle: {
+                text: 'KOT BOT & None'
+            },
+            xAxis: {
+                categories: days
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Orders'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                x: -30,
+                verticalAlign: 'top',
+                y: 25,
+                floating: true,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'KOT',
+                data: kotcount
+            }, {
+                name: 'BOT',
+                data: botcount
+            }, {
+                name: 'None',
+                data: nonecount
+            }]
+        });
+
+    },
+   error: function (error) {
+            //  alert(error);
+  }
+});
+
+    }
+</script>
+
+

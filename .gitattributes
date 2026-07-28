@@ -1,0 +1,48 @@
+# Pin line endings so the legacy .NET solution builds identically on
+# Windows dev boxes and the GitHub Actions windows-latest runner.
+
+* text=auto
+
+# Windows / .NET source — keep CRLF
+*.cs        text eol=crlf
+*.cshtml    text eol=crlf
+*.config    text eol=crlf
+*.csproj    text eol=crlf
+*.sln       text eol=crlf
+*.resx      text eol=crlf
+*.xml       text eol=crlf
+*.xaml      text eol=crlf
+*.ps1       text eol=crlf
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+
+# Cross-platform — LF
+*.md        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.json      text eol=lf
+*.sh        text eol=lf
+
+# Binaries
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.pdf       binary
+*.zip       binary
+*.dll       binary
+*.exe       binary
+*.ttf       binary
+*.woff      binary
+*.woff2     binary
+*.eot       binary
+*.otf       binary
+
+# GitHub linguist — don't let vendored JS dominate language stats
+src/HospitalityManagement/vendors/**      linguist-vendored
+src/HospitalityManagement/Scripts/**      linguist-vendored
+src/HMSOrderTaker/Content/**              linguist-vendored
+src/HMSOrderTaker/Scripts/**              linguist-vendored
+db/schema/HMS_DATABASE_SCRIPT.sql         linguist-generated
+src/**/Migrations/**.cs                   linguist-generated

@@ -1,0 +1,209 @@
+﻿@model IEnumerable<RIT.HMS.HMSOrderTaker.Domain.DTOs.DTO_Department>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="~/Content/STOS/img/express-favicon.png" type="image/x-icon" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Smart Order Management System</title>
+    <!-- Icon css link -->
+    <link href="~/Content/STOS/vendors/material-icon/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/linears-icon/style.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="~/Content/STOS/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Extra plugin css -->
+    <link href="~/Content/STOS/vendors/bootstrap-selector/bootstrap-select.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/bootatrap-date-time/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/owl-carousel/assets/owl.carousel.css" rel="stylesheet">
+
+    <link href="~/Content/STOS/css/style.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/responsive.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .service_item {
+            border-radius: 10px;
+            height: 350px;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        /*//////////BACK SIDE BTN/////////*/
+        .icon-bar {
+            position: fixed;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+            .icon-bar a {
+                display: block;
+                text-align: center;
+                padding: 10px;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 15px;
+                font-style: italic;
+            }
+
+                .icon-bar a:hover {
+                    background-color: #000;
+                }
+
+        .backsidebtn {
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            width: 100px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="preloader">
+        <div class="loader absolute-center">
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+        </div>
+    </div>
+
+    <!--================ Frist hader Area =================-->
+    <div class="first_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="text-align:center;" class="header_contact_details">
+
+                        @*<button style="float:left;margin-top:10px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon glyphicon-chevron-left"></i></button>*@
+
+                    </div>
+                </div>
+                <div style="text-align:center" class="col-md-4">
+
+                    <div class="s_black_title">
+                        <h3>Department</h3>
+
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="header_social">
+                        <ul><li>
+                            <a href="javascript:Cart()">
+                            <i class="fa fa-shopping-cart" style="color:white"></i>
+                            </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================Banner Area =================-->
+    <!--================End Banner Area =================-->
+    <!--================End Our feature Area =================-->
+    <!--================Service Area =================-->
+
+
+    <section class="our_feature_area">
+        <div class="container">
+
+            <div class="feature_slider">
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="item">
+                            @foreach (var listitem in item.DepartmentList)
+                            {
+                                var deptid = listitem.RstDepartmentID;
+                                <div style="margin-bottom:5px;" class="feature_item">
+                                    <a href="javascript:GetCategory(@deptid)">
+                                        <div class="service_item" style="height:200px">
+                                            <h3>@listitem.DepartmentName</h3>
+                                            <p>@listitem.DepartmentCode</p>
+                                        </div>                                      
+                                    </a>
+                                </div>
+                            }
+                        </div>
+
+
+                    }
+                }
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <!--================End Our feature Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================Back Btn =================-->
+    <div class="icon-bar">
+        <!-- <a href="/FingerScan/Index" class="backsidebtn"><i class="fa fa-angle-double-left"></i></a>       -->
+        <a href="/STOSOrder/BookTable" class="backsidebtn">Back</a>
+    </div>
+    <!--================End Back Btn =================-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="~/Content/STOS/js/jquery-2.1.4.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="~/Content/STOS/js/bootstrap.min.js"></script>
+    <!-- Extra plugin js -->
+    <script src="~/Content/STOS/vendors/bootstrap-selector/bootstrap-select.js"></script>
+    <script src="~/Content/STOS/vendors/bootatrap-date-time/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/STOS/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="~/Content/STOS/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="~/Content/STOS/vendors/isotope/isotope.pkgd.min.js"></script>
+    <script src="~/Content/STOS/vendors/countdown/jquery.countdown.js"></script>
+    <script src="~/Content/STOS/vendors/js-calender/zabuto_calendar.min.js"></script>
+
+    <script src="~/Content/STOS/js/theme.js"></script>
+</body>
+</html>
+
+<script>
+    function GetCategory(departmentid)
+    {
+        debugger;
+        window.location.href = '/STOSOrder/ProductCategory?deptid=' + departmentid;
+    }
+    function Cart()
+    {
+        debugger;
+        window.location.href = '/STOSOrder/Cart';
+    }
+</script>

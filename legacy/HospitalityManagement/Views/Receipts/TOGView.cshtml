@@ -1,0 +1,329 @@
+﻿@model RIT.HMS.Domain.Transactions.TransferNoteHeader
+@{
+    ViewBag.Title = "Print TOG";
+    Layout = null;
+}
+
+
+
+
+@using (Html.BeginForm("CreateTOG", "TOG", FormMethod.Get, new
+{
+    @class = "form-horizontal",
+
+}))
+
+
+
+{
+
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="modal-header col-md-12">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">...</h4>
+                </div>
+                <div class="x_panel">
+
+                    <div id="printcontent">
+                        <div class="x_title" style="text-align:center">
+                            @if (Model.PrintStatus == 1)
+                            {
+                                <div class="small text-right" style="text-align:right">Original | @Model.DocState</div>
+                            }
+                            else
+                            {
+                                <div class="small text-right" style="text-align:right">Duplicate | @Model.DocState</div>
+                            }
+                            <div style="font-size:large">@Model.SysCompany.CompanyName</div>
+                            <div style="font-size:medium">@Model.SysCompany.Address1,@Model.SysCompany.Address2,@Model.SysCompany.Address3</div><br />
+                            <div style="font-size:large">Transfer of Goods Note</div>
+                            <br />
+                        </div>
+
+                        <div class="x_content">
+                            <div>
+                                <table align="center" style="width:100%">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Company: @Model.Company </label>
+                                        </td>
+                                        <td width="10%"></td>
+                                        <td style="text-align:right">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Location: @Model.From </label>
+                                        </td>
+                                        <td width="10%"></td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">To Location: @Model.To </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Doc #: @Model.DocumentNo </label>
+                                        </td>
+                                        <td width="10%"></td>
+                                        <td style="text-align:right">
+                                            @*<label class="control-label">Doc Date: @Model.CreatedDate </label>*@
+                                            <label class="control-label">TOG Date: @Model.TOGDate.ToShortDateString() </label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Create User: @Model.CreatedUser </label>
+                                        </td>
+                                        <td width="10%"></td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">Print Date: @DateTime.Now </label>
+                                        </td>
+                                    </tr>
+                                    @* Added by pavithra *@
+                                    <tr>
+                                        <td style="text-align:left">
+
+                                            <label class="control-label">Reference No: @Model.ReferenceNo </label>
+                                        </td>
+                                        <td width="10%"></td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">Remark: @Model.Remark </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Base Doc No: @Model.BaseDocNo </label>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">GRN No: @Model.GRNNo </label>
+                                        </td>
+
+                                    </tr>
+
+
+                                </table>
+                            </div>
+                            <br />
+                            <div class="clearfix"></div>
+
+
+                            <br />
+
+                            <div class="table-responsive">
+
+                                @if (Model.TOGDetail != null)
+                                {
+
+
+                                    <table id="tblstock" border="1" style="width:100%;border:thick"  class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                            <tr class="headings">
+                                                @{ // Retrieve the value from the session and convert it to a boolean
+                                                    bool TOGGridAdditionalColumn = Convert.ToBoolean(Session["TOGGridAdditionalColumn"]);
+
+                                                    bool DisablePriceRequestNote = Session["DisablePriceRequestNote"] != null && (bool)Session["DisablePriceRequestNote"];
+
+                                                }
+                                                @if (TOGGridAdditionalColumn)
+                                                {
+
+
+                                                    <th>Request Note Date</th>
+                                                    <th>Request Note No </th>
+                                                }
+
+
+
+
+                                                <th>Product Code</th>
+                                                <th>Product Name</th>
+                                                <th>Quantity </th>
+
+                                                @if (!DisablePriceRequestNote)
+                                                {
+                                                <th>Cost Price</th>
+                                                <th>Cost Value</th>
+                                                }
+                                                @*<th>Selling Price</th>*@
+
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            @foreach (var item in Model.TOGDetail)
+                                            {
+                                            <tr class="even pointer">
+
+                                                @if (TOGGridAdditionalColumn)
+                                                {
+
+
+                                                    <td>@item.ReqNoteCreatedDate.ToString("MM/dd/yyyy")</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.RequestNoteDocumentNo)</td>
+                                                }
+
+
+
+                                                <td>@Html.DisplayFor(modelItem => item.ProductCode)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                                <td style="text-align:right">@Html.DisplayFor(modelItem => item.OrderQty)</td>
+
+                                                @if (!DisablePriceRequestNote)
+                                                {
+
+                                                    <td style="text-align:right">@Html.DisplayFor(modelItem => item.CostPrice) </td>
+                                                    <td style="text-align:right">@((item.CostPrice * item.OrderQty).ToString("F2"))</td>
+                                                }
+                                                    @*<td style="text-align:right">@Html.DisplayFor(modelItem => item.SellingPrice) </td>*@
+
+
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                        <tfoot>
+                                            @if (!DisablePriceRequestNote)
+                                            {
+                                                <tr>
+                                                    <td>Total:</td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                    @if (TOGGridAdditionalColumn)
+                                                    {
+                                                        <td></td>
+                                                        <td></td>
+                                                    }
+                                                    <td></td>
+                                                    <td style="text-align:right">@Model.TotCostPrice</td>
+
+                                                    @*<td  style="text-align:right">@Model.TotSellingPrice</td>*@
+                                                </tr>
+                                            }
+                                            </tfoot>
+
+                                    </table>
+                                    <br />
+                                    <table id="tblNet" style="width:50%" align="right">
+                                        @*<tr>
+            <td style="text-align:left">
+                <label class="control-label">Gross Amount: </label>
+            </td>
+            <td style="text-align:right">
+                <label class="control-label">@Model.GrossAmount </label>
+            </td>
+        </tr>*@
+
+                                        @if (!DisablePriceRequestNote)
+                                        {
+                                            <tr>
+                                                <td style="text-align:left">
+                                                    <label class="control-label">Net Amount:  </label>
+                                                </td>
+                                                <td style="text-align:right">
+                                                    <label class="control-label">@Model.NetAmount </label>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <table id="signature" style="width:100%">
+                                            <tr style="width:100%">
+                                                <td style="text-align:center">
+                                                    ..................................<br />
+                                                    Entered By
+                                                </td>
+                                                <td style="text-align:center">
+                                                    ..................................<br />
+                                                    Received By
+                                                </td>
+                                                <td style="text-align:center">
+                                                    ..................................<br />
+                                                    Checked By
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                        }
+</div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="actionBar">
+                    <div class="msgBox">
+                        <button type="submit" class="btn btn-primary pull-right">Back</button>
+                        <div class="btn-group">
+                            <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                        <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                    </a>
+                                </li>
+                                <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+  
+
+}
+
+
+
+@*<script src="~/vendors/jquery/dist/jquery.min.js"></script>*@
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+       // var divContents = document.getElementById("printcontent").innerHTML;
+       //var printWindow = window.open('', '', 'height=200,width=400');
+       
+       // printWindow.document.write('<html><head><title></title>');
+       // printWindow.document.write('</head><body >');
+       // printWindow.document.write(divContents);
+       // printWindow.document.write('</body></html>');
+       // printWindow.document.close();
+       // printWindow.print();
+
+       // $(document).ready(function () {
+       //     $('#printcontent').DataTable();
+        // });
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+
+    }
+</script>
+
+
+
+

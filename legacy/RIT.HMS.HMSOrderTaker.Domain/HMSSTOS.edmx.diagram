@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="499bcb3170954a8c8323ca34ea2d4a4a" Name="Diagram1" ZoomLevel="98" ShowGrid="false">
+        <EntityTypeShape EntityType="SmartLinkModel.AddonCategoryMaster" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Addon" Width="1.5" PointX="2.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CashierFunction" Width="1.5" PointX="0.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CashierPermission" Width="1.5" PointX="4.25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Currency" Width="1.5" PointX="2.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CustomerCategory" Width="1.625" PointX="0.5" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CustomerDiscount" Width="1.5" PointX="6" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Customer" Width="1.5" PointX="4.125" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.DeliveryPerson" Width="1.5" PointX="7.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.EmployeeGroup" Width="1.5" PointX="5.875" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.KOTBOTDescription" Width="1.5" PointX="5.875" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.ProductInstruction" Width="1.75" PointX="10.875" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.ProductServingUnit" Width="1.5" PointX="9.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.ProductTax" Width="1.5" PointX="14.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.RstCategory" Width="1.5" PointX="16.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.RstDepartment" Width="1.5" PointX="20.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.RstSubCategory" Width="1.5" PointX="4.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.StewardsMaster" Width="1.5" PointX="6.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.SysLocation" Width="1.5" PointX="18.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.TableMaster" Width="1.5" PointX="11.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.UnitOfMeasure" Width="1.5" PointX="12.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.InterDepartment" Width="1.5" PointX="27.375" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.KitchenMaster" Width="1.5" PointX="27.375" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.LocationTax" Width="1.5" PointX="27.375" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Receipe" Width="1.5" PointX="27.375" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.RstKotCategory" Width="1.5" PointX="27.375" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.ServingUnit" Width="1.5" PointX="5.375" PointY="29.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.AutoGenerateInfo" Width="1.5" PointX="12.75" PointY="30.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CashierGroup" Width="1.5" PointX="20.875" PointY="33.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CateringModeTax" Width="1.5" PointX="14.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.ChairMaster" Width="1.5" PointX="29.25" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Configuration" Width="1.5" PointX="23" PointY="33.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.CustomoerPreviousVisit" Width="2.25" PointX="24.875" PointY="34" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.DocumentNumber" Width="1.5" PointX="35.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.LoyaltyCustomer" Width="1.5" PointX="33.75" PointY="39.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.POSUserGroup" Width="1.5" PointX="41.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.PrinterType" Width="1.5" PointX="41.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.RstMealType" Width="1.5" PointX="3.125" PointY="43" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.SysCompany" Width="1.5" PointX="13.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.SysGroupOfCompany" Width="2.75" PointX="20.75" PointY="47.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.DocumentNumbers_17112020" Width="1.5" PointX="11.75" PointY="52.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.ProductServingUnits_18112020" Width="1.5" PointX="52.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Receipes_30112020" Width="1.5" PointX="41.75" PointY="52.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Employee" Width="1.5" PointX="0.75" PointY="54.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.Product" Width="1.5" PointX="3.375" PointY="54.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartLinkModel.STOS_TabOrderDetail" Width="2.375" PointX="7.5" PointY="6.75" />
+        <EntityTypeShape EntityType="SmartLinkModel.STOS_TabOrderHeader" Width="1.5" PointX="9.75" PointY="4.875" />
+        <EntityTypeShape EntityType="SmartLinkModel.STOS_TabOrderConfirmationDetail" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SmartLinkModel.STOS_TabOrderConfirmationHeader" Width="2.25" PointX="12" PointY="7.875" />
+        <EntityTypeShape EntityType="SmartLinkModel.SuspendDet" Width="1.5" PointX="9" PointY="13.75" />
+        <EntityTypeShape EntityType="SmartLinkModel.SuspendHed" Width="1.5" PointX="5.75" PointY="14.75" />
+        <EntityTypeShape EntityType="SmartLinkModel.TransactionDet" Width="1.5" PointX="0.625" PointY="19.5" />
+        <EntityTypeShape EntityType="SmartLinkModel.CateringMood" Width="1.5" PointX="15.75" PointY="0.5" />
+        <EntityTypeShape EntityType="SmartLinkModel.ProductStockMaster" Width="1.5" PointX="15.75" PointY="3.125" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 350" width="1160" height="350">
+  <path d="M58 178 C 250 58, 560 52, 760 120" fill="none" stroke="#f5b21a" stroke-width="24" stroke-linecap="round"/>
+  <text x="34" y="236" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" letter-spacing="-3">
+    <tspan fill="#1f7a34" font-size="156">RETAIL</tspan><tspan fill="#f5b21a" font-size="182" dx="26">IT</tspan>
+  </text>
+  <text x="566" y="318" font-family="'Arial',sans-serif" font-weight="800" font-size="58" fill="#6b7280" text-anchor="middle">we provide more than a solution</text>
+</svg>

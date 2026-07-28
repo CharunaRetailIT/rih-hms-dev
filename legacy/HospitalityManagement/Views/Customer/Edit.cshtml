@@ -1,0 +1,949 @@
+﻿@model RIT.HMS.Domain.Customer
+
+@{
+    ViewBag.Title = "Edit Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+@*<html lang="en">*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+</head>
+
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "Customer", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.CustomerID);
+            @Html.HiddenFor(model => model.IsCardValid);
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Customer</strong> @ViewBag.CustCode modified successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Customer</strong> @ViewBag.CustCode failed to modify.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Can't be select Active and Delete options in the same time..!
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "5")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Loyalty customers must have a Loyalty Card Number.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "6")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Please entere a valid card number.
+                        </div>
+                    }
+
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Customer - Edit</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                             
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* Customer Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.CustomerCode,
+                                               new
+                                                    {
+                                                   @class = "form-control",
+                                                   MaxLength = 5,
+                                                   Placeholder = "Code",
+                                                   @readonly = true
+                                                    })
+                                                @Html.ValidationMessageFor(model => model.CustomerCode, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Title</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <select id="CustomerTitle" name="CustomerTitle" class="form-control">
+                                                    @*<option value="0">-Title-</option>*@
+                                                    <option value="Mr">Mr.</option>
+                                                    <option value="Mrs">Mrs.</option>
+                                                    <option value="Mrs">Ms.</option>
+                                                    <option value="Miss">Miss.</option>
+                                                    <option value="Dr">Dr.</option>
+                                                    <option value="Rev">Rev.</option>
+                                                    <option value="Company">Company</option>
+                                                </select>
+
+                                                @Html.ValidationMessageFor(model => model.CustomerTitle, "", new { @class = "text-danger pull-left" })
+
+
+
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-3">Name</label>
+            <div class="col-md-9 col-sm-9 col-xs-9">
+                @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", Placeholder = "Name" })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger pull-left" })
+            </div>
+        </div>*@
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* First Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", Placeholder = "Name", autocomplete = "false" })
+                                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* Last Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", Placeholder = "Name", autocomplete = "false" })
+                                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* Address 01</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.BillingAddress1, new { @class = "form-control", Placeholder = "Address 01" })
+                                                @Html.ValidationMessageFor(model => model.BillingAddress1, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* Address 02</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.BillingAddress2, new { @class = "form-control", MaxLength = 20, Placeholder = "Address 02" })
+                                                @Html.ValidationMessageFor(model => model.BillingAddress2, "", new { @class = "text-danger pull-left" })
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 03</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.BillingAddress3, new { @class = "form-control", MaxLength = 20, Placeholder = "Address 03" })
+                                                @Html.ValidationMessageFor(model => model.BillingAddress3, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-3">DOB</label>
+            <div class="col-md-9 col-sm-9">
+                @Html.TextBoxFor(model => model.DOB, new
+           {
+               @class = "form-control pull-left",
+               Type = "date",
+               @Value = Model.DOB.ToString("yyyy-MM-dd"),
+               @Style = "width:50%",
+               Placeholder = "DOB"
+           })
+                @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger pull-left" })
+            </div>
+
+        </div>*@
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">DOB</label>
+                                            <div class="col-md-9 col-sm-9">
+                                                @Html.TextBoxFor(model => model.DOB, new
+                                                {
+                                               @id = "DOB",
+                                               @class = "form-control pull-left",
+                                               Type = "date",
+                                               @Style = "width:50%",
+                                               Placeholder = "DOB",
+                                               @Value = string.Format("{0:yyyy-MM-dd}", Model.DOB),
+
+                                           })
+                                                @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Wedding Anniversary</label>
+                                            <div class="col-md-9 col-sm-9">
+                                                @Html.TextBoxFor(model => model.WeddingAnniversary, new
+                                           {
+                                               @class = "form-control pull-left",
+                                               @Type = "date",
+                                               @Value = string.Format("{0:yyyy-MM-dd}", Model.WeddingAnniversary),
+                                               @Style = "width:50%",
+
+                                           })
+                                                @Html.ValidationMessageFor(model => model.WeddingAnniversary, "", new { @class = "text-danger pull-left" })
+
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Profession</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Profession, new { @class = "form-control", Placeholder = "Profession" })
+                                                @Html.ValidationMessageFor(model => model.Profession, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">VIP/VVIP/Other</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="CustomerStatus" name="CustomerStatus" class="form-control"></select>
+                                                @*@{
+                    IList<SelectListItem> list = Enum.GetValues(typeof(RIT.HMS.Domain.MasterEnums.EnumCustomerStatus)).Cast<RIT.HMS.Domain.MasterEnums.EnumCustomerStatus>().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }).ToList();
+                    SelectList data = new SelectList(list, "Value", "Text");
+                }
+                @Html.DropDownList("Status", data, new { @class = "form-control" })*@
+
+                                                @*@Html.ValidationMessageFor(model => model.CustomerStatus, "", new { @class = "text-danger pull-left" })*@
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* Customer Group</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="CustomerCategoryId" name="CustomerCategoryId" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.CustomerCategoryId, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none;">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Photograph</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 pull-left">
+                                                <input type="file" id="Photograph" name="Photograph" class="flat pull-left" />
+                                                @Html.ValidationMessageFor(model => model.Photograph, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                            <div class="pull-left col-xs-2">
+                                                @*@ViewBag.FileName*@
+                                                @Model.CustomerPictureName
+
+                                            </div>
+                                        </div>
+
+                                        <br />
+
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Customer Type</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.CustomerType, new { @class = "form-control", MaxLength = 50, Placeholder = "Customer Type" })
+                                                @Html.ValidationMessageFor(model => model.CustomerType, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>*@
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* NIC</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.NIC, new { @class = "form-control", MinLength = 10, Placeholder = "NIC", Maxlength = 12 })
+                                                @Html.ValidationMessageFor(model => model.NIC, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Passport</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Passport, new { @class = "form-control", Placeholder = "Passport" })
+                                                @Html.ValidationMessageFor(model => model.Passport, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Telephone</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Telephone, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Telephone",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 10,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">* Mobile</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Mobile, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Mobile",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 10,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">E Mail</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Email, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "E Mail",
+                                               type = "email",
+                                               MaxLength = 100,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Vehicle No</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.VehicleNo, new { @class = "form-control", Placeholder = "VehicleNo" })
+                                                @Html.ValidationMessageFor(model => model.VehicleNo, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Fax</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Fax, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Fax",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 20,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Credit Limit</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.CreditLimit, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Credit Limit",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 20,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.CreditLimit, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Outstanding</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Outstanding, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Outstanding",
+                                               type = "number",
+                                               min = 0,
+                                               MaxLength = 20,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Outstanding, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">EPF No</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.EPFNo, new { @class = "form-control", Placeholder = "EPF No" })
+                                                @Html.ValidationMessageFor(model => model.EPFNo, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Membership Card No</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.MembershipCardNo, new { @class = "form-control", Placeholder = "Membership Card No" })
+                                                @Html.ValidationMessageFor(model => model.MembershipCardNo, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Remarks</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", Placeholder = "Remarks" })
+                                                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger pull-left" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">SenderPreference</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <select id="SenderPreference" name="SenderPreference" class="form-control">
+                                                    @*<option value="0">-Title-</option>*@
+                                                    <option value="0">None</option>
+                                                    <option value="1">SMS</option>
+                                                    <option value="2">Email</option>
+                                                    <option value="3">Email & SMS</option>
+                                                    <option value="4">Only Print</option>
+                                                </select>
+
+                                                @Html.ValidationMessageFor(model => model.SenderPreference, "", new { @class = "text-danger pull-left" })
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Active For Loyality</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsActiveForLoyalty, new {  })
+                                                </div>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsDelete, new { })
+                                                </div>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new {  })
+                                                </div>
+                                                @*<label class="control-label col-md-3 col-sm-3 col-xs-3">IsHeadOffice</label>
+                                                    <div class="checkbox col-xs-1">
+
+                                                    </div>
+                                                    <label class="control-label col-md-4 col-sm-3 col-xs-3">IsStockLocation</label>
+                                                    <div class="checkbox col-xs-1">
+
+                                                    </div>*@
+                                            </div>
+                                        </div>
+
+
+                                        <br />
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <div id="loyaltyproperties" style="display:none">
+                                        <hr />
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Card No</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.CardNumber, new
+                                                       {
+                                                           @class = "form-control",
+                                                           MaxLength = 50,
+                                                           Placeholder = "Card number",
+                                                           onkeyup = "ValidateCardNo()"
+                                                       })
+                                                        <font color="red" class="col-md-9 col-sm-9 col-xs-9">
+                                                            <label id="validatecard" name="validatecard" style="font:small-caption"></label>
+                                                        </font> 
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Name On card</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                       @Html.TextBoxFor(model => model.NameOnCard, new
+                                                       {
+                                                           @class = "form-control",
+                                                           MaxLength = 50,
+                                                           Placeholder = "Name On Card"
+                                                      
+                                                       })                                                       
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Ref# 01</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.ReferenceNo1, new { @class = "form-control", MaxLength = 50, Placeholder = "Ref No 01" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Ref# 02</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.ReferenceNo2, new { @class = "form-control", MininumLength = 50, Placeholder = "Ref No 02" })
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Religon</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <select id="Religion" name="Religion" class="form-control"></select>
+                                                        @*@Html.TextBoxFor(model => model.Religion, new { @class = "form-control", Placeholder = "Religion" })*@
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Race</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <select id="Race" name="Race" class="form-control"></select>
+                                                        @*@Html.TextBoxFor(model => model.Race, new { @class = "form-control", Placeholder = "Race" })*@
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work Address 01</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkAddres1, new { @class = "form-control", Placeholder = "Work Addres 01" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work Address 02</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkAddres2, new { @class = "form-control", Placeholder = "Work Addres 02" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work Address 03</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkAddres3, new { @class = "form-control", Placeholder = "Work Addres 03" })
+                                                    </div>
+                                                </div>                       
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work E mail</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkEmail, new { @class = "form-control", Placeholder = "Work e mail" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work Telephone</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkTelephone, new { @class = "form-control", Placeholder = "Work telephone" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work Mobile</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkMobile, new { @class = "form-control", Placeholder = "Work Mobile" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Work Fax</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.WorkFax, new { @class = "form-control", Placeholder = "Work Fax" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Civil Status</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <select id="CivilStatus" name="CivilStatus" class="form-control"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Spouse Name</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.SpouseName, new { @class = "form-control", Placeholder = "Spouse Name" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Spouse DoB</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <input type="date" id="SpouseDateOfBirth" name="SpouseDateOfBirth" class="form-control" value="@string.Format("{0:yyyy-MM-dd}", Model.SpouseDateOfBirth)" />
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Deliver To</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextAreaFor(model => model.DeliverToAddress, new { @class = "form-control", Placeholder = "Deliver To Address" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Landmark</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextAreaFor(model => model.LandMark, new { @class = "form-control", MininumLength = 50, Placeholder = "Landmark" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">District</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.District, new { @class = "form-control", Placeholder = "District" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Country</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @Html.TextBoxFor(model => model.Country, new { @class = "form-control", Placeholder = "Country", Value="Sri Lanka" })
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Customer Since</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @*<input id="CustomerSince" name="CustomerSince" type="date" class="form-control" value="@Model.CustomerSince.ToString("yyyy-MM-dd")" />*@
+                                                        @Html.TextBoxFor(model => model.CustomerSince, new
+                                                   {
+                                                       @class = "form-control col-md-6 col-xs-6",
+                                                       @Type = "date",
+                                                       //@Value =Convert.ToString(Model.CustomerSince),
+                                                       @Value = string.Format("{0:yyyy-MM-dd}", Model.CustomerSince)
+                                                   })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Special Day</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <select id="SpecialDayType" name="SpecialDayType" class="form-control"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4 col-sm-3 col-xs-3">Send Updates via E mails</label>
+                                                    <div class="checkbox col-xs-1">
+                                                        @Html.CheckBoxFor(model => model.SendUpdatesViaEmail, new { })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4 col-sm-3 col-xs-3">Send Updates via E SMS</label>
+                                                    <div class="checkbox col-xs-1">
+                                                        @Html.CheckBoxFor(model => model.SendUpdatesViaSms, new { })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    <label class="control-label col-md-4 col-sm-3 col-xs-3">Registered by POS</label>
+                                                    <div class="checkbox col-xs-1">
+                                                        @Html.CheckBoxFor(model => model.IsRegByPOS, new { })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <input type="button" class="btn btn-primary" value="Reset" onclick="location.href='@Url.Action("Edit", null, new { })'" />
+                                            @*<div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Reset", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>*@
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewCustomers", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Modify</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        debugger;
+        if('@Model.IsActiveForLoyalty'=='True') 
+        {
+            $('#loyaltyproperties').removeAttr("style", "display:none;")
+        }
+        else
+        {
+            $('#loyaltyproperties').attr("style", "display:none;")
+        }
+        $('#IsActiveForLoyalty').change(function () {
+            if(this.checked) {
+                $('#loyaltyproperties').removeAttr("style", "display:none;")
+            }else
+            {
+                $('#loyaltyproperties').attr("style", "display:none;")
+            }
+
+        });
+        $.getJSON("@Url.Action("GetSpecialDays", "Customer")", function (data) {
+            debugger;
+            var SpecialDayType = $("#SpecialDayType");
+            SpecialDayType.empty();
+            SpecialDayType.append("<option value='0'>-- Select a Day --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                SpecialDayType.append($('<option />', { value: optionaldata.Value }).html(optionaldata.Name));
+
+            });        
+            debugger;
+            if ('@Model.SpecialDayType') {
+                $('#SpecialDayType').val('@Model.SpecialDayType').trigger("change");
+            } else {
+                $('#SpecialDayType').val(0).trigger("change");
+            }
+        });
+
+        $.getJSON("@Url.Action("CivilStates", "Customer")", function (data) {
+            debugger;
+            var CivilStatus = $("#CivilStatus");
+            CivilStatus.empty();
+            CivilStatus.append("<option value='0'>-- Select a Status --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                CivilStatus.append($('<option />', { value: optionaldata.Value }).html(optionaldata.Name));
+
+            });
+            debugger;
+            if ('@Model.CivilStatus') {
+                $('#CivilStatus').val('@Model.CivilStatus').trigger("change");
+            } else {
+                $('#CivilStatus').val(0).trigger("change");
+            }
+        });
+    });
+
+    $.getJSON("@Url.Action("GetReligions", "Customer")", function (data) {
+
+        var Religion = $("#Religion");
+        Religion.empty();
+        Religion.append("<option value='0'>-- Select a Religion --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            Religion.append($('<option />', { value: optionaldata.ReferenceTypeId }).html(optionaldata.LookupValue));
+
+        });
+
+        if ('@Model.Religion') {
+            $('#Religion').val('@Model.Religion').trigger("change");
+        } else {
+            $('#Religion').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetRaces", "Customer")", function (data) {
+
+        var Race = $("#Race");
+        Race.empty();
+        Race.append("<option value='0'>-- Select a Race --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            Race.append($('<option />', { value: optionaldata.ReferenceTypeId }).html(optionaldata.LookupValue));
+
+        });
+
+        if ('@Model.Race') {
+            $('#Race').val('@Model.Race').trigger("change");
+        } else {
+            $('#Race').val(0).trigger("change");
+        }
+    });
+
+
+
+</script>
+
+
+<script type="text/javascript">
+    function ValidateCardNo()
+    {
+        document.getElementById('validatecard').innerHTML = '';
+
+        $.ajax({
+            url: "@Url.Action("ValidateCardNumber", "CardNumberGeneration")",
+            data: { cardnumber: $("#CardNumber").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp)
+            {
+                data = resp;
+                if (resp == 1)
+                {
+                    document.getElementById('validatecard').innerHTML = "Card number is not generated";
+                    $("#IsCardValid").val(false);
+
+                } else if(resp == 2)
+                {
+                    document.getElementById('validatecard').innerHTML = "Card number already issued";
+                    $("#IsCardValid").val(false);
+
+                } else if (resp == 3)
+                {
+                    document.getElementById('validatecard').innerHTML = "";
+                    $("#IsCardValid").val(true);
+                }
+
+            }
+        });
+
+
+    }
+</script>
+
+<script>
+    debugger;
+    document.getElementById("CustomerTitle").value = '@Model.CustomerTitle';
+  //  document.getElementById("CustomerStatus").value = @ViewBag.CustomerStatus;
+
+    $.getJSON("@Url.Action("GetActiveCustomerCategories", "Customer")", function (data) {
+
+        var CustomerCategoryId = $("#CustomerCategoryId");
+        CustomerCategoryId.empty();
+        CustomerCategoryId.append("<option value='0'>-- Select a Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CustomerCategoryId.append($('<option />', { value: optionaldata.CustomerCategoryID }).html(optionaldata.CustomerCategoryName));
+
+        });
+
+         if ('@ViewBag.CustomerCategoryId'!='0') {
+             $('#CustomerCategoryId').val('@ViewBag.CustomerCategoryId').trigger("change");
+        } else {
+             $('#CustomerCategoryId').val(0).trigger("change");
+        }
+
+
+
+
+
+
+        @*if ('@Model.CustomerTitle') {
+            $('#CustomerTitle').val(@Model.CustomerTitle).trigger("change");
+        } else {
+            $('#CustomerTitle').val(0).trigger("change");
+        }*@
+
+
+    });
+
+    $.getJSON("@Url.Action("GetActiveCustomerStatuses", "Customer")", function (data) {
+
+        var CustomerStatus = $("#CustomerStatus");
+        CustomerStatus.empty();
+        CustomerStatus.append("<option value='0'>-- Select a Status --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CustomerStatus.append($('<option />', { value: optionaldata.toString() }).html(optionaldata.toString()));
+
+        });
+        debugger;
+        if ('@ViewBag.CustomerStatus'!='0') {
+            $('#CustomerStatus').val('@ViewBag.CustomerStatus').trigger("change");
+        } else {
+            $('#CustomerStatus').val(0).trigger("change");
+        }
+
+
+    });
+
+    document.getElementById("SenderPreference").selectedIndex = '@Model.SenderPreference';
+    //  document.getElementById("CustomerStatus").value = @ViewBag.SenderPreference;
+
+    $.getJSON("@Url.Action("GetActiveCustomerSenderPreference", "Customer")", function (data) {
+
+        var CustomerCategoryId = $("#SenderPreference");
+        CustomerCategoryId.empty();
+        CustomerCategoryId.append("<option value='0'>-- Select a SenderPreference --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            SenderPreference.append($('<option />', { value: optionaldata.SenderPreference }).html(optionaldata.SenderPreference));
+
+        });
+
+        if ('@Model.SenderPreference') {
+            $('#SenderPreference').val(@Model.SenderPreference).trigger("change");
+        } else {
+            $('#SenderPreference').val(0).trigger("change");
+        }
+
+
+    });
+
+        if ('@Model.SenderPreference') {
+            $('#SenderPreference').val(@Model.SenderPreference).trigger("change");
+        } else {
+            $('#SenderPreference').val(0).trigger("change");
+        }
+
+
+
+
+</script>
+<script type="text/javascript">
+    //document.getElementById("WeddingAnniversary").required = false;
+    function checkDOB() {
+        var dateString = document.getElementById('DOB').setAttribute("max", today);;
+        var myDate = new Date(dateString);
+        var today = new Date();
+        if (myDate > today) {
+            $('#DOB').after('<p>You cannot enter a BOD in the future!.</p>');
+            return false;
+        }
+        return true;
+    }
+</script>

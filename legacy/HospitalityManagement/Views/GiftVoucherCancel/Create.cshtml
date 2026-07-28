@@ -1,0 +1,154 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Transactions.InvGiftVoucherCancel>
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container body">
+        <div class="main_container">
+            {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GiftVoucher Group</strong> @ViewBag.Gift Voucher Cancel saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "0")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>GiftVoucher Group</strong> @ViewBag.Gift Voucher Cancel save failed.
+                        </div>
+                    }
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Gift Voucher Cancel</h2>
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <div class="form-horizontal form-label-left col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher No *</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                                                <input type="text" class="form-control has-feedback-left text-right" value="" id="txtVoucherNo" placeholder="Gift Voucher No">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" id="btnSearch" class="btn btn-primary ">Serach</button>
+                                                @Html.ActionLink("View", "ViewVoucher", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                <button type="button" id="btnView" class="btn btn-primary ">View</button>
+                                            </div>
+                                            <div class="form-group">
+                                            </div>
+                                        </div>
+                                        <div class="x_content">
+                                            <table id="giftvoucherdetailstable" class="table table-striped table-bordered dt-responsive nowrap mstable">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="display:none">Gift Voucher Master ID</th>
+                                                        <th>Gift Voucher Group</th>
+                                                        <th>Book Code</th>
+                                                        <th>Voucher No</th>
+                                                        <th>Gift Voucher Value</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    @*<div class="form-group">
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+<script type="text/javascript">
+    $("body").on("click", "#btnSearch",
+function () {
+    var itemId = $("#txtVoucherNo").val();
+    $.ajax({
+        url: "@Url.Action("ViewVoucher", "GiftVoucherCancel")",
+        data: { VoucherNo : $("#txtVoucherNo").val() },
+    type: "GET",
+    dataType: "json",
+        success: function (resp) {
+            data = resp;
+
+            console.log(data);
+            $("#giftvoucherdetailstable").find("tr:not(:first)").remove();
+            if (data.Message == "No Records Found")
+            {
+                alert("No Records Found");
+                $("#giftvoucherdetailstable").find("tr:not(:first)").remove();
+            }
+            else
+            {
+                var table = document.getElementById("giftvoucherdetailstable");
+                $(table).find('tbody').append("<tr><td style='display:none'>" + data.InvGiftVoucherMasterID + "</td><td>" + data.GiftVoucherGroupCode + "</td><td>" + data.BookCode + "</td><td>" + data.VoucherNo + "</td><td >" + data.GiftVoucherValue + "</td><td><button type='button' id='promotionrow' onclick='CancelGiftvoucherConfirmation(this);' class='btn btn-danger btn-xs'> Cancel </button></td></tr>");
+
+            }
+        },
+        error: function (error) {
+            $("#giftvoucherdetailstable").find("tr:not(:first)").remove();
+        alert("No Records Found");
+    }
+});
+});
+    function CancelGiftvoucherConfirmation(button) {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(3).html();
+        var GiftID = $("TD", row).eq(1).html();
+        if (confirm("Do you want to Cancel: " + name + " ?")) {
+            ///
+            $.ajax({
+                url: "@Url.Action("CancelGiftVoucher", "GiftVoucherCancel")",
+                data: { VoucherNo: name },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+
+                alert(data);
+            },
+            error: function (error) {
+                alert("No Records Found");
+            }
+        });
+      }
+    };
+</script>

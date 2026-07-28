@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Native UI controls (date/time pickers, radios, range, progress, the date-picker
+     calendar selection, Clear/Today links) follow the brand green, not browser blue. */
+  :root { accent-color: #15803d; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    line-height: 1.55;
+  }
+  /* Type scale — a clear, consistent hierarchy for any heading that doesn't set
+     its own size utility. Page titles (Topbar) sit above section titles below. */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+  h1 { @apply text-2xl font-bold leading-tight tracking-tight; }
+  h2 { @apply text-xl font-bold leading-snug tracking-tight; }
+  h3 { @apply text-lg font-semibold leading-snug; }
+  h4 { @apply text-base font-semibold; }
+
+  /* Checkboxes — branded: transparent box with a green tick (replaces the default blue fill).
+     Size still comes from utility classes (size-4 etc.); these are sensible defaults. */
+  input[type='checkbox'] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    border: 1.5px solid #cbd5e1;            /* slate-300 */
+    border-radius: 0.3rem;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 78%;
+    cursor: pointer;
+    transition: background-color .12s ease, border-color .12s ease;
+  }
+  input[type='checkbox']:hover { border-color: #15803d; }       /* primary green */
+  input[type='checkbox']:checked {
+    border-color: #15803d;
+    background-color: rgba(21, 128, 61, 0.14);                  /* transparent green */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2315803d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-6.5'/%3E%3C/svg%3E");
+  }
+  input[type='checkbox']:focus-visible {
+    outline: 2px solid rgba(21, 128, 61, 0.35);
+    outline-offset: 1px;
+  }
+  input[type='checkbox']:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* Hide native number-input spinners — they clip values in tight table cells.
+     Values are still typed/edited normally; we just drop the up/down stepper. */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] { -moz-appearance: textfield; appearance: textfield; }
+}
+
+@layer components {
+  /* Status pill — the one place we use full rounding */
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset;
+  }
+  .pill-paid     { @apply bg-green-50 text-green-700 ring-green-600/20; }
+  .pill-pending  { @apply bg-amber-50 text-amber-700 ring-amber-600/30; }
+  .pill-void     { @apply bg-red-50 text-red-700 ring-red-600/20; }
+  .pill-progress { @apply bg-blue-50 text-blue-700 ring-blue-600/20; }
+  .pill-idle     { @apply bg-slate-100 text-slate-600 ring-slate-500/20; }
+
+  /* Card — 8px radius, 1px border, no shadow by default */
+  .card {
+    @apply rounded-lg border border-border bg-card;
+  }
+}

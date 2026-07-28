@@ -1,0 +1,939 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Transactions.RequestNoteHeader>
+@{
+    ViewBag.Title = "Request Notes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>View Request Notes<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        @*<li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="#">Settings 1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Settings 2</a>
+                                                </li>
+                                            </ul>
+                                        </li>*@
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    @{ // Calculate the first day of the current month
+                                        var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd");
+
+                                        var dateFromValue = ViewBag.DateFrom as string;
+
+                                        // If the session value is null or empty, fallback to the calculated first day of the month
+                                        var dateFromUse = string.IsNullOrEmpty(dateFromValue) ? firstDayOfMonth : dateFromValue;
+
+
+
+                                        var today = DateTime.Now.ToString("yyyy-MM-dd");
+
+                                        var dateToValue = ViewBag.DateTo as string;
+
+                                        // If the session value is null or empty, fallback to the calculated first day of the month
+                                        var dateToUse = string.IsNullOrEmpty(dateToValue) ? today : dateToValue;
+
+
+                                    }
+                                    <div class="form-horizontal col-md-12 trn-header">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-4">From Date <span class="required">*</span></label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@dateFromUse" />
+                                            </div>
+
+                                            <label class="control-label col-md-2 col-sm-4">To Date <span class="required">*</span></label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <input type="date" class="form-control" id="DateTo" name="DateTo" value="@dateToUse" />
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-4">From Location</label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <select id="LocationId" name="LocationId" class="form-control"></select>
+
+
+                                            </div>
+
+                                            <label class="control-label col-md-2 col-sm-4">To Location</label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <select id="LocationIdTo" name="LocationIdTo" class="form-control"></select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-4">Status</label>
+                                            <div class="col-md-3 col-sm-3">
+                                                <select id="drpStatus" name="drpStatus" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*<table id="datatable-responsive"
+                                    class="table table-striped table-bordered dt-responsive nowrap">*@
+                                                        @*<table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>DOC Number</th>
+                                                <th>Doc Date</th>
+                                                <th>From Location</th>
+                                                <th>From Department</th>
+                                                <th>To Location</th>
+                                                <th>To Department</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.DocumentNo)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.DocumentDate)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.FromLocation)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.FromDepartment)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ToLocation)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ToDepartment)</td>
+                                                    <td class="non-editable">@Html.DisplayFor(modelItem => item.Remark)</td>
+                                                    <td>
+                                                        @if (item.Remark != "Approved")
+                                                        {
+                                                            @Html.ActionLink("Edit", "Edit", new { id = item.RequestnoteHeaderId })
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="disabled-link" style="color: blue;">Disable</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>*@
+
+                                    <table id="tblTOG" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th id="typeid" style="display:none">Type Id</th>
+                                                <th id="create-date">Create Date</th>
+                                                <th id="expected-delivery-date">Expected Delivery Date</th>
+                                                <th id="from-location">From Location</th>
+                                                <th id="to-location">To Location</th>
+                                                <th id="request-note-no">Request Note No</th>
+                                                <th id="status-id">Status</th>
+                                                <th id="create-new-based-on">Create New Based On</th>
+                                                <th id="select">Edit | View</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="togitems">
+                                            <tr data-request-note-no="1">
+                                                <td style="display:none"></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <!-- More rows as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id='myModal' class='modal'>
+                                <div class="col-md-12">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div id='myModalContent'>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">
+                            @*@Html.ActionLink("Create New Request", "CreateRequestNote", null, new
+                                { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                            <input type="button" class="btn btn-info" value="Create New Request" onclick="location.href='@Url.Action("CreateRequestNote", null, new { })'" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+
+     $.getJSON("@Url.Action("GetActiveShowRoomLocations", "Location")", function (data)
+    {
+        var poLocationId = $("#LocationId");
+
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- All From Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata)
+        {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+         var poLocationIdTo = $("#LocationIdTo");
+
+         poLocationIdTo.empty();
+         poLocationIdTo.append("<option value='0'>--All To Locations --</option>");
+
+         $.each(JSON.parse(data), function (index, optionaldata) {
+             poLocationIdTo.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+         });
+
+          var isHeadOffice = @Html.Raw(Json.Encode(Convert.ToBoolean(Session["IsHeadOffice"])));
+        var locationId = '@ViewBag.locationId'; // Ensure locationId is correctly formatted
+
+        if (!isHeadOffice) {
+                var locationElement = document.getElementById("LocationId");
+                if (locationElement) {
+                    locationElement.disabled = true;
+                    locationElement.value = locationId; // Set the value from ViewBag
+                }
+            }
+
+         if ('@ViewBag.SelectFromLocation') {
+             var SelectFromlocationId = '@ViewBag.SelectFromLocation';
+
+             var locationElementFrom = document.getElementById("LocationId");
+             if (locationElementFrom) {
+
+                 locationElementFrom.value = SelectFromlocationId; // Set the value from ViewBag
+             }
+         }
+
+
+          if ('@ViewBag.SelectToLocation') {
+             var SelectTolocationId = '@ViewBag.SelectToLocation';
+
+              var locationElementTo = document.getElementById("LocationIdTo");
+              if (locationElementTo) {
+
+                  locationElementTo.value = SelectTolocationId; // Set the value from ViewBag
+             }
+         }
+
+         var drpStatus = $("#drpStatus");
+
+         drpStatus.empty();
+         drpStatus.append("<option value='0'> All Status</option>");
+         drpStatus.append("<option value='1'> Pending Approve </option>");
+         drpStatus.append("<option value='2'> Approved </option>");
+         drpStatus.append("<option value='3'> Cancelled </option>");
+
+          if ('@ViewBag.SelectAppStatus') {
+             var Select_AppStatus = '@ViewBag.SelectAppStatus';
+
+             var drpStatusElement = document.getElementById("drpStatus");
+             if (drpStatusElement) {
+
+                 drpStatusElement.value = Select_AppStatus; // Set the value from ViewBag
+             }
+         }
+
+         @*if ('@ViewBag.SelectFromLocation') {
+             $('#LocationId').val(@ViewBag.SelectFromLocation).trigger("change");
+        } else {
+        $('#LocationId').val(0).trigger("change");
+    }*@
+
+
+
+
+        @*if ('@ViewBag.poLocationId') {
+            $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }*@
+    });
+
+    $.getJSON("@Url.Action("GetActiveShowRoomLocations", "Location")", function (data)
+    {
+        var poLocationId = $("#ToLocationId");
+
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- All From Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata)
+        {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+
+        var poLocationIdTo = $("#LocationIdTo");
+
+        poLocationIdTo.empty();
+        poLocationIdTo.append("<option value='0'>-- All To Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poLocationIdTo.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        var drpStatus = $("#drpStatus");
+
+        drpStatus.empty();
+        drpStatus.append("<option value='0'> All Status</option>");
+        drpStatus.append("<option value='1'> Pending Approve </option>");
+        drpStatus.append("<option value='2'> Approved </option>");
+        drpStatus.append("<option value='3'> Cancelled </option>");
+
+        if ('@ViewBag.SelectToLocation') {
+             var SelectTolocationId = '@ViewBag.SelectToLocation';
+
+              var locationElementTo = document.getElementById("LocationIdTo");
+              if (locationElementTo) {
+
+                  locationElementTo.value = SelectTolocationId; // Set the value from ViewBag
+             }
+         }
+
+
+         if ('@ViewBag.SelectAppStatus') {
+             var Select_AppStatus = '@ViewBag.SelectAppStatus';
+
+             var drpStatusElement = document.getElementById("drpStatus");
+             if (drpStatusElement) {
+
+                 drpStatusElement.value = Select_AppStatus; // Set the value from ViewBag
+             }
+         }
+
+   @*if ('@ViewBag.poLocationId') {
+       $('#LocationId').val(@ViewBag.poLocationId).trigger("change");
+   } else {
+       $('#LocationId').val(0).trigger("change");
+    }*@
+    });
+
+    @*$("#LocationId").change(
+function () {
+    var requestid = this.value;
+    $.getJSON("@Url.Action("GetMergePORequestData", "Merge_PO_Request")", { id: requestid, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+        function (data) {
+
+
+        });
+});*@
+
+</script>
+
+<script>
+    // Function to be executed when the page loads
+    // Function to handle the event
+    function handleStatusChange(event) {
+        var selectedValue = event.target.value;
+        console.log("Dropdown value changed to:", selectedValue);
+
+        // Example: You can add additional logic here
+        if (!selectedValue) {
+            selectedValue = '0'; // Default to zero if no value is selected
+            event.target.value = selectedValue;
+        }
+    }
+
+    // Function to trigger the change event programmatically
+    function triggerChangeEvent() {
+        var statusElement = document.getElementById("drpStatus");
+        var event = new Event('change');
+        statusElement.dispatchEvent(event);
+    }
+
+    window.onload = function () {
+        var statusElement = document.getElementById("drpStatus");
+
+        // Add an event listener to handle the change event
+        statusElement.addEventListener('change', handleStatusChange);
+
+        // Trigger the change event programmatically
+        triggerChangeEvent();
+    };
+</script>
+
+
+<script>
+    @{
+    var editUrl = Url.Action("Edit", "RequestNote", new { id = 0 }); // Replace with your actual controller and parameters
+    }
+    //dateToInput Change
+    const dateToInput = document.getElementById('DateTo');
+    dateToInput.addEventListener('change', function () {
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+        }
+        var requestidTo = document.getElementById("LocationIdTo").value;
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+        }
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+        }
+            $.ajax({
+                url: "@Url.Action("ViewAllRequestNotes1", "RequestNote")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td  id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeleveryDateCell = `<td  id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+                        var unitFromLocationCell = `<td  id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td  id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td  id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td  id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+                        var unitEditCell;
+                        var printCell;
+
+                        // Assume item.Approve and unitindex are available in your script
+                        //if (item.Approve === "Approved" || item.Approve === "Cancelled") {
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><span>Disable</span></td>`;
+                        //} else {
+                        //    var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+                        //}
+
+                        var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        //var printUrl = printUrlTemplate.replace("__id__", item.requestnoteheaderid);
+                        //printCell = `<td  color: blue; font-weight: bold;'><a href='${printUrl}' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+                        printCell = `<td style='color: blue; font-weight: bold;'><a href='javascript:void(0)' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+
+                        var unitCreateNewBasedOn;
+
+                        var CreateUrlCreate = CreateUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitCreateNewBasedOn = `<td  color: blue; font-weight: bold;'><a href='${CreateUrlCreate}' onclick='CreateNewRow(${unitindex})'>Click</a></td>`;
+
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell} ${ExpectedDeleveryDateCell}${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell} ${unitCreateNewBasedOn}${unitEditCell} ${printCell}  </tr>`;
+
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    //alert("Item data mapping error");
+                }
+            });
+
+    });
+
+    //dateFromInput Change
+    const dateFromInput = document.getElementById('DateFrom');
+    dateFromInput.addEventListener('change', function () {
+
+        var requestid = document.getElementById("LocationId").value;
+
+        if (!requestid) {
+            requestid = '0'; // Default to zero
+
+        }
+        var requestidTo = document.getElementById("LocationIdTo").value;
+        if (!requestidTo) {
+            requestidTo = '0'; // Default to zero
+        }
+
+        var AppStatus = document.getElementById("drpStatus").value;
+
+        if (!AppStatus) {
+            AppStatus = '0'; // Default to zero
+        }
+            $.ajax({
+                url: "@Url.Action("ViewAllRequestNotes1", "RequestNote")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td  id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeleveryDateCell = `<td  id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+
+                        var unitFromLocationCell = `<td  id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td  id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td  id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td  id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+                        // Assume item.Approve and unitindex are available in your script
+
+                        //if (item.Approve === "Approved" || item.Approve === "Cancelled"){
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><span>Disable</span></td>`;
+                        //} else {
+                        //    var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+                        //}
+
+                        var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        //var printUrl = printUrlTemplate.replace("__id__", item.requestnoteheaderid);
+                        //printCell = `<td  color: blue; font-weight: bold;'><a href='${printUrl}' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+                        printCell = `<td style='color: blue; font-weight: bold;'><a href='javascript:void(0)' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+
+                        var unitCreateNewBasedOn;
+
+                        var CreateUrlCreate = CreateUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitCreateNewBasedOn = `<td  color: blue; font-weight: bold;'><a href='${CreateUrlCreate}' onclick='CreateNewRow(${unitindex})'>Click</a></td>`;
+
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell}  ${ExpectedDeleveryDateCell} ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell} ${unitCreateNewBasedOn}${unitEditCell} ${printCell}  </tr>`;
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    //alert("Item data mapping error");
+                }
+            });
+    });
+
+    $(document).ready(function () {
+        //LocationId change
+        $('#LocationId').on("change", function () {
+            var requestid = document.getElementById("LocationId").value;
+
+            if (!requestid) {
+                requestid = '0'; // Default to zero
+            }
+            var requestidTo = document.getElementById("LocationIdTo").value;
+            if (!requestidTo) {
+                requestidTo = '0'; // Default to zero
+            }
+
+            var AppStatus = document.getElementById("drpStatus").value;
+
+            if (!AppStatus) {
+                AppStatus = '0'; // Default to zero
+            }
+
+            $.ajax({
+                url: "@Url.Action("ViewAllRequestNotes1", "RequestNote")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td  id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeleveryDateCell = `<td  id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+                        var unitFromLocationCell = `<td  id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td  id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td  id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td  id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+                        // Assume item.Approve and unitindex are available in your script
+                        //if (item.Approve === "Approved" || item.Approve === "Cancelled"){
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><span>Disable</span></td>`;
+                        //} else {
+                        //    var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+                        //}
+
+                        var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                            unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        //var printUrl = printUrlTemplate.replace("__id__", item.requestnoteheaderid);
+                        //printCell = `<td  color: blue; font-weight: bold;'><a href='${printUrl}' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+                        printCell = `<td style='color: blue; font-weight: bold;'><a href='javascript:void(0)' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+
+                        var unitCreateNewBasedOn;
+
+                        var CreateUrlCreate = CreateUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitCreateNewBasedOn = `<td  color: blue; font-weight: bold;'><a href='${CreateUrlCreate}' onclick='CreateNewRow(${unitindex})'>Click</a></td>`;
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell} ${ExpectedDeleveryDateCell}    ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell} ${unitCreateNewBasedOn}${unitEditCell}${printCell}</tr>`;
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                  //  alert("Item data mapping error");
+                }
+            });
+        });
+
+        //LocationIdTo change
+        $('#LocationIdTo').on("change", function () {
+            var requestid = document.getElementById("LocationId").value;
+
+            if (!requestid) {
+                requestid = '0'; // Default to zero
+            }
+
+            var requestidTo = document.getElementById("LocationIdTo").value;
+            if (!requestidTo) {
+                requestidTo = '0'; // Default to zero
+            }
+
+            var AppStatus = document.getElementById("drpStatus").value;
+
+            if (!AppStatus) {
+                AppStatus = '0'; // Default to zero
+            }
+
+            $.ajax({
+                url: "@Url.Action("ViewAllRequestNotes1", "RequestNote")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td  id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeleveryDateCell = `<td  id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+
+
+
+                        var unitFromLocationCell = `<td  id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td  id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td  id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td  id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+                        // Assume item.Approve and unitindex are available in your script
+                        //if (item.Approve === "Approved" || item.Approve === "Cancelled") {
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><span>Disable</span></td>`;
+                        //} else {
+                        //    var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+                        //}
+                        var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                            unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        //var printUrl = printUrlTemplate.replace("__id__", item.requestnoteheaderid);
+                        //printCell = `<td  color: blue; font-weight: bold;'><a href='${printUrl}' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+                        printCell = `<td style='color: blue; font-weight: bold;'><a href='javascript:void(0)' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+
+                        var unitCreateNewBasedOn;
+
+                        var CreateUrlCreate = CreateUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitCreateNewBasedOn = `<td  color: blue; font-weight: bold;'><a href='${CreateUrlCreate}' onclick='CreateNewRow(${unitindex})'>Click</a></td>`;
+
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell}  ${ExpectedDeleveryDateCell}     ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell} ${unitCreateNewBasedOn}${unitEditCell}${printCell}</tr>`;
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                 //   alert("Item data mapping error");
+                }
+            });
+        });
+
+        //Status Change
+        $('#drpStatus').on("change", function () {
+
+            var requestid = document.getElementById("LocationId").value;
+
+            if (!requestid) {
+                requestid = '0'; // Default to zero
+            }
+
+            var requestidTo = document.getElementById("LocationIdTo").value;
+            if (!requestidTo) {
+                requestidTo = '0'; // Default to zero
+            }
+
+            var AppStatus = document.getElementById("drpStatus").value;
+
+            if (!AppStatus) {
+                AppStatus = '0'; // Default to zero
+            }
+
+            $.ajax({
+                url: "@Url.Action("ViewAllRequestNotes1", "RequestNote")",
+                data: {
+                    id: requestid,
+                    requestidTo: requestidTo,
+                    AppStatus: AppStatus,
+                    from: $("#DateFrom").val(),
+                    to: $("#DateTo").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    $("#togitems tr").remove();
+
+                    console.log(resp);
+                    $.each(resp, function (i, item) {
+                        $("#RequestType").val(item.RequestType);
+
+                        var unitindex = $("#togitems").children("tr").length;
+
+                        var unitindexCell = `<td style='display:none' id='${unitindex}_requestnoteheaderid' name='RequestNoteHeader[${unitindex}].requestnoteheaderid'>${item.requestnoteheaderid}</td>`;
+                        var unitCreateDateCell = `<td  id='${unitindex}_CreateDate' name='RequestNoteHeader[${unitindex}].CreateDate'>${item.CreateDate}</td>`;
+
+                        var ExpectedDeleveryDateCell = `<td  id='${unitindex}_ExpectedDeleveryDate' name='RequestNoteHeader[${unitindex}].ExpectedDeleveryDate'>${item.ExpectedDeleveryDate}</td>`;
+
+                        var unitFromLocationCell = `<td  id='${unitindex}_Location' name='RequestNoteHeader[${unitindex}].Location'>${item.Location}</td>`;
+                        var unitToLocationCell = `<td  id='${unitindex}_ToLocation' name='RequestNoteHeader[${unitindex}].ToLocation'>${item.ToLocation}</td>`;
+                        var unitDocumentNoCell = `<td  id='${unitindex}_DocumentNo' name='RequestNoteHeader[${unitindex}].DocumentNo'>${item.DocumentNo}</td>`;
+                        var unitDocumentStatusCell = `<td  id='${unitindex}_Approve' name='RequestNoteHeader[${unitindex}].Approve'>${item.Approve}</td>`;
+                        // Assume item.Approve and unitindex are available in your script
+                        //if (item.Approve === "Approved" || item.Approve === "Cancelled" ) {
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><span>Disable</span></td>`;
+                        //} else {
+                        //    var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        //    unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+                        //}
+
+                        var editUrl = editUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                            unitEditCell = `<td  color: blue; font-weight: bold;'><a href='${editUrl}' onclick='editRow(${unitindex})'>Click</a></td>`;
+
+                        //var printUrl = printUrlTemplate.replace("__id__", item.requestnoteheaderid);
+                        //printCell = `<td  color: blue; font-weight: bold;'><a href='${printUrl}' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+                        printCell = `<td style='color: blue; font-weight: bold;'><a href='javascript:void(0)' onclick='PrintNewRow(${unitindex})'>Print</a></td>`;
+
+                        var unitCreateNewBasedOn;
+
+                        var CreateUrlCreate = CreateUrlTemplate.replace("__id__", item.requestnoteheaderid); // Replace the placeholder with the actual ID
+                        unitCreateNewBasedOn = `<td  color: blue; font-weight: bold;'><a href='${CreateUrlCreate}' onclick='CreateNewRow(${unitindex})'>Click</a></td>`;
+
+                        var newUnitRow = `<tr id='trreceipeitem${unitindex}'>${unitindexCell}${unitCreateDateCell} ${ExpectedDeleveryDateCell} ${unitFromLocationCell}${unitToLocationCell}${unitDocumentNoCell}${unitDocumentStatusCell} ${unitCreateNewBasedOn}${unitEditCell} ${printCell}</tr>`;
+                        $("#togitems").append(newUnitRow);
+                    });
+                },
+                error: function () {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+
+        // Define editRow function outside of AJAX success callback
+        window.editRow = function (index) {
+            var requestnoteHeaderId = $(`#${index}_requestnoteheaderid`).text();
+            //var createDate = $(`#${index}_CreateDate`).text();
+            //var location = $(`#${index}_Location`).text();
+            //var toLocation = $(`#${index}_ToLocation`).text();
+            //var documentNo = $(`#${index}_DocumentNo`).text();
+            //var documentStatus = $(`#${index}_DocumentStatus`).text();
+
+             $.ajax({
+                url: "@Url.Action("Edit", "RequestNote")",
+                data: {
+                    id: requestnoteHeaderId
+
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                   // $("#togitems tr").remove();
+
+                    console.log(resp);
+
+                },
+                error: function () {
+                  //  alert("Item data mapping error");
+                }
+            });
+        }
+
+        window.CreateNewRow = function (index) {
+            var requestnoteHeaderId = $(`#${index}_requestnoteheaderid`).text();
+
+         debugger;
+             $.ajax({
+                url: "@Url.Action("CreateNewbasedOn", "RequestNote")",
+                data: {
+                    id: requestnoteHeaderId
+
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                   // $("#togitems tr").remove();
+
+                   // console.log(resp);
+
+                },
+                error: function () {
+                  //  alert("Item data mapping error");
+                }
+            });
+        }
+
+        window.PrintNewRow = function (index) {
+        var requestnoteHeaderId = $(`#${index}_requestnoteheaderid`).text();
+
+        $.ajax({
+            type: "GET",
+            url: "/RequestNote/Print", 
+            data: {
+                id: requestnoteHeaderId,
+                printstatus: 2
+            },
+            success: function (data) {
+                $('#myModalContent').html(data);
+                $('#myModal').modal({
+                    backdrop: 'static',
+                    keyboard: true
+                });
+                $('#myModal').modal('show');
+            },
+            error: function () {
+                alert("Failed to load print view.");
+            }
+        });
+    };
+
+    });
+</script>
+<script type="text/javascript">
+    var editUrlTemplate = '@Url.Action("Edit", "RequestNote", new { id = "__id__" })';
+    var CreateUrlTemplate = '@Url.Action("CreateNewbasedOn", "RequestNote", new { id = "__id__" })';
+    @*var printUrlTemplate = '@Url.Action("Print", "RequestNote", new { id = "__id__", printstatus = 2 })';*@
+
+</script>
+
+<style>
+    .mstable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .mstable thead {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .mstable th, .mstable td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .mstable th {
+            font-weight: bold;
+        }
+
+    tbody {
+        max-height: 300px; /* Set a height for scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
+        display: block; /* Enable scrolling */
+    }
+
+    tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed; /* Maintain table layout */
+    }
+</style>
+
+

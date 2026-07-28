@@ -1,0 +1,423 @@
+﻿@model RIT.HMS.Domain.Loyalty.CardMaster
+@{
+    ViewBag.Title = "Card Types";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<div class="container body" novalidate>
+    <div class="main_container">
+        @using (Html.BeginForm("CardMaster", "CardMaster", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(c=>c.IsExists)
+            @Html.HiddenFor(c => c.CardMasterId)
+            @Html.HiddenFor(c => c.ModifiedUser)
+            @Html.HiddenFor(c => c.LocationId)
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Card Type</strong> @ViewBag.CTCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong> Atleast one point schema required! </strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Card Type</strong> @ViewBag.CTCode save failed..
+                        </div>
+                    }
+
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Card Types</h2>
+                                    <br />
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>Card Details</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small>Point Schema</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            @*<li>
+                                                <a href="#step-3">
+                                                    <span class="step_no">3</span>
+                                                    <span class="step_descr">
+                                                        Step 3<br />
+                                                        <small>Production Summary</small>
+                                                    </span>
+                                                </a>
+                                            </li>*@
+                                        </ul>
+
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12 trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-9">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2 col-sm-2">
+                                                            Type <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="CardType" name="CardType" class="form-control"></select>
+                                                            @Html.ValidationMessageFor(model => model.CardType, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2 col-sm-2">
+                                                            Code <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                                            @Html.TextBoxFor(model => model.CardCode, new { @class = "form-control", MaxLength = 15, Placeholder = "Code", @readonly = "readonly" })
+                                                            @Html.ValidationMessageFor(model => model.CardCode, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-2 col-xs-2">
+                                                            @if (Model.IsExists==false)
+                                                            {
+                                                           <input type="button" class="btn btn-primary" value="New" id="btnnewcode" name="btnnewcode" />
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2 col-sm-2">
+                                                            Name <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.CardName, new { @class = "form-control", MaxLength = 50, Placeholder = "Card name", style = "resize: none;"})
+                                                            @Html.ValidationMessageFor(model => model.CardName, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2 col-sm-2">
+                                                            Description <span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-8 col-sm-8 col-xs-8">
+                                                            @Html.TextBoxFor(model => model.Remark, new { @class = "form-control", MaxLength = 150, Placeholder = "Description", style = "resize: none;"})
+                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    @if (Model.IsExists)
+                                                    {
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2 col-sm-2">
+                                                            Delete
+                                                        </label>
+                                                        <div class="col-md-1 col-sm-1 col-xs-1">                        
+                                                            @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })                                                           
+                                                        </div>
+                                                    </div>
+                                                    }
+                                                    <div class="clearfix"></div>
+                                                                                                                                                         
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-2">
+                                            <div class="col-md-12 trn-detail">
+                                                <br />
+                                                <div class="clearfix"></div>
+                                                <div class="form-group">
+
+                                                    @*<div id="buttons">*@                                                   
+                                                    @*</div>*@
+                                                    @*<div id="btnAddReOrderItems"></div>
+                                                        <div id="btnAddRequestItems"></div>*@
+
+                                                    <br />
+                                                    <div class="clearfix"></div>
+                                                    <div class="text-info"><b>Point Schema</b></div>      
+                                                    <table id="tblProductions" class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Bill Value From
+                                                                <input id="billvaluefrom" type="number" class="form-control small" onkeypress="return isNumberKey(event)"
+                                                                       value="0" step="any" style="text-align:right" />
+                                                                </th>
+                                                                <th>Bill Value To
+                                                                <input id="billvalueto" type="number" class="form-control" value="0" onkeypress="return isNumberKey(event)"
+                                                                       step="any" style="text-align:right"/>
+                                                                </th>
+                                                                <th>Increment
+                                                                <input id="incrementfactor" type="number" class="form-control" value="0" onkeypress="return isNumberKey(event)"
+                                                                        step="any" style="text-align:right" />
+                                                                </th>
+                                                                <th>Points
+                                                                <input id="points" type="number" class="form-control" value="0"  onkeypress="return isNumberKey(event)"
+                                                                       step="any" style="text-align:right" />
+                                                                </th>
+                                                                <th style="background-color:white;border-width:thin;border-color:#f2f2f2;">
+                                                                    <input type="button" id="addcarditems" class="btn btn-round btn-info" value="+" />
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="carditems">
+                                                            @if (Model.LoyaltyCardSchems != null)
+                                                            {
+                                                                foreach (var points in Model.LoyaltyCardSchems)
+                                                                {
+                                                                    int i = Model.LoyaltyCardSchems.ToList().IndexOf(points);
+                                                                        <tr id="trcarditems_@i">
+                                                                            <td style='display:none'>
+                                                                                <input name='LoyaltyCardSchems.Index' value='@i'/>
+                                                                            </td>
+                                                                            <td><input id='LoyaltyCardSchems[@i]_BillFromValue' class='form-control' style="text-align:right" name='LoyaltyCardSchems[@i].BillFromValue' readonly value='@points.BillFromValue' /></td>
+                                                                            <td><input id='LoyaltyCardSchems[@i]_BillToValue' class='form-control' style="text-align:right" name='LoyaltyCardSchems[@i].BillToValue' readonly value='@points.BillToValue' /></td>
+                                                                            <td><input id='LoyaltyCardSchems[@i]_Increment' class='form-control' style="text-align:right" name='LoyaltyCardSchems[@i].Increment' readonly value='@points.Increment' /></td>
+                                                                            <td><input id='LoyaltyCardSchems[@i]_PointValue' class='form-control' style="text-align:right" name='LoyaltyCardSchems[@i].PointValue' readonly value='@points.PointValue' /></td>
+                                                                            <td>
+                                                                                <input id='btnRemoveCardItem' type='button' value='-' class='btn btn-round btn-info' onclick='removeUnitRow(@i);' />
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    }
+                                                                }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        @*<div id="step-3">
+                                            <div class="col-md-12 trn-footer">
+                                                <br />
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Tot. Cost Price<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <input id="TotalCostPrice" name="TotalCostPrice" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="btnallClear btn pull-left">
+                                                @Html.ActionLink("Clear", "CardMaster", null, new
+                                               {
+                                                   @style = "font-size: 12px;color:white;" +
+                                                             "font-family: 'Lucida Sans Unicode', " +
+                                                             "'Lucida Grande', Sans-Serif;text-decoration: none"
+                                               })
+                                            </div>
+                                            <button type="submit"  class="btnallSubmit btn pull-left">Submit Card Type</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="se-pre-con"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function SwitchWizard ()
+    {
+        //alert('@Convert.ToBoolean(Session["CMWizadUI"])');
+        if('@Convert.ToBoolean(Session["CMWizadUI"])'=='False'){
+            //debugger;
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+        }
+    });
+</script>
+
+<script>
+
+    function isNumberKey(evt)
+    {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+           return false;
+
+        return true;
+    }
+
+    $(document).ready(function ()
+    {
+
+        // direct loaders
+        $.getJSON("@Url.Action("GetActiveReferances", "CardMaster")", function (data) {
+            var CardType = $("#CardType");
+            CardType.empty();
+            CardType.append("<option value='0'>-- Select a Card Type --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                CardType.append($('<option />', { value: optionaldata.ReferenceTypeId }).html(optionaldata.LookupValue));
+            });
+            if ('@ViewBag.CardType') {
+                $('#CardType').val(@ViewBag.CardType).trigger("change");
+            } else {
+                $('#CardType').val(0).trigger("change");
+            }
+
+        });
+
+        $("#btnnewcode").click(
+        function () {
+            debugger;
+            if ($('#CardType').val() == 0) { alert("Select a Card Type!"); return; }
+            $.getJSON("@Url.Action("GetCardNumber", "CardMaster")", { formname:"CardMaster" },
+            function (data) {
+                debugger;
+                $('#CardCode').val(data);
+                $('#CardCode').prop('disabled', true);
+                $('#btnnewcode').prop('disabled', true);
+
+            });
+        });
+
+        $(this).submit(function() {
+            debugger;
+            $('#CardCode').removeAttr('disabled');
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#addcarditems",
+        function () {
+
+            debugger;
+            if ($("#CardType").val() == 0 || $("#CardType").val() == null) {
+                alert("Select a Card Type!");
+                return;
+            }
+            if ($("#CardCode").val() == 0 || $("#CardCode").val() == null) {
+                alert("Add the card Code!");
+                return;
+            }
+            
+            if (Number($("#billvalueto").val()).toFixed(2) == 0 || Number($("#incrementfactor").val()).toFixed(2) == 0 || Number($("#points").val()).toFixed(2) == 0)
+            {
+                alert("Bill Value To, Increment, Points fields can not be 0 !");
+                return;
+            }
+
+
+
+            debugger;
+            var table = document.getElementById("carditems");
+            var hasitem = '0';
+            // checking already exists
+            for (var r = 0, n = table.rows.length; r < n; r++)
+            {
+
+                var efrom = document.getElementById('LoyaltyCardSchems[' + r +']_BillFromValue').value;
+                var eto = document.getElementById('LoyaltyCardSchems[' + r + ']_BillToValue').value;
+                var einc = document.getElementById('LoyaltyCardSchems[' + r + ']_Increment').value;
+                var epoint = document.getElementById('LoyaltyCardSchems[' + r + ']_PointValue').value;
+
+                if (efrom == Number($("#billvaluefrom").val()).toFixed(2) && eto == Number($("#billvalueto").val()).toFixed(2) 
+                    && einc == Number($("#incrementfactor").val()).toFixed(2) && epoint == Number($("#points").val()).toFixed(2))
+                {
+                    hasitem = '1';
+                }
+            }
+            if (hasitem == '1') {
+                alert("This point generation schema is already exists!");
+                return;
+            }
+
+            var ddd = $("#billvalueto").val();
+            var unitindex = $("#carditems").children("tr").length;
+            var unitindexCell = "<td style='display:none'><input name='LoyaltyCardSchems.Index'  value='" +
+                unitindex + "' /></td>";
+
+            var unitBillValueFrom = "<td><input id='LoyaltyCardSchems[" + unitindex + "]_BillFromValue' class='form-control' style='text-align:right' name='LoyaltyCardSchems[" +
+                unitindex + "].BillFromValue' type='text' readonly value=" + Number($("#billvaluefrom").val()).toFixed(2) + " /></td>";
+
+            var unitBillValueTo = "<td ><input id='LoyaltyCardSchems[" + unitindex + "]_BillToValue' class='form-control' style='text-align:right' name='LoyaltyCardSchems[" +
+                unitindex + "].BillToValue' type='text' readonly value='" + Number($("#billvalueto").val()).toFixed(2) + "' /></td>";
+
+            var unitIncrement = "<td ><input id='LoyaltyCardSchems[" + unitindex + "]_Increment'  class='form-control' type='text' style='text-align:right' name='LoyaltyCardSchems[" +
+                unitindex + "].Increment'  readonly value=" + Number($("#incrementfactor").val()).toFixed(2) + " /></td>";
+
+            var unitPointValue = "<td ><input id='LoyaltyCardSchems[" + unitindex + "]_PointValue' class='form-control' style='text-align:right' name='LoyaltyCardSchems[" +
+                unitindex + "].PointValue' type='text' readonly value=" + Number($("#points").val()).toFixed(2) + " /></td>";
+                     
+            var unitRemoveCell = "<td><input id='btnRemoveCardItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                unitindex + ");' /></td>";
+
+            var newUnitRow = "<tr id='trcarditems_" + unitindex + "'>" +
+                unitindexCell +
+                unitBillValueFrom +
+                unitBillValueTo +
+                unitIncrement +
+                unitPointValue +
+                unitRemoveCell +"</tr>";
+            $("#carditems").append(newUnitRow);         
+        }
+     );
+
+    function removeUnitRow(id) {
+        debugger;
+        if (confirm("Do you want to delete row ? ")) {
+            var controlToBeRemoved = "#trcarditems_" + id;
+            $(controlToBeRemoved).remove();
+        }
+
+    }
+</script>
+
+
+

@@ -1,0 +1,427 @@
+﻿
+@model RIT.HMS.Domain.SysCompany
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<!DOCTYPE html>
+    <html lang="en">*@
+@*<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System </title>
+
+
+</head>*@
+@*<body class="nav-md">*@
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Create", "Company", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Company</strong> @ViewBag.CompanyCode saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Company</strong> @ViewBag.CompanyCode save failed.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "3")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Company</strong> @ViewBag.CompanyCode already exists.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "4")
+                            {
+                                <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Group of Company</strong> Can't be select Active and Delete options in the same time..!
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Company</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Company Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.CompanyCode, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Company Code",
+                                               MaxLength = 10,
+                                               onkeypress = "return checkCodeTypeInput(event)",
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.CompanyCode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Group of Company</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                <select id="SysGroupOfCompanyId" name="SysGroupOfCompanyId" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.SysGroupOfCompanyId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Company Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.CompanyName, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Company Name",
+                                               MaxLength = 50,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+
+                                                @*@Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", MaxLength = 50, Placeholder = "Company Name" })*@
+                                                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Other Business Name 1</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.OtherBusinessName1, new { @class = "form-control", MaxLength = 50, Placeholder = "Business Name 1" })
+                                                @*@Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Other Business Name 2</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.OtherBusinessName2, new { @class = "form-control", MaxLength = 50, Placeholder = "Business Name 2" })
+                                                @Html.ValidationMessageFor(model => model.OtherBusinessName2, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Other Business Name 3</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.OtherBusinessName3, new { @class = "form-control", MaxLength = 50, Placeholder = "Business Name 3" })
+                                                @Html.ValidationMessageFor(model => model.OtherBusinessName3, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 1</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Address1, new { @class = "form-control", MaxLength = 50, Placeholder = "Address 01" })
+                                                @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 2</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Address2, new { @class = "form-control", MaxLength = 50, Placeholder = "Address 02" })
+                                                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 3</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Address3, new { @class = "form-control", MaxLength = 50, Placeholder = "Address 03" })
+                                                @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Telephone</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.Telephone, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Telephone",
+                                               type = "number",
+                                               MaxLength = 50,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Mobile</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.Mobile, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Mobile",
+                                               type = "number",
+                                               MaxLength = 50,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Fax</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextBoxFor(model => model.Fax, new
+                                           {
+                                               @class = "form-control",
+                                               Placeholder = "Fax",
+                                               type = "number",
+                                               MaxLength = 50,
+                                               oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                           })
+                                                @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Contact Person</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.ContactPerson, new { @class = "form-control", MaxLength = 50, Placeholder = "Contact Person" })
+                                                @Html.ValidationMessageFor(model => model.ContactPerson, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Web Site</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.Website, new { @class = "form-control", MaxLength = 50, Placeholder = "Web Site" })
+                                                @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 1</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TaxID1, new { @class = "form-control", MaxLength = 50, Placeholder = "Tax ID 1" })
+                                                @Html.ValidationMessageFor(model => model.TaxID1, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 2</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TaxID2, new { @class = "form-control", MaxLength = 50, Placeholder = "Tax ID 2" })
+                                                @Html.ValidationMessageFor(model => model.TaxID2, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 3</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TaxID3, new { @class = "form-control", MaxLength = 50, Placeholder = "Tax ID 3" })
+                                                @Html.ValidationMessageFor(model => model.TaxID3, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax Registration No 1</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TaxRegistrationNo1, new { @class = "form-control", MaxLength = 50, Placeholder = "Tax Registration No 1" })
+                                                @Html.ValidationMessageFor(model => model.TaxRegistrationNo1, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax Registration No 2</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TaxRegistrationNo2, new { @class = "form-control", MaxLength = 50, Placeholder = "Tax Registration No 2" })
+                                                @Html.ValidationMessageFor(model => model.TaxRegistrationNo2, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax Registration No 3</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TaxRegistrationNo3, new { @class = "form-control", MaxLength = 50, Placeholder = "Tax Registration No 3" })
+                                                @Html.ValidationMessageFor(model => model.TaxRegistrationNo3, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsVat</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsVat, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+                                        @*//Commented by pavithra on 2019-11-30*@
+                                        @*<div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+
+                                            </div>
+                                        </div>*@
+                                        <div tabindex="0">
+                                            @*<div class="ln_solid"></div>*@ <br />
+                                            <div class="actionBar">
+                                                <div class="msgBox">
+
+                                                    <div class="pull-left">
+                                                        @*@Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                                                        <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Index",null, new { })'" />
+                                                    </div>
+                                                    <div class=" pull-left">
+                                                        @*@Html.ActionLink("View All", "ViewCompanies", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                                                        <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewCompanies",null, new { })'" />
+                                                    </div>
+                                                    @if (Convert.ToBoolean(Session["CreateCompanies"]) == true)
+                                                    {
+                                                    <button type="submit" class="btn btn-success">Submit</button>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>*@
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+
+
+<script>
+    $.getJSON("@Url.Action("GetGroupOfCompanies", "GroupOfCompany")", function (data) {
+
+        var companyDropDown = $("#SysGroupOfCompanyId");
+
+        companyDropDown.empty();
+        companyDropDown.append("<option value='0'>-- Select a Group of Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            companyDropDown.append($('<option />', { value: optionaldata.SysGroupOfCompanyId }).html(optionaldata.GroupOfCompanyName));
+        });
+
+        if ('@ViewBag.SysGroupOfCompanyId') {
+            $('#SysGroupOfCompanyId').val(@ViewBag.SysGroupOfCompanyId).trigger("change");
+        } else {
+            $('#SysGroupOfCompanyId').val(0).trigger("change");
+        }
+
+
+    });
+
+</script>
+
+<script>
+
+    $(function () {
+        var groupofcompanyValue = localStorage.getItem("groupofcompanyValue");
+        if (groupofcompanyValue != null) {
+            $("select[name=SysGroupOfCompanyId]").val(groupofcompanyValue);
+        }
+
+        $("select[name=SysGroupOfCompanyId]").on("change", function () {
+            localStorage.setItem("groupofcompanyValue", $(this).val());
+        });
+    })
+</script>
+
+
+
+
+<!-- Initialize datetimepicker -->
+@*<script>
+        $('#myDatepicker').datetimepicker();
+
+        $('#myDatepicker2').datetimepicker({
+            format: 'DD.MM.YYYY'
+        });
+
+        $('#myDatepicker3').datetimepicker({
+            format: 'hh:mm A'
+        });
+
+        $('#myDatepicker4').datetimepicker({
+            ignoreReadonly: true,
+            allowInputToggle: true
+        });
+
+        $('#datetimepicker6').datetimepicker();
+
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false
+        });
+
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    </script>*@
+
+
+
+@*</body>*@
+
+
+@*</html>*@

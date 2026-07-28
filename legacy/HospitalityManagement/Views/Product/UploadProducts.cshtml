@@ -1,0 +1,454 @@
+﻿@model RIT.HMS.Domain.ViewModels.DataUpload.DataUploadViewModel
+@{
+    ViewBag.Title = "UploadProducts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+<h2></h2>
+
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            @using (Html.BeginForm("UploadProductsFromExcel", "Product", FormMethod.Post, new
+            {
+                enctype = "multipart/form-data"
+            }))
+            {
+                <div class="row">
+                    <!-- form input mask -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+
+                            <div class="x_content">
+                                <br />
+
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>
+                                            Data Uploads
+                                            @*<small>
+                                                    @Html.ActionLink("Download excel file from here.", "DownloadFile", new { fileName = "HMSProductUpload.xlsx", })
+                                                </small>*@
+                                        </h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <div id="statuszone">
+                                            @if (@ViewBag.statuscode == 0)
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong>@ViewBag.status</strong>
+                                                </div>
+                                            }
+                                            else if (@ViewBag.statuscode == 1)
+                                            {
+                                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong>@ViewBag.status </strong>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="clearfix"></div><br /><br />
+                                        <div id="productsZone">
+                                            <div class="form-group">
+                                                <div class="checkbox col-md-3">
+                                                    @Html.CheckBoxFor(model => model.WithData, new { @class = "flat" }) Download format(s) with data
+                                                </div>
+                                                @*<div class="checkbox col-md-2">
+
+
+                                                    </div>*@
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSProductUploadFormat" class="form-control btn btn-primary" value="1. Download Product Upload Format" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSProductTaxFormat" class="form-control btn btn-primary" value="2. Download Product Taxes Format" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSRecipePriceChangeFormat" class="form-control btn btn-primary" value="3. Download Recipe Price Change Format" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSRecipeUploadFormat" class="form-control btn btn-primary" value="4. Download Recipe Upload Format" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSProductPriceChangeFormat" class="form-control btn btn-primary" value="5. Download Serving Unit Price Change Format" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSProductPriceTakeawayUberFormat" class="form-control btn btn-primary" value="6. Download Price for Takeaway Uber Format" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <input type="submit" formaction="HMSProductPriceTakeawayKelaniyaFormat" class="form-control btn btn-primary" value="7. Download Price for Takeaway Kelaniya Format" />
+                                                </div>                                                
+                                            </div>
+                                            <div class="clearfix"></div><br /><br /><br />
+                                            <div class="form-group">
+                                                <div class="col-md-3">
+                                                    <b>Browse complete excel</b>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @*@ViewBag.ExcelFile*@
+                                                    <input type="file" name="ProductUploadFile" class="form-control" value=@ViewBag.ExcelFile accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <input type="submit" formaction="VerifyExcel" class="btn btn-info" name="Submit" value="Verify" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div> <br />
+                                            <div class="form-group">
+                                                @if (Model.DataUploadProductViewModel.Count() != 0)
+                                                {
+                                                    <label class="text-danger">@Model.VerifyMessage</label>
+                                                    <table class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Line #</th>
+                                                                <th>Department Code</th>
+                                                                <th>Category Code</th>
+                                                                <th>SubCategory Code</th>
+                                                                <th>Purchasing Unit Code</th>
+                                                                <th>Sub Unit</th>
+                                                                <th>Supplier Code</th>
+                                                                <th>Location Code</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var m in Model.DataUploadProductViewModel)
+                                                            {
+                                                                <tr>
+                                                                    <td>@m.LineNo</td>
+                                                                    @if (@m.InCorrectDepartmentCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.DepartmentCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.DepartmentCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectRstCategoryCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.RstCategoryCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.RstCategoryCode</td>
+                                                                    }
+
+
+                                                                    @if (@m.InCorrectRstSubCategoryCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.RstSubCategoryCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.RstSubCategoryCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectUnitOfMeasureName)
+                                                                    {
+                                                                        <td class="text-danger">@m.UnitOfMeasureCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.UnitOfMeasureCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectSubUnit)
+                                                                    {
+                                                                        <td class="text-danger">@m.SubUnit</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.SubUnit</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectSuppliereCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.SupplierCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.SupplierCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectLocationCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.LocationCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.LocationCode</td>
+                                                                    }
+
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+                                                }
+                                                else if (Model.DataUploadRecipePriceChangeViewModel.Count() != 0 && Model.ProductTaxVerified == false)
+                                                {
+                                                    <label class="text-danger">@Model.VerifyMessage</label>
+                                                    <table class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Line #</th>
+                                                                <th>Recipe Code</th>
+                                                                <th>Serving Unit</th>
+                                                                <th>Location Code</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var m in Model.DataUploadRecipePriceChangeViewModel)
+                                                            {
+                                                                <tr>
+                                                                    <td>@m.LineNo</td>
+                                                                    @if (@m.InCorrectProductCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.ProductCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.ProductCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectServingUnit)
+                                                                    {
+                                                                        <td class="text-danger">@m.ServingUint</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.ServingUint</td>
+                                                                    }
+
+
+                                                                    @if (@m.InCorrectLocationCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.LocationCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.LocationCode</td>
+                                                                    }
+
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+                                                }
+                                                else if (Model.DataUploadProductTaxViewModel.Count() != 0)
+                                                {
+                                                    <label class="text-danger">@Model.VerifyMessage</label>
+                                                    <table class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Line #</th>
+                                                                <th>Product Code</th>
+                                                                <th>Tax Code</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var m in Model.DataUploadProductTaxViewModel)
+                                                            {
+                                                                <tr>
+                                                                    <td>@m.LineNo</td>
+                                                                    @if (@m.InCorrectProductCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.ProductCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.ProductCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectTaxCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.TaxCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.TaxCode</td>
+                                                                    }
+
+
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                                else if (Model.DataUploadRecipeViewModel.Count() != 0 && Model.ProductTaxVerified == false)
+                                                {
+                                                    <label class="text-danger">@Model.VerifyMessage</label>
+                                                    <table class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Line #</th>
+                                                                <th>Location Code</th>
+                                                                <th>Recipe Code</th>
+                                                                <th>Serving Unit</th>
+                                                                <th>Material Code</th>
+                                                                <th>Sub Unit</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var m in Model.DataUploadRecipeViewModel)
+                                                            {
+                                                                <tr>
+                                                                    <td>@m.LineNo</td>
+                                                                    @if (@m.InCorrectLocationCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.LocationCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.LocationCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectProductCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.ProductCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.ProductCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectServingUnitCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.ServingUint</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.ServingUint</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectMaterialCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.MaterialCode</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.MaterialCode</td>
+                                                                    }
+
+                                                                    @if (@m.InCorrectSubUnitCode)
+                                                                    {
+                                                                        <td class="text-danger">@m.SubUnit</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@m.SubUnit</td>
+                                                                    }
+
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <label class="text-success">@Model.VerifyMessage</label>
+                                                }
+                                            </div>
+                                            <br />
+                                            <br />
+                                            <div class="clerfix"></div>
+                                            <div class="pull-right">
+                                                @if (Model.ProductTaxVerified)
+                                                {
+                                                    <input type="submit" formaction="UploadProductsFromExcel" class="btn btn-primary" name="Submit" value="Upload Products" />
+                                                }
+                                            </div>
+
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        @*<div id="stockZone">
+                                                <div>
+                                                    <div class="col-md-3">
+                                                        Browse Stock
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="file" name="ProductStockUploadFile" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <div class="clerfix">
+                                                    <div class="pull-right">
+                                                        <input type="submit" formaction="UploadStockFromExcel" class="btn btn-primary" name="Submit" value="Upload Stock" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div id="supplierZone">
+                                                <div>
+                                                    <div class="col-md-3">
+                                                        Browse Supplier Products
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="file" name="ProductSupplierUploadFile" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <div class="clerfix">
+                                                    <div class="pull-right">
+                                                        <input type="submit" formaction="UploadSupplierFromExcel" class="btn btn-primary" name="Submit" value="Upload Supplier Products" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div id="productTaxesZone">
+                                                <div>
+                                                    <div class="col-md-3">
+                                                        Browse Product Taxes
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="file" name="ProductTaxesUploadFile" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <div class="clerfix">
+                                                    <div class="pull-right">
+                                                        <input type="submit" formaction="UploadProductTaxesFromExcel" class="btn btn-primary" name="Submit" value="Upload Product Taxes" />
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+

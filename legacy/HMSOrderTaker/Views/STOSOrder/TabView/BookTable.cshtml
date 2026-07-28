@@ -1,0 +1,500 @@
+﻿@model RIT.HMS.HMSOrderTaker.Domain.ViewModels.vmTabOrderHeader
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <section class="booking_table_area booking_area_white">
+        <div class="s_black_title">
+            <h3>Book a</h3>
+            <h2>Table</h2>
+        </div>
+        <form class="form_area" id="NewOrderForm">
+            <div class="row">
+                @*<div class="form-group col-md-6">
+                    <select id="LocationSelect" name="LocationSelect" class=" form-control " style="width: 100%; height:40px;" required></select>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <select id="TblSelect" name="TblSelect" class=" form-control " style="width: 100%; height:40px;" required></select>
+                </div>*@
+                <div class="clearfix"></div>
+                <div class="form-group col-md-12">
+                    <div class="justify-content-center">
+                        <br />
+                        @foreach (var table in Model.Tables)
+                        {
+                            <button id="@table.TableMasterID" 
+                                        type="button" 
+                                        class="col-md-1 btn btn-default" 
+                                        style="height:60px;margin:2px; 
+                                        background-image:url('../Content/STOS/img/dining_room-512.png'); 
+                                        background-size:auto"                                   
+                                        onclick="ContinueTable(@table.TableMasterID)">
+                                        @table.TableName
+                             </button>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-12 form-group" id="ButtonArea">
+                    @*<button id="NewOrderBtn" type="button" class="btn btn-sm btn-info">BOOK MY TABLE</button>*@
+
+                </div>
+                <br />
+                <div class="form-group col-md-12">
+                    <div class="table-responsive">
+                        <table style="display:none;" id="OrderList" class="table table-striped table-bordered">
+                            <thead style="background-color:#B0E8FE">
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Table</th>
+                                    @*<th>Order Name</th>*@
+                                    <th>Order Item Qty</th>
+                                    <th>Order Time</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </section>
+</div>
+<div class="icon-bar">
+    <a href="/STOSSysUser/UserLogin" class="backsidebtn">Back</a>
+</div>
+
+<script src="~/Content/STOS/js/jquery-2.1.4.min.js"></script>
+<!--ActionCallMethod-->
+<script>
+
+    function NewOrder(tbl)
+    {
+        debugger;
+        var tableid=tbl;
+       // var location = $("#LocationSelect option:selected");
+       // var tbl = $("#TblSelect option:selected");
+
+        $.ajax({
+            url: "/STOSOrder/SaveTabOrderHead",
+            type: "POST",
+            //contentType: "application/json;charset=utf-8",
+            //dataType: "json",
+            data: { tblid: tbl},
+            success: function (data) {
+                debugger;
+                if (data.isRedirect)
+                {
+                    window.location.href = data.redirectUrl;
+                }
+                else {
+                    if (data.result != null) {
+
+                        window.location.href = '/STOSOrder/ProductDepartment';
+
+                    }
+                }
+
+            }
+        });
+    }
+
+    function Cart(locationid,orderid) {
+        //window.location.href = '/STOSOrder/AddToCart';
+        window.location.href = '/STOSOrder/AddToCart?locationid=' + locationid + '&orderno=' + orderid;
+    }
+
+    function AddItem(location, orderseqid)
+    {
+        debugger;
+        window.location.href = '/STOSOrder/AddItem?LocationId=' + location + '&OrderSeqId=' + orderseqid;
+    }
+
+    function CanselOrder(location, orderseqid, rowunicode)
+    {
+        debugger;
+
+        if (confirm("Are you sure to cancel order: " + orderseqid + "?") == false)
+        {
+            return;
+        } 
+
+
+        $.ajax({
+            url: "/STOSOrder/CanselTblOrder",
+            type: "POST",
+            //contentType: "application/json;charset=utf-8",
+            //dataType: "json",
+            data: { locationid: location, orderseqid: orderseqid },
+            success: function (data)
+            {
+
+                if (data.isRedirect) 
+                {
+                    window.location.href = data.redirectUrl;
+                }
+                else 
+                {
+
+                    if (data.result != null) 
+                    {
+                        //$("#orderunicode_" + rowunicode).css("display", "none");
+                        $("#orderunicode_" + rowunicode).remove();
+                        //var rowCount = $('#OrderList tbody tr').length;
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<script>
+    function ContinueTable(tableid) {
+        debugger;
+        var sss = tableid;
+
+        debugger
+
+        // var location = $("#LocationSelect option:selected");
+        var tbl = tableid;
+
+        if (tbl != 0) {
+
+            $.ajax({
+                url: "/STOSOrder/GetTblOrder",
+                type: "POST",
+                data: { tblid: tbl },
+                success: function (data) {
+
+                    if (data.isRedirect) {
+                        window.location.href = data.redirectUrl;
+                    }
+                    else
+                    {
+                        if (data.result.length != 0)
+                        {
+                            $('#OrderList').find('tbody').empty();
+                            $('#OrderList').show();
+
+                            $('#ButtonArea').empty();
+
+                            jQuery.each(data.result, function (i, dataitem) {
+                                debugger;
+                                //Convert jquary date to real date format
+                                var dateAsFromServerSide = dataitem.CreatedDateTime;
+                                var parsedDate = new Date(parseInt(dateAsFromServerSide.substr(6)));
+                                var jsDate = new Date(parsedDate);
+                                var realdate = jsDate.getDate();
+                                var realyear = jsDate.getFullYear();
+                                var realMonth = jsDate.getMonth();
+                                var intmonth = parseInt(realMonth) + 1;
+                                var createdate = realdate + " / " + intmonth + " / " + realyear;
+
+                                var orderunicode = dataitem.LocationId + '' + dataitem.OrderSeqNumber;
+
+                                var htmlinjectOrder = '';
+                                htmlinjectOrder += '<tr id="orderunicode_' + orderunicode + '">';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.OrderSeqNumber;
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.TableCode;
+                                htmlinjectOrder += '</td>';
+
+                                //htmlinjectOrder += '<td>';
+                                //htmlinjectOrder += dataitem.OrderName;
+                                //htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.OrderItemCount;
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.RealDateTime;
+                                htmlinjectOrder += '</td>';
+
+                                if (dataitem.OrderItemCount == 0)
+                                {
+                                    htmlinjectOrder += '<td>';
+                                    htmlinjectOrder += '<button type="button" onclick="Cart()" disabled>Cart</button>';
+                                    htmlinjectOrder += '</td>';
+                                }
+                                else
+                                {
+                                    htmlinjectOrder += '<td>';
+                                    htmlinjectOrder += '<button type="button" class="btn btn-sm btn-info" onclick="Cart(' + dataitem.LocationId + ',' + dataitem.OrderSeqNumber + ')" >Cart</button>';
+                                    htmlinjectOrder += '</td>';
+                                }
+
+                                var oname = dataitem.OrderName;
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += '<button type="button" class="btn btn-sm btn-success" onclick="AddItem(' + dataitem.LocationId + ',' + dataitem.OrderSeqNumber + ')">Menu</button>';
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += '<button type="button" class="btn btn-sm btn-danger" onclick="CanselOrder(' + dataitem.LocationId + ',' + dataitem.OrderSeqNumber + ',' + orderunicode + ')">Cancel</button>';
+                                htmlinjectOrder += '</td>';
+                                htmlinjectOrder += '</tr>';
+
+                                $('#OrderList').find('tbody').append(htmlinjectOrder);
+
+                            });
+                            var htmlbtnbooktable = '<button id="NewOrderBtn" style="float:right;" type="button" onclick="NewOrder(' + tbl + ')" class="btn btn-primary">  New Order  </button>';
+                            $('#ButtonArea').append(htmlbtnbooktable);
+                        }
+                        else
+                        {
+                            $('#OrderList').hide();
+                            $('#ButtonArea').empty();
+                            var htmlbtnbooktable = '<button id="NewOrderBtn" type="button" onclick="NewOrder(' + tbl + ')" class="btn btn-default submit_btn">BOOK MY TABLE</button>';
+                            $('#ButtonArea').append(htmlbtnbooktable);
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+
+<!--Select box load method-->
+<script>
+    //----------------------------------------------------------------------------------------------------------
+    $.getJSON("@Url.Action("GetActiveLocation", "STOSOrder")", function (data) {
+
+        var location = $("#LocationSelect ");
+
+        location.empty();
+        location.append("<option value='0'>-- Select a Location --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+
+            location.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        //Pending Under Code
+
+        if ('@ViewBag.location') {
+            $('#LocationSelect').val(@ViewBag.location).trigger("change");
+        } else {
+            $('#LocationSelect').val(0).trigger("change");
+        }
+        //
+
+    });
+
+    //----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------
+
+
+    $("#LocationSelect").change(function () {
+        debugger
+
+        var Locationid = $("#LocationSelect option:selected");
+
+        if (Locationid.val() != 0) {
+            $.getJSON("@Url.Action("GetActiveTbl", "STOSOrder")", { locationid: Locationid.val() }, function (data) {
+
+
+                var tbl = $("#TblSelect ");
+
+                tbl.empty();
+                tbl.append("<option value='0'>-- Select a Table --</option>");
+
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+
+                    tbl.append($('<option />', { value: optionaldata.TableMasterID }).html(optionaldata.TableName));
+
+                });
+
+                //Pending Under Code
+
+                if ('@ViewBag.tbl') {
+                    $('#TblSelect').val(@ViewBag.tbl).trigger("change");
+                } else {
+                    $('#TblSelect').val(0).trigger("change");
+                }
+                //
+
+
+            });
+        }
+
+
+
+
+    });
+    //----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------
+
+    $("#TblSelect").change(function () {
+
+        debugger
+
+        var location = $("#LocationSelect option:selected");
+        var tbl = $("#TblSelect option:selected");
+
+        if (tbl.val() != 0) {
+
+             $.ajax({
+
+                url: "/STOSOrder/GetTblOrder",
+                type: "POST",
+                //contentType: "application/json;charset=utf-8",
+                //dataType: "json",
+                data: { locationid: location.val(), tblid: tbl.val() },
+                success: function (data) {
+
+
+
+                    if (data.isRedirect) {
+                        window.location.href = data.redirectUrl;
+                    }
+
+                    else {
+
+
+                        if (data.result.length != 0) {
+                            $('#OrderList').find('tbody').empty();
+                            $('#OrderList').show();
+
+                            jQuery.each(data.result, function (i, dataitem) {
+
+                                //Convert jquary date to real date format
+                                var dateAsFromServerSide = dataitem.CreatedDateTime;
+                                var parsedDate = new Date(parseInt(dateAsFromServerSide.substr(6)));
+                                var jsDate = new Date(parsedDate);
+                                var realdate = jsDate.getDate();
+                                var realyear = jsDate.getFullYear();
+                                var realMonth = jsDate.getMonth();
+                                var intmonth = parseInt(realMonth) + 1;
+                                var createdate = realdate + " / " + intmonth + " / " + realyear;
+
+                                var orderunicode = dataitem.LocationId+ '' +dataitem.OrderSeqNumber;
+
+                                var htmlinjectOrder = '';
+                                htmlinjectOrder += '<tr id="orderunicode_'+orderunicode + '">';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.OrderSeqNumber;
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.TableCode;
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.OrderName;
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.OrderItemCount;
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += dataitem.RealDateTime;
+                                htmlinjectOrder += '</td>';
+
+                                if (dataitem.OrderItemCount == 0) {
+
+                                    htmlinjectOrder += '<td>';
+                                    htmlinjectOrder += '<button type="button" onclick="Cart()" disabled>Cart</button>';
+                                    htmlinjectOrder += '</td>';
+                                }
+                                else {
+                                    htmlinjectOrder += '<td>';
+                                    htmlinjectOrder += '<button type="button" onclick="Cart(' + dataitem.LocationId + ',' + dataitem.OrderSeqNumber +  ')" >Cart</button>';
+                                    htmlinjectOrder += '</td>';
+                                }
+
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += '<button type="button" onclick="AddItem(' + dataitem.LocationId + ',' + dataitem.OrderSeqNumber + ')">Menu</button>';
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '<td>';
+                                htmlinjectOrder += '<button type="button" onclick="CanselOrder(' + dataitem.LocationId + ',' + dataitem.OrderSeqNumber + ',' + orderunicode + ',' + dataitem.OrderName + ')">Cancel</button>';
+                                htmlinjectOrder += '</td>';
+
+                                htmlinjectOrder += '</tr>';
+
+
+                                $('#OrderList').find('tbody').append(htmlinjectOrder);
+
+
+                            });
+                        }
+                        else {
+                            $('#OrderList').hide();
+                        }
+
+                    }
+
+
+                }
+
+            });
+        }
+
+
+
+
+    });
+
+    //----------------------------------------------------------------------------------------------------------
+</script>
+
+@*validate new order form  *@
+<script>
+    $(document).ready(function () {
+
+        $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+            return arg != value;
+        }, "Value must not equal arg.");
+
+        $("#NewOrderForm").validate({
+            rules: {
+
+
+                LocationSelect: { valueNotEquals: "0" },
+                TblSelect: { valueNotEquals: "0" },
+                //diseases: "Please select Diseases Type",
+            },
+            messages: {
+
+                LocationSelect: "Please select Location",
+                TblSelect: "Please select Diseases Table",
+                //diseases: "Please select Diseases Type",
+            }
+        })
+
+        //$('#NewOrderBtn').click(function () {
+
+        //    if ($("#NewOrderForm").valid())
+        //    {
+        //        NewOrder();
+        //        return false;
+
+        //    } else
+        //    {
+        //        return false;
+        //    }
+        //});
+
+
+    });
+</script>
+

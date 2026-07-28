@@ -1,0 +1,210 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Transactions.CustomProductionNoteHeader>
+
+@{
+    ViewBag.Title = "Custom Productions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Report.css" rel="stylesheet" />
+
+@using (Html.BeginForm("Report", "CustomProduction", FormMethod.Post, new { @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Custom Production Report<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Date To </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input type="date" class="form-control" id="DateTo" name="DateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Process Location </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <select id="ProcessLocId" name="ProcessLocId" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Pickup Location </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <select id="PickupLocId" name="PickupLocId" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="actionBar">
+                                <div class="msgBox">
+                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                        <ul class="dropdown-menu">
+
+                                            <li>
+                                                <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                </a>
+                                            </li>
+                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="clearfix"></div>
+
+                            <div id="tblstock">
+                                <div style="text-align:left; background-color:silver">
+                                    @ViewBag.Selection
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="table-responsive">                                 
+                                        <table id="tblstock1" class="table table-striped jambo_table bulk_action">          
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th></th>
+                                                    <th class="column-title">Product Code</th>
+                                                    <th class="column-title">Product</th>
+                                                    <th class="column-title">Product Qty</th>
+                                                    <th class="column-title">Material Code</th>
+                                                    <th class="column-title">Material</th>
+                                                    <th class="column-title">Material Qty</th>
+                                                    <th class="column-title">Cost Value (Material)</th>
+                                                    @*<th class="column-title">Selling Price</th>*@
+                                                </tr>
+                                            </thead>
+                                            @if (Model != null)
+                                            {
+                                                    foreach (var head in Model)
+                                                    {
+                                                        @*<thead>*@
+                                                        <tr style="background-color:lightgray; width:200%" class="headings">
+                                                            <td>@(Model.ToList().IndexOf(head) + 1)</td>
+                                                            <td>Doc #:@Html.DisplayFor(modelItem => head.DocumentNo)</td>
+                                                            <td>Date:@Html.DisplayFor(modelItem => head.CreatedDate)</td>
+                                                            @*<td>Advance Note #:@Html.DisplayFor(modelItem => head.ReceiptNo)</td>*@
+                                                            <td>Remark:@Html.DisplayFor(modelItem => head.Remark)</td>
+                                                    
+                                                        </tr>
+                                                        @*</thead>*@
+
+                                                        <tbody>
+
+                                                            @foreach (var item in head.CustomProductionNoteDetail)
+                                                            {
+                                                                <tr class="even pointer">
+                                                                    <td>
+                                                                        @HospitalityManagement.Common.HMSExtensions.IntToRoman((head.CustomProductionNoteDetail.ToList().IndexOf(item) + 1))
+                                                                    </td>
+                                                                    <td class=""> @Html.DisplayFor(k => item.ProductCode)</td>
+                                                                    <td class="">@Html.DisplayFor(k => item.ProductName)</td>
+                                                                    <td style="text-align:right">@item.ProductQty.ToString("n2")</td>
+                                                                    <td style="text-align:right"> @item.MaterialCode </td>
+                                                                    <td>@item.MaterialName</td>
+                                                                    <td style="text-align:right">@item.MaterialQty.ToString("n2")</td>
+                                                                    <td style="text-align:right">@item.MaterialCostPrice.ToString("n2")</td>                                                         
+                                                                </tr>
+                                                            }
+
+                                                        </tbody>
+                                                    }
+                                            }
+                                        </table>                                   
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+
+}
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var ProcessLocId = $("#ProcessLocId");
+
+        ProcessLocId.empty();
+        ProcessLocId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            ProcessLocId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.ProcessLocId') {
+            $('#ProcessLocId').val(@ViewBag.ProcessLocId).trigger("change");
+        } else {
+            $('#ProcessLocId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var PickupLocId = $("#PickupLocId");
+
+        PickupLocId.empty();
+        PickupLocId.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PickupLocId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.PickupLocId') {
+            $('#PickupLocId').val(@ViewBag.PickupLocId).trigger("change");
+        } else {
+            $('#PickupLocId').val(0).trigger("change");
+        }
+    });
+
+</script>
+
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+
+        var divToPrint = document.getElementById("tblstock");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+    }
+</script>
+

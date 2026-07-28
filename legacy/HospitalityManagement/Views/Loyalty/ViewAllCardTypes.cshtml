@@ -1,0 +1,179 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Loyalty.CardMaster>
+@{
+    ViewBag.Title = "Card Types";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Card Types<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                    <br />
+                                    <br />
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>Card Code</th>
+                                                <th>Card Name</th>
+                                                <th>Card Type</th>                                               
+                                                <th></th>
+                                              
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@item.CardCode</td>
+                                                    <td>@item.CardName</td>
+                                                    <td>@item.CardTypeName</td>                                                   
+                                                    <td>@Html.ActionLink("Edit / View", "EditCard", new { id = item.CardMasterId })</td>
+                                                   
+                                                    @*<td>
+                                                        <a href="javascript:void(0);"
+                                                           class="anchorDetail"
+                                                           data-id="@item.PurchaseOrderHeaderId">Print</a>
+                                                    </td>*@
+
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id='myModal' class='modal'>
+                                <div class="col-md-12">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div id='myModalContent'>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">
+                            @*@Html.ActionLink("Create New PO", "CreatePO", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                            <input type="button" class="btn btn-info" value="Create Card" onclick="location.href='@Url.Action("CardMaster", null, new { })'" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+@*<script>
+    var TeamDetailPostBackURL = '/PO/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id,"printstatus":2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetDocStatus", "PO")", function (data) {
+
+        var DocStatusId = $("#DocStatusId");
+
+
+        DocStatusId.empty();
+        DocStatusId.append("<option value='0'>-- Select a Doc Status--</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DocStatusId.append($('<option />', { value: optionaldata.DocStatusId }).html(optionaldata.Description));
+
+        });
+
+        if ('@ViewBag.DocStatusId') {
+            $('#DocStatusId').val(@ViewBag.DocStatusId).trigger("change");
+        } else {
+            $('#DocStatusId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $('#btnFilter').click(function () {
+        debugger;
+        var statusid = $('#DocStatusId').val();
+        var datefrom = $('#PODateFrom').val();
+        var dateto = $('#PODateTo').val();
+        var url = $(this).attr('href') + 'FilterPos?statusid=' + statusid + '&datefrom=' + datefrom + '&dateto=' + dateto;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+});
+</script>*@

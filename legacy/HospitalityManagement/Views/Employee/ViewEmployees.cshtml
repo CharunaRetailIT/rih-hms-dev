@@ -1,0 +1,95 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Employee>
+@{
+    ViewBag.Title = "ViewEmployees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+@using (Html.BeginForm("", "Employee", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+<body class="nav-md">
+    <div class="right_col" role="main">       
+        <div class="">
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <br />
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Employee<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="">
+
+                                    </div>
+                                    <div class="pull-right">
+                                        <input type="submit" value="Download Data" formaction="HMSEmployees" class="btn btn-primary">
+                                    </div>
+                                </div><div class="clerfix"></div><br />
+                                <div class="x_content"><br />                               
+                                    <table id="datatable-responsive" class="mstable col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                                        <thead>
+                                            <tr>
+                                                <th>Employee Code</th>
+                                                <th>EPF No</th>
+                                                <th>Title</th>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                                <th>Email</th>
+                                                <th>NIC</th>
+                                                <th>Designation</th>
+                                                <th>Contact No</th>
+                                                <th>IsActive</th>
+                                                <th></th>
+                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.EmployeeCode)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.EpfNo)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.EmployeeTitle)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.EmployeeName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Address1)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.NIC)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Designation)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                                                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.EmployeeID })</td>                                                   
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clerfix">                
+                        <div class="btn btn-info pl_add btn-small pull-left">
+                            @Html.ActionLink("Add Employee", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>                
+    </div>   
+</body>
+
+}

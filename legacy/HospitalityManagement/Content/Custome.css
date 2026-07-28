@@ -1,0 +1,129 @@
+﻿body {
+    background-image: url("/Content/Images/Login/bg11.jpg");
+    background-repeat: no-repeat;
+    background-color:white;
+    height: 100%; 
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+
+}
+
+h2.maintitle{
+   
+   color:#737373;
+   font-size: 30px;
+}
+
+.logintitle{
+    font-size: 20px;
+    color:#cccccc;
+    
+}
+
+.custext{
+
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  background-color:#cccccc;
+  border-radius:5px;
+}
+
+.loginbtn{
+  
+  background: #1c8adb;
+  color: #fff;
+  outline:none;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity:0.8;
+  border-radius:5px;
+
+
+}
+.loginbtn:hover {
+    opacity:1;
+    
+
+}
+
+hr{
+  border: 2px solid  #cccccc;
+  border-radius: 5px;
+}
+h2.tlogin{
+    color:white;
+    float:initial;
+    font-size:30px;
+    
+}
+.lblw{
+    color:white;
+}
+div.row{
+    width:100%;
+    text-align:center;   
+    
+}
+
+#footer{
+     color:black;
+     text-align: center;
+     width: 100%;
+     padding-top: 50px;
+     padding-bottom: 0px;
+     
+}
+   
+ 
+/*transparent login form*/
+.imgcontainer {
+  text-align: center;
+  margin: 0px 0 12px 0;
+  
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.con{
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius:8px;
+  
+}
+.container{
+    width:100%;
+    height:100%;
+}
+
+/*.image{
+    content:url("/Content/Images/Login/bg11.png");
+}*/
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .con {
+    width: 100%;
+  }
+}
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .image {
+    width: 60%;
+    height:60%;
+  }
+}

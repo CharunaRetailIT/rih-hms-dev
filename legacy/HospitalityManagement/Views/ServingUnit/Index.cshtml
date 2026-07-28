@@ -1,0 +1,98 @@
+﻿
+@model IEnumerable<RIT.HMS.Domain.ServingUnit>
+@{
+    ViewBag.Title = "Serving Units";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+<h2></h2>
+
+@using (Html.BeginForm("", "ServingUnit", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+<body class="nav-md">
+
+    <div class="right_col" role="main" id="bgt">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel" id="test1">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Serving Units<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="">
+
+                                    </div>
+                                    <div class="pull-right">
+                                        <input type="submit" value="Download Data" formaction="HMSServingUnits" class="btn btn-primary">
+                                    </div>
+                                </div><div class="clerfix"></div><br />
+                                <div class="x_content"><br />
+
+                                    <table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Serving Unit</th>
+                                                <th>Active</th>
+                                                <th></th>
+                                                @*<th></th>*@
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.ServingUnitId)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ServingUnitName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                                                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.ServingUnitId })</td>
+                                                    @*<td>@Html.ActionLink("View", "Details", new { id = item.SysGroupOfCompanyId })</td>*@
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">
+                            @*@Html.ActionLink("Add Company", "Index", null,
+                                new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                            <input type="button" class="btn btn-info" value="Add Serving Unit" onclick="location.href='@Url.Action("Create", null, new { })'" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+}

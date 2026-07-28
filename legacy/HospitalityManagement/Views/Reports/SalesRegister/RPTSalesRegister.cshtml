@@ -1,0 +1,537 @@
+﻿@model RIT.HMS.Domain.ViewModels.Reports.SalesRegisterView
+@{
+    ViewBag.Title = "RPTSalesRegister";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Report.css" rel="stylesheet" />
+
+@using (Html.BeginForm("RPTSalesRegister", "Report", FormMethod.Post, new { @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Sales Register Report<small></small></h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="row">
+
+                                <div class="form-horizontal form-label-left col-md-7">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+
+                                            @Html.TextBoxFor(model => model.FromDate, new
+                                               {
+                                                   @class = "form-control",
+                                                   @id = "FromDate",
+                                                   @Type = "date",
+                                                   @Value = Model.FromDate.ToString("yyyy-MM-dd"),
+                                                   Placeholder = "From Date"
+                                               })
+                                            @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-3 col-xs-3">To</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+
+                                            @Html.TextBoxFor(model => model.ToDate, new
+                                           {
+                                               @class = "form-control",
+                                               @id = "ToDate",
+                                               @Type = "date",
+                                               @Value = Model.ToDate.ToString("yyyy-MM-dd"),
+                                               Placeholder = "To Date"
+                                           })
+                                            @Html.ValidationMessageFor(model => model.ToDate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Time From</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+
+                                            @Html.TextBoxFor(model => model.FromTime, new
+                                           {
+                                               @class = "form-control",
+                                               @id = "FromTime",
+                                               @Type = "time",
+                                               @Value = Model.FromTime.ToString("HH:mm"),
+                                               Placeholder = "From Date"
+                                           })
+                                            @Html.ValidationMessageFor(model => model.FromTime, "", new { @class = "text-danger" })
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-3 col-xs-3">To</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+
+                                            @Html.TextBoxFor(model => model.ToTime, new
+                                           {
+                                               @class = "form-control",
+                                               @id = "ToTime",
+                                               @Type = "time",
+                                               @Value = Model.ToTime.ToString("HH:mm"),
+                                               Placeholder = "To Date"
+                                           })
+                                            @Html.ValidationMessageFor(model => model.ToTime, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Location From</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9">
+
+                                            <select id="LocationIDF" name="LocationIDF" class="form-control"></select>
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-3 col-xs-3" style="display:none">To</label>
+                                        <div class="col-md-4 col-sm-9 col-xs-9" style="display:none">
+                                            <select id="LocationIDT" name="LocationIDT" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Department</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            <select id="DepartmentId" name="DepartmentId" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Category</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            <select id="CategoryId" name="CategoryId" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Category</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            <select id="SubCategoryId" name="SubCategoryId" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Customer</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                            <select id="CustomerIDS" name="CustomerIDS" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+
+                                        <div class="col-md-3 col-sm-9 col-xs-9">
+                                            <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                        </div>
+                                        <div class="col-md-3 col-sm-9 col-xs-9pull-right">
+                                            <div class="btn-group">
+                                                <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
+                                                <ul class="dropdown-menu">
+
+                                                    <li>
+                                                        <a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                            <img src='~/Content/Images/icons/xls.png' width="10" /> XLS
+                                                        </a>
+                                                    </li>
+                                                    <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" /> PDF</a></li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-horizontal col-md-1 pull-left">
+                                    @Html.CheckBoxFor(model => model.IsAsAtDate, new { @class = "flat" }) <br /> As At Date
+                                </div>
+
+                            </div>
+
+                            <br />
+                            <div class="clearfix"></div>
+
+                            <div id="printcontent">
+                                <br /><br />
+                                <div class="table-responsive">
+
+                                    @if (Model != null)
+                                    {
+
+                                        <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th class="column-title">Date</th>
+                                                    <th class="column-title">Invoice No</th>
+                                                    <th class="column-title">Z No</th>
+                                                    <th class="column-title">Product Code</th>
+                                                    <th class="column-title">Product Name</th>
+                                                    <th class="column-title" style="text-align:right">Cost Price</th>
+                                                    <th class="column-title" style="text-align:right">Average Cost</th> @*Added By Nipuna Francisku #2619*@
+                                                    <th class="column-title" style="text-align:right">Amount</th>
+                                                    <th class="column-title" style="text-align:right">Average Cost Amount</th> @*Added By Nipuna Francisku #2619*@
+                                                    <th class="column-title" style="text-align:right">Discount</th>
+                                                    <th class="column-title" style="text-align:right">Online</th>
+                                                    <th class="column-title" style="text-align:right">Uber</th>
+                                                    <th class="column-title" style="text-align:right">Pickme</th>
+                                                    <th class="column-title" style="text-align:right">Qty</th>
+                                                    <th class="column-title" style="text-align:right">Unit</th>
+                                                    <th class="column-title" style="text-align:right">Nett Amount</th>
+                                                    <th class="column-title" style="text-align:right">Tax</th>
+                                                    <th class="column-title" style="text-align:right">GP</th>  
+                                                    <th class="column-title" style="text-align:right">Average GP</th> @*Added By Nipuna Francisku #2619*@                              
+                                                    <th class="column-title" style="text-align:right">GP %</th>
+                                                    <th class="column-title" style="text-align:right">Average GP %</th> @*Added By Nipuna Francisku #2619*@ 
+                                                    <th class="column-title" style="text-align:right">Service Charges</th>
+                                                    <th class="column-title" style="text-align:right">AC Charges</th>
+                                                    <th class="column-title" style="text-align:right">Discount Remark</th>
+                                                    <th class="column-title" style="text-align:right">POS ID</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.salesmodelList)
+                                                {
+                                                    <tr class="even pointer">
+                                                        <td class="">@Html.DisplayFor(k => item.DATEPART)</td>
+                                                        <td class="">@Html.DisplayFor(k => item.Receipt)</td>
+                                                        <td class="">@Html.DisplayFor(k => item.ZNo)</td>
+                                                        <td class="">@Html.DisplayFor(k => item.ProductCode)</td>
+                                                        <td class="">@Html.DisplayFor(k => item.ProductName)</td>
+                                                        <td style="text-align:right">@((item.Cost).ToString("n2"))</td>
+                                                        <td style="text-align:right">@item.AvgCost.ToString("n2")</td> @*Added By Nipuna Francisku #2619*@
+                                                        <td style="text-align:right">@((item.Cost * item.Qty).ToString("n2"))</td>
+                                                        <td style="text-align:right">@((item.AvgCost * item.Qty).ToString("n2"))</td>  @*Added By Nipuna Francisku #2619*@
+                                                        <td style="text-align:right">@item.IDiscount1.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.Online.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.Uber.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.Pickme.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.Qty.ToString("n2")</td>
+                                                        <td class="">@Html.DisplayFor(k => item.UnitOfMeasureName)</td>
+                                                        <td style="text-align:right">@item.Amount.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.TaxAmount.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.GP.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.AverageGP.ToString("n2")</td> @*Added By Nipuna Francisku #2619*@
+                                                        <td style="text-align:right">@item.GPPres.ToString("n2")</td>
+                                                        <td style="text-align:right">@item.AverageGPPres.ToString("n2")</td> @*Added By Nipuna Francisku #2619*@
+                                                        <td style="text-align:right">@item.ServCharge.ToString("n2")</td> 
+                                                        <td style="text-align:right">@item.ACCharge.ToString("n2")</td> 
+                                                        <td style="text-align:right">@item.DiscRem</td>
+                                                        <td style="text-align:right">@item.UnitNo</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            @*<tfoot>*@
+                                                @*<tr style="background-color:lightgray;font-weight:bold">*@
+                                            <tr style="background-color:lightgray; width:200%" class="headings">
+                                                <td>Total:</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Cost).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.AvgCost).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Cost * i.Qty).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.AvgCost * i.Qty).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.IDiscount1).ToString("n2")</td>
+
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Online).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Uber).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Pickme).ToString("n2")</td>
+
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Qty).ToString("n2")</td>
+                                                <td></td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.Amount).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.TaxAmount).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.GP).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.AverageGP).ToString("n2")</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.ServCharge).ToString("n2")</td>
+                                                <td style="text-align:right">@Model.salesmodelList.Sum(i => i.ACCharge).ToString("n2")</td>
+
+                                                <td></td>
+                                            </tr>
+                                            @*</tfoot>*@
+                                        </table>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false
+        });
+    });
+</script>
+
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var LocationIDF = $("#LocationIDF");
+
+        LocationIDF.empty();
+        LocationIDF.append("<option value='0'>-- All Locations --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            LocationIDF.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.LocationIDF') {
+            $('#LocationIDF').val(@ViewBag.LocationIDF).trigger("change");
+        } else {
+            $('#LocationIDF').val(0).trigger("change");
+        }
+    });
+
+
+        $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+            var LocationIDT = $("#LocationIDT");
+
+            LocationIDT.empty();
+            LocationIDT.append("<option value='0'>-- All Locations --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                LocationIDT.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+            });
+
+            if ('@ViewBag.LocationIDT') {
+                $('#LocationIDT').val(@ViewBag.LocationIDT).trigger("change");
+            } else {
+                $('#LocationIDT').val(0).trigger("change");
+            }
+
+
+        });
+
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var DepartmentId = $("#DepartmentId");
+        var CategoryId = $("#CategoryId");
+        var SubCategoryId = $("#SubCategoryId");
+
+        DepartmentId.empty();
+        DepartmentId.append("<option value='0'>-- All Departments --</option>");
+        CategoryId.append("<option value='0'>-- All Categories --</option>");
+        SubCategoryId.append("<option value='0'>-- All Sub Categories --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DepartmentId.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+
+        if ('@ViewBag.DepartmentId') {
+            $('#DepartmentId').val(@ViewBag.DepartmentId).trigger("change");
+        } else {
+            $('#DepartmentId').val(0).trigger("change");
+        }
+
+
+    });
+
+
+    if('@Model.DepartmentId'==0){
+        $.getJSON("@Url.Action("GetActiveCategories", "Category")", function (data) {
+
+            var CategoryId = $("#CategoryId");
+
+            CategoryId.empty();
+            CategoryId.append("<option value='0'>-- All Categories --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+
+            });
+
+            if ('@ViewBag.CategoryId') {
+                $('#CategoryId').val(@ViewBag.CategoryId).trigger("change");
+            } else {
+                $('#CategoryId').val(0).trigger("change");
+            }
+
+
+        });
+    }else
+    {
+        $.getJSON("@Url.Action("GetCategoriesByDepartmentId", "Category")", { id: @Model.DepartmentId },
+    function (data) {
+
+        var CategoryId = $("#CategoryId");
+
+        CategoryId.empty();
+        CategoryId.append("<option value='0'>-- All Categories --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+        });
+
+        if ('@ViewBag.CategoryId') {
+            $('#CategoryId').val(@ViewBag.CategoryId).trigger("change");
+        } else {
+            $('#CategoryId').val(0).trigger("change");
+        }
+
+
+    });
+
+    }
+
+    $("#DepartmentId").change(function () {
+        var diptId = this.value;
+
+        $.getJSON("@Url.Action("GetCategoriesByDepartmentId", "Category")", { id: diptId },
+        function (data) {
+
+            var CategoryId = $("#CategoryId");
+
+            CategoryId.empty();
+            CategoryId.append("<option value='0'>-- All Categories --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+            });
+
+            if ('@ViewBag.CategoryId') {
+                $('#CategoryId').val(@ViewBag.CategoryId).trigger("change");
+            } else {
+                $('#CategoryId').val(0).trigger("change");
+            }
+
+
+        });
+    });
+
+
+    if('@Model.CategoryId'==0){
+        $.getJSON("@Url.Action("GetActiveSubCategories", "Product")", function (data) {
+
+            var SubCategoryId = $("#SubCategoryId");
+
+            SubCategoryId.empty();
+            SubCategoryId.append("<option value='0'>-- All SubCategories --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                SubCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+
+            });
+
+            if ('@ViewBag.SubCategoryId') {
+                $('#SubCategoryId').val(@ViewBag.SubCategoryId).trigger("change");
+            } else {
+                $('#SubCategoryId').val(0).trigger("change");
+            }
+
+
+        });
+    }else
+    {
+        $.getJSON("@Url.Action("GetSubcatByCatId", "Product")", { id: @Model.CategoryId },
+        function (data) {
+
+        var SubCategoryId = $("#SubCategoryId");
+        SubCategoryId.empty();
+        SubCategoryId.append("<option value='0'>-- All Sub Categories --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            SubCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+        });
+
+        if ('@ViewBag.SubCategoryId') {
+            $('#SubCategoryId').val(@ViewBag.SubCategoryId).trigger("change");
+        } else {
+            $('#SubCategoryId').val(0).trigger("change");
+        }
+    });
+    }
+
+    $("#CategoryId").change(function () {
+        var catid = this.value;
+
+        $.getJSON("@Url.Action("GetSubcatByCatId", "Product")", { id: catid },
+        function (data) {
+
+            var SubCategoryId = $("#SubCategoryId");
+            SubCategoryId.empty();
+            SubCategoryId.append("<option value='0'>-- All Sub Categories --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                SubCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+            });
+
+            if ('@ViewBag.SubCategoryId') {
+                $('#SubCategoryId').val(@ViewBag.SubCategoryId).trigger("change");
+            } else {
+                $('#SubCategoryId').val(0).trigger("change");
+            }
+        });
+    });
+
+
+
+
+
+    $.getJSON("@Url.Action("GetCustomers", "Customer")", function (data) {
+        var CustomerIDS = $("#CustomerIDS");
+        CustomerIDS.empty();
+        CustomerIDS.append("<option value='0'>-- All Customers --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CustomerIDS.append($('<option />', { value: optionaldata.CustomerID }).html(optionaldata.CustomerName));
+
+        });
+        if ('@ViewBag.CustomerIDS') {
+            $('#CustomerIDS').val(@ViewBag.CustomerIDS).trigger("change");
+        } else {
+            $('#CustomerIDS').val(0).trigger("change");
+        }
+    });
+
+        $("#CustomerIDS").change(
+              function () {
+                  var cus = this.value;
+                  $.getJSON("@Url.Action("GetReceiptNoByCusId", "Report")", { cusid: cus },
+                   function (data) {
+                       var DocNo = $("#DocumentId");
+                       DocNo.empty();
+                       DocNo.append("<option value='0'>-- Select a Receipt --</option>");
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           DocNo.append($('<option />', { value: optionaldata.TransactionDetID }).html(optionaldata.Receipt));
+                       });
+                   });
+              });
+
+</script>
+
+<script>
+        document.getElementById('FromDate').Value=@ViewBag.FromDate;
+</script>
+
+
+<script type="text/javascript">
+    function PrintDiv() {
+        var divToPrint = document.getElementById("datatable-responsive");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+</script>
+
+
+
+
+

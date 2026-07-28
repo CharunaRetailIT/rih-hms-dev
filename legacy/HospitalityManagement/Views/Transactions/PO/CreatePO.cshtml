@@ -1,0 +1,2503 @@
+﻿
+@model RIT.HMS.Domain.Transactions.PurchaseOrderHeader
+@{
+    ViewBag.Title = "Create PO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+@*@if (ViewBag.Message != null)
+{
+    <script>
+
+        $(document).ready(function () {
+
+            alert('@ViewBag.ErrorMessage');
+
+        });
+
+    </script>
+
+}*@
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new
+        {
+            id = "CreatePO",
+            @class = "form-horizontal",
+            enctype = "multipart/form-data"
+        }))
+        {
+
+            @Html.HiddenFor(model => model.PurchaseOrderHeaderId);
+            @Html.HiddenFor(model => model.CreatedDate);
+            @Html.HiddenFor(model => model.CreatedUser);
+            @Html.HiddenFor(model => model.CompanyID);
+
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>PO - </strong> @ViewBag.POCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>PO - </strong> @ViewBag.POCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>PO - </strong> @ViewBag.POCode already exists.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Atleast one item requires to submit PO
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "5")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Selected Month is not opened to selected Location!
+                        </div>
+                    }
+
+                    <div class="actionBar">
+                        <div class="msgBox">
+
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("CreatePO", null, new { })'" />
+                            </div>
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewAllPO", null, new { })'" />
+                            </div>
+                            <button type="submit" formaction="CreatePO" id="ButtonSubmit" class="btn btn-success pull-left">Submit PO</button>
+                            <button type="submit" name="sbt" formaction="TempSavePO" id="ButtonTempSavePO" class="btn btn-primary pull-left">Temporary Save PO</button>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel trn-xpanel">
+                                <div class="x_title1">
+                                    <h2>Purchase Order</h2>
+                                    <br />
+
+                                    @*<ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>*@
+
+                                    @*<div class="clearfix"></div>*@
+                                </div>
+
+                                <div class="x_content">
+
+                                    <div id="wizard" class="form_wizard wizard_horizontal">
+                                        <ul class="wizard_steps" id="wizardsteps">
+                                            <li>
+                                                <a href="#step-1">
+                                                    <span class="step_no">1</span>
+                                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>Step 1 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-2">
+                                                    <span class="step_no">2</span>
+                                                    <span class="step_descr">
+                                                        Step 2<br />
+                                                        <small>Step 2 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-3">
+                                                    <span class="step_no">3</span>
+                                                    <span class="step_descr">
+                                                        Step 3<br />
+                                                        <small>Step 3 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#step-4">
+                                                    <span class="step_no">4</span>
+                                                    <span class="step_descr">
+                                                        Step 4<br />
+                                                        <small>Step 4 description</small>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <div id="step-1">
+                                            <div class="form-horizontal col-md-12 trn-header">
+                                                <br />
+                                                <div class="form-horizontal col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Mode <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.POType, "Manual", new { @id = "Manual", @checked = true })
+                                                                Manual
+                                                            </div> <div class="clearfix"></div>
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.POType, "ReOrderLevelBased", new { @id = "Auto" })
+                                                                Re Order Level based
+                                                            </div><div class="clearfix"></div>
+                                                            <div class="pull-left">
+                                                                @Html.RadioButtonFor(m => m.POType, "RequestNoteBased", new { @id = "Request" })
+                                                                Request Note Based
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Doc # <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", MaxLength = 20, @readonly = true, Placeholder = "Doc Number" })
+                                                            @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Supplier <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="SupplierId" class="form-control" Name="SupplierId"></select>
+                                                            @*@Html.HiddenFor(x => x.SupplierId)*@
+                                                            @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            PO Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="POLocationId" class="form-control" Name="POLocationId"></select>
+                                                            @Html.ValidationMessageFor(model => model.POLocationId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Delivery Location <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <select id="DeliveryLocationId" class="form-control" Name="DeliveryLocationId"></select>
+                                                            @Html.ValidationMessageFor(model => model.DeliveryLocationId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Delivery Address
+                                                        </label>
+                                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                                            @Html.TextAreaFor(model => model.DeliveryAddress, new
+                                                       {
+                                                           @class = "form-control",
+                                                           MaxLength = 100,
+                                                           Placeholder = "Delivery Address",
+                                                           style = "resize: none;"
+                                                       })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Delivery Details
+                                                        </label>
+                                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                                            @Html.TextAreaFor(model => model.DeliveryDetail, new
+                                                       {
+                                                           @class = "form-control",
+                                                           MaxLength = 200,
+                                                           style = "resize: none;",
+                                                           Placeholder = "Delivery details"
+                                                       })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-horizontal col-md-6">
+
+                                                    @{ // Get the current date in the "yyyy-MM-dd" format
+                                                        string todayDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+                                                        string maxDate = DateTime.Now.ToString("yyyy-MM-dd"); ;
+
+                                                        }
+
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Currency  <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="CurrencyId" class="form-control" Name="CurrencyId"></select>
+                                                            @Html.ValidationMessageFor(model => model.CurrencyId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Expected Delivery Date <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+
+                                                            @Html.TextBoxFor(model => model.ExpectedDate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           @Type = "date",
+                                                           @Value = Model.ExpectedDate.ToString("yyyy-MM-dd"),
+                                                           Placeholder = "Expected Date",
+                                                           min = todayDate // Set the minimum date to today's date
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.ExpectedDate, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display:none">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Validity Period <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-3 col-sm-6">
+                                                            <input id="ValidityPeriod" name="ValidityPeriod" type="number"
+                                                                   required="required" min='0' value="0" onkeypress='return event.charCode >= 46'
+                                                                   oninput="javascript: if (this.value.length >5) this.value = this.value.slice(0, 5);"
+                                                                   class="form-control col-md-6 col-xs-6">
+                                                            @Html.ValidationMessageFor(model => model.ValidityPeriod, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Term <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="PaymentTermId" class="form-control" Name="PaymentTermId"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentTermId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Method <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="PaymentMethodId" class="form-control" Name="PaymentMethodId"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentMethodId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display:none">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Payment Period <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-3 col-sm-6">
+                                                            <input id="PaymentPeriod" name="PaymentPeriod" type="number" autocomplete="on" min="0"
+                                                                   onkeypress='return event.charCode >= 46' value="0"
+                                                                   oninput="javascript: if (this.value.length >5) this.value = this.value.slice(0, 5);"
+                                                                   class="form-control col-md-6 col-xs-6">
+                                                            @Html.ValidationMessageFor(model => model.PaymentPeriod, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            PO Date <span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            @Html.TextBoxFor(model => model.PODate, new
+                                                       {
+                                                           @class = "form-control col-md-6 col-xs-6",
+                                                           @Type = "date",
+                                                           @Value = Model.PODate.ToString("yyyy-MM-dd"),
+                                                           Placeholder = "Expected Date",
+                                                           min = todayDate, // Set the minimum date to today's date,
+                                                           max = maxDate,
+                                                           disabled = "disabled" // Disables the input field
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Event<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <select id="EventId" class="form-control" Name="EventId"></select>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="step-2">
+
+                                            <div id="trndetail" class="col-md-12 trn-detail">
+                                                <br />
+                                                @*<div class="col-md-12 col-sm-12">*@
+                                                @*<div class="col-md-11">*@
+                                                <div id="buttons">
+                                                    <table id="buttons" class="table table table-striped" style="background-color:#f5f5f5">
+                                                        <tr class="col-md-12">
+                                                            <td>
+                                                                Item/Material (UOM)
+                                                            </td>
+                                                            <td style="width:23%">
+                                                                @Html.DropDownList("ItemId", (IEnumerable<SelectListItem>)Session["AllItemsToPO"], new
+                                                                {
+                                                                    @class = "form-control select2",
+                                                                    @style = "width:100%"
+                                                                })
+                                                                @*<select id="ItemId" class="form-control select2" style="width:100%" name="ItemId"></select>*@
+                                                            </td>
+                                                            <td>
+                                                                Order Quantity
+                                                            </td>
+                                                            <td>
+                                                                <input id="RecQty" name="RecQty" step="any" type='number' min="0" value="0"  onkeypress='return validateInputForNumbers(event)' onkeyup="checkCostPrice()" class="form-control col-md-2 col-xs-6" />
+                                                                <font color="red"><label id="validateqty" name="validateqty" style="font:small-caption"></label></font>
+                                                            </td>
+                                                            <td>
+                                                                Cost Price
+                                                            </td>
+                                                            <td>
+                                                                <input id="CostPrice" name="CostPrice" type='text' value="0" onkeypress='return validateInputForNumbers(event)' onkeyup="calcManualCostPrice()" class="form-control">
+                                                            </td>
+                                                            <td>
+                                                                Cost Value
+                                                            </td>
+                                                            <td>
+                                                                <input id="CostValue" readonly name="CostValue" type='text' value=@Model.TotCostPrice onkeypress='return validateInputForNumbers(event)' class="form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="button" id="btnAddPOItem" class="btn btn-round btn-info" value="+" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                @*</div>
+                                                    <div class="col-md-1">*@
+                                                <div id="btnAddReOrderItems">
+                                                    <input type="button" id="btnAddReOrderLevelItems" class="btn btn-round btn-info pull-right"
+                                                           value="Add Re Order Levels achived Items" />
+                                                </div>
+                                                <div id="btnAddRequestItems">                                               
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2 ">
+                                                            Request Note
+                                                        </label>
+                                                        <div class="col-md-6">
+                                                            <select id="RequestNoteId" name="RequestNoteId" class="form-control"></select>
+                                                        </div>
+                                                        <input type="button" id="SelectRequestNote" name="SelectRequestNote" value="Select" class="btn btn-primary" />
+                                                    </div>      
+                                                </div>                                               
+                                                </div><div class="clearfix"></div>
+                                                @*</div>*@
+                                                @*</div>*@
+                                                <div id="headerPO">
+                                                    <div class="text-info"><b>Purchasing Items</b></div>
+                                                    <table id="tblRecepies" class="table table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display:none">idx</th>
+                                                                <th style="display:none">Item Id</th>
+                                                                <th>Item</th>
+                                                                <th >UOM</th>
+                                                                <th>Quantity</th>
+                                                                <th>Free Qty</th>
+                                                                <th style="display:none">Unit Selling Price</th>
+                                                                <th>Unit Cost Price</th>
+                                                                <th>Cost Value</th>
+                                                                @if (Convert.ToBoolean(Session["ConfigPOLineTax"]) == true)
+                                                                {
+                                                                    <th>Tax</th>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <th style="display:none">Tax</th>
+                                                                }
+                                                                @*<th>Discounts</th>
+                                                                    <th>Item Tax</th>*@
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="poitems">
+                                                            @if (Model.PODetail != null || Model.PODetail.Count != 0)
+                                                            {
+                                                                foreach (var poDetail in Model.PODetail)
+                                                                {
+                                                            <tr>
+
+                                                                <td style='display:none'><input name='PODetail.Index' type='hidden' value=@poDetail.ProductId /></td>
+                                                                <td style="display:none"><input id='PODetail[@poDetail.ProductId]_ProductId' class='form-control' name='PODetail[@poDetail.ProductId].ProductId' type='text' readonly value=@poDetail.ProductId /></td>
+                                                                <td id='PODetail[@poDetail.ProductId]_ProductName' name='PODetail[@poDetail.ProductId].ProductName'>@poDetail.ProductName</td>
+                                                                @if (Model.POType == "Manual")
+                                                                {
+                                                                    <td ><input id='PODetail[@poDetail.ProductId]_UOM' class='form-control' name='PODetail[@poDetail.ProductId].UOM' readonly value='@poDetail.UOM' /></td>
+                                                                    <td><input id='PODetail[@poDetail.ProductId]_OrderQty' type='hidden' class='form-control' name='PODetail[@poDetail.ProductId].OrderQty' readonly value=@Convert.ToDecimal(poDetail.RecQty) /></td>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td ><input id='PODetail[@poDetail.ProductId]_UOM' class='form-control' name='PODetail[@poDetail.ProductId].UOM' readonly value='@poDetail.UOM' /></td>
+                                                                    <td><input id='PODetail[@poDetail.ProductId]_OrderQty' type='number' class='form-control' name='PODetail[@poDetail.ProductId].OrderQty' value=@Convert.ToDecimal(poDetail.RecQty) readonly onkeyup='checkCostPriceROLBased(@poDetail.ProductId)' /></td>
+
+                                                                }
+                                                                <td><input id='PODetail[@poDetail.ProductId]_FreeQty' oninput="javascript: if (this.value.length > 5) this.value = this.value.slice(0,5);" class='form-control' name='PODetail[@poDetail.ProductId].FreeQty' type='number' value=@Convert.ToDecimal(poDetail.FreeQty) /></td>
+                                                                <td style="display:none"><input id='PODetail[@poDetail.ProductId]_SellingPrice' class='form-control' name='PODetail[@poDetail.ProductId].SellingPrice' type='text' readonly value=@poDetail.SellingPrice /></td>
+                                                                <td><input id='PODetail[@poDetail.ProductId]_CostPrice' class='form-control' name='PODetail[@poDetail.ProductId].CostPrice' type='text' onkeyup='SetCostValue(@poDetail.ProductId)' value=@poDetail.CostPrice /></td>
+                                                                <td><input id='PODetail[@poDetail.ProductId]_CostValue' class='form-control' name='PODetail[@poDetail.ProductId].CostValue' type='text' readonly value=@poDetail.CostValue /></td>
+                                                                @if (Convert.ToBoolean(Session["ConfigPOLineTax"]) == true)
+                                                                {
+                                                                    <td><input id='PODetail[@poDetail.ProductId]_ItemTaxTotal' class='form-control' name='PODetail[@poDetail.ProductId].ItemTaxTotal' type='number' step="any" value=@poDetail.ItemTaxTotal onkeyup="SetTax(@poDetail.ProductId)" /></td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="display:none"><input id='PODetail[@poDetail.ProductId]_ItemTaxTotal' class='form-control' name='PODetail[@poDetail.ProductId].ItemTaxTotal' type='text' readonly value=@poDetail.ItemTaxTotal /></td>
+                                                                }
+                                                                <td>
+                                                                    <input id='btnAddPOItem1' type='button' value='-' class='btn btn-round btn-info' onclick='removePORow(this);' />
+                                                                    <input id='btnAddPOItem1' type='button' value='-' class='btn btn-round btn-info' onclick='removePORow(this);' />
+                                                                </td>
+                                                                <td style="display:none"><input id='PODetail[@poDetail.ProductId]_CostPriceHidden' class='form-control' name='PODetail[@poDetail.ProductId].CostPriceHidden' type='text' value=@poDetail.CostPrice /></td>
+                                                                <td style="display:none"><input id='PODetail[@poDetail.ProductId]_ReOrderQtyPriceHidden' class='form-control' name='PODetail[@poDetail.ProductId].ReOrderQtyPriceHidden' type='text' value=@Convert.ToDecimal(poDetail.OrderQty) /></td>
+
+                                                            </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="summary">
+                                                    <div style="display:none">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-5 col-sm-6">
+                                                                Total Selling Price <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-7 col-sm-6">
+                                                                <input id="TotSellingPrice" name="TotSellingPrice" readonly="readonly" value="0" class="form-control">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="control-label col-md-5 col-sm-6">
+                                                                Total Cost Value <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-7 col-sm-6">
+                                                                @Html.TextBoxFor(model => model.TotCostPrice, new
+                                                               {
+                                                                   @class = "form-control",
+                                                                   @Type = "number",
+                                                                   @readonly = true
+                                                               })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div><br />
+                                        <div id="trnfooter" class="col-md-12 trn-footer">
+                                            <br />
+                                            <div id="step-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Gross Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.GrossAmount, new { type = "number", @class = "form-control", MaxLength = 20, @readonly = true })
+                                                            @Html.ValidationMessageFor(model => model.GrossAmount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Other Chargers<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.OtherCharges, new
+                                                       {
+                                                           type = "number",
+                                                           @class = "form-control",
+                                                           min = "0",
+                                                           step = "0.001",
+                                                           onkeypress = "return event.charCode >= 46",
+                                                           onkeyup = "CalculateNetAmt()"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.OtherCharges, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Deductions<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.Deduction, new
+                                                       {
+                                                           type = "number",
+                                                           @class = "form-control",
+                                                           value = "0",
+                                                           min = "0",
+                                                           step = "0.001",
+                                                           onkeypress = "return event.charCode >= 46",
+                                                           onkeyup = "CalculateNetAmt()",
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.Deduction, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Total Tax Amount<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.TotalTaxAmount, new
+                                                       {
+                                                           type = "number",
+                                                           @class = "form-control",
+                                                           MaxLength = 20,
+                                                           step = "0.001",
+                                                           Placeholder = "Total Tax",
+                                                           onkeyup = "CalculateNetAmt()"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.TotalTaxAmount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Additions<span class="required"></span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.Addition, new
+                                                       {
+                                                           type = "number",
+                                                           @class = "form-control",
+                                                           value = "0",
+                                                           min = "0",
+                                                           step = "0.001",
+                                                           onkeypress = "return event.charCode >= 46",
+                                                           onkeyup = "CalculateNetAmt()"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.Addition, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-6">
+                                                            Net Amount<span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                            @Html.TextBoxFor(model => model.NetAmount, new { type = "number", @class = "form-control", @readonly = true })
+                                                            @Html.ValidationMessageFor(model => model.NetAmount, "", new { @class = "text-danger" })
+                                                            <input data-val="true" id="NetAmountHidden" name="NetAmountHidden" type="hidden" />
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="clearfix"></div><hr />
+                                            <div id="step-4">
+                                                <div class="col-md-12">
+                                                    <div class="x_panel">
+                                                        <div class="x_title">
+                                                            <h2><small>Optional</small></h2>
+                                                            <ul class="nav navbar-right panel_toolbox">
+                                                                <li>
+                                                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                        <div class="x_content">
+                                                            <div class="bs-example" data-example-id="simple-jumbotron">
+                                                                <div class="jumbotrona">
+
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3">
+                                                                            Ref No<span class="required"></span>
+                                                                        </label>
+                                                                        <div class="col-md-9 col-sm-9">
+
+                                                                            @Html.TextBoxFor(model => model.ReferenceNo, new { type = "text", @class = "form-control", MaxLength = 20 })
+                                                                            @Html.ValidationMessageFor(model => model.ReferenceNo, "", new { @class = "text-danger" })
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3">
+                                                                            Remark<span class="required"></span>
+                                                                        </label>
+                                                                        <div class="col-md-9 col-sm-9">
+
+                                                                            @Html.TextAreaFor(model => model.Remark, new { type = "text", @class = "form-control", MaxLength = 200, style = "resize: none;" })
+                                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                                        </div>
+                                                                    </div>
+                                                                    @*<div class="form-group" style="display:none">
+                                                                            <label class="control-label col-md-3 col-sm-3">
+                                                                                Reason for Reject<span class="required"></span>
+                                                                            </label>
+                                                                            <div class="col-md-9 col-sm-9">
+
+                                                                                @Html.TextAreaFor(model => model.RejectReason, new { type = "text", @class = "form-control", MaxLength = 200 })
+                                                                                @Html.ValidationMessageFor(model => model.RejectReason, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group" style="display:none">
+                                                                            <label class="control-label col-md-3 col-sm-3">
+                                                                                Reason for Cancel<span class="required"></span>
+                                                                            </label>
+                                                                            <div class="col-md-9 col-sm-9">
+                                                                                @Html.TextAreaFor(model => model.CancelReason, new { type = "text", @class = "form-control", MaxLength = 200 })
+                                                                                @Html.ValidationMessageFor(model => model.CancelReason, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                        </div>*@
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                    </div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("CreatePO", null, new { })'" />
+                                            </div>
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewAllPO", null, new { })'" />
+                                            </div>
+                                            <button type="button" formaction="CreatePO" id="ButtonSubmitB" class="btn btn-success pull-left">Submit PO</button>
+                                            <button type="button" name="sbt" formaction="TempSavePO" id="ButtonTempSavePOB" class="btn btn-primary pull-left">Temporary Save PO</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="se-pre-con"></div>
+                        <div id='myModal' class='modal'>
+                            <div class="col-md-12">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div id='myModalContent'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+       // debugger;
+        
+
+        $('#ButtonSubmit').on('click',
+            function (event) {
+                $('#ButtonSubmit').text('Processing...');
+                $('#ButtonSubmit').prop('disabled', true);
+                $('#ButtonSubmitB').text('Processing...');
+                $('#ButtonSubmitB').prop('disabled', true);
+                $('#SupplierId').removeAttr('disabled');
+                $('#CreatePO').submit();
+            });
+        $('#ButtonSubmitB').on('click',
+           function (event) {
+               $('#ButtonSubmit').text('Processing...');
+               $('#ButtonSubmit').prop('disabled', true);
+               $('#ButtonSubmitB').text('Processing...');
+               $('#ButtonSubmitB').prop('disabled', true);
+               $('#SupplierId').removeAttr('disabled');
+               $('#CreatePO').submit();
+           });
+        // -------------------------------------------------------
+        $('#ButtonTempSavePO').on('click',
+            function (event) {
+                $('#ButtonTempSavePO').text('Processing...');
+                $('#ButtonTempSavePO').prop('disabled', true);
+                $('#ButtonTempSavePOB').text('Processing...');
+                $('#ButtonTempSavePOB').prop('disabled', true);
+                $('#CreatePO').attr('action', 'TempSavePO');
+                $('#SupplierId').removeAttr('disabled');
+                $('#CreatePO').submit();
+            });
+        $('#ButtonTempSavePOB').on('click',
+           function (event) {
+               $('#ButtonTempSavePO').text('Processing...');
+               $('#ButtonTempSavePO').prop('disabled', true);
+               $('#ButtonTempSavePOB').text('Processing...');
+               $('#ButtonTempSavePOB').prop('disabled', true);
+               $('#CreatePO').attr('action', 'TempSavePO');
+               $('#SupplierId').removeAttr('disabled');
+               $('#CreatePO').submit();
+           });
+    });
+</script>
+
+<script>
+   // debugger;
+   // alert(111);
+    $(document).ready(function SwitchWizard ()
+    {
+        //alert('@Convert.ToBoolean(Session["POWizadUI"])');
+        if('@Convert.ToBoolean(Session["POWizadUI"])'=='False')
+        {
+           // alert(222);
+            debugger;
+            document.getElementById("wizard").className="";
+            var e= document.getElementById("wizard");
+            e.id = "plain";
+            document.getElementById("wizardsteps").style = "display:none";
+        }
+   });
+</script>
+
+<script>
+    debugger;
+
+    $(document).ready(function() { 
+        
+        EnableDisable();
+        
+    });
+
+    $('input[type=radio][name=POType]').change(function()
+    {
+        debugger;
+        var rowCount = $('#poitems tr').length;
+        
+        if (this.value == 'Manual')
+        {
+            debugger;
+            if(rowCount!=0)
+            {
+                alert("Can not change the PO Mode after adding Items!");
+                $("#ReOrderLevelBased").prop("checked", true);
+                return;
+            }
+            EnableDisable();
+        }
+        else if (this.value == 'ReOrderLevelBased') 
+        {
+            debugger;
+            if(rowCount!=0)
+            {
+                alert("Can not change the PO Mode after adding Items!");
+                $("#Manual").prop("checked", true);
+                return;
+            }
+            EnableDisable();
+           
+        }   
+        else if (this.value == 'RequestNoteBased') 
+        {
+         
+            EnableDisable();
+           
+        }   
+    });
+</script>
+
+<script>
+    $(this).submit(function() {
+        debugger;
+        $('#SupplierId').removeAttr('disabled');
+    });
+</script>
+
+<script>
+    debugger;
+    if (@ViewBag.POHeaderId!= null) {
+        debugger;
+        $("#DeliveryAddress").val("");
+        var TeamDetailPostBackURL = '/PO/Print';
+
+        $(function () {
+           // debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": @Model.PurchaseOrderHeaderId,"printstatus":1 },
+                datatype: "json",
+                success: function (data) {
+                  //  debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function ()
+        {
+           // debugger;
+            $('#myModal').modal('hide');
+             // location.href='@Url.Action("CreatePO", null, new { })';
+           // window.location.href = "/PO/CreatePO";
+        });
+    }
+</script> 
+
+<script type="text/javascript">
+    function checkProductQuantity() {
+        document.getElementById('validateqty').innerHTML = '';
+
+        if ($("#SupplierId").val() == 0 || $("#SupplierId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select a Supplier';
+
+            return;
+        }
+
+        if ($("#POLocationId").val() == 0 || $("#POLocationId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select a PO Location';
+
+            return;
+        }
+
+        if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Select an Item';
+            return;
+        }
+
+        if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+            document.getElementById('validateqty').innerHTML = 'Quantity can not be 0 or empty';
+            return;
+
+        } else {
+            document.getElementById('validateqty').innerHTML = '';
+        }
+
+        $.ajax({
+            url: "@Url.Action("VaidateQuantity", "PO")",
+            data: { id: $("#ItemId").val(), qty: $("#RecQty").val(), polocid: $("#POLocationId").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+
+                if (resp.Stock < $("#RecQty").val()) {
+                    document.getElementById('validateqty').innerHTML = 'available stock is ' + resp.Stock;
+                    document.getElementById('RecQty').value = '0';
+                } else {
+                    document.getElementById('validateqty').innerHTML = '';
+                }
+
+            }
+        });
+
+
+    }
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetEvents", "PO")", function (data) {
+
+      //  debugger;
+
+        var EventId = $("#EventId");
+
+        EventId.empty();
+        EventId.append("<option value='0'>-- Select an Event --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            EventId.append($('<option />', { value: optionaldata.EventId }).html(optionaldata.EventName));
+
+        });
+
+        if ('@ViewBag.EventId') {
+            $('#EventId').val(@ViewBag.EventId).trigger("change");
+        } else {
+            $('#EventId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetCurrenciesForTransactions", "Currency")", function (data) {
+
+      //  debugger;
+
+        var currencyId = $("#CurrencyId");
+
+        currencyId.empty();
+        currencyId.append("<option value='0'>-- Select Currency Type --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            currencyId.append($('<option />', { value: optionaldata.CurrencyId }).html(optionaldata.CurrencyDescription));
+
+        });
+
+        if ('@ViewBag.CurrencyId') {
+            $('#CurrencyId').val(@ViewBag.CurrencyId).trigger("change");
+        } else {
+            $('#CurrencyId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetSuppliers", "Supplier")", function (data) {
+
+        var supplierId = $("#SupplierId");
+
+
+        supplierId.empty();
+        supplierId.append("<option value='0'>-- Select a Supplier --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            supplierId.append($('<option />', { value: optionaldata.SupplierID }).html(optionaldata.SupplierName));
+
+        });
+
+        if ('@ViewBag.supplierId') {
+            $('#SupplierId').val(@ViewBag.supplierId).trigger("change");
+        } else {
+            $('#SupplierId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var deliveryLocationId = $("#DeliveryLocationId");
+
+        deliveryLocationId.empty();
+        deliveryLocationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            deliveryLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.DeliveryLocationId') {
+            $('#DeliveryLocationId').val(@ViewBag.deliveryLocationId).trigger("change");
+        } else {
+            $('#DeliveryLocationId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var poLocationId = $("#POLocationId");
+        poLocationId.empty();
+        poLocationId.append("<option value='0'>-- Select a Location --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+        if ('@ViewBag.poLocationId') {
+            $('#POLocationId').val(@ViewBag.poLocationId).trigger("change");
+        } else {
+            $('#POLocationId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetLocWiseAccRequestForPO", "RequestNote")", { locid: @ViewBag.poLocationId },
+    function (data) {
+
+        var RequestNoteId = $("#RequestNoteId");
+        RequestNoteId.empty();
+        RequestNoteId.append("<option value='0'>-- Select a Request Note --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            RequestNoteId.append($('<option />', { value: optionaldata.RequestNoteAccptanceHeaderId }).html(optionaldata.DocumentNo));
+        });
+        if ('@Model.RequestNoteId') {
+            $('#RequestNoteId').val(@Model.RequestNoteId).trigger("change");
+        } else {
+            $('#RequestNoteId').val(0).trigger("change");
+        }
+    });
+
+    $("#POLocationId ").change(function () {
+        var polocid = this.value;
+        $.getJSON("@Url.Action("GetLocWiseAccRequestForPO", "RequestNote")", { locid: polocid },
+            function (data) {
+
+                var RequestNoteId = $("#RequestNoteId");
+                RequestNoteId.empty();
+                RequestNoteId.append("<option value='0'>-- Select a Request Note --</option>");
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    RequestNoteId.append($('<option />', { value: optionaldata.RequestNoteAccptanceHeaderId }).html(optionaldata.DocumentNo));
+                });
+                if ('@Model.RequestNoteId') {
+                    $('#RequestNoteId').val(@Model.RequestNoteId).trigger("change");
+                } else {
+                    $('#RequestNoteId').val(0).trigger("change");
+                }
+            });
+    });
+
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePaytmentTerms", "PO")", function (data) {
+
+        var paymentTermId = $("#PaymentTermId");
+
+
+        paymentTermId.empty();
+        paymentTermId.append("<option value='0'>-- Select a Payment Term --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            paymentTermId.append($('<option />', { value: optionaldata.PaymenttermId }).html(optionaldata.PaymentTermName));
+
+        });
+
+        if ('@ViewBag.PaymenttermId') {
+            $('#PaymentTermId').val(@ViewBag.PaymenttermId).trigger("change");
+        } else {
+            $('#PaymentTermId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActivePaytmentMethods", "PO")", function (data) {
+
+        var PaymentMethodId = $("#PaymentMethodId");
+
+
+        PaymentMethodId.empty();
+        PaymentMethodId.append("<option value='0'>-- Select a Payment Method --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PaymentMethodId.append($('<option />', { value: optionaldata.PaymentMethodId }).html(optionaldata.PaymentMethodName));
+
+        });
+
+        if ('@ViewBag.PaymentMethodId') {
+            $('#PaymentMethodId').val(@ViewBag.PaymentMethodId).trigger("change");
+        } else {
+            $('#PaymentMethodId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $("#DeliveryLocationId").change(function () 
+    {
+      //  debugger;
+        var dlocid = this.value;
+        $.getJSON("@Url.Action("GetLocationById", "Location")", { locid: dlocid },
+       function (data) {
+        //   debugger;         
+           document.getElementById("DeliveryAddress").value=data.Address1+","+data.Address2+","+data.Address3+".";
+       });
+    });
+</script>
+
+<script>
+    if ('@ViewBag.IsAllItems'=='True')
+    {
+        $("#SupplierId").change(function () {
+            debugger;
+            var supplier = this.value;
+            $.getJSON("@Url.Action("GetSupplierProducts", "PO")", { supplierid: supplier },
+            function (data) {
+
+                var itemId = $("#ItemId");
+                itemId.empty();
+                itemId.append("<option value='0'>-- Select an Item --</option>");
+                $.each(JSON.parse(data),
+                function (index, optionaldata) {
+                    itemId.append($('<option />', { value: this.ProductId }).html(this.ProductCode+"-"+this.ProductName + "(" + this.UOMDesc + ")"));
+
+                }
+               );
+            });
+        });
+    }
+    @*else if('@ViewBag.IsAllItems'=='True')
+    {
+
+        var allactiveproducts = @Html.Raw(Json.Encode(ViewBag.productdata));
+        var itemID = $("#ItemId");
+        itemID.empty();
+        itemID.append("<option value='0'>-- Select an Item --</option>");
+        $.each(allactiveproducts, function (index, optionaldata) {
+            itemID.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+
+        });
+    }*@
+
+    if ('@ViewBag.LoadBySupplierID'=='TRUE')
+    {
+        $("#SupplierId").change(function () {
+            var supplier = this.value;
+            $.getJSON("@Url.Action("GetSupplierProducts", "PO")", { supplierid: supplier },
+            function (data) {
+
+                var itemId = $("#ItemId");
+                itemId.empty();
+                itemId.append("<option value='0'>-- Select an Item --</option>");
+                $.each(JSON.parse(data),
+                function (index, optionaldata) {
+                    itemId.append($('<option />', { value: this.ProductId }).html(this.ProductCode+"-"+this.ProductName + "(" + this.UOMDesc + ")"));
+
+                }
+               );
+            });
+        });
+    }
+       
+
+
+</script>
+
+<script>
+    $( document ).ready(function() {
+        
+        $("#ItemId").change(function ()
+        {
+           // debugger;
+            document.getElementById("RecQty").value = "0";
+            document.getElementById("CostPrice").value = "0";
+            document.getElementById("CostValue").value = "0";
+        });
+    });
+
+    
+</script>
+
+@*PO Item handling*@
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddPOItem",
+        function () {
+            
+
+            if ($("#POLocationId").val() == 0 || $("#POLocationId").val() == null) {
+                alert("Select a PO Location !");
+                return;
+            }
+
+            if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+                alert("Select an Item !");
+                return;
+            }
+            if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+            var itemId = $("#ItemId").val();
+            var itemDesc = $("#ItemId option:selected").text().split(" ")[0];        
+            $("#SupplierId").attr("disabled","disabled");
+          
+
+
+            $.ajax({
+                url: "@Url.Action("ApplyPOTaxes", "PO")",
+                data: { id: $("#ItemId").val(), qty: $("#RecQty").val(), polocid: $("#POLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                 //   debugger;
+
+                    data = resp;
+
+
+                    if (data.CostPrice == 0 && data.SellingPrice == 0) {
+                        alert("Item: " + itemDesc + " is not exists in  location: " + $("#POLocationId option:selected").text());
+                        return;
+                    }
+
+
+                    var table = document.getElementById("poitems");
+                    var hasitem = '0';
+
+                    // checking already exists
+                    for (var r = 0, n = table.rows.length; r < n; r++)
+                    {
+
+                        var itemidcell = table.rows[r].cells[1].innerHTML;
+                        var regex = /value="(\d+(\.\d+)*)/i;
+                        var itemidex = itemidcell.match(regex)[1];
+                        if (itemidex == itemId) {
+                            hasitem = '1';
+                        }
+
+                    }
+                    //  debugger;
+                  
+
+                    if (hasitem == '0') 
+                    {
+                        var unitindex = $("#poitems").children("tr").length;
+                        var unitindexCell = "<td style='display:none'><input name='PODetail.Index'  value='" +
+                            itemId + "' /></td>";
+
+                        var unitIdCell = "<td style='display:none'><input id='PODetail[" + itemId + "]_ProductId' class='form-control' name='PODetail[" +
+                            itemId + "].ProductId' type='text' readonly value='" + itemId + "' /></td>";
+
+                        var unitDescCell = "<td id='PODetail[" + itemId + "]_ProductName'   name='PODetail[" +
+                            itemId + "].ProductName' type='text'>" + data.ItemDesc + "</td>";
+
+                        var unitQtyCell = "<td  ><input id='PODetail[" + itemId + "]_OrderQty'  class='form-control'  name='PODetail[" +
+                            itemId + "].OrderQty' type='number' readonly value='" + parseFloat(data.RecQty).toFixed(3) + "' /></td>";
+
+                        var unitUOMCell = "<td><input id='PODetail[" + itemId + "]_UOM'  class='form-control'  name='PODetail[" +
+                            itemId + "].UOM' type='text' readonly value='" + data.UOM + "'/></td>";
+
+                        var unitFreeQtyCell = "<td><input id='PODetail[" + itemId + "]_FreeQty'  class='form-control'  name='PODetail[" +
+                            itemId + "].FreeQty' type='text' value='0' onkeypress='validateInputForNumbers(event)' /></td>";
+                       
+                        var unitSellingPriceCell = "<td style='display:none'><input id='PODetail[" + itemId + "]_SellingPrice'  class='form-control'  name='PODetail[" +
+                            itemId + "].SellingPrice' type='text' readonly  value='" + parseFloat(data.SellingPrice).toFixed(3) + "' /></td>";
+                        //data.CostPrice
+                        var unitCostPriceCell = "<td><input id='PODetail[" + itemId + "]_CostPrice' onkeyup='SetCostValue(" + itemId + ")'   class='form-control'  name='PODetail[" +
+                            itemId + "].CostPrice' type='text'   value='" + parseFloat($("#CostPrice").val()).toFixed(3) + "' /></td>";
+                        //data.CostValue
+                        var unitCostValueCell = "<td><input id='PODetail[" + itemId + "]_CostValue'  class='form-control'  name='PODetail[" +
+                           itemId + "].CostValue' type='text' readonly  value='" + parseFloat($("#CostValue").val()).toFixed(3) + "' /></td>";
+                       
+                        var unitDiscountCell = "<td><input id='PODetail[" + itemId + "]_DiscountAmount'  class='form-control'  name='PODetail[" +
+                            itemId + "].DiscountAmount' type='text' readonly value='" + parseFloat(data.Discounts).toFixed(3) + "' /></td>";
+                        if ('@Session["ConfigPOLineTax"]' == 'True')
+                        {
+                            var unitTaxCell = "<td><input id='PODetail[" + itemId + "]_ItemTaxTotal'  class='form-control' onkeypress='return validateInputForNumbers(event)' name='PODetail[" +
+                                itemId + "].ItemTaxTotal' type='number' step='any'  value='" + parseFloat(data.TaxAmount).toFixed(3) + "' onkeyup='SetTax(" + itemId + ")' /></td>";
+                        }
+                        else
+                        {
+                            var unitTaxCell = "<td style='display:none'><input id='PODetail[" + itemId + "]_ItemTaxTotal'  class='form-control' onkeypress='return validateInputForNumbers(event)' name='PODetail[" +
+                                itemId + "].ItemTaxTotal' type='text' readonly value='" + parseFloat(data.TaxAmount).toFixed(3) + "' /></td>";
+                        }
+                        var unitRemoveCell = "<td><input id='btnAddPOItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                            itemId + ");' /></td>";
+                       
+                        var unitCostPriceCellHidden = "<td style='display:none'><input id='PODetail[" + itemId + "]_CostPriceHidden' class='form-control'  name='PODetail[" +
+                            itemId + "].CostPriceHidden' type='text'   value='" + parseFloat($("#CostPrice").val()).toFixed(3) + "' /></td>";
+
+                        var newUnitRow = "<tr id='trPOItem" + itemId + "'>" +
+                            unitindexCell +
+                            unitIdCell +
+                            unitDescCell +
+
+                            unitUOMCell +
+                            unitQtyCell +
+                           
+                            unitFreeQtyCell +
+                            unitSellingPriceCell +
+                            unitCostPriceCell +
+                            unitCostValueCell +
+                            //unitDiscountCell +
+                            unitTaxCell +
+                            unitRemoveCell + 
+                            unitCostPriceCellHidden+"</tr>";
+
+                        $("#poitems").append(newUnitRow);
+
+                    }
+
+                    else if (hasitem == '1') 
+                    {
+                        if (confirm("Do you want to Override item? ")) 
+                        {
+                            // itemOverride(newoddrUnitRow, itemId);
+
+
+                            var orrtable = document.getElementById("poitems");
+                            var regex = /value="(\d+(\.\d+)*)/i;
+                            var indexval;
+
+                            for (var r = 0, n = orrtable.rows.length; r < n; r++) 
+                            {
+                                var idcell = orrtable.rows[r].cells[1].innerHTML;
+                                var idval = idcell.match(regex)[1];
+                                if (idval == itemId) {
+
+                                    var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                                    indexval = indexcell.match(regex)[1];
+
+                                }
+                            }
+
+
+
+                            document.getElementById('PODetail[' + indexval + ']_OrderQty').value=parseFloat(data.RecQty).toFixed(3);
+                            document.getElementById('PODetail[' + indexval + ']_FreeQty').value=0;
+                            document.getElementById('PODetail[' + indexval + ']_UOM').value=data.UOM;
+                            document.getElementById('PODetail[' + indexval + ']_SellingPrice').value=data.SellingPrice;
+                            document.getElementById('PODetail[' + indexval + ']_CostPrice').value=$("#CostPrice").val();
+                            document.getElementById('PODetail[' + indexval + ']_CostPriceHidden').value=$("#CostValue").val();
+                            //document.getElementById('GRNDetail[' + indexval + ']_SellingPriceHidden').value=data.SellingPrice;
+                            //document.getElementById('PODetail[' + indexval + ']_CostValue').value=data.CostValue;
+                            document.getElementById('PODetail[' + indexval + ']_CostValue').value=$("#CostValue").val();
+                            document.getElementById('PODetail[' + indexval + ']_ItemTaxTotal').value=data.TaxAmount;
+
+
+                            //var controlToBeRemoved = "#trPOItem" + indexval;
+                            //$(controlToBeRemoved).remove();
+
+
+                            
+                            @*var unitindexCell1 = "<td style='display:none'><input name='PODetail.Index' value='" +
+                                indexval + "' /></td>";
+
+                            var unitIdCell1 = "<td style='display:none'><input id='PODetail[" + indexval + "]_ProductId' class='form-control' name='PODetail[" +
+                                indexval + "].ProductId' type='text' readonly value='" + itemId + "' /></td>";
+
+                            var unitDescCell1 = "<td id='PODetail[" + indexval + "]_ProductName'    name='PODetail[" +
+                                indexval + "].ProductName'>" + data.ItemDesc + "</td>";
+
+                            var unitQtyCell1 = "<td style='display:none' ><input id='PODetail[" + indexval + "]_OrderQty' type='hidden' class='form-control'  name='PODetail[" +
+                                indexval + "].OrderQty' type='number' readonly value='" + parseFloat(data.RecQty).toFixed(3) + "' /></td>";
+
+                            var unitUOMCell1 = "<td><input id='PODetail[" + indexval + "]_UOM'  class='form-control'  name='PODetail[" +
+                               indexval + "].UOM' type='text' readonly value='" + data.UOM + "' /></td>";
+
+                            var unitFreeQtyCell1 = "<td><input id='PODetail" + indexval + "_FreeQty'  class='form-control'  name='PODetail[" +
+                                indexval + "].FreeQty' type='text' value='0' onkeypress='validateInputForNumbers(event)'  /></td>";
+
+                            var unitSellingPriceCell1 = "<td style='display:none'><input id='PODetail" + indexval + "_SellingPrice'  class='form-control'  name='PODetail[" +
+                                indexval + "].SellingPrice' type='text' readonly  value='" + parseFloat(data.SellingPrice).toFixed(3) + "' /></td>";
+
+                            var unitCostPriceCell1 = "<td><input id='PODetail" + indexval + "_CostPrice' onkeyup='SetCostValue(" + indexval + ")' class='form-control'  name='PODetail[" +
+                                indexval + "].CostPrice' type='text'  value='" + parseFloat($("#CostPrice").val()).toFixed(3) + "' /></td>";
+
+                            var unitCostValueCell1 = "<td><input id='PODetail" + indexval + "_CostValue'  class='form-control'  name='PODetail[" +
+                                indexval + "].CostValue' type='text' readonly  value='" + parseFloat($("#CostValue").val()).toFixed(3) + "' /></td>";
+
+                            var unitDiscountCell1 = "<td><input id='PODetail" + indexval + "_DiscountAmount'  class='form-control'  name='PODetail[" +
+                                indexval + "].DiscountAmount' type='text' readonly value='" + parseFloat(data.Discounts).toFixed(3) + "' /></td>";
+                            if ('@Session["ConfigPOLineTax"]' == 'True')
+                            {
+                                var unitTaxCell1 = "<td><input id='PODetail" + indexval + "_ItemTaxTotal'  class='form-control'  name='PODetail[" +
+                                    indexval + "].ItemTaxTotal' type='text'  value='" + parseFloat(data.TaxAmount).toFixed(3) + "' onkeyup='SetTax(" + indexval + ")' /></td>";
+                            }else
+                            {
+                                var unitTaxCell1 = "<td style='display:none'><input id='PODetail" + indexval + "_ItemTaxTotal'  class='form-control'  name='PODetail[" +
+                                    indexval + "].ItemTaxTotal' type='text' readonly value='" + parseFloat(data.TaxAmount).toFixed(3) + "' /></td>";
+                            }
+                            var unitRemoveCell1 = "<td><input id='btnAddPOItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                                indexval + ");' /></td>";
+
+                            var unitCostPriceCellHidden1 = "<td style='display:none'><input id='PODetail" + indexval + "_CostPriceHidden' class='form-control'  name='PODetail[" +
+                                indexval + "].CostPriceHidden' type='text'   value='" + parseFloat($("#CostPrice").val()).toFixed(3) + "' /></td>";
+
+                            var newUnitRow1 = "<tr id='trPOItem" + indexval + "'>" +
+                                unitindexCell1 +
+                                unitIdCell1 +
+                                unitDescCell1 +
+                                unitQtyCell1 +
+                                unitUOMCell1 +
+                                unitFreeQtyCell1 +
+                                unitSellingPriceCell1 +
+                                unitCostPriceCell1 +
+                                unitCostValueCell1 +
+                                //unitDiscountCell1 +
+                                unitTaxCell1 +
+                                unitRemoveCell1 + 
+                                unitCostPriceCellHidden1+"</tr>";
+                            $("#poitems").append(newUnitRow1);*@
+                        }
+
+                    }
+                    //end checking if exists
+
+                  //  debugger;
+                    //var table1 = document.getElementById("poitems");
+                    calcTotal();
+
+                    
+                    //end setting tot values
+                    document.getElementById("RecQty").value = "0";
+                    document.getElementById("CostPrice").value = "0";
+                    document.getElementById("CostValue").value = "0";
+
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+
+    
+
+    function itemOverride(orrow, id) {
+
+
+        var orrtable = document.getElementById("poitems");
+        var regex = /value="(\d+(\.\d+)*)/i;
+        var indexval;
+
+        for (var r = 0, n = orrtable.rows.length; r < n; r++) {
+            var idcell = orrtable.rows[r].cells[1].innerHTML;
+            var idval = idcell.match(regex)[1];
+            if (idval == id) {
+
+                var indexcell = orrtable.rows[r].cells[0].innerHTML;
+                indexval = indexcell.match(regex)[1];
+
+            }
+
+        }
+        var controlToBeRemoved = "#trPOItem" + indexval;
+        $(controlToBeRemoved).remove();
+
+        $("#poitems").append("<tr id='trPOItem" + indexval + "'>" + "<td style='display:none' ><input name='PODetail.Index' type='hidden' value='" +
+                        indexval + "' /></td>" + orrow + "<td><input id='btnAddPOItem' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                        indexval + ");' /></td></tr>");
+
+
+    }
+
+</script>
+
+<script>
+    function removeUnitRow(id) {
+       // debugger
+        if (confirm("Do you want to delete? ")) {
+            var controlToBeRemoved = "#trPOItem" + id;
+            $(controlToBeRemoved).remove();
+
+            var table = document.getElementById("poitems");
+            calcTotal();
+        } else 
+        {
+            return;
+        }
+
+    }
+
+</script>
+
+
+@*Re order level item handling*@
+
+<script type="text/javascript">
+    $("body").on("click", "#btnAddReOrderLevelItems", function () {
+        if ($("#SupplierId").val() == 0 || $("#SupplierId").val() == null) {
+            alert("Select a supplier !");
+            return;
+        }
+        if ($("#POLocationId").val() == 0 || $("#POLocationId").val() == null) {
+            alert("Select a PO Location !");
+            return;
+        }
+
+        document.getElementById("SupplierId").disabled = true;
+
+        $.ajax({
+            url: "@Url.Action("AddSupplierProducts", "PO")",
+            data: { supplierid: $("#SupplierId").val(), polocid: $("#POLocationId").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+
+                $("#poitems tr").remove();
+
+                if (!$.trim(data)) {
+                    alert("No re order level achieved items for supplier: " + $("#SupplierId option:selected").text() + " and " + " location: " + $("#POLocationId option:selected").text() + "");
+                }
+
+
+
+                $.each(data, function (i, item) {
+
+
+                    @{
+                    Model.PODetail.Add(new RIT.HMS.Domain.Transactions.PurchaseOrderDetail());
+                    }
+
+
+                    var unitindex = $("#poitems").children("tr").length;
+                    var unitindexCell = "<td style='display:none' ><input name='PODetail.Index' type='hidden' value='" +
+                        unitindex + "' /></td>";
+
+                    var unitIdCell = "<td style='display:none'><input id='PODetail[" + item.ItemId + "]_ProductId' class='form-control' name='PODetail[" + unitindex + "].ProductId' type='text' readonly value='" + item.ItemId + "' /></td>";
+
+                    var unitDescCell = "<td  id='PODetail[" + item.ItemId  + "]_ProductName'  name='PODetail[" +
+                        unitindex + "].ProductName'>" + item.ItemDesc + "</td>";
+
+                    var unitQtyCell = "<td ><input id='PODetail[" + item.ItemId  + "]_OrderQty' type='number'  class='form-control'  name='PODetail[" +
+                        unitindex + "].OrderQty'  value='" + parseFloat(item.RecQty).toFixed(3) + "' onkeyup='checkCostPriceROLBased("+item.ItemId+")' /></td>";
+
+                    var unitUOMCell = "<td ><input id='PODetail[" + item.ItemId  + "]_UOM'  class='form-control'  name='PODetail[" +
+                        unitindex + "].UOM' type='text' readonly value='" + item.UOM + "' onkeyup= /></td>";
+
+                    var unitFreeQtyCell = "<td><input id='PODetail[" + item.ItemId  + "]_FreeQty'  class='form-control'  name='PODetail[" +
+                        unitindex + "].FreeQty' type='text' pattern='[0-9]*' value='0' /></td>";
+
+                    var unitSellingPriceCell = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_SellingPrice'  class='form-control'  name='PODetail[" +
+                        unitindex + "].SellingPrice' type='text'  readonly value='" + parseFloat(item.SellingPrice).toFixed(3) + "' /></td>";
+
+                    var unitCostPriceCell = "<td><input id='PODetail[" + item.ItemId  + "]_CostPrice'  class='form-control'  name='PODetail[" +
+                        unitindex + "].CostPrice' type='text' onkeyup='SetCostValue(" + item.ItemId  + ")'  value='" + parseFloat(item.CostPrice).toFixed(3) + "' /></td>";
+
+                    var unitCostValueCell = "<td><input id='PODetail[" + item.ItemId  + "]_CostValue'  class='form-control'  name='PODetail[" +
+                        unitindex + "].CostValue' type='text' readonly  value='" + parseFloat(item.CostValue).toFixed(3) + "' /></td>";
+
+                    var unitDiscountCell = "<td><input id='PODetail[" + item.ItemId  + "]_DiscountAmount'  class='form-control'  name='PODetail[" +
+                        unitindex + "].DiscountAmount' type='text' readonly value='" + parseFloat(item.Discounts).toFixed(3) + "' /></td>";
+
+                    if ('@Session["ConfigPOLineTax"]' == 'True')
+                    {
+                        var unitTaxCell = "<td><input id='PODetail[" + item.ItemId  + "]_ItemTaxTotal'  class='form-control' onkeypress='return validateInputForNumbers(event)'  name='PODetail[" +
+                            unitindex + "].ItemTaxTotal' type='number' step='any'  value='" + parseFloat(item.TaxAmount).toFixed(3) + "' onkeyup='SetTax(" + item.ItemId + ")' /></td>";
+                    }else
+                    {
+                        var unitTaxCell = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_ItemTaxTotal'  class='form-control' onkeypress='return validateInputForNumbers(event)'  name='PODetail[" +
+                           unitindex + "].ItemTaxTotal' type='text' readonly value='" + parseFloat(item.TaxAmount).toFixed(3) + "' /></td>";
+                    }
+
+                    var unitCostPriceCellHidden = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_CostPriceHidden'  class='form-control'  name='PODetail[" +
+                        unitindex + "].CostPriceHidden' type='text'   value='" + parseFloat(item.CostPrice).toFixed(3) + "' /></td>";
+
+                    var unitReOrderQtyCellHidden = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_ReOrderQtyPriceHidden'  class='form-control'  name='PODetail[" +
+                       unitindex + "].ReOrderQtyPriceHidden' type='text'   value='" +  parseFloat(item.RecQty).toFixed(3) + "' /></td>";
+
+
+                    var unitRemoveCell = "<td><input id='btnAddPOItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                        item.ItemId + ");' /></td>";
+
+                    var newUnitRow = "<tr id='trPOItem" + item.ItemId  + "'>" +
+                        unitindexCell +
+                        unitIdCell +
+                        unitDescCell +
+
+                        unitUOMCell +
+
+                        unitQtyCell +
+                       
+                        unitFreeQtyCell +
+                        unitSellingPriceCell +
+                        unitCostPriceCell +
+                        unitCostValueCell +
+                        //unitDiscountCell +
+                        unitTaxCell +
+                        unitRemoveCell +
+                        unitCostPriceCellHidden +
+                        unitReOrderQtyCellHidden +"</tr>";
+
+                    $("#poitems").append(newUnitRow);
+
+                });
+
+
+                var table = document.getElementById("poitems");
+                calcTotal();
+
+
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+
+    });
+</script>
+
+<script>
+    function Remove(button) {
+        debugger;
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete: " + name+" ?"))
+        {
+           
+            var table = $("#poitems")[0];
+            //table.deleteRow(row[0].rowIndex);
+            table.deleteRow(0);
+        }
+    };
+</script>
+
+
+@*Request note Based Item Handling*@
+
+<script type="text/javascript">
+    $("body").on("click", "#SelectRequestNote", function () {
+        if ($("#SupplierId").val() == 0 || $("#SupplierId").val() == null) {
+            alert("Select a supplier !");
+            return;
+        }
+        if ($("#POLocationId").val() == 0 || $("#POLocationId").val() == null) {
+            alert("Select a PO Location !");
+            return;
+        }
+        if ($("#RequestNoteId").val() == 0 || $("#RequestNoteId").val() == null) {
+            alert("Select a Request Note !");
+            return;
+        }
+
+        document.getElementById("SupplierId").disabled = true;
+
+        $.ajax({
+            url: "@Url.Action("AddRequestNoteItemsBySupplierId", "PO")",
+            data: { supplierid: $("#SupplierId").val(), requestnoteid: $("#RequestNoteId").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                data = resp;
+
+                $("#poitems tr").remove();
+
+                if (!$.trim(data)) {
+                    alert("No  items for supplier: " + $("#SupplierId option:selected").text() + ".");
+                }
+
+
+
+                $.each(data, function (i, item) {
+
+
+                    @{
+                    Model.PODetail.Add(new RIT.HMS.Domain.Transactions.PurchaseOrderDetail());
+                    }
+
+
+                    var unitindex = $("#poitems").children("tr").length;
+                    var unitindexCell = "<td style='display:none' ><input name='PODetail.Index' type='hidden' value='" +
+                        unitindex + "' /></td>";
+
+                    var unitIdCell = "<td style='display:none'><input id='PODetail[" + item.ItemId + "]_ProductId' class='form-control' name='PODetail[" + unitindex + "].ProductId' type='text' readonly value='" + item.ItemId + "' /></td>";
+
+                    var unitDescCell = "<td  id='PODetail[" + item.ItemId  + "]_ProductName'  name='PODetail[" +
+                        unitindex + "].ProductName'>" + item.ItemDesc + "</td>";
+
+                    var unitQtyCell = "<td ><input id='PODetail[" + item.ItemId  + "]_OrderQty' type='number'  class='form-control'  name='PODetail[" +
+                        unitindex + "].OrderQty'  value='" + parseFloat(item.RecQty).toFixed(3) + "' onkeyup='checkCostPriceROLBased("+item.ItemId+")' /></td>";
+
+                    var unitUOMCell = "<td ><input id='PODetail[" + item.ItemId  + "]_UOM'  class='form-control'  name='PODetail[" +
+                        unitindex + "].UOM' type='text' readonly value='" + item.UOM + "' onkeyup= /></td>";
+
+                    var unitFreeQtyCell = "<td><input id='PODetail[" + item.ItemId  + "]_FreeQty'  class='form-control'  name='PODetail[" +
+                        unitindex + "].FreeQty' type='text' pattern='[0-9]*' value='0' /></td>";
+
+                    var unitSellingPriceCell = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_SellingPrice'  class='form-control'  name='PODetail[" +
+                        unitindex + "].SellingPrice' type='text'  readonly value='" + parseFloat(item.SellingPrice).toFixed(3) + "' /></td>";
+
+                    var unitCostPriceCell = "<td><input id='PODetail[" + item.ItemId  + "]_CostPrice'  class='form-control'  name='PODetail[" +
+                        unitindex + "].CostPrice' type='text' onkeyup='SetCostValue(" + item.ItemId  + ")'  value='" + parseFloat(item.CostPrice).toFixed(3) + "' /></td>";
+
+                    var unitCostValueCell = "<td><input id='PODetail[" + item.ItemId  + "]_CostValue'  class='form-control'  name='PODetail[" +
+                        unitindex + "].CostValue' type='text' readonly  value='" + parseFloat(item.CostValue).toFixed(3) + "' /></td>";
+
+                    var unitDiscountCell = "<td><input id='PODetail[" + item.ItemId  + "]_DiscountAmount'  class='form-control'  name='PODetail[" +
+                        unitindex + "].DiscountAmount' type='text' readonly value='" + parseFloat(item.Discounts).toFixed(3) + "' /></td>";
+
+                    if ('@Session["ConfigPOLineTax"]' == 'True')
+                    {
+                        var unitTaxCell = "<td><input id='PODetail[" + item.ItemId  + "]_ItemTaxTotal'  class='form-control' onkeypress='return validateInputForNumbers(event)'  name='PODetail[" +
+                            unitindex + "].ItemTaxTotal' type='number' step='any'  value='" + parseFloat(item.TaxAmount).toFixed(3) + "' onkeyup='SetTax(" + item.ItemId + ")' /></td>";
+                    }else
+                    {
+                        var unitTaxCell = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_ItemTaxTotal'  class='form-control'  onkeypress='return validateInputForNumbers(event)' name='PODetail[" +
+                           unitindex + "].ItemTaxTotal' type='text' readonly value='" + parseFloat(item.TaxAmount).toFixed(3) + "' /></td>";
+                    }
+
+                    var unitCostPriceCellHidden = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_CostPriceHidden'  class='form-control'  name='PODetail[" +
+                        unitindex + "].CostPriceHidden' type='text'   value='" + parseFloat(item.CostPrice).toFixed(3) + "' /></td>";
+
+                    var unitReOrderQtyCellHidden = "<td style='display:none'><input id='PODetail[" + item.ItemId  + "]_ReOrderQtyPriceHidden'  class='form-control'  name='PODetail[" +
+                       unitindex + "].ReOrderQtyPriceHidden' type='text'   value='" +  parseFloat(item.RecQty).toFixed(3) + "' /></td>";
+
+
+                    var unitRemoveCell = "<td><input id='btnAddPOItem1' type='button' value='-' class='btn btn-round btn-info'  onclick='removeUnitRow(" +
+                        item.ItemId + ");' /></td>";
+
+                    var newUnitRow = "<tr id='trPOItem" + item.ItemId  + "'>" +
+                        unitindexCell +
+                        unitIdCell +
+                        unitDescCell +
+
+                        unitUOMCell +
+                        unitQtyCell +
+                       
+                        unitFreeQtyCell +
+                        unitSellingPriceCell +
+                        unitCostPriceCell +
+                        unitCostValueCell +
+                        //unitDiscountCell +
+                        unitTaxCell +
+                        unitRemoveCell +
+                        unitCostPriceCellHidden +
+                        unitReOrderQtyCellHidden +"</tr>";
+
+                    $("#poitems").append(newUnitRow);
+
+                });
+
+
+                var table = document.getElementById("poitems");
+                calcTotal();
+
+
+
+            },
+            error: function (error) {
+                alert("Item data mapping error");
+            }
+        });
+
+    });
+</script>
+
+ @*End Request note Based Item Handling*@
+
+<script>
+    function calcTotal() {
+        debugger;
+
+     
+        //var totsp = 0;
+        //var totcp = 0;
+        //var totdis = 0;
+        //var tottax = 0;
+        //var costval = 0;
+        //var sellingval = 0;
+
+
+        var totsp = 0.0;
+        var totcp = 0.0;
+        var totdis = 0.0;
+        var tottax = 0.0;
+        var costval = 0.0;
+        var sellingval = 0.0;
+
+        var table = document.getElementById("poitems");
+    
+        var regex = /value="(\d+(\.\d+)*)/i;
+
+        for (var r = 0, n = table.rows.length; r < n; r++)
+        {
+            var rowitemid =  table.rows[r].cells[1].innerHTML.match(regex)[1];
+
+            var spvalue =document.getElementById('PODetail[' + rowitemid + ']_SellingPrice').value;
+            totsp += Number(spvalue);    
+           
+            var cpvalue =document.getElementById('PODetail[' + rowitemid + ']_CostPrice').value;
+            totcp += Number(cpvalue);     
+         
+            var costvalue = document.getElementById('PODetail[' + rowitemid + ']_CostValue').value;
+            costval += Number(costvalue); 
+          
+            var taxvalue =  document.getElementById('PODetail[' + rowitemid + ']_ItemTaxTotal').value;
+            tottax += Number(taxvalue);    
+
+            var qtyvalue = document.getElementById('PODetail[' + rowitemid + ']_OrderQty').value;
+            sellingval+=spvalue*qtyvalue;
+        }
+
+
+
+        //$("#poitems TR").each(function () 
+        //{
+        //    debugger;
+        //    var row = $(this);
+        //    var spvalue =row.find("TD").eq(6).html().match(regex)[1];
+        //    totsp += Number(spvalue);    
+           
+        //    var cpvalue =row.find("TD").eq(7).html().match(regex)[1];
+        //    totcp += Number(cpvalue);     
+         
+        //    var costvalue =row.find("TD").eq(8).html().match(regex)[1];
+        //    costval += Number(costvalue); 
+          
+        //    var taxvalue = row.find("TD").eq(9).html().match(regex)[1];
+        //    tottax += Number(taxvalue);    
+         
+        //    var qtyvalue = row.find("TD").eq(3).html().match(regex)[1];
+        //    sellingval+=Number(spvalue*qtyvalue);
+           
+        //});
+
+
+
+          
+       
+        debugger;
+        //setting total values
+
+        var otherchargers=document.getElementById('OtherCharges').value;
+        var deductions=document.getElementById('Deduction').value;
+        var additions=document.getElementById('Addition').value;
+
+
+
+        document.getElementById("TotSellingPrice").value = (Number(sellingval)).toFixed(3);
+        document.getElementById("TotCostPrice").value = (Number(costval)).toFixed(3);
+        document.getElementById("GrossAmount").value = (Number(costval)).toFixed(3);
+        document.getElementById("NetAmount").value = (Number(costval + tottax)).toFixed(3);
+        document.getElementById("NetAmount").value = ((Number(document.getElementById("NetAmount").value)+
+            Number(otherchargers)+Number(additions))-Number(deductions)           
+                                                    ).toFixed(3);
+        document.getElementById("NetAmountHidden").value = Number((document.getElementById("NetAmount").value)).toFixed(3);
+        document.getElementById("TotalTaxAmount").value=Number(tottax).toFixed(3);
+        
+        var totsp = 0.0;
+        var totcp = 0.0;
+        var totdis = 0.0;
+        var tottax = 0.0;
+        var costval = 0.0;
+        var sellingval = 0.0;
+
+
+        //document.getElementById("TotSellingPrice").value = sellingval;
+        //document.getElementById("TotCostPrice").value = costval;
+        //document.getElementById("GrossAmount").value = costval;
+        //document.getElementById("NetAmount").value = costval + tottax;
+        //document.getElementById("NetAmount").value = document.getElementById("NetAmount").value;
+        //document.getElementById("NetAmountHidden").value =document.getElementById("NetAmount").value;
+
+
+    }
+
+    function setTaxes() 
+    {
+       // debugger;
+
+   
+
+
+        var totsp = 0.0;
+        var totcp = 0.0;
+        var totdis = 0.0;
+        var tottax = 0.0;
+        var costval = 0.0;
+        var sellingval = 0.0;
+
+    
+    
+        var regex = /value="(\d+(\.\d+)*)/i;
+        var table = document.getElementById("poitems");
+        
+        for (var r = 0, n = table.rows.length; r < n; r++)
+        {
+            var rowitemid =  table.rows[r].cells[1].innerHTML.match(regex)[1];
+            var tax =document.getElementById('PODetail' + rowitemid + '_ItemTaxTotal').value;
+            tottax += Number(tax);  
+
+        }
+
+      
+          
+       
+        debugger;
+        //setting total values
+
+        var otherchargers=document.getElementById('OtherCharges').value;
+        var deductions=document.getElementById('Deduction').value;
+        var additions=document.getElementById('Addition').value;
+
+
+
+        document.getElementById("TotSellingPrice").value = (Number(sellingval)).toFixed(3);
+        document.getElementById("TotCostPrice").value = (Number(costval)).toFixed(3);
+        document.getElementById("GrossAmount").value = (Number(costval)).toFixed(3);
+        document.getElementById("NetAmount").value = (Number(costval + tottax)).toFixed(3);
+        document.getElementById("NetAmount").value = ((Number(document.getElementById("NetAmount").value)+
+            Number(otherchargers)+Number(additions))-Number(deductions)           
+                                                    ).toFixed(3);
+        document.getElementById("NetAmountHidden").value = Number((document.getElementById("NetAmount").value)).toFixed(3);
+        document.getElementById("TotalTaxAmount").value=Number(tottax).toFixed(3);
+        
+     
+    }
+</script>
+
+<script type="text/javascript">
+   
+    function CalculateNetAmt()
+    {
+      //  debugger;
+        var otherCharge = document.getElementById('OtherCharges').value;
+        var addition = document.getElementById('Addition').value;
+        var deductions = document.getElementById('Deduction').value;
+        var totalTaxAmount = document.getElementById('TotalTaxAmount').value;
+        if(otherCharge==null || otherCharge=="")
+        {
+            document.getElementById('OtherCharges').value="0";
+            document.getElementById('NetAmount').value = (Number(document.getElementById('GrossAmount').value) +
+                                                          Number(addition) - Number(deductions) + Number(totalTaxAmount)).toFixed(3);
+            return;
+        }
+
+        
+        if(addition==null || addition=="")
+        {
+            document.getElementById('Addition').value="0";
+            document.getElementById('NetAmount').value = (Number(document.getElementById('GrossAmount').value) +
+                                                           Number(otherCharge)  - Number(deductions) + Number(totalTaxAmount)).toFixed(3);
+            return;
+        }
+       
+       
+        if(deductions==null || deductions=="")
+        {
+            document.getElementById('Deduction').value="0";
+            document.getElementById('NetAmount').value = (Number(document.getElementById('GrossAmount').value) +
+                                                           Number(otherCharge) + Number(addition) + Number(totalTaxAmount)).toFixed(3);
+            return;
+        }
+      
+        if(totalTaxAmount==null || totalTaxAmount=="")
+        {
+            document.getElementById('TotalTaxAmount').value="0";
+            document.getElementById('NetAmount').value = (Number(document.getElementById('GrossAmount').value) +
+                                                           Number(otherCharge) + Number(addition) - Number(deductions)).toFixed(3);
+            return;
+        }
+
+        document.getElementById('NetAmount').value = (Number(document.getElementById('GrossAmount').value) +
+                                                           Number(otherCharge) + Number(addition) - Number(deductions) + Number(totalTaxAmount)).toFixed(3);
+    }
+
+    function checkOtherChargers()
+    {
+       // debugger;
+        var otherchargers = document.getElementById('OtherCharges').value;
+        debugger;
+        if (otherchargers != 0) {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(otherchargers)).toFixed(3);
+        } else {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(otherchargers)).toFixed(3);
+        }
+
+    }
+
+    function checkAdditions() {
+      //  debugger;
+        var addition = document.getElementById('Addition').value;
+        debugger;
+        if (addition != 0) {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(addition)).toFixed(3);
+        } else {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) +
+                                                            Number(addition)).toFixed(3);
+        }
+
+    }
+
+    function checkDeductions() {
+      //  debugger;
+        var deductions = document.getElementById('Deduction').value;
+        debugger;
+        if (deductions != 0) {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) -
+                                                            Number(deductions)).toFixed(3);
+        } else {
+            document.getElementById('NetAmount').value = (Number(document.getElementById('NetAmountHidden').value) -
+                                                            Number(deductions)).toFixed(3);
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+
+    function removePORow(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(1).html();
+        if (confirm("Do you want to delete? ")) {
+
+            var table = $("#poitems")[0];
+            table.deleteRow(row[0].rowIndex - 1);
+            var tabletorem = document.getElementById("poitems");         
+            var totsp = 0.0;
+            var totcp = 0.0;
+            var totdis = 0.0;
+            var tottax = 0.0;
+
+            for (var r = 0, n = tabletorem.rows.length; r < n; r++)
+            {
+                var spcell = tabletorem.rows[r].cells[6].innerHTML;
+             
+                var regex = /value="(\d+(\.\d+)*)/i;
+                var spvalue = spcell.match(regex)[1];
+
+            
+                totsp += Number(spvalue);
+
+                var cpcell = tabletorem.rows[r].cells[7].innerHTML;
+                var cpvalue = parseFloat(cpcell.match(/value="(\d+(\.\d)*)/i)[1]).toFixed(3);
+                totcp += Number(cpvalue);
+
+
+
+            }
+            document.getElementById("TotSellingPrice").value = parseFloat(totsp).toFixed(3);
+            document.getElementById("TotCostPrice").value = totcp;
+
+
+            document.getElementById("GrossAmount").value = parseFloat(
+                Number(document.getElementById("TotDiscounts").value) +
+                Number(document.getElementById("TotSellingPrice").value)
+            ).toFixed(3);
+
+            document.getElementById("NetAmount").value = parseFloat((tottax +
+            Number(document.getElementById("TotSellingPrice").value)) -
+                Number(document.getElementById("TotDiscounts").value)
+            ).toFixed(3);
+
+            document.getElementById("NetAmountHidden").value = parseFloat(document.getElementById("NetAmount").value).toFixed(3);
+
+        }
+
+    };
+</script>
+
+
+@*Cost Price Change*@
+
+<script>
+    function SetCostValue(i) {
+        debugger;
+       
+
+        var otherchargers=document.getElementById('OtherCharges').value;
+        var deductions=document.getElementById('Deduction').value;
+        var additions=document.getElementById('Addition').value;
+
+        var quantity = document.getElementById('PODetail[' + i + ']_OrderQty').value;     
+        var costprice = document.getElementById('PODetail[' + i + ']_CostPrice').value;      
+        var productid = document.getElementById('PODetail[' + i + ']_ProductId').value;       
+        var costpricehidden = document.getElementById('PODetail[' + i + ']_CostPriceHidden').value;   
+        if(costprice==0 || costprice==null || costprice=="")
+        {
+            costprice=costpricehidden;
+            document.getElementById('PODetail[' + i + ']_CostPrice').value=costpricehidden;
+        }
+
+        document.getElementById('PODetail[' + i + ']_CostValue').value = (Number(quantity) * Number(costprice));
+        var ttt =  document.getElementById('PODetail[' + i + ']_ItemTaxTotal').value;
+
+        //alert("Quantity"+quantity);
+        //alert("CP"+costprice); 
+        //alert("Product"+productid);
+        //alert("CPH"+costpricehidden);
+
+
+        $.ajax({
+            url: "@Url.Action("ApplyNewTaxes", "PO")",
+            data: { id: productid, qty: quantity, polocid: $("#POLocationId").val(), newcostprice: costprice },
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+               debugger;
+                data = resp;
+               document.getElementById('PODetail[' + i + ']_ItemTaxTotal').value = data.TaxAmount.toFixed(3);
+                var table = document.getElementById("poitems");
+
+                document.getElementById("TotCostPrice").value = 0;
+                document.getElementById("TotSellingPrice").value = 0;
+                document.getElementById("TotalTaxAmount").value = 0;
+                calcTotal();
+
+                var cp = 0;
+                var sp = 0;
+                var tp = 0;
+
+                var regex = /value="(\d+(\.\d+)*)/i;               
+                var rowproductid=0;
+                
+                for (var r = 0, n = table.rows.length; r < n; r++) 
+                {
+                    var rowvalue =  table.rows[r].cells[1].innerHTML.match(regex)[1];
+                    rowproductid=rowvalue;
+                    cp += Number(document.getElementById('PODetail[' + rowproductid + ']_CostValue').value);
+                    tp += Number(document.getElementById('PODetail[' + rowproductid + ']_ItemTaxTotal').value);
+                }
+
+                document.getElementById("TotCostPrice").value = parseFloat(cp).toFixed(3);
+                document.getElementById("TotalTaxAmount").value = parseFloat(tp).toFixed(3);
+                document.getElementById("GrossAmount").value = parseFloat(Number(document.getElementById("TotCostPrice").value)).toFixed(3);
+                document.getElementById("NetAmount").value = parseFloat(
+                    (tp +
+                    Number(document.getElementById("TotCostPrice").value) +
+                    Number(additions)+
+                    Number(otherchargers) 
+                    )-
+                    Number(deductions) 
+                    ).toFixed(3);
+
+                document.getElementById("NetAmountHidden").value = parseFloat(
+                    (tp +
+                    Number(document.getElementById("TotCostPrice").value) +
+                    Number(additions)+
+                    Number(otherchargers) 
+                    )-
+                    Number(deductions) 
+                    ).toFixed(3);
+              
+            }
+        });
+
+      
+    }
+</script>
+
+@*Tax change*@
+
+<script>
+    function SetTax(i) 
+    {
+        debugger;
+
+       
+
+       // alert(i);
+
+        var otherchargers=document.getElementById('OtherCharges').value;
+        var deductions=document.getElementById('Deduction').value;
+        var additions=document.getElementById('Addition').value;
+
+        var quantity = document.getElementById('PODetail[' + i + ']_OrderQty').value;
+        var costprice = document.getElementById('PODetail[' + i + ']_CostPrice').value;
+        var productid = document.getElementById('PODetail[' + i + ']_ProductId').value;
+        var costpricehidden = document.getElementById('PODetail[' + i + ']_CostPriceHidden').value;
+        if(costprice==0 || costprice==null || costprice=="")
+        {
+            costprice=costpricehidden;
+            document.getElementById('PODetail[' + i + ']_CostPrice').value=costpricehidden;
+        }
+
+        document.getElementById('PODetail[' + i + ']_CostValue').value = (Number(quantity) * Number(costprice));
+        var linetax =  document.getElementById('PODetail[' + i + ']_ItemTaxTotal').value;
+
+   
+                debugger;
+            
+            
+                var table = document.getElementById("poitems");
+
+                document.getElementById("TotCostPrice").value = 0;
+                document.getElementById("TotSellingPrice").value = 0;
+                document.getElementById("TotalTaxAmount").value = 0;
+                // calcTotal();
+
+                var cp = 0;
+                var sp = 0;
+                var tp = 0;
+
+                var regex = /value="(\d+(\.\d+)*)/i;
+                var rowproductid=0;
+
+                for (var r = 0, n = table.rows.length; r < n; r++)
+                {
+                    var rowvalue =  table.rows[r].cells[1].innerHTML.match(regex)[1];
+                    rowproductid=rowvalue;
+                    cp += Number(document.getElementById('PODetail[' + rowproductid + ']_CostValue').value);
+                    tp += Number(document.getElementById('PODetail[' + rowproductid + ']_ItemTaxTotal').value);
+                }
+
+                document.getElementById("TotCostPrice").value = parseFloat(cp).toFixed(3);
+                document.getElementById("TotalTaxAmount").value = parseFloat(tp).toFixed(3);
+                document.getElementById("GrossAmount").value = parseFloat(Number(document.getElementById("TotCostPrice").value)).toFixed(3);
+                document.getElementById("NetAmount").value = parseFloat(
+                    (tp +
+                    Number(document.getElementById("TotCostPrice").value) +
+                    Number(additions)+
+                    Number(otherchargers)
+                    )-
+                    Number(deductions)
+                    ).toFixed(3);
+
+                document.getElementById("NetAmountHidden").value = parseFloat(
+                (tp +
+                Number(document.getElementById("TotCostPrice").value) +
+                Number(additions)+
+                Number(otherchargers)
+                )-
+                Number(deductions)
+                ).toFixed(3);
+         
+    }
+</script>
+
+<script>
+    function validateInputForNumbers(evt) {
+
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        debugger;
+        if (charCode != 46 && charCode > 31
+          && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+
+      //  debugger;
+        //var theEvent = evt || window.event;      
+        //if (theEvent.type === 'paste') {
+        //    key = event.clipboardData.getData('text/plain');
+        //} else {
+          
+        //    var key = theEvent.keyCode || theEvent.which;
+        //    key = String.fromCharCode(key);
+        //}
+        //var regex = /[0-9]|\./;
+        //if (!regex.test(key)) {
+        //    theEvent.returnValue = false;
+        //    if (theEvent.preventDefault) theEvent.preventDefault();
+        //}
+    }
+</script>
+
+@*Check cost price and value*@ 
+
+<script type="text/javascript">
+    function checkCostPrice () 
+    {
+       // debugger;
+        if ($("#POLocationId").val() == 0 || $("#POLocationId").val() == null) {
+            alert("Select a PO Location !");
+            return;
+        }
+
+        if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+            alert("Select an Item !");
+            return;
+        }
+
+        if ($("#RecQty").val() == null || $("#RecQty").val() == "") {
+          
+            document.getElementById("RecQty").value ="0";
+            document.getElementById("CostPrice").value ="0";
+            document.getElementById("CostValue").value ="0";
+            return;
+        }
+
+           // debugger;
+            $.ajax({
+                url: "@Url.Action("ApplyPOTaxes", "PO")",
+                data: { id: $("#ItemId").val(), qty: $("#RecQty").val(), polocid: $("#POLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                  //  debugger;
+
+                    data = resp;
+                  //  alert(data.CostPrice);
+                    document.getElementById("CostPrice").value =data.CostPrice.toFixed(3);
+                    document.getElementById("CostValue").value =data.CostValue.toFixed(3);
+
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        };
+</script>
+
+<script type="text/javascript">
+    function calcManualCostPrice()
+    {
+
+        if ($("#POLocationId").val() == 0 || $("#POLocationId").val() == null) {
+            alert("Select a PO Location !");
+            return;
+        }
+
+        if ($("#ItemId").val() == 0 || $("#ItemId").val() == null) {
+            alert("Select an Item !");
+            return;
+        }
+        if ($("#RecQty").val() == 0 || $("#RecQty").val() == null) {
+            // alert("Invalid Quantity!");
+            document.getElementById("RecQty").value ="0";
+            document.getElementById("CostPrice").value ="0";
+            document.getElementById("CostValue").value ="0";
+            return;
+        }
+        document.getElementById("CostValue").value =(Number(document.getElementById("CostPrice").value)*
+                                                    Number(document.getElementById("RecQty").value)).toFixed(3);
+           
+
+        };
+</script>
+
+<script type="text/javascript">
+    function checkCostPriceROLBased(unitindex)
+    {
+        debugger;
+        
+
+
+        var itemid=document.getElementById('PODetail['+ unitindex +']_ProductId').value;
+        var quantity=document.getElementById('PODetail[' + unitindex +']_OrderQty').value;          
+        var firstquantity=document.getElementById('PODetail[' + unitindex +']_ReOrderQtyPriceHidden').value;
+        if(quantity==0)
+        {
+            alert("Order Quantity can not be 0");
+            document.getElementById('PODetail[' + unitindex +']_OrderQty').value=firstquantity;
+            quantity=firstquantity;
+          //  return;
+        }
+      //  document.getElementById('PODetail' + unitindex +'_OrderQty').value=parseFloat(quantity).toFixed(3);
+
+          //  debugger;
+            $.ajax({
+                url: "@Url.Action("ApplyPOTaxes", "PO")",
+                data: { id:itemid, qty:quantity, polocid: $("#POLocationId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                   debugger;
+
+                    data = resp;                                
+                    document.getElementById('PODetail['+ unitindex +']_CostPrice').value=parseFloat(data.CostPrice).toFixed(3);
+                    document.getElementById('PODetail['+ unitindex +']_CostValue').value=parseFloat(data.CostValue).toFixed(3);
+                    document.getElementById('PODetail['+ unitindex +']_ItemTaxTotal').value=parseFloat(data.TaxAmount).toFixed(3);
+                    document.getElementById('PODetail[' + unitindex + ']_CostPriceHidden').value = parseFloat(data.CostPrice).toFixed(3);
+
+                    document.getElementById('PODetail[' + unitindex + ']_OrderQty').value = parseFloat(data.RecQty).toFixed(3);
+                 
+                    var totsp = 0.0;
+                    var totcp = 0.0;
+                    var totdis = 0.0;
+                    var tottax = 0.0;
+                    var costval = 0.0;
+                    var sellingval = 0.0;
+
+    
+
+                    var orrtable = document.getElementById("poitems");                 
+                    var indexval;
+
+                    for (var r = 0, n = orrtable.rows.length; r < n; r++) 
+                    {
+
+                        var productid=document.getElementById('PODetail['+ unitindex +']_ProductId').value;
+
+                     //   debugger;
+                        var spvalue =Number(document.getElementById('PODetail['+ unitindex +']_SellingPrice').value);
+                        totsp += Number(document.getElementById('PODetail['+ unitindex +']_SellingPrice').value); 
+                        totcp += Number(document.getElementById('PODetail['+ unitindex +']_CostPrice').value);           
+                        costval += Number(document.getElementById('PODetail['+ unitindex +']_CostValue').value);                              
+                        tottax += Number(document.getElementById('PODetail['+ unitindex +']_ItemTaxTotal').value);
+                        var qtyvalue = Number(document.getElementById('PODetail['+ unitindex +']_OrderQty').value);
+                        sellingval+=Number(spvalue*qtyvalue);
+                    }
+
+
+                  //  debugger;
+                    //setting total values
+
+                    var otherchargers=document.getElementById('OtherCharges').value;
+                    var deductions=document.getElementById('Deduction').value;
+                    var additions=document.getElementById('Addition').value;
+                    document.getElementById("TotSellingPrice").value = (Number(sellingval)).toFixed(3);
+                    document.getElementById("TotCostPrice").value = (Number(costval)).toFixed(3);
+                    document.getElementById("GrossAmount").value = (Number(costval)).toFixed(3);
+                    document.getElementById("NetAmount").value = (Number(costval + tottax)).toFixed(3);
+                    document.getElementById("NetAmount").value = ((Number(document.getElementById("NetAmount").value)+
+                        Number(otherchargers)+Number(additions))-Number(deductions)           
+                                                                ).toFixed(3);
+                    document.getElementById("NetAmountHidden").value = Number((document.getElementById("NetAmount").value)).toFixed(3);
+                    document.getElementById("TotalTaxAmount").value = parseFloat(tottax).toFixed(3);
+
+                },
+                error: function (error) 
+                {
+                    alert("Item data mapping error");
+                }
+
+            }
+            
+            );
+            
+        
+        };
+</script>

@@ -1,0 +1,462 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Transactions.PurchaseOrderHeader>
+@{
+    ViewBag.Title = "POs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new
+{
+    id = "EditPO",
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <body class="nav-md">
+
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <!-- form input mask -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+
+                            <div class="x_content">
+                                <br />
+
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Purchase Orders<small>Existing</small></h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                        <br />
+                                        <br />
+
+
+                                        <div class=" form-horizontalcol-md-12">
+
+                                            <div class="form-horizontal col-md-6">
+
+
+                                                @{ // Calculate the first day of the current month
+                                                    var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd");
+
+                                                    var dateFromValue = ViewBag.DateFrom as string;
+
+                                                    // If the session value is null or empty, fallback to the calculated first day of the month
+                                                    var dateFromUse = string.IsNullOrEmpty(dateFromValue) ? firstDayOfMonth : dateFromValue;
+
+
+
+                                                    var today = DateTime.Now.ToString("yyyy-MM-dd");
+
+                                                    var dateToValue = ViewBag.DateTo as string;
+
+                                                    // If the session value is null or empty, fallback to the calculated first day of the month
+                                                    var dateToUse = string.IsNullOrEmpty(dateToValue) ? today : dateToValue;
+
+
+                                                }
+
+
+
+
+
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        PO Date From <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <input id="PODateFrom" class="form-control col-md-6 col-xs-6" type="date" value="@dateFromUse"/>
+                                                        @Html.ValidationMessageFor(model => model.First().PODateFrom, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal  col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        To <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <input id="PODateTo" class="form-control col-md-6 col-xs-6" type="date" value="@dateToUse" />
+                                                        @Html.ValidationMessageFor(model => model.First().PODateTo, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-horizontal col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        PO Status <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <select id="DocStatusId" class="form-control" Name="DocStatusId"></select>
+                                                        @Html.ValidationMessageFor(model => model.First().DocStatusId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal  col-md-6">
+                                                <div class="form-group">
+
+                                                    <div class="col-md-6 col-sm-6 pull-right">
+                                                        <input type="button" id="btnFilter" class="btn btn-primary btn-sm" value="Filter" />
+                                                        <input type="button" class="btn btn-success btn-sm" value="View All" onclick="location.href='@Url.Action("ViewAllPO", null, new { })'" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="clerfix"></div>
+                                        <br />
+                                        <br />
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <div class="">
+
+                                        </div>
+                                        <div class="pull-right">
+                                            <input type="submit" value="Download Data" formaction="HMSPurchaseOrders" class="btn btn-primary">
+                                        </div>
+                                    </div><div class="clerfix"></div>
+                                          <div class="x_content">
+                                              <br />
+
+                                              @*id="datatable-responsive"*@
+                                          <div style="overflow-y: auto; max-height:600px; border: 1px solid #ddd; padding: 5px;">
+                                              <table id="tblTOG" class="mstable" style="width: 100%; border-collapse: collapse;">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>PO Number</th>
+                                                          <th>Supplier</th>
+                                                          <th>PO Date</th>
+                                                          <th>Expected Delivery Date</th>
+                                                          <th>Value</th>
+                                                          <th>Status</th>
+                                                          <th>Edit | Approve</th>
+                                                          <th>Orginal Print</th>
+
+
+                                                          @{ // Retrieve the value from the session and convert it to a boolean
+                                                              bool TOGGridAdditionalColumn = Convert.ToBoolean(Session["TOGGridAdditionalColumn"]); }
+                                                          @if (TOGGridAdditionalColumn)
+                                                          {
+                                                              <th>Summary</th>
+                                                              <th>Breakdown</th>
+                                                          }
+
+
+                                                          @*<th></th>
+                    <th></th>*@
+                                                      </tr>
+                                                  </thead>
+
+                                                  <tbody>
+                                                      @foreach (var item in Model.OrderByDescending(item => item.DocumentDate))
+                                                      {
+                                                          <tr>
+                                                              <td>@item.DocumentNo</td>
+                                                              <td>@item.SupplierName</td>
+
+                                                              <td>@item.DocumentDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+
+                                                              <td>@item.ExpectedDate.ToString("yyyy-MM-dd")</td>
+                                                              <td style="text-align:right">@item.NetAmount.ToString("n2")</td>
+                                                              <td>@Html.DisplayFor(modelItem => item.DocState)</td>
+                                                              <td>@Html.ActionLink("Click", "Edit", new { id = item.PurchaseOrderHeaderId })</td>
+                                                              @*<td>
+                                 @Html.ActionLink("Inactive", "Inactive",
+                                new { id = item.PurchaseOrderHeaderId },
+                                new { onclick = "return confirm('Are you sure to inactive this PO?');" }
+                                )
+                        </td>*@
+                                                              @*<td>@Html.ActionLink("Active", "Active",
+                           new { id = item.PurchaseOrderHeaderId },
+                            new { onclick = "return confirm('Are you sure to active this PO?');" }
+                           )
+                        </td>*@
+                                                              <td>
+                                                                  <a href="javascript:void(0);"
+                                                                     class="anchorDetail"
+                                                                     data-id="@item.PurchaseOrderHeaderId">Print</a>
+                                                              </td>
+
+
+                                                              @if (TOGGridAdditionalColumn)
+                                                              {
+                                                                  <td>
+                                                                      <a href="javascript:void(0);"
+                                                                         class="anchorDetail2"
+                                                                         data-id="@item.PurchaseOrderHeaderId">Print</a>
+                                                                  </td>
+
+
+
+                                                                  <td>
+                                                                      <a href="javascript:void(0);"
+                                                                         class="anchorDetail1"
+                                                                         data-id="@item.PurchaseOrderHeaderId">Print</a>
+                                                                  </td>
+                                                              }
+
+                                                          </tr>
+                                                      }
+                                                  </tbody>
+
+                                              </table>
+                                              </div>
+                                          </div>
+                                </div>
+
+                                <div id='myModal' class='modal'>
+                                    <div class="col-md-12">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div id='myModalContent'>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="clerfix">
+                            <div class="pull-left">
+                                @*@Html.ActionLink("Create New PO", "CreatePO", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                                <input type="button" class="btn btn-info" value="Create New PO" onclick="location.href='@Url.Action("CreatePO", null, new { })'" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </body>
+
+}
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+    var TeamDetailPostBackURL = '/PO/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id, "printstatus": 2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+<script>
+    var TeamDetailPostBackURL2 = '/PO/PrintBreakDownKitchen';
+    $(function () {
+        $(".anchorDetail2").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL2,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id, "printstatus": 2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+
+
+<script>
+    var TeamDetailPostBackURL1 = '/PO/PrintBreakDown';
+    $(function () {
+        $(".anchorDetail1").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL1,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id, "printstatus": 2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#datatable-responsive').DataTable({
+            order: [
+                [2, 'asc'], // First sort by DocumentDate (index 2)
+                [0, 'asc']  // Then sort by DocumentNo (index 0)
+            ]
+        });
+    });
+</script>
+
+<script>
+
+
+    $.getJSON("@Url.Action("GetDocStatus", "PO")", function (data) {
+
+        var DocStatusId = $("#DocStatusId");
+
+
+        DocStatusId.empty();
+        DocStatusId.append("<option value='0'>-- Select a Doc Status--</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DocStatusId.append($('<option />', { value: optionaldata.DocStatusId }).html(optionaldata.Description));
+
+        });
+
+
+         if ('@ViewBag.POstatusid') {
+             var Select_AppStatus = '@ViewBag.POstatusid';
+
+             var drpStatusElement = document.getElementById("DocStatusId");
+             if (drpStatusElement) {
+
+                 drpStatusElement.value = Select_AppStatus; // Set the value from ViewBag
+             }
+         }
+
+
+
+
+
+
+
+        @*if ('@ViewBag.DocStatusId') {
+            $('#DocStatusId').val(@ViewBag.DocStatusId).trigger("change");
+        } else {
+            $('#DocStatusId').val(0).trigger("change");
+        }*@
+
+
+    });
+</script>
+
+<script>
+    $('#btnFilter').click(function () {
+        debugger;
+        var statusid = $('#DocStatusId').val();
+        var datefrom = $('#PODateFrom').val();
+        var dateto = $('#PODateTo').val();
+        var url = $(this).attr('href') + 'FilterPos?statusid=' + statusid + '&datefrom=' + datefrom + '&dateto=' + dateto;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+    });
+</script>
+<style>
+    .mstable {
+        width: 100%;
+        border-collapse: collapse; /* Collapse borders */
+    }
+
+    thead {
+        background-color: #f2f2f2; /* Header background color */
+        position: sticky; /* Makes the header sticky */
+        top: 0; /* Position from the top */
+        z-index: 10; /* Ensure it stays on top */
+    }
+
+    th, td {
+        padding: 12px; /* Padding for cells */
+        text-align: left; /* Align text to the left */
+        border: 1px solid #ddd; /* Border for cells */
+        box-sizing: border-box; /* Include padding and border in total width */
+    }
+
+    tbody {
+        display: block; /* Keeps tbody scrollable */
+        max-height: 400px; /* Set a max height for the tbody */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    tr {
+        display: table; /* Ensure rows are table elements */
+        width: 100%; /* Full width for the row */
+        table-layout: fixed; /* Equal width for columns */
+    }
+</style>

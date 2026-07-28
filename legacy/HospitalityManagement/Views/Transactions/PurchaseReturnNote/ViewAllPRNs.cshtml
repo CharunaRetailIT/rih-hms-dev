@@ -1,0 +1,237 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Transactions.PurchaseHeader>
+@{
+    ViewBag.Title = "ViewAllPRNs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Purchase Return Note<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>                                     
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                    <br />
+                                    <br />
+
+                                    <div class=" form-horizontalcol-md-12">
+
+                                        <div class="form-horizontal col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Date From <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <input id="PRNDateFrom" class="form-control col-md-6 col-xs-6" type="date" value=@ViewBag.datefrom.ToString("yyyy-MM-dd") />
+                                                    @Html.ValidationMessageFor(model => model.First().GRNDateFrom, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal  col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    To <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <input id="PRNDateTo" class="form-control col-md-6 col-xs-6" type="date" value=@ViewBag.dateTo.ToString("yyyy-MM-dd") />
+                                                    @Html.ValidationMessageFor(model => model.First().GRNDateTo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-horizontal col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    PRN Status <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <select id="DocStatusId" class="form-control" Name="DocStatusId"></select>
+                                                    @Html.ValidationMessageFor(model => model.First().DocStatusId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal  col-md-6">
+                                            <div class="form-group">
+
+                                                <div class="col-md-6 col-sm-6 pull-right">
+
+                                                    <input type="button" id="btnFilter" class="btn btn-primary btn-sm" value="Filter" />
+                                                    <input type="button" class="btn btn-success btn-sm" value="All" onclick="location.href='@Url.Action("ViewAllPRN", null, new { })'" />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="clerfix"></div>
+                                    <br />
+                                    <br />
+                                    <div class="clearfix"></div>
+
+                                </div>
+                                <div class="x_content">
+                                   
+                                    <table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>PRN Number</th>
+                                                <th>PRN Date</th>
+                                                <th>Value</th>
+                                                <th>PRN Type</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                                <th></th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.DocumentNo)</td>
+                                                    <td>@item.GRNDate.ToShortDateString()</td>
+                                                    <td style="text-align:right">@item.NetAmount.ToString("n2")</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.PRNType)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.DocState)</td>
+                                                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.PurchaseHeaderId })</td>
+                                                    <td>
+                                                        <a href="javascript:void(0);"
+                                                           class="anchorDetail"
+                                                           data-id="@item.PurchaseHeaderId">Print</a> 
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table> 
+                                </div>
+                            </div>
+
+
+                            <div id='myModal' class='modal'>
+                                <div class="col-md-12">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div id='myModalContent'>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="btn btn-info pl_add btn-small pull-left">
+                            @Html.ActionLink("Create New PRN", "CreatePRN", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script src="~/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+
+    var TeamDetailPostBackURL = '/PurchaseReturnNote/Print';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id, "printstatus": 2 },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>  
+
+
+<script>
+    $.getJSON("@Url.Action("GetDocStatus", "PO")", function (data) {
+
+        var DocStatusId = $("#DocStatusId");
+
+
+        DocStatusId.empty();
+        DocStatusId.append("<option value='0'>-- Select a Doc Status--</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DocStatusId.append($('<option />', { value: optionaldata.DocStatusId }).html(optionaldata.Description));
+
+        });
+
+        if ('@ViewBag.DocStatusId') {
+            $('#DocStatusId').val(@ViewBag.DocStatusId).trigger("change");
+        } else {
+            $('#DocStatusId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $('#btnFilter').click(function () {
+        debugger;
+        var statusid = $('#DocStatusId').val();
+        var datefrom = $('#PRNDateFrom').val();
+        var dateto = $('#PRNDateTo').val();
+        var url = $(this).attr('href') + 'FilterPRNs?statusid=' + statusid + '&datefrom=' + datefrom + '&dateto=' + dateto;
+        location.href = url.replace("undefined", " ").trim();
+        return false;
+});
+</script>

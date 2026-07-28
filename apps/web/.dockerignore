@@ -1,0 +1,17 @@
+# Web build context = apps/web. Install deps fresh inside the image.
+node_modules
+.next
+.git
+.turbo
+test-results
+playwright-report
+playwright/.cache
+e2e
+coverage
+*.log
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore
+tsconfig.tsbuildinfo

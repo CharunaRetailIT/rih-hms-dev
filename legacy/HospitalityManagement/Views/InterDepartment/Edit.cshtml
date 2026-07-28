@@ -1,0 +1,198 @@
+﻿@model RIT.HMS.Domain.InterDepartment
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Edit", "InterDepartment", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.InterDepartmentId)
+            <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Inter Department </strong> @ViewBag.InterDeptCode modified successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Inter Department</strong> @ViewBag.InterDeptCode modify failed.
+                            </div>
+                        }
+
+
+                        <div class="row">
+
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+
+                                    <div class="x_title">
+                                        <h2>Inter Department - Edit</h2>
+                                        <br />
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            @*<li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="#">Settings 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Settings 2</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>*@
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content">
+                                        <br />
+                                        <form class="form-horizontal form-label-left">
+                                           
+                                            
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Inter Department Location<span class="required">*</span></label>
+                                                <div class="col-md-3 col-sm-9 col-xs-9">
+                                                    <select id="InterDeptLocId" class="form-control" name="InterDeptLocId"></select>
+                                                </div>
+                                            </div>
+
+
+
+                                            @*<div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-6">
+                                                        Location <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select id="GRNLocationId" class="form-control" name="GRNLocationId"></select>
+                                                    </div>
+
+                                            </div>*@
+                                            
+                                            
+                                             <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Inter Department Code</label>
+                                                <div class="col-md-3 col-sm-9 col-xs-9">
+                                                   
+                                                    @Html.TextBoxFor(model => model.InterDepartmentCode, new
+                                                    {
+                                                        @class = "form-control",
+                                                        Placeholder = "Inter-Department Code",
+                                                        MaxLength = 50,
+                                                        oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                    })
+
+                                                    @Html.ValidationMessageFor(model => model.InterDepartmentCode, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Inter-Department Name</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.InterDepartmentName, new { @class = "form-control", MaxLength = 50, Placeholder = "Inter-Department Name" })
+                                                    @Html.ValidationMessageFor(model => model.InterDepartmentName, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", Placeholder = "Remark" })
+                                                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1 pull-left ">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                                </div>
+                                            </div>
+
+                                            <div class="actionBar">
+                                                <div class="msgBox">
+
+                                                    <div class="btn btn-primary pl_add btn-small pull-left">
+                                                        @Html.ActionLink("Clear", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>
+                                                    <div class="btn btn-info pl_add btn-small pull-left">
+                                                        @Html.ActionLink("View All", "ViewInterDepartments", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success">Modify</button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#InterDeptLocId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.InterDeptLocId') {
+            $('#InterDeptLocId').val(@ViewBag.InterDeptLocId).trigger("change");
+        } else {
+            $('#InterDeptLocId').val(0).trigger("change");
+        }
+
+
+    });
+</script>

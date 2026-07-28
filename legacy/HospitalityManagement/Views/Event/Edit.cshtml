@@ -1,0 +1,325 @@
+﻿@*@model HospitalityManagement.Models.PaymentMethod*@
+@model RIT.HMS.Domain.Event
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Edit", "Event", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.EventId)
+            @Html.HiddenFor(model => model.CreatedUser)
+            @Html.HiddenFor(model => model.CreatedDate)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Event</strong> modified successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Event</strong> failed to modify.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "4")
+                            {
+                                <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    Can't be select Active and Delete options in the same time..!
+                                </div>
+                            }
+        
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Event - Edit</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Event Code</label>
+                                                <div class="col-md-5 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.EventCode, new { @class = "form-control", MaxLength = 50, Placeholder = "Event Code", @readonly = true })
+                                                    @Html.ValidationMessageFor(model => model.EventCode, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Event</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                    @Html.TextBoxFor(model => model.EventName, new
+                                                   {
+                                                       @class = "form-control",
+                                                       Placeholder = "Event",
+                                                       MaxLength = 50,
+                                                       oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                   })
+                                                    @*@Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", MaxLength = 50, Placeholder = "Company Name" })*@
+                                                    @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Start</label>
+                                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                                    @Html.TextBoxFor(model => model.FromTime, new
+                                                   {
+                                                       @class = "form-control",
+                                                       type = "time"
+                                                      
+
+                                                   })
+                                                    @*@Html.ValidationMessageFor(model => model.FromTime, "", new { @class = "text-danger" })*@
+                                                </div>
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">End</label>
+                                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                                    @Html.TextBoxFor(model => model.ToTime, new
+                                                   {
+                                                       @class = "form-control",
+                                                       type = "time"
+                                                       
+
+                                                   })
+                                                    @*@Html.ValidationMessageFor(model => model.ToTime, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Is POS</label>
+                                                <div class="checkbox col-xs-1 pull-left ">
+                                                    @Html.CheckBoxFor(model => model.IsPOS, new { })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Active</label>
+                                                <div class="checkbox col-xs-1 pull-left ">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Delete</label>
+                                                <div class="checkbox col-xs-1 pull-left ">
+                                                    @Html.CheckBoxFor(model => model.IsDelete, new { })
+
+                                                </div>
+                                            </div>
+                                        </div><div class="clearfix"></div>
+
+                                        <div id="eventitems" style="display:none">
+                                            <hr /> <br />
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Event Location</label>
+                                                <div class="col-md-5 col-sm-9 col-xs-9">
+                                                    <select id="LocationId" name="LocationId" class="form-control"></select>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="text-info"><b>Event Items</b></div><br />
+                                            <table id="buttons" class="table table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:50%;text-align:center">Product</th>
+                                                        <th style="width:10%"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:50%"><select id="ProductId" name="ProductId" class="form-control select2" style="width:100%"></select></td>
+                                                        <td style="width:10%"><input type="button" id="btnAdd" class="btn btn-round btn-info" value="+" /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <table id="tblevent" class="table table table-striped table-bordered bulk_action">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="display:none">Event Id</th>
+                                                        <th>Event</th>
+                                                        <th style="display:none">ProductId</th>
+                                                        <th>Product</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbleventitems">
+                                                    @if (Model != null)
+                                                    {
+                                                        foreach (var item in Model.EventProducts)
+                                                        {
+                                                            var rowid = "treventitems" + @Model.EventProducts.IndexOf(item);
+                                                            <tr id='@rowid'>
+
+                                                                <td style="display:none"><input name='EventProducts.Index' id='EventProducts[@Model.EventProducts.IndexOf(item)]' value=@Model.EventProducts.IndexOf(item) /></td>
+                                                                <td style="display:none"><input id='EventProducts[@Model.EventProducts.IndexOf(item)]_EventId' class='form-control' name='EventProducts[@Model.EventProducts.IndexOf(item)].EventCode' type='text' readonly value='@item.EventId' /></td>
+                                                                <td><input id='EventProducts[@Model.EventProducts.IndexOf(item)]_EventName' class='form-control' name='EventProducts[@Model.EventProducts.IndexOf(item)].EventName' type='text' readonly value='@item.EventName' /></td>
+                                                                <td style="display:none"><input id='EventProducts[@Model.EventProducts.IndexOf(item)]_ProductId' class='form-control' name='EventProducts[@Model.EventProducts.IndexOf(item)].ProductId' type='number' readonly value='@item.ProductId' /></td>
+                                                                <td><input id='EventProducts[@Model.EventProducts.IndexOf(item)]_ProductName' class='form-control' name='EventProducts[@Model.EventProducts.IndexOf(item)].ProductName' type='text' readonly value='@item.ProductName' /></td>
+                                                                <td>
+                                                                    <input id='btnRemove' type='button' value='-' class='btn btn-round btn-info' onclick='removeRow(@Model.EventProducts.IndexOf(item));' />
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                       
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+                                                <div class="pull-left">                                                  
+                                                    <input type="button" class="btn btn-primary" value="Reset" onclick="location.href='@Url.Action("Edit",null, new { })'" />
+                                                </div>
+                                                <div class="pull-left">                                                
+                                                    <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewEvents",null, new { })'" />
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Modify</button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var LocationId = $("#LocationId");
+
+        LocationId.empty();
+        LocationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            LocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@Model.LocationId') {
+            $('#LocationId').val(@Model.LocationId).trigger("change");
+        } else {
+            $('#LocationId').val(0).trigger("change");
+        }
+
+
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#IsPOS').change(function() {
+            if(this.checked) {
+                $('#eventitems').removeAttr("style", "display:none;")
+            }else
+            {
+                $('#eventitems').attr("style", "display:none;")
+            }
+
+        });
+
+        debugger;
+        if('@ViewBag.IsPOS'=='True')
+        {
+          $('#eventitems').removeAttr("style", "display:none;");
+        }
+    });
+</script>
+
+<script>
+
+    var allactiveproducts = @Html.Raw(Json.Encode(ViewBag.productdata));
+
+    var itemID = $("#ProductId");
+    itemID.empty();
+    itemID.append("<option value='0'>-- Select a Product --</option>");
+    $.each(allactiveproducts, function (index, optionaldata) {
+        itemID.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductCode+"-"+optionaldata.ProductName));
+
+    });
+    if ('@ViewBag.ProductId') {
+        $('#ProductId').val(@ViewBag.ProductId).trigger("change");
+    } else {
+        $('#ProductId').val(0).trigger("change");
+    }
+</script>
+
+@*button add*@
+<script type="text/javascript">
+    $("body").on("click", "#btnAdd", function () {
+        debugger;
+
+        if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+            alert("Select a product !");
+            return;
+        }
+        var productId = $("#ProductId").val();
+        var productName = $("#ProductId option:selected").text();
+        var eventName=$("#EventName").val();
+
+        //Check duplicates
+        var table = document.getElementById('tbleventitems');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            if (table.rows[r].cells[3].firstChild.value == productId) {
+                alert("Product already Exists..! " + productName);
+                return;
+            }
+        }
+
+        var index = $("#tbleventitems").children("tr").length;
+        var indexCell = "<td style='display:none'><input name='EventProducts.Index' type='hidden' value='" + index + "' /></td>";
+        var eventIdCell = "<td style='display:none'><input id='EventProducts[" + index + "]_EventId' class='form-control' name='EventProducts[" + index + "].EventId' type='text' readonly value='0' /></td>";
+        var eventNameCell = "<td><input id='EventProducts[" + index + "]_EventName' class='form-control' name='EventProducts[" + index + "].EventName' type='text' readonly value='"+eventName+"' /></td>";
+        var productIdcell = "<td style='display:none'><input id='EventProducts[" + index + "]_ProductId' class='form-control' name='EventProducts[" + index + "].ProductId' type='number' readonly value='"+productId+"' /></td>";
+        var productNameCell = "<td><input id='EventProducts[" + index + "]_ProductName' class='form-control' name='EventProducts[" + index + "].ProductName' type='text' readonly value='"+productName+"' /></td>";
+        var removeCell = "<td><input id='btnRemove' type='button' value='-' class='btn btn-round btn-info'  onclick='removeRow(" + index + ");' /></td>";
+
+        var newRow = "<tr id='treventitems" + index + "'>" +
+                    indexCell + eventIdCell + eventNameCell + productIdcell + productNameCell + removeCell + "</tr>";
+        $("#tbleventitems").append(newRow);
+
+    });
+
+    function removeRow(id) {
+                debugger;
+                var controlToBeRemoved = "#treventitems" + id;
+                $(controlToBeRemoved).remove();
+    }
+</script>

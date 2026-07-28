@@ -1,0 +1,173 @@
+﻿@model RIT.HMS.Domain.Accounts.LoginViewModel
+@{
+    ViewBag.Title = "Log In";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>Smart Hospitality Management | </title>
+
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link type="text/css" href="~/Content/Custome.css" rel="stylesheet" />
+    <style>
+        .nav_menu {
+            background: #2A3F54;
+            border-bottom: 1px solid #2A3F54;
+        }
+
+        .content form .submit, .login_content form input[type=submit] {
+            float: initial;
+            margin: auto;
+        }
+    </style>
+
+</head>
+@*<body class="login " >*@
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div style="text-align:center"><h2 class="maintitle"><b>Smart Hospitality Management System</b></h2></div><br>
+            @*<img src="~/Content/Images/Login/b10.jpg" width="100" height="100" />*@
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1 col-lg-4 col-md-4 col-sm-2 ">
+            </div>
+            <div class="col-xs-10 col-lg-4 col-md-4 col-sm-8 ">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,
+                                            new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <form action="/action_page.php" method="post">
+                        <div class="imgcontainer">
+                            @*<img src="/Content/Images/Login/avatar.png" alt="Avatar" class="avatar">*@
+                        </div>
+                        <div class="con">
+                            <img src="~/Content/Images/Login/logof1.png" width="100" height="100" class="image" /><br>
+                            @*<div class="image"></div><br>*@
+                          
+                            <h2 class="tlogin">Login</h2>
+                            <hr>
+                            <br>                           
+                            @Html.TextBoxFor(m => m.Email, new { @class = "custext", placeholder = "Enter Username" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "", style = "font-weight: bold; color:red; font-size: 15px;" })                                                    
+                            @Html.PasswordFor(m => m.Password, new { @class = "custext", placeholder = "Enter Password" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "", style = "font-weight: bold; color:red; font-size: 15px;" })  
+                            @if (Model.Authorized)
+                            {
+                                <input type="submit" value="Log In" class="loginbtn" />
+                                @*<div style="float:left;" class="">
+                                    <a href="@Session["DURL"].ToString()" target="_blank" style="color:silver">
+                                        Dashboard View
+                                    </a>
+                                    <br />
+                                </div>*@
+                                @*Added by dilshan*@
+                                @*<div style="float:right;" class="">
+                                    @if (Session["STOS"] != null)
+                                    {
+                                        if (Session["STOS"].ToString() == "True")
+                                        {
+                                            <a href="/STOSSysUser/UserLogin" style="color:silver">Menu</a>
+                                        }
+                                    }                                
+                                    <br />
+                                </div>*@  
+                                @*End*@   
+                            }
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="col-xs-1 col-lg-4 col-md-4 col-sm-2 ">
+            </div>
+        </div>
+
+        <div class="row" id="footer">
+            <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                <p>
+                    <b>
+                        Version 1.0.39.0<br />
+                        ©2020 All Rights Reserved. <br />
+                        Retail Information Technologies (Pvt) Ltd.
+                    </b>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="../vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+
+
+
+</body>
+</html>
+

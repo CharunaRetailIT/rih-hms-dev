@@ -1,0 +1,422 @@
+﻿
+@model  IEnumerable<RIT.HMS.Domain.UnitConversion>
+
+@{
+    ViewBag.Title = "Tax Modes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @*@using (Html.BeginForm("Create", "Department", FormMethod.Post, new { @class = "form-horizontal" }))
+                {*@
+            @*@Html.AntiForgeryToken()*@
+
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit Conversions</strong> saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit Conversions</strong> save failed.
+                                </div>
+                            }
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>Tax Modes</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <div class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+
+                                                <select id="TaxId" name="TaxId" class="form-control"></select>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <br />
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">                                            
+                                                <table id="tblTaxModes" class="mstable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="display:none">CMId</th>
+                                                            <th style="display:none">LocationId</th>
+                                                            <th>Location</th>
+                                                            <th style="display:none">PayModeId</th>
+                                                            <th>Pay Mode</th>
+                                                            <th style="display:none">CateringModeId</th>
+                                                            <th>Catering Mode</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="conversionrows">
+                                                        @if (Model != null)
+                                                        {
+                                                            foreach (var unitConversion in Model)
+                                                            {
+                                                                <tr>
+                                                                    <td style="display:none">@unitConversion.UnitConversionId</td>
+                                                                    <td>@unitConversion.SubUnit</td>
+                                                                    <td>@unitConversion.SubUnitValue</td>
+                                                                    <td>@unitConversion.SubUnitSymbol</td>
+                                                                    <td>
+                                                                        <input type="button" class="btn btn-round btn-info" value="-" onclick="Remove(this)" />
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                           
+                                                            <td style="display:none"></td>
+                                                            <td style="display:none"></td>
+                                                            <td><select id="TaxLocationId" name="TaxLocationId" class="form-control"></select></td>
+                                                            <td style="display:none"></td>
+                                                            <td><select id="PayModeId" name="PayModeId" class="form-control"></select></td>
+                                                            <td style="display:none"></td>
+                                                            <td><select id="CateringModeId" name="CateringModeId" class="form-control"></select></td>
+                                                         
+                                                            <td><input type="button" id="btnAdd" class="btn btn-round btn-info" value="+" /></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <br />
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <input type="button" id="btnSave" class="btn btn-success" value="Save Tax Modes" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @*}*@
+        </div>
+    </div>
+</body>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/json2.js"></script>
+
+<script>
+
+    loadbaseunits();
+    $.getJSON("@Url.Action("GetActiveTaxes", "Tax")", function (data) {
+        var TaxId = $("#TaxId");
+        TaxId.empty();
+        TaxId.append("<option value='0'>-- Select a Tax --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            TaxId.append($('<option />', { value: optionaldata.TaxId }).html(optionaldata.TaxName));
+        });
+
+    });
+
+
+    function loadbaseunits(){
+
+        $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+            var TaxLocationId = $("#TaxLocationId");
+
+            TaxLocationId.empty();
+            TaxLocationId.append("<option value='0'>-- Select a Location --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                TaxLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+            });
+
+        });
+
+        $.getJSON("@Url.Action("GetActivePayModes", "Tax")", function (data) {
+
+            var PayModeId = $("#PayModeId");
+
+            PayModeId.empty();
+            PayModeId.append("<option value='0'>-- Select a Pay Mode --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                PayModeId.append($('<option />', { value: optionaldata.PaymentID }).html(optionaldata.Descrip));
+            });
+
+        });
+
+        $.getJSON("@Url.Action("GetActiveCateringMoods", "CateringMood")", function (data) {
+
+            var CateringModeId = $("#CateringModeId");
+
+            CateringModeId.empty();
+            CateringModeId.append("<option value='0'>-- Select a Catering Mode --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                CateringModeId.append($('<option />', { value: optionaldata.CateringMoodID }).html(optionaldata.CateringMoodName));
+            });
+
+        });
+    }
+
+    $("#Tax ").change(function () {
+        var taxid = this.value;
+        $.getJSON("@Url.Action("GetTaxModes", "Tax")", { id: taxid },
+            function (data) {
+
+              // alert('aaaa');
+                $("#conversionrows tr").remove();
+                $.each(JSON.parse(data), function (index, optionaldata)
+                {
+                    var CMId = optionaldata.CMId;
+                    var TaxId = optionaldata.TaxId;
+                    var TaxLocationId = optionaldata.TaxLocationId;
+                    var PayModeId = optionaldata.PayModeId;
+                    var CateringModeId = optionaldata.CateringModeId;
+
+                    var TaxLocation = optionaldata.TaxLocation;
+                    var PayMode = optionaldata.PayMode;
+                    var CateringMode = optionaldata.CateringMode;
+                    //Get the reference of the Table's TBODY element.
+                    var tBody = $("#tblTaxModes > TBODY")[0];
+
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+
+                    var cell = $(row.insertCell(-1));
+                    cell.html(conversionId);
+                    cell.attr("style", "display:none");
+
+                    //Add Name cell.
+                    var cell = $(row.insertCell(-1));
+                    cell.html(baseUnitName);
+
+                    //Add Country cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(baseUnitValue);
+
+                    //Add Country cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(baseUnitSymbol);
+
+
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                    btnRemove.attr("type", "button");
+
+                    btnRemove.attr("onclick", "Remove(this);");
+                    btnRemove.val("-");
+                    cell.append(btnRemove);
+
+                    //Clear the TextBoxes.
+                    baseUnitName = "";
+                    baseUnitValue = "";
+                    baseUnitSymbol = "";
+                });
+            });
+    });
+</script>
+
+<script type="text/javascript">
+        $("body").on("click", "#btnAdd", function () {
+            debugger;
+
+
+
+            if ($("#TaxId").val() == 0) {
+                alert("Select a Tax !");
+                return;
+            }
+
+            var txid = $("#TaxId").val();
+          
+
+            var Location = $("#TaxLocationId");
+            var PayMode = $("#PayModeId");
+            var CateringMode = $("#CateringModeId");
+
+           
+            //Get the reference of the Table's TBODY element.
+            var tBody = $("#tblTaxModes > TBODY")[0];
+
+            //Add Row.
+            var row = tBody.insertRow(-1);
+
+            var cell = $(row.insertCell(-1));
+            cell.html(0);
+            cell.attr("style", "display:none");
+
+            //Add Location props.
+            var cell = $(row.insertCell(-1));
+            cell.html(Location.find(":selected").val());
+            cell.attr("style", "display:none");
+
+            var cell = $(row.insertCell(-1));
+            if (Location.find(":selected").val() == 0) {
+                cell.html("N/A");
+            } else {
+                cell.html(Location.find(":selected").text());
+            }
+
+            //Add pay mode props.
+            var cell = $(row.insertCell(-1));
+            cell.html(PayMode.find(":selected").val());
+            cell.attr("style", "display:none");
+
+            var cell = $(row.insertCell(-1));
+            if (PayMode.find(":selected").val() == 0) {
+                cell.html("N/A");
+            } else {
+                cell.html(PayMode.find(":selected").text());
+            }
+          
+
+            //Add  catering mode props
+            var cell = $(row.insertCell(-1));
+            cell.html(CateringMode.find(":selected").val());
+            cell.attr("style", "display:none");
+
+            var cell = $(row.insertCell(-1));
+            if (CateringMode.find(":selected").val() == 0) {
+                cell.html("N/A");
+            } else {
+                cell.html(CateringMode.find(":selected").text());
+            }
+           
+
+            //Add Button cell.
+            cell = $(row.insertCell(-1));
+            var btnRemove = $("<input class='btn btn-round btn-info'/>");
+            btnRemove.attr("type", "button");
+
+            btnRemove.attr("onclick", "Remove(this);");
+            btnRemove.val("-");
+            cell.append(btnRemove);
+
+            //Clear the TextBoxes.
+            Location.val("");
+            PayMode.val("");
+            CateringMode.val("");
+
+            loadbaseunits();
+        });
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var cid = $("TD", row).eq(0).html();
+            var cname = $("TD", row).eq(1).html();
+            if (confirm("Do you want to delete: " + cname)) {
+                //Get the reference of the Table.
+                var table = $("#tblTaxModes")[0];
+
+
+                $.ajax({
+                    type: "GET",
+                    url: "/UnitConversion/CheckConversion",
+                    data: { id: cid },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        debugger
+                      //  alert(r);
+                        if (r == 0) {
+                            table.deleteRow(row[0].rowIndex);
+                            alert("Unit Conversion Removed !");
+                        } else
+                        {
+                            alert("Can not delete. "+ r +" Product(s) has this unit Conversion !");
+                        }
+                    }
+                });
+
+
+
+            }
+        };
+
+
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+            debugger;
+            var taxmodes = new Array();
+            $("#tblTaxModes TBODY TR").each(function () {
+                var row = $(this);
+                var TaxMode = {};
+                TaxMode.CMId = row.find("TD").eq(0).html();
+                TaxMode.TaxLocationId = row.find("TD").eq(1).html();
+                TaxMode.PayModeId = row.find("TD").eq(3).html();
+                TaxMode.CateringModeId = row.find("TD").eq(5).html();
+                TaxMode.TaxId = $("#TaxId").find(":selected").val();
+                taxmodes.push(TaxMode);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Tax/SaveTaxModes",
+                data: JSON.stringify(taxmodes),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    debugger
+                    // $("#CountryName").val(data.con);
+                   // $("#tblTaxModes TBODY TR").remove();
+                    alert("Tax Modes Saved !");
+                    window.location.href = "/Tax/TaxModes";
+                }
+            });
+        });
+</script>
+

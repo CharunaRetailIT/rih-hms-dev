@@ -1,0 +1,648 @@
+﻿@model IEnumerable<RIT.HMS.Domain.ViewModels.Promotions.VMProductDiscounts>
+@{
+    ViewBag.Title = "Create Product Discounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+@*<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>*@
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Create", "ProductInstruction", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="right_col" role="main">
+                    <div class="">
+
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "1")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Instructions </strong> saved successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Product Instructions</strong> save failed.
+                            </div>
+                        }
+
+
+                        <div class="row">
+
+                            <!-- form input mask -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+
+                                    <div class="x_title">
+                                        <h2>Product Discounts</h2>
+                                        <br />
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>                                      
+                                            <li>
+                                                <a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content">
+                                        <br />
+                                        <form class="form-horizontal form-label-left">
+                                            <div class="form-group">
+                                          
+                                                <div class="col-md-12">
+                                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Promotion Name</label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <select id="PromotionMasterId" class="form-control" name="PromotionMasterId"></select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Department</label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <select id="Department" class="form-control" name="Department"></select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Sub Catagory</label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <select id="SubCategory" class="form-control"  name="SubCategory"></select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                               @*Keep as Empty*@
+                                                            </div>
+                                                        </div>                                                       
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Qty From</label>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                               <input type="number" step="0.01" class="form-control text-right" value="0" id="FromQty" name="FromQty" />                                                              
+                                                            </div>
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-1">To</label>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">                                                                                
+                                                                <input type="number" step="0.01" class="form-control text-right" value="0" id="ToQty" name="ToQty" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Rate</label>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <input type="number" step="0.01" class="form-control text-right" value="0" id="Rate" name="Rate" />
+                                                            </div>
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-1">Points</label>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <input type="number" step="0.01" class="form-control text-right" value="0" id="Points" name="Points" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Discount (Amt)</label>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <input type="number" step="0.01" class="form-control text-right" value="0" id="DiscountAmount" name="DiscountAmount" />
+                                                            </div>
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-1">(Prc)</label>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <input type="number" step="0.01" class="form-control text-right" value="0" id="DiscountPercentage" name="DiscountPercentage" />
+                                                            </div>
+                                                        </div>
+                                                        <br />
+                                                    </div>
+                                                    
+                                                    <div class="form-horizontal form-label-left col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <br />
+                                                                @*<select id="Department" class="form-control" name="Department"></select>*@
+                                                            </div>
+                                                        </div>
+                                                     
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Category</label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <select id="Category" class="form-control" name="Category"></select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Product</label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <select id="ProductID" class="form-control select2" name="ProductID"></select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Serving Unit</label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                <select id="ServingUnitId" class="form-control" name="ServingUnitId"></select>
+                                                            </div>
+                                                        </div>
+                                                        <br />
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                              <button type="button" class="btn btn-primary" id="btnAddItem" name="btnAddItem">Add Product(s)</button>
+                                                            </div>
+                                                        </div>                                                     
+                                                        <div class="clearfix"></div>
+
+                                                    </div>                                                   
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                                
+                                                <br /><hr />
+
+
+                                                <div class="text-info"><b>Existing Product Discounts</b></div>
+
+                                               
+                                                <table id="datatable" class="mstable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="display:none">idx</th>
+                                                            <th style="display:none">Promotion Master Id</th>
+                                                            <th style="display:none">Company Id</th>
+                                                            <th style="display:none">Location Id</th>                                                           
+                                                            <th style="display:none">Product Id</th>
+                                                            <th>Product Code</th>
+                                                            <th>Product Desc</th>
+                                                            <th style="display:none">UOM Id</th>  
+                                                            <th>UOM</th> 
+                                                            <th style="display:none">ServingUnitId</th>
+                                                            <th>Serving Unit</th>                                                       
+                                                            <th>Rate</th>
+                                                            <th>Qty From</th>
+                                                            <th>Qty To</th>
+                                                            <th>Discounts(%)</th>
+                                                            <th>Discounts(Amt.)</th>
+                                                           
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="productdiscounts">
+                                                        @if (Model != null)
+                                                            {
+                                                                foreach (var m in Model)
+                                                                {
+
+                                                                    <tr>
+
+                                                                        <td style="display:none">@m.InvPromotionDetailsProductDisId</td>
+                                                                        <td style="display:none">@m.InvPromotionMasterID</td>
+                                                                        <td style="display:none">@m.CompanyID</td>
+                                                                        <td style="display:none">@m.LocationID</td>
+                                                                        <td style="display:none">@m.ProductID</td>
+                                                                        <td>@m.ProductCode</td>
+                                                                        <td>@m.ProductName</td>
+                                                                        <td style="display:none">@m.UnitOfMeasureID</td>
+                                                                        <td>@m.UOM</td>
+                                                                        <td style="display:none">@m.ServingUnitId</td>
+                                                                        <td>@m.ServingUnit</td>                                                                       
+                                                                        <td>@m.Rate</td>
+                                                                        <td>@m.FromQty</td>
+                                                                        <td>@m.ToQty</td>
+                                                                        <td>@m.DiscountPercentage</td>
+                                                                        <td>@m.DiscountAmount</td>                                                                     
+                                                                        <td><button type='button' id='freeitemrowrow' onclick='RemoveItem(this);' class='btn btn-danger btn-xs'> Remove </button></td>
+                                                                    </tr>
+
+                                                                }
+
+                                                            }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                           
+
+
+
+                                            <div class="actionBar">
+                                                <div class="msgBox">
+                                                    @*<div class="btn btn-info pl_add btn-small pull-left">
+                                                        @Html.ActionLink("View Product Instructions", "Vieww", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>*@
+                                                    @*<button type="submit" class="btn btn-success">Submit</button>*@
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</body>
+@*</html>*@
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+<script>
+
+
+    $.getJSON("@Url.Action("GetPromotionMasters", "ProductDiscountPromotions")", function (data) {
+
+        var PromotionMasterId = $("#PromotionMasterId");
+
+        PromotionMasterId.empty();
+        PromotionMasterId.append("<option value='0'>-- Select a Promotion --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PromotionMasterId.append($('<option />', { value: optionaldata.InvPromotionMasterID }).html(optionaldata.PromotionName));
+        });
+    });
+
+    $("#PromotionMasterId").change(function ()
+    {
+        $.getJSON("@Url.Action("GetPromotionType", "ProductXYPromotions")", { promotionmasterid: $("#PromotionMasterId").val() },
+           function (data)
+           {
+               debugger;
+               var tablepromo = document.getElementById("promotiontable");
+               var tablefree = document.getElementById("freeitem");
+               $("#promotiontable").find("tr:not(:first)").remove();
+               $("#freeitem").find("tr:not(:first)").remove();
+
+              // $.each(JSON.parse(data), function (index, optionaldata)
+              // {
+                   debugger;
+                   document.getElementById("promotiondet").innerText = data.PromotionName;
+                   document.getElementById("lblpromotiontype").innerText = data.PromotionTypeId;
+                   //document.getElementById("promotiondet").innerText = optionaldata.PromotionName;
+                   //document.getElementById("lblpromotiontype").innerText = optionaldata.PromotionTypeId;
+
+
+
+              // });
+
+           });
+    });
+
+
+
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var departmentGroupDropDown = $("#DepartmentId");
+
+        departmentGroupDropDown.empty();
+        departmentGroupDropDown.append("<option value='0'>-- Select a Department--</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            departmentGroupDropDown.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+
+        if ('@ViewBag.DepartmentId') {
+            $('#DepartmentId').val(@ViewBag.DepartmentId).trigger("change");
+        } else {
+            $('#DepartmentId').val(0).trigger("change");
+        }
+    });
+
+
+</script>
+
+<script>
+
+
+    $.getJSON("@Url.Action("GetActiveDepartments", "Department")", function (data) {
+
+        var DepartmentId = $("#Department");
+        var CategoryId = $("#Category");
+        var subCategoryId = $("#SubCategory");
+
+        DepartmentId.empty();
+        DepartmentId.append("<option value='0'>-- Select a department --</option>");
+        CategoryId.append("<option value='0'>-- Select All --</option>");
+        subCategoryId.append("<option value='0'>-- Select All --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            DepartmentId.append($('<option />', { value: optionaldata.RstDepartmentID }).html(optionaldata.DepartmentName));
+
+        });
+
+    });
+
+    $("#Department").change(function () {
+        var diptId = this.value;
+
+        $.getJSON("@Url.Action("GetMenuByDeptId", "Product")", { id: diptId },
+        function (data) {
+
+            var itemId = $("#ProductID");
+
+
+            itemId.empty();
+            itemId.append("<option value='0'>-- Select All Products --</option>");
+
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+            });
+
+        }
+     );
+    });
+    
+    $("#Department").change(function () {
+        var diptId = this.value;
+
+        $.getJSON("@Url.Action("GetCategoriesByDepartmentId", "Category")", { id: diptId },
+            function (data) {
+
+                var CategoryId = $("#Category");
+
+                CategoryId.empty();
+                CategoryId.append("<option value='0'>-- Select All --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    CategoryId.append($('<option />', { value: optionaldata.RstCategoryID }).html(optionaldata.RstCategoryName));
+                });
+
+
+            });
+    });
+
+
+    $("#Category").change(function () {
+        var deptid = $("#Department").val();
+        var catid = this.value;
+
+        $.getJSON("@Url.Action("GetSubcatByCatId", "Product")", { id: catid },
+            function (data) {
+
+                var subCategoryId = $("#SubCategory");
+
+                subCategoryId.empty();
+                subCategoryId.append("<option value='0'>-- Select All --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    subCategoryId.append($('<option />', { value: optionaldata.RstSubCategoryID }).html(optionaldata.RstSubCategoryName));
+                });
+
+            });
+
+        $.getJSON("@Url.Action("GetMenuByDeptCatId", "Product")", { deptid: deptid, catid: catid },
+         function (data) {
+
+             var itemId = $("#ProductID");
+
+
+             itemId.empty();
+             itemId.append("<option value='0'>-- Select All Products --</option>");
+
+
+             $.each(JSON.parse(data), function (index, optionaldata) {
+                 itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+             });
+
+         }
+       );
+
+
+    });
+
+
+    $("#SubCategory").change(function () {
+        var deptid = $("#Department").val();
+        var catid = $("#Category").val();
+        var scatid = this.value;
+
+        $(document).ready(function () {
+           
+       
+
+
+        $.getJSON("@Url.Action("GetMenuByDeptCatScatId", "Product")", { deptid: deptid, catid: catid, scatid: scatid },
+              function (data) {
+
+                  var itemId = $("#ProductID");
+
+
+                  itemId.empty();
+                  itemId.append("<option value='0'>-- Select All Products --</option>");
+
+
+                  $.each(JSON.parse(data), function (index, optionaldata) {
+                      itemId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+
+                  });
+
+              }
+            );
+
+        });
+
+    });
+
+
+    $(document).ready(function () {
+        $("#ProductID").change(function () {
+
+            $.getJSON("@Url.Action("GetServingUnits", "ProductXYPromotions")", { id: $("#ProductID").val() },
+               function (data) {
+                   var ServingUnitId = $("#ServingUnitId");
+
+                   ServingUnitId.empty();
+                   ServingUnitId.append("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+
+
+
+                   //$.each(JSON.parse(data), function (index, optionaldata) {
+                   //    ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                   //});
+
+
+                   var ln = JSON.parse(data).length;
+
+                   if (ln > 1) {
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                       });
+
+                   } else {
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                           ServingUnitId.val(optionaldata.ProductServingUnitId).trigger("change");
+                       });
+
+                   }
+
+
+               });
+
+        });
+    });
+
+
+</script>
+
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddItem",
+        function () {
+
+            debugger;
+            if ($("#Department").val() == 0 || $("#Department").val() == null)
+            {
+                alert("Select a Department !");
+                return;
+            }
+
+
+            var Product = $("#ProductID").val();
+            var Department = $("#Department").val();
+            var Category = $("#Category").val();
+            var SubCategory = $("#SubCategory").val();
+            var ServingUnit;
+            if ($("#ServingUnitId").val() == null || $("#ServingUnitId").val() == "")
+            {
+                ServingUnit = 0;
+            } else
+            {
+                ServingUnit = $("#ServingUnitId").val();
+            }
+
+            var FromQty = $("#FromQty").val();
+            var ToQty = $("#ToQty").val();
+            var Rate = $("#Rate").val();
+            var Points = $("#Points").val();
+            var DiscountAmt = $("#DiscountAmount").val();
+            var DiscountPrc = $("#DiscountPercentage").val();
+            var PromoMasterId = $("#PromotionMasterId").val();
+
+           
+            swal({
+                title: "Item TO Item Promotion",
+                text: "Confirm?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+                       function (isConfirm)
+                       {
+                           if (isConfirm)
+                           {
+
+                         
+
+                                    $.ajax({
+                                        url: "@Url.Action("SubmitProductDiscouts", "ProductDiscountPromotions")",
+                                        data: {
+                                            deptid: Department, catid: Category, subcatid: SubCategory, productid: Product, servingunitid: ServingUnit,
+                                            FromQty: FromQty, ToQty: ToQty, Rate: Rate, Points: Points, DiscountAmt: DiscountAmt, DiscountPrc: DiscountPrc,
+                                            promomasterid: PromoMasterId
+                                            },
+                
+                                        type: "GET",
+                                        dataType: "json",
+                                        success: function (data)
+                                        {
+
+                                            if (data != 0)
+                                            {
+
+                                                swal({
+                                                    title: "",
+                                                    text: "Promotion Saved Successfully!",
+                                                    type: "success",
+                                                    showCancelButton: false,
+                                                    confirmButtonClass: "btn-success",
+                                                    confirmButtonText: "Ok",
+                                                    closeOnConfirm: true
+                                                },
+                                            function () {
+                                                window.location.href = "/ProductDiscountPromotions/ProductDiscountPromotions";
+                                            });
+
+                                               
+                                            }
+                   
+
+                                        }
+               
+                                    });
+                           }
+                       });
+
+
+
+        });
+    
+
+</script>
+
+
+<script>
+
+    function RemoveItem(button)
+    {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(3).html();
+
+        var rowid = $("TD", row).eq(0).html();
+        var productname = $("TD", row).eq(6).html();
+        var servingunit = $("TD", row).eq(10).html();
+
+        if (confirm("Do you want to delete: " + productname + "- "+ servingunit+" ?"))
+        {
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("RemoveProductDiscount", "ProductDiscountPromotions")",
+                data: { rowid:rowid},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res)
+                {
+
+                    var table = $("#datatable")[0];
+                    table.deleteRow(row[0].rowIndex);
+
+                }
+        });
+
+
+
+
+           
+    }
+    };
+
+</script>

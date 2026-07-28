@@ -1,0 +1,239 @@
+﻿
+@model RIT.HMS.Domain.ViewModels.Journal.JournalViewModel
+@{
+    ViewBag.Title = "Print Journal";
+    Layout = null;
+    // Layout =null;
+}
+
+
+<body>
+
+    @using (Html.BeginForm("Journal", "Journal", FormMethod.Get, new { @class = "form-horizontal", }))
+    {
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+            <div class="modal-header col-md-12">
+
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">...</h4>
+            </div>
+
+
+            <div class="x_panel">
+
+                <div id="printcontent">
+                    <div class="title" style="text-align:center">
+                        
+                        <div class="small text-left" style="text-align:right">@DateTime.Now</div>
+                        <div style="font-size:large">@Model.SysCompany.CompanyName</div>
+                        <div style="font-size:medium">@Model.SysCompany.Address1,@Model.SysCompany.Address2,@Model.SysCompany.Address3</div><br />
+                        <div style="font-size:large">Journal Data Upload</div>
+                        <br />
+                        <hr />
+
+                    </div>
+
+                    <div class="x_content">
+                        <div>
+
+                            <table align="center" style="width:100%">
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Log Location:@ViewBag.LogLocation </label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">Log User:@ViewBag.LogUser </label>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Create Date: @DateTime.Now.ToShortDateString()</label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        
+                                    </td>
+                                </tr>
+                                
+                               
+
+                            </table>
+                        </div>
+                        <br />
+                        <div class="clearfix"></div>
+
+
+                        <br />
+                        <div class="table-responsive">
+                            @if (Model.JournalReport != null)
+                            {
+                                <table id="tblstock" border="1" style="width:100%;border:none" class="table table-striped jambo_table bulk_action">
+                                    <thead>
+                                        <tr class="headings">
+                                           
+                                            <th>ACODE</th>
+                                            <th>DESCRIPTION</th>
+                                            <th>DR</th>
+                                            @*<th>Free Quantity</th>*@
+                                            <th>CR</th>                                          
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.JournalReport.GroupBy(x => x.LocationName))
+                                        {
+
+                                            <tr class="even pointer">
+                                                <td>Location : @item.Key</td>
+                                                
+                                                <td></td>
+                                               
+                                                <td style="text-align:right"></td>
+                                                <td style="text-align:right"></td>
+                                               
+                                            </tr>
+
+                                            foreach (var k in item)
+                                            {
+                                                <tr class="even pointer">
+                                                   
+                                                    <td>@k.ACODE</td>
+                                                    <td>@k.DESCRIPTION</td>
+                                                    @if (k.DRCR == "D")
+                                                    {
+                                                    <td style="text-align:right">@k.AMOUNT</td>
+                                                    <td style="text-align:right">0.00</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="text-align:right">0.00</td>
+                                                        <td style="text-align:right">@k.AMOUNT</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>
+                                                Total:
+                                            </td>                                            
+                                            <td>
+                                                
+                                            </td>
+                                          
+                                            <td style="text-align:right">@Model.JournalReport.Where(s => s.DRCR == "D").Sum(s => s.AMOUNT)</td>                                              
+                                            <td style="text-align:right">@Model.JournalReport.Where(s=>s.DRCR=="C").Sum(s=>s.AMOUNT)</td>
+                                           
+                                        </tr>
+                                    </tfoot>
+                                   
+                                </table>
+                                <br />                          
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actionBar">
+                <div class="msgBox">
+                    <button type="submit" class="btn btn-primary pull-right">Back</button>
+                    <div class="btn-group">
+                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="btnPrint" onclick="PrintDiv();">
+                                    <img src='~/Content/Images/icons/pdf.png' width="10" />
+                                    Print/PDF
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+</body>
+
+
+@*<script>
+        $(window).load(function() {
+            $(".se-pre-con").fadeOut("slow");;
+        });
+    </script>*@
+
+
+<script type="text/javascript">
+
+    //$(function () {
+    //    $("#btnPrint").click(function () {
+    //        debugger;
+
+    //        var contents = $("#printcontent").html();
+    //        var frame1 = $('<iframe />');
+    //        frame1[0].name = "frame1";
+    //        frame1.css({ "position": "absolute", "top": "-1000000px" });
+    //        $("body").append(frame1);
+    //        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    //        frameDoc.document.open();
+
+
+    //        var toprint = '<html><head><title>.</title></head><body><link href="style.css" rel="stylesheet" type="text/css" />' + contents + '</body></html>';
+
+    //        frameDoc.document.write(toprint.toString());
+    //        frameDoc.document.close();
+    //        setTimeout(function () {
+    //            window.frames["frame1"].focus();
+    //            window.frames["frame1"].print();
+    //            frame1.remove();
+    //        }, 500);
+    //    });
+    //});
+
+
+    function PrintDiv() {
+
+        //var divContents = document.getElementById("printcontent").outerHTML;
+        //var printWindow = window.open('', '', 'height=200,width=400');
+
+        //printWindow.document.write('<html><head><title></title>');
+        //printWindow.document.write('</head><body >');
+        //printWindow.document.write(divContents);
+        //printWindow.document.write('</body></html>');
+        //printWindow.document.close();
+        //printWindow.print();
+
+        //$(document).ready(function () {
+        //    $('#printcontent').DataTable();
+        //});
+
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+    }
+
+
+</script>
+
+
+

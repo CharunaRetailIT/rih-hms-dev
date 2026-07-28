@@ -1,0 +1,105 @@
+﻿body {
+}
+
+h2{
+    color:#1a1a1a;
+}
+
+#test1{
+    background-color:white;
+    border:none;
+}
+
+.x_panel{
+    background-color:white;
+    
+    border-color:#0099ff;
+   
+}
+
+.mstable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.mstable th,.mstable td{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.mstable tr:nth-child(even){background-color: #f2f2f2;}
+
+.mstable tr:hover {background-color: #ddd;}
+
+.mstable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #0099ff;
+  /*background-color:darkorange;*/
+  color: white;
+}
+
+.row{
+    background-color:white;
+    
+}
+
+#bgt{
+    /*background-image:url("/Content/Images/Login/bg19.jpg");*/
+    background-color:#e6e6e6;
+    
+}
+
+.savebt{
+  background-color: #0099ff;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius:5px;
+}
+
+.nav_menu{
+    background-image:url("/Content/Images/Login/bg22.jpg");
+    background-color:#737373;
+}
+.passlog{
+    background-color:#E9EFF3;
+    background: rgb(0, 0, 0); 
+    background: rgba(0, 0, 0, 0.8);
+    
+}
+
+
+
+.usrname {
+
+    color:white;
+    
+    
+}
+
+#logomain{
+    height:150px;
+    
+}
+
+#logomain2{
+    height:100px;
+    
+}
+.image{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:10px;
+    width: 45%;
+    
+}

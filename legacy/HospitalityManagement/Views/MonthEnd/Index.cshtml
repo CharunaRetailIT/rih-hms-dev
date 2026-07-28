@@ -1,0 +1,517 @@
+﻿@model RIT.HMS.Domain.MonthEnd
+@{
+    ViewBag.Title = "Month End";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<!DOCTYPE html>
+@*
+<html lang="en">
+*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+<div class="container body" novalidate>
+    <div class="main_container">
+
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+        @Html.AntiForgeryToken()
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="clearfix"></div>
+                <div class="row col-lg-12 col-sm-12">
+
+                    <!-- form input mask -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                        @if (@ViewBag.Message == "1")
+                        {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month is opened successfully</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month opening failed</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "3")
+                        {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closed successfully</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "4")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month close failed</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "5")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Already opened month is available</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "6")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Data not available for this year. Press refresh button first</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "7")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Already month is closed.</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "8")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Temporary saved GRNs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "9")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Approval pending GRNs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "10")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Reopened GRNs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "11")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Temporary saved PRNs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "12")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Approval pending PRNs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "13")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Month closing failed. Reopened PRNs available</strong>
+                                <br>
+                                @ViewBag.DocNumbers
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "14")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Temporary saved TOGs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "15")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed. Approval pending TOGs available</strong>
+                            <br>
+                            @ViewBag.DocNumbers
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "16")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Month closing failed. Reopened TOGs available</strong>
+                                <br>
+                                @ViewBag.DocNumbers
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "17")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Month closing failed.</strong>
+                        </div>
+                        }
+                        else if (@ViewBag.Message == "18")
+                        {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Cannot Open Future Months.</strong>
+                        </div>
+                        }
+
+                        <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Month End</h2>
+                                <br />
+
+                                <div class="clerfix">
+                                    <div class="pull-right">
+                                        <button type="submit" name="sbt" formaction="CloseMonth" class="btn btn-danger">Close Month</button>
+                                    </div>
+                                </div>
+                                <div class="clerfix">
+                                    <div class="pull-right">
+                                        <button type="submit" name="sbt" formaction="OpenMonth" class="btn btn-primary pull-left">Open Month</button>
+                                    </div>
+                                </div>
+
+                                <br />
+                                <br />
+
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li>
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+                            <div class="x_content">
+
+                                <div class="form-horizontal col-md-12">
+                                    <div class="form-horizontal col-md-10">
+
+                                        <div class="form-group">
+
+                                            <label class="control-label col-md-3 col-sm-6">
+                                                Year <span class="required">*</span>
+                                            </label>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select id="SysYearsId" class="form-control" name="LocYear"></select>
+                                                @Html.ValidationMessageFor(model => model.LocYear, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="pull-right">
+                                                <input type="button" id="btnRefresh" class="btn btn-round btn-info pull-left" value="Refresh" />
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <label class="control-label col-md-3 col-sm-6">
+                                                Month <span class="required">*</span>
+                                            </label>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                @*<select id="sysMonthID" class="form-control" name="LocMonth"></select>*@
+                                                <select id="LocMonth" name="LocMonth" class="form-control">
+                                                    <option value="0">--Select a month--</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                                @Html.ValidationMessageFor(model => model.LocMonth, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <label class="control-label col-md-3 col-sm-6">
+                                                Location <span class="required">*</span>
+                                            </label>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select id="StockLocationId" class="form-control" name="LocationId"></select>
+                                                @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="x_content">
+                                            <table id="tblMonth" class="mstable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Month</th>
+                                                        <th>Location</th>
+                                                        <th>Status</th>
+                                                        @*<th></th>*@
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="grdMonthEnd">
+                                                    @*@if (Model != null)
+                                                    {
+                                                    foreach (var item in Model)
+                                                    {
+                                                    <tr>
+                                                        <td><input id='MonthEnd[@item.MonthEndId]LocMonthDesc' class='form-control' name='MonthEnd[@item.MonthEndId].LocMonthDesc' type='text' readonly value='@item.LocMonthDesc' /></td>
+                                                        <td><input id='MonthEnd[@item.MonthEndId]LocDesc' class='form-control' name='MonthEnd[@item.MonthEndId].LocDesc' type='text' readonly value='@item.LocDesc' /></td>
+                                                        <td><input id='MonthEnd[@item.MonthEndId]LocStatusDesc' class='form-control' name='MonthEnd[@item.MonthEndId].LocStatusDesc' type='text' readonly value='@item.LocStatusDesc' /></td>
+                                                    </tr>
+                                                    }
+                                                    }*@
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnRefresh",
+        function () {
+
+            if ($("#SysYearsId").val() == 0 || $("#SysYearsId").val() == null) {
+                alert("Select the year!");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("GetMonthEndDataByYear", "MonthEnd")",
+                data: {
+                    year: $("#SysYearsId").val(), loc: $("#StockLocationId").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    $("#grdMonthEnd tr").remove();
+                    $.each(data, function (i, item) {
+
+                        var unitindex = $("#grdMonthEnd").children("tr").length;
+
+                        var unitLocDescCell = "<td id='MDet" + unitindex + "_MonthEndId' name='MDet[" +
+                            unitindex + "].LocDesc'>" + item.LocDesc + "</td>";
+
+                        var unitLocMonthDescCell = "<td id='MDet" + unitindex + "_MonthEndId' name='MDet[" +
+                            unitindex + "].LocMonthDesc'>" + item.LocMonthDesc + "</td>";
+
+                        var unitLocStatusDescCell = "<td id='MDet" + unitindex + "_MonthEndId' name='MDet[" +
+                            unitindex + "].LocStatusDesc'>" + item.LocStatusDesc + "</td>";
+
+                        var newUnitRow = "<tr id='trAddons" + unitindex + "'>" +
+                            unitLocMonthDescCell +
+                            unitLocDescCell +
+                            unitLocStatusDescCell +
+                             "</tr>";
+
+                        $("#grdMonthEnd").append(newUnitRow);
+
+                    });
+
+                },
+
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+
+        });
+</script>
+<script>
+    //var glb_years = [];
+
+
+    $(document).ready(function () {
+
+        locationViewload();
+
+        yearsviewload();
+
+        //   monthsviewload();
+
+        //monthsviewload();
+        //$('#btnx').click(function () {
+
+        //});
+    });
+
+
+    //var dynamichtml = function () {
+
+    //    var HtmlInject = '';
+
+    //    HtmlInject += '<div id="r">';
+    //    HtmlInject += '<div id="r">';
+    //    HtmlInject += '<div/> ';
+    //    HtmlInject += '<div id="r">';
+    //    for (var i = 0; i < $('#ff').val().toString().trim(); i++) {
+    //        HtmlInject += '<input type="button" id="txt'+i+'" style="background-color:blue;radius:2;border:3px" / > ';
+    //    }
+
+    //    HtmlInject += '<div/> ';
+    //    HtmlInject += '<div/> ';
+
+    //    $('#div').html('');
+    //    $('#div').html(HtmlInject);
+
+
+    //}
+
+    //var myajax = $.ajax({
+    //    type: "POST",
+    //    url: "CHService.asmx/SavePurpose",
+    //    dataType: "text",
+    //    data: JSON.stringify({ Vid: Vid, PurpId: PurId }),
+    //    contentType: "application/json; charset=utf-8",
+    //    async: false, //add this
+    //});
+
+    // var monthsviewload = function () {
+
+    //    var sysmonth = $("#sysMonthID");
+    //    sysmonth.empty();
+    //    sysmonth.append("<option value='0'>-- Select a Month --</option>");
+    //    sysmonth.append("<option value='1'>January</option>");
+    //    sysmonth.append("<option value='2'>February</option>");
+    //    sysmonth.append("<option value='3'>March</option>");
+    //    sysmonth.append("<option value='4'>April</option>");
+    //    sysmonth.append("<option value='5'>May</option>");
+    //    sysmonth.append("<option value='6'>June</option>");
+    //    sysmonth.append("<option value='7'>July</option>");
+    //    sysmonth.append("<option value='8'>August</option>");
+    //    sysmonth.append("<option value='9'>September</option>");
+    //    sysmonth.append("<option value='10'>October</option>");
+    //    sysmonth.append("<option value='11'>November</option>");
+    //    sysmonth.append("<option value='12'>December</option>");
+
+    //}
+
+    var yearsviewload = function () {
+        $.getJSON("@Url.Action("GetYears", "MonthEnd")", function (data) {
+
+            var sysyear = $("#SysYearsId");
+            sysyear.empty();
+            sysyear.append("<option value='0'>-- Select a Year --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                sysyear.append($('<option />', { value: optionaldata.SysYear }).html(optionaldata.SysYear));
+
+            });
+
+            if ('@ViewBag.SysYearsId') {
+                $('#SysYearsId').val(@ViewBag.SysYearsId).trigger("change");
+            } else {
+                $('#SysYearsId').val(0).trigger("change");
+            }
+        });
+    }
+
+    var locationViewload = function () {
+
+        $.getJSON("@Url.Action("GetActiveLocations", "MonthEnd")", function (data) {
+
+            var locationId = $("#StockLocationId");
+            locationId.empty();
+            locationId.append("<option value='0'>-- Select a Location --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+            });
+
+            if ('@ViewBag.StockLocationId') {
+                $('#StockLocationId').val(@ViewBag.StockLocationId).trigger("change");
+            } else {
+                $('#StockLocationId').val(0).trigger("change");
+            }
+        });
+
+    }
+
+
+
+
+</script>
+

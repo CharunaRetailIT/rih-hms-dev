@@ -1,0 +1,484 @@
+﻿@model  IEnumerable<RIT.HMS.Domain.SysUserGroupPermission>
+@*@model  RIT.HMS.Domain.SysUserGroupPermission*@
+@{
+    ViewBag.Title = "User Group Permissions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @*@using (Html.BeginForm("Create", "Department", FormMethod.Post, new { @class = "form-horizontal" }))
+                {*@
+            @*@Html.AntiForgeryToken()*@
+
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>User Group Permissions</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <div class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">User Group</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+
+                                                <select id="SysUserGroupId" name="SysUserGroupId" class="form-control"></select>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <br />
+
+                                        @*<div class="form-group">
+                                            <table id="datatablepermissions" class="table table-striped table-bordered bulk_action">
+                                                <thead>
+
+                                                    <tr>
+                                                        <th style='display:none'></th>
+                                                        <th><input type="checkbox" id="GrantAll" name="GrantAll" class="chkbox" /> Access</th>
+                                                        <th>Function</th>
+                                                        <th>Function Description</th>
+                                                    </tr>
+
+                                                </thead>
+
+                                                <tbody id="permissions">
+                                                    @if (Model.SysUserFunctions.Count() != 0)
+                                                    {
+                                                        foreach (var function in Model.SysUserFunctions)
+                                                        {
+                                                       <tr>
+                                                          <td style="display:none">@function.SysUserFunctionID</td>
+                                                           <td style="display:none">@function.IsGrant</td>
+                                                           <td style="display:none">@function.SysUserFunctionID</td>
+                                                           <td style="display:none">@function.SysUserFunctionID</td>
+                                                           <td style="display:none">@function.SysUserFunctionID</td>
+                                                           <td style="display:none">@function.SysUserFunctionID</td>
+                                                           <td style="display:none">@function.SysUserFunctionID</td>
+                                                       </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>*@
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">                                           
+                                                <table id="tblCustomers" class="mstable col-xs-9 col-lg-9 col-md-9 col-sm-9">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><input type="checkbox" id="GrantAll" name="GrantAll" onclick="checkAll(this)" class="chkbox" /> Access</th>
+                                                            <th>Function Name</th>
+                                                            <th>Function Description</th>
+                                                            <th style="display:none">TypeId</th>
+                                                            <th style="display:none">FormId</th>
+                                                            <th style="display:none">SysUserFunctionID</th>
+                                                            @*<th></th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="permissionrows">
+                                                        @*@if (Model != null)
+                                                        {
+                                                            foreach (var permissions in Model)
+                                                            {
+
+                                                                <tr>
+                                                                    <td>@permissions.FunctionName</td>
+                                                                    <td>@permissions.FunctionDescription</td>
+                                                                    <td style="display:none">@permissions.TypeID</td>
+                                                                    <td style="display:none">@permissions.FormId</td>
+                                                                    <td>
+                                                                        <input type="button" class="btn btn-round btn-info" value="-" onclick="Remove(this)" />
+                                                                    </td>
+                                                                </tr>
+
+                                                            }
+                                                        }*@
+                                                    </tbody>
+                                                    @*<tfoot>
+                                                        <tr>
+                                                          
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td><select id="FunctionId" name="FunctionId" class="form-control select2" style="width:100%"></select></td>
+                                                            <td><input type="button" id="btnAdd" class="btn btn-round btn-info" value="+" /></td>
+                                                        </tr>
+                                                    </tfoot>*@
+                                                </table>
+                                                <br />
+                                            </div>
+                                        </div>
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <input type="button" id="btnSave" class="savebt" value="Save All" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @*}*@
+        </div>
+    </div>
+</body>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/json2.js"></script>
+
+<script>
+
+    $.getJSON("@Url.Action("GetActiveFunctions", "UserGroup")", function (data) {
+
+        var FunctionId = $("#FunctionId");
+
+        FunctionId.empty();
+        FunctionId.append("<option value='0'>-- Select a Permission --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            FunctionId.append($('<option />', { value: optionaldata.SysUserFunctionID }).html(optionaldata.FunctionName + ' - ' + optionaldata.FunctionDescription));
+        });
+
+        if ('@ViewBag.FunctionId') {
+            $('#FunctionId').val(@ViewBag.FunctionId).trigger("change");
+        } else {
+            $('#FunctionId').val(0).trigger("change");
+        }
+
+
+    });
+
+
+
+
+    $.getJSON("@Url.Action("GetActiveUserGroupes", "UserGroup")", function (data)
+    {
+        var UserGroup = $("#SysUserGroupId");
+        UserGroup.empty();
+        UserGroup.append("<option value='0'>-- Select a User Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            UserGroup.append($('<option />', { value: optionaldata.SysUserGroupID }).html(optionaldata.UserGroupName));
+        });
+
+        if ('@ViewBag.SysUserGroupId') {
+            $('#SysUserGroupId').val(@ViewBag.SysUserGroupId).trigger("change");
+        } else {
+            $('#SysUserGroupId').val(0).trigger("change");
+        }
+
+
+    }
+    );
+
+
+    $("#SysUserGroupId ").change(function () {
+        var groupid = this.value;
+        $.getJSON("@Url.Action("GetPermissions", "UserGroupPermission")", { id: groupid },
+            function (data) {
+
+               
+                $("#permissionrows tr").remove();
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    var IsGrant = optionaldata.IsGrant;
+                    var FunctionName = optionaldata.FunctionName;
+                    var FunctionDescription = optionaldata.FunctionDescription;
+                    var TypeId = optionaldata.TypeID;
+                    var FormId = optionaldata.FormId;
+                    var SysUserFunctionID = optionaldata.SysUserFunctionID;
+
+
+                    var tBody = $("#tblCustomers > TBODY")[0];
+
+                   
+                    var row = tBody.insertRow(-1);
+
+
+                    cell = $(row.insertCell(-1));
+                    if (IsGrant)
+                    {
+                        var checkIsGrant = $("<input type='checkbox' checked='checked' class='chkbox'/>");
+                    }
+                    else
+                    {
+                        var checkIsGrant = $("<input type='checkbox' class='chkbox'/>");
+                    }                    
+                    cell.append(checkIsGrant);
+
+
+                    var cell = $(row.insertCell(-1));
+                    cell.html(FunctionName);
+
+                   
+                    cell = $(row.insertCell(-1));
+                    cell.html(FunctionDescription);
+
+                    cell = $(row.insertCell(-1));
+                    cell.html(TypeId);
+                    cell.attr("style", "display:none;");
+
+                    cell = $(row.insertCell(-1));
+                    cell.html(FormId);
+                    cell.attr("style", "display:none;");
+
+
+                    cell = $(row.insertCell(-1));
+                    cell.html(SysUserFunctionID);
+                    cell.attr("style", "display:none;");
+
+
+                    //Add Button cell.
+
+                    //cell = $(row.insertCell(-1));
+                    //var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                    //btnRemove.attr("type", "button");
+
+                    //btnRemove.attr("onclick", "Remove(this);");
+                    //btnRemove.val("-");
+                    //cell.append(btnRemove);
+
+                   
+                    FunctionName = "";
+                    FunctionDescription = "";
+                    TypeId = "";
+                    FormId = "";
+                }
+                );
+            });
+    });
+
+
+</script>
+
+<script type="text/javascript">
+
+    //$(document).ready(function () {
+     
+   
+
+    $("body").on("click", "#btnAdd", function () {
+     
+        debugger;
+        if ($("#SysUserGroupId").val() == 0) {
+            alert("Select a user group !");
+            return;
+        }
+
+        if ($("#FunctionId").val() == "")
+        {
+            alert("Select a function!");
+            return;
+        }
+
+        debugger;
+        var skillsSelect = document.getElementById("FunctionId");
+        var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
+        
+        var FunctionName;
+        var FunctionDescription;
+        var TypeId;
+        var FormId;
+
+        debugger;
+
+        $.ajax({
+            type: "GET",
+            url: "/UserGroupPermission/Function",
+            data: { id: $("#FunctionId").val(), name: selectedText },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                debugger;
+
+                var hasFunction;
+                $("#tblCustomers TBODY TR").each(function () {
+                    var row = $(this);
+                    if (row.find("TD").eq(0).html() == r.FunctionName)
+                    {
+                        alert("The Permission " + r.FunctionName + " has already added!");
+                        hasFunction = true;
+                    }
+                   
+                });
+
+                if (hasFunction)
+                {
+                    return;
+                }
+
+
+                //  alert(r.FunctionName);
+                FunctionName = r.FunctionName;
+                FunctionDescription = r.FunctionDescription;
+                TypeId = r.TypeID;
+                FormId = r.FormId;
+
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblCustomers > TBODY")[0];
+
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                //Add Name cell.
+                var cell = $(row.insertCell(-1));
+                cell.html(FunctionName);
+
+                //Add Country cell.
+                cell = $(row.insertCell(-1));
+                cell.html(FunctionDescription);
+
+                cell = $(row.insertCell(-1));
+                cell.html(TypeId);
+                cell.attr("style", "display:none;");
+
+                cell = $(row.insertCell(-1));
+                cell.html(FormId);
+                cell.attr("style", "display:none;");
+
+                //Add Button cell.
+                cell = $(row.insertCell(-1));
+                var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                btnRemove.attr("type", "button");
+
+                btnRemove.attr("onclick", "Remove(this);");
+                btnRemove.val("-");
+                cell.append(btnRemove);
+            
+                FunctionName("");
+                FunctionDescription("");
+
+            }
+        });
+    });
+
+    function Remove(button) {
+       
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete: " + name)) {
+            //Get the reference of the Table.
+            var table = $("#tblCustomers")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+    $("body").on("click", "#btnSave", function ()
+    {
+        console.log("Hi");
+       // debugger;
+      
+        var SysUserGroupPermissions = new Array();
+        $("#tblCustomers TBODY TR").each(function () {
+            var row = $(this);
+            var SysUserGroupPermission = {};
+          //  debugger;
+           
+            console.log("Hii");
+            var teee = row.find('td:eq(0) input').is(':checked');
+            if (teee == true)
+            {
+                SysUserGroupPermission.IsGrant = true;
+            }
+            else
+            {
+                SysUserGroupPermission.IsGrant = false;
+            }
+
+
+            
+            //SysUserGroupPermission.FunctionName = row.find("TD").eq(1).html();
+           // SysUserGroupPermission.FunctionDescription = row.find("TD").eq(2).html();
+           // SysUserGroupPermission.TypeID = row.find("TD").eq(3).html();
+           // SysUserGroupPermission.FormId = row.find("TD").eq(4).html();
+            SysUserGroupPermission.SysUserFunctionID = row.find("TD").eq(5).html();
+            console.log("SysUserFunctionID" + SysUserGroupPermission.SysUserFunctionID );
+
+            SysUserGroupPermission.SysUserGroupId = $("#SysUserGroupId").val();
+            SysUserGroupPermissions.push(SysUserGroupPermission);
+        });
+        console.log("Hiiiiiiiii");
+
+       // console.log(SysUserGroupPermissions);
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/UserGroupPermission/Create",
+            data: JSON.stringify(SysUserGroupPermissions),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log("Success response:", response);
+                alert("Function(s) modified for user group - " + $("#SysUserGroupId option:selected").text());
+            },
+            error: function (xhr, status, error) {
+                console.error("Error details:", {
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText
+                });
+
+                // Attempt to parse and log detailed error information if available
+                try {
+                    const errorResponse = JSON.parse(xhr.responseText);
+                    console.error("Detailed error response:", errorResponse);
+                } catch (e) {
+                    console.error("Failed to parse error response:", xhr.responseText);
+                }
+
+                alert("Failed to modify function(s) for user group. Please check the console for details.");
+            }
+        });
+
+
+    });
+
+
+    //});
+</script>
+
+<script>
+
+    function checkAll(bx) {
+        var cbs = document.getElementsByTagName('input');
+        for (var i = 0; i < cbs.length; i++) {
+            if (cbs[i].type == 'checkbox') {
+                cbs[i].checked = bx.checked;
+            }
+        }
+    }
+</script>

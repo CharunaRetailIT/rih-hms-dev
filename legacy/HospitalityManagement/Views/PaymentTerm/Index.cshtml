@@ -1,0 +1,87 @@
+﻿
+@model IEnumerable<RIT.HMS.Domain.PaymentTerm>
+@{
+    ViewBag.Title = "Payment Terms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+<h2></h2>
+
+<body class="nav-md">
+
+    <div class="right_col" role="main" id="bgt">
+        <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <!-- form input mask -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel" id="test1">
+
+                        <div class="x_content">
+                            <br />
+
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Payment Terms<small>Existing</small></h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <table id="datatable-responsive" class="mstable">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Payment Term</th>
+                                                <th>Delete</th>
+                                                <th></th>
+                                                @*<th></th>*@
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.PaymentTermCode)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.PaymentTermName)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.IsDelete)</td>
+                                                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.PaymenttermId })</td>
+                                                    @*<td>@Html.ActionLink("View", "Details", new { id = item.SysGroupOfCompanyId })</td>*@
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="clerfix">
+                        <div class="pull-left">
+                            @*@Html.ActionLink("Add Company", "Index", null,
+                                new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })*@
+                            <input type="button" class="btn btn-info" value="Add Payment Term" onclick="location.href='@Url.Action("Create",null, new { })'" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+

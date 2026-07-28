@@ -1,0 +1,233 @@
+﻿@model RIT.HMS.Domain.Currency
+@{
+    ViewBag.Title = "Currency";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+@*<html lang="en">*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+
+</head>
+
+@if (ViewBag.Message != null)
+{
+    <script>
+
+$(document).ready(function(){
+
+alert('@ViewBag.ErrorMessage');
+
+});
+
+    </script>
+
+}
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Currency", "Currency", FormMethod.Post, new { @class = "form-horizontal"}))
+        {
+            @Html.AntiForgeryToken()
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Currency</strong> for currency code -  @ViewBag.CurrCode saved successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Currency</strong> for currency code - @ViewBag.CurrCode save failed.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "3")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Currency</strong> for currency code -  @ViewBag.CurrCode is already exists.
+                        </div>
+                    }
+
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Currency</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                       
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Currency Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.CurrencyCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 5,
+                                                   Placeholder = "Code",
+                                                   onkeypress = "return checkCodeTypeInput(event)"
+                                               })
+                                                @Html.ValidationMessageFor(model => model.CurrencyCode, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Description</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.CurrencyDescription, new { @class = "form-control", Placeholder = "Description" })
+                                                @Html.ValidationMessageFor(model => model.CurrencyDescription, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Format</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                @Html.TextAreaFor(model => model.CurrencyFormat, new { @class = "form-control", Placeholder = "Currency Format" })
+                                                @Html.ValidationMessageFor(model => model.CurrencyFormat, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Symbol</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+
+
+                                                @Html.TextBoxFor(model => model.CurrencySymbol, new { @class = "form-control", MaxLength = 20, Placeholder = "" })
+                                                @Html.ValidationMessageFor(model => model.CurrencySymbol, "", new { @class = "text-danger" })
+
+
+                                            </div>
+                                        </div>
+
+                                    
+                                       
+
+                                        <br />
+
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+
+                                       
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Buying Rate</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.BuyingRate, new { @class = "form-control pull-left", @min = 0, MininumLength = 20,Type="number",step="0.01", style = "width:50%" })
+                                                @Html.ValidationMessageFor(model => model.BuyingRate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Selling Rate</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.SellingRate, new { @class = "form-control pull-left", @min = 0, MininumLength = 20, Type = "number", step = "0.01", style = "width:50%" })
+                                                @Html.ValidationMessageFor(model => model.SellingRate, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">As Of Date</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.AsofDate, new { @class = "form-control pull-left", Placeholder = "Mobile",Type="date", style = "width:50%" })
+                                                @Html.ValidationMessageFor(model => model.AsofDate, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                       
+                                        <br /><br />
+                                        <div class="form-group">
+                                            <div class="col-md-9">
+
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                                </div>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">IsActive</label>
+                                                <div class="checkbox col-xs-1">
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+
+
+                                        <br />
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Currency", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewCurrencies", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Submit</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+

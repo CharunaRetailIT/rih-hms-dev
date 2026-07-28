@@ -1,0 +1,215 @@
+﻿@*@model  HospitalityManagement.Models.Reports.ReportInfo*@
+@model IEnumerable<RIT.HMS.Domain.Reports.ReportInfo>
+    @{
+        ViewBag.Title = "Reports";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+
+    @using (Html.BeginForm("GetReports", "Report", FormMethod.Post, new { @class = "" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container body">
+            <div class="main_container">
+                <div class="right_col" role="main">
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Reports<small></small></h2>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <br />
+                                <div class="row">
+
+                                    <div class="form-horizontal form-label-left col-md-7">
+                                        @*<div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From</label>
+                                                <div class="col-md-4 col-sm-9 col-xs-9">
+                                                    <input type="date" class="form-control" id="DateFrom" name="DateFrom" />
+                                                </div>
+                                                <label class="control-label col-md-1 col-sm-3 col-xs-3">To</label>
+                                                <div class="col-md-4 col-sm-9 col-xs-9">
+                                                    <input type="date" class="form-control" id="DateTo" name="DateTo" />
+
+                                                </div>
+                                            </div>*@
+                                        <div class="form-group col-md-9 col-sm-9 col-xs-9 col-sm-9">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Report Category</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="ReportCategoryId" name="ReportCategoryId" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-9 col-sm-9 col-xs-9 col-sm-9">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Report Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <select id="ReportInfoId" name="ReportInfoId" class="form-control select2"></select>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-horizontal form-label-left col-md-5">
+
+                                        <div class="form-group">
+                                            <br /><br /><br /><br /><br />
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <button type="submit" class="btn btn-success">View</button>
+                                            </div>
+                                            @*<div class="col-md-3 col-sm-9 col-xs-9">
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                                                        <ul class="dropdown-menu">
+
+                                                            <li>
+                                                                <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                                                </a>
+                                                            </li>
+                                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                                                        </ul>
+                                                    </div>
+
+                                                </div>*@
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <br />
+                                <div class="clearfix"></div>
+
+                                @*<div id="printcontent">
+
+                                        <div class="clearfix"></div>
+                                        <br />
+                                        <div class="col-md-12">
+
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <br /><br />
+
+                                        <div class="table-responsive">
+
+                                            @if (Model != null)
+                                            {
+
+
+                                                <table id="tblstock" class="table table-striped jambo_table bulk_action">
+                                                    <thead>
+                                                        <tr class="headings">
+                                                            <th class="column-title">Product Id</th>
+                                                            <th class="column-title">Product</th>
+                                                            <th class="column-title">Quantity</th>
+                                                            <th class="column-title">Cost Price</th>
+                                                            <th class="column-title">Selling Price</th>
+                                                        </tr>
+                                                    </thead>
+
+
+
+                                                    @foreach (var head in Model)
+                                                    {
+
+                                                        <tr style="background-color:lightgray; width:200%" class="headings">
+                                                            <td>Location:@Html.DisplayFor(modelItem => head.Location)</td>
+                                                            <td>To Location:@Html.DisplayFor(modelItem => head.ToLocation)</td>
+                                                            <td>Date:@Html.DisplayFor(modelItem => head.DocumentDate)</td>
+                                                            <td>Document No:@Html.DisplayFor(modelItem => head.DocumentNo)</td>
+
+                                                        </tr>
+
+
+                                                        <tbody>
+
+                                                            @foreach (var item in head.Detail)
+                                                            {
+                                                                <tr class="even pointer">
+                                                                    <td class="">@Html.DisplayFor(k => item.ProductId)</td>
+                                                                    <td class="">@Html.DisplayFor(k => item.ProductName)</td>
+                                                                    <td class="">@Html.DisplayFor(k => item.OrderQty) </td>
+                                                                    <td class="">@Html.DisplayFor(k => item.CostPrice)</td>
+                                                                    <td class="">@Html.DisplayFor(k => item.SellingPrice)</td>
+                                                                </tr>
+                                                            }
+
+                                                        </tbody>
+
+
+
+                                                    }
+
+                                                </table>
+
+                                            }
+
+                                        </div>
+
+                                    </div>*@
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+          
+     
+
+        debugger;
+
+        $.getJSON("@Url.Action("GetRptCategories", "Report")", function (data) {
+
+            var rptCategory = $("#ReportCategoryId");
+            rptCategory.empty();
+            rptCategory.append("<option value='0'>-- Select a Report Category --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                rptCategory.append($('<option />', { value: optionaldata.ReportCategoryId }).html(optionaldata.ReportCategoryName));
+
+            });
+            //debugger;
+            @*if ('@Convert.ToInt32(Session["ReportCategoryId"])') {
+                $('#ReportCategoryId').val('@Convert.ToInt32(Session["ReportCategoryId"])').trigger("change");
+            } else {
+                $('#ReportCategoryId').val(0).trigger("change");
+            }*@
+
+
+        });
+
+
+        $("#ReportCategoryId").change(
+          function () {
+              var rpt = this.value;
+
+              $.getJSON("@Url.Action("GetRptInfoIdByRptCatId", "Report")", { rptid: rpt },
+               function (data) {
+                   var Report = $("#ReportInfoId");
+                   Report.empty();
+                   Report.append("<option value='0'>-- Select a Report --</option>");
+
+                   $.each(JSON.parse(data), function (index, optionaldata) {
+                       Report.append($('<option />', { value: optionaldata.ReportInfoId }).html(optionaldata.ReportName));
+                   });
+               });
+          });
+
+        });
+    </script>
+

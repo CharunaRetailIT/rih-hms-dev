@@ -1,0 +1,349 @@
+﻿@model RIT.HMS.Domain.Transactions.PurchaseHeader
+@{
+    ViewBag.Title = "GRN View";
+    Layout = null;
+}
+
+<body>
+
+    @using (Html.BeginForm("CreateGRN", "GRN", FormMethod.Get, new
+    {
+        @class = "form-horizontal",
+
+    }))
+
+
+    {
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="modal-header col-md-12" style="width: 55%;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">...</h4>
+            </div>
+            <div class="x_panel">
+
+                <div id="printcontent">
+
+                    <div class="x_title" style="text-align:center">
+                        @if (Model.PrintStatus == 1)
+                        {
+                            <div class="small text-right" style="text-align:right">Original | @Model.DocState</div>
+                        }
+                        else
+                        {
+                            <div class="small text-right" style="text-align:right">Duplicate | @Model.DocState</div>
+                        }
+                        <div style="font-size:large">@Model.SysCompany.CompanyName</div>
+                        <div style="font-size:medium">@Model.SysCompany.Address1,@Model.SysCompany.Address2,@Model.SysCompany.Address3</div><br />
+                        <div style="font-size:large">Goods Received Note</div>
+                        <br />
+                    </div>
+
+                    <div class="x_content">
+                        <div>
+                            <table align="center" style="width:100%">
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Location: @Model.Location </label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">Create User: @Model.CreatedUser </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Doc #: @Model.DocumentNo </label>
+
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        @*<label class="control-label">Doc Date: @Model.CreatedDate </label>*@
+                                        <label class="control-label">GRN Date: @Model.GRNDate.ToShortDateString() </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">
+
+                                        <label class="control-label">Supplier: @Model.Supplier.SupplierName </label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">Print Date: @DateTime.Now </label>
+                                    </td>
+                                </tr>
+                                @* Added by pavithra *@
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Reference No: @Model.ReferenceNo </label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">Remark: @Model.Remark </label>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="text-align:left">
+                                        @if (Model.GRNType == "POBased")
+                                        {
+                                            <label class="control-label">PO No:@Model.PONumber </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="control-label">PO No:N/A</label>
+                                        }
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right"></td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <br />
+                        <div class="clearfix"></div>
+
+                        <br />
+                        <div class="table-responsive">
+                            @if (Model.PurchaseDetail != null)
+                            {
+
+                                <table id="tblstock" border="1" style="width:100%;border:thick" class="table table-striped jambo_table bulk_action table-responsive">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th>Product Code</th>
+                                            <th>Product Name</th>
+                                            @if (Model.GRNType == "POBased")
+                                            {
+                                                <th>PO Quantity </th>
+                                            }
+                                            <th>GRN Quantity </th>
+                                            <th>Free Quantity </th>
+                                            <th>Discounts as %</th>
+                                            <th>Discounts as Amt.</th>
+                                            <th>Unit CP</th>
+                                            <th>Unit SP</th>
+                                            <th>Cost Value</th>
+                                            <th>Tax</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @foreach (var item in Model.PurchaseDetail)
+                                        {
+
+                                            <tr class="">
+
+                                                <td>@item.ProductCode</td>
+                                                <td style="word-wrap: break-word;" >@item.ProductName</td>
+                                                @if (Model.GRNType == "POBased")
+                                                {
+                                                    <td style="text-align:right">@item.OrderQty.ToString("n2")</td>
+                                                }
+                                                <td style="text-align:right">@item.GRNQuantity.ToString("n2")</td>
+                                                <td style="text-align:right">@item.FreeQty.ToString("n2")</td>
+                                                <td style="text-align:right">@item.DiscountPercentage</td>
+                                                <td style="text-align:right">@item.DiscountAmount.ToString("n2")</td>
+                                                <td style="text-align:right">@item.CostPrice.ToString("n3")</td>
+                                                <td style="text-align:right">@item.SellingPrice.ToString("n3")</td>
+                                                <td style="text-align:right">@item.CostValue.ToString("n3")</td>
+                                                <td style="text-align:right">@item.TotalTax.ToString("n2")</td>
+
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td></td>
+                                            @if (Model.GRNType == "POBased")
+                                            {
+                                                <td></td>
+
+                                            }
+                                            <td style="text-align:right">@Model.PurchaseDetail.Sum(p => p.GRNQuantity).ToString("n2")</td>
+                                            <td style="text-align:right">@Model.PurchaseDetail.Sum(p => p.FreeQty).ToString("n2")</td>
+                                            <td style="text-align:right">@Model.PurchaseDetail.Sum(p => p.DiscountPercentage)</td>
+                                            <td style="text-align:right">@Model.PurchaseDetail.Sum(p => p.DiscountAmount * p.GRNQuantity).ToString("n2")</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align:right">@Model.TotCostPrice.ToString("n3")</td>
+                                            <td style="text-align:right">@Model.TotalTax.ToString("n2")</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <br />
+
+                                //Added by pavithra
+                                <table id="tblNet" style="width:50%" align="right">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Gross Amount: </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.GrossAmount.ToString("n3") </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Subtotal Discount Amount:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.DiscountAmount.ToString("n2") </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Subtotal Discount Percentage:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.DiscountPercentage </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Deductions:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.Deductions.ToString("n2") </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Other Charges:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.OtherChargers.ToString("n2") </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Total Taxes:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.TotalTax.ToString("n2") </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Net Amount:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.NetAmount.ToString("n3") </label>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <table id="signature" style="width:100%">
+                        <tr style="width:100%">
+                            <td style="text-align:center">
+                                ..................................<br />
+                                Entered By
+                            </td>
+                            <td style="text-align:center">
+                                ..................................<br />
+                                Received By
+                            </td>
+                            <td style="text-align:center">
+                                ..................................<br />
+                                Checked By
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="actionBar">
+                <div class="msgBox">
+                    <button type="submit" class="btn btn-primary pull-right">Back</button>
+                    <div class="btn-group">
+                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                </a>
+                            </li>
+                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" />PDF</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    }
+
+</body>
+
+@*<script src="~/vendors/jquery/dist/jquery.min.js"></script>*@
+
+<script type="text/javascript">
+    function PrintDiv() {
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+        //var divContents = document.getElementById("printcontent").innerHTML;
+        //var printWindow = window.open('', '', '');
+        //printWindow.document.write('<html><head><title></title>');
+        //printWindow.document.write('</head><body >');
+        //printWindow.document.write(divContents);
+        //printWindow.document.write('</body></html>');
+        //printWindow.document.close();
+        //printWindow.print();
+
+        //$(document).ready(function () {
+        //    $('#printcontent').DataTable();
+        //});
+    }
+</script>
+@*<style>
+    .custom-div {
+        width: 100%; /* or a specific width like 1200px */
+        max-width: 1200px; /* Set a max width if needed */
+        /* Additional styles if needed */
+    }
+</style>*@

@@ -1,0 +1,31 @@
+# Root build context = the API image (apps/api/Dockerfile). Keep apps/api/** and
+# db/postgres/** ; drop everything heavy or irrelevant so the daemon upload is small.
+.git
+.github
+.gitignore
+.gitattributes
+**/.DS_Store
+
+# 219 MB of frozen .NET Framework — never part of the v2 image.
+legacy/
+
+# Other workspaces / docs / tests the API image doesn't need.
+apps/web/
+docs/
+tests/
+scripts/
+infra/
+*.md
+LICENSE
+
+# Build artifacts (the SDK rebuilds these inside the image).
+**/bin/
+**/obj/
+**/node_modules/
+**/.next/
+
+# Never ship env/secrets into a build layer.
+.env
+**/.env
+**/.env.*
+!**/.env.example

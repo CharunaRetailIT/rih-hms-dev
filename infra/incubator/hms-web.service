@@ -1,0 +1,27 @@
+[Unit]
+Description=RIT HMS Web (Next.js standalone, Node)
+After=network.target hms-api.service
+Wants=hms-api.service
+
+[Service]
+Type=simple
+User=azureuser
+Group=azureuser
+WorkingDirectory=/opt/hms/web
+Environment=NODE_ENV=production
+Environment=PORT=8003
+Environment=HOSTNAME=127.0.0.1
+Environment=API_BASE_URL=http://127.0.0.1:8002
+Environment=NEXT_TELEMETRY_DISABLED=1
+ExecStart=/usr/bin/node /opt/hms/web/server.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/hms/web.log
+StandardError=append:/var/log/hms/web.err
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=false
+
+[Install]
+WantedBy=multi-user.target

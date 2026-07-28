@@ -1,0 +1,393 @@
+﻿@model RIT.HMS.Domain.SysLocation
+@{
+    ViewBag.Title = "Location";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewBag.Message != null)
+{
+    <script>
+
+        $(document).ready(function () {
+
+            alert('@ViewBag.ErrorMessage');
+
+        });
+
+    </script>
+
+}
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "Location", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.SysLocationID)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Location</strong> @ViewBag.LocCode modified successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Location</strong> @ViewBag.LocCode failed to modify.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "4")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Only One Head Office Can be Create</strong>
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "5")
+                    {
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            Can't be select Active and Delete options in the same time..!
+                        </div>
+                    }
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Location</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location Code</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.LocationCode, new { @class = "form-control", MaxLength = 5, Placeholder = "Code", @readonly = true })
+                                                @Html.ValidationMessageFor(model => model.LocationCode, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control", MaxLength = 50, Placeholder = "Location Name" })
+                                                @Html.ValidationMessageFor(model => model.LocationName, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 01</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.Address1, new { @class = "form-control", Placeholder = "Address 01" })
+                                                @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 02</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.Address2, new { @class = "form-control", Placeholder = "Address 02" })
+                                                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 03</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.Address3, new { @class = "form-control", Placeholder = "Address 03" })
+                                                @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Tel</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+
+
+                                                @Html.TextBoxFor(model => model.Telephone, new { @class = "form-control", MaxLength = 20, Placeholder = "Telephone" })
+                                                @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Fax</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.Fax, new { @class = "form-control", MaxLength = 20, Placeholder = "Fax" })
+                                                @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">E Mail</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", Type = "email", MaxLength = 20, Placeholder = "E mail" })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        @if (ViewBag.IsInherit == "inherit")
+                                        {
+                                            <div class="form-group">
+
+                                                <br />
+                                                <br />
+                                                <div class="clearfix"></div>
+
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.CheckBoxFor(model => model.InheritProducts, new { @class = "flat" })
+                                                    <label class="control-label">Create all products for this location</label>
+                                                </div>
+
+
+                                            </div>
+                                        }
+
+
+                                        <br />
+
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Group</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                <select id="GroupOfCompanyID" name="GroupOfCompanyID" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.GroupOfCompanyID, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Company</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                <select id="CompanyID" name="CompanyID" class="form-control"></select>
+                                                @Html.ValidationMessageFor(model => model.CompanyID, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location Type</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.DropDownListFor(M => M.LocationTypeId, new SelectList(Model.SysLocationTypeList, "Id", "Description", "-- Select a location type --"), new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.LocationTypeId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Contact Person</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.ContactPersonName, new { @class = "form-control", Placeholder = "Contact Person" })
+                                                @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Other Business Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.OtherBusinessName, new { @class = "form-control", Placeholder = "Other Business Name" })
+                                                @Html.ValidationMessageFor(model => model.OtherBusinessName, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none;">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Perfix</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.LocationPrefixCode, new { @class = "form-control", Placeholder = "Perfix" })
+                                                @Html.ValidationMessageFor(model => model.LocationPrefixCode, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none;">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IP</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.LocationIP, new { @class = "form-control", Placeholder = "IP", min = 0, MaxLength = 20 })
+                                                @Html.ValidationMessageFor(model => model.LocationIP, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Cost Center</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                @Html.TextBoxFor(model => model.CostCenter, new { @class = "form-control", Placeholder = "Cost Center" })
+                                                @Html.ValidationMessageFor(model => model.CostCenter, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                            <div class="col-md-9">
+                                                <div class="row">
+                                                    <div class="col-md-6 text-left">
+
+                                                         @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })&nbsp;&nbsp; <label>Is Delete </label>
+
+                                                    </div>
+                                                    <div class="col-md-6 text-left">
+
+                                                        @Html.CheckBoxFor(model => model.IsVAT, new { @class = "flat" })&nbsp;&nbsp; <label>Is Vat </label>
+
+                                                    </div>
+                                                    <div class="col-md-6 text-left">
+
+                                                         @Html.CheckBoxFor(model => model.IsActive, new { @class = "flat" })&nbsp;&nbsp; <label>Is Active </label>
+
+                                                    </div>
+
+                                                    <div class="col-md-6 text-left">
+
+                                                         @Html.CheckBoxFor(model => model.IsHeadOffice, new { @class = "flat" })&nbsp;&nbsp; <label>Is HeadOffice </label>
+
+                                                    </div>
+                                                    <div class="col-md-6 text-left">
+
+                                                         @Html.CheckBoxFor(model => model.IsStockLocation, new { @class = "flat" })&nbsp;&nbsp; <label>Is Stock Location </label>
+
+                                                    </div>
+                                                    <div class="col-md-6 text-left">
+
+                                                         @Html.CheckBoxFor(model => model.IsShowRoom, new { @class = "flat" })&nbsp;&nbsp; <label>Is Show Room </label>
+
+                                                    </div>
+                                                </div>
+                                              
+
+                                            </div>
+                                        </div>
+
+
+                                        <br />
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Reset", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewLocations", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Modify</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $.getJSON("@Url.Action("GetGroupOfCompanies", "GroupOfCompany")", function (data) {
+
+        var companyGroupDropDown = $("#GroupOfCompanyID");
+
+
+        companyGroupDropDown.empty();
+        companyGroupDropDown.append("<option value='0'>-- Select a Group of Company --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            companyGroupDropDown.append($('<option />', { value: optionaldata.SysGroupOfCompanyId }).html(optionaldata.GroupOfCompanyName));
+
+        });
+
+        if ('@ViewBag.GroupOfCompanyID') {
+            $('#GroupOfCompanyID').val(@ViewBag.GroupOfCompanyID).trigger("change");
+        } else {
+            $('#GroupOfCompanyID').val(0).trigger("change");
+        }
+
+
+    });
+
+    $.getJSON("@Url.Action("GetActiveCompanies", "Company")", function (data) {
+
+
+        var CompanyCodelist = $("#CompanyID");
+
+        CompanyCodelist.empty();
+        CompanyCodelist.append("<option value='0'>-- Select a  Company --</option>");
+
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CompanyCodelist.append($('<option />', { value: optionaldata.SysCompanyID }).html(optionaldata.CompanyName));
+
+        });
+
+        if ('@ViewBag.CompanyID') {
+            $('#CompanyID').val(@ViewBag.CompanyID).trigger("change");
+        } else {
+            $('#CompanyID').val(0).trigger("change");
+        }
+
+
+    });
+
+    $("#GroupOfCompanyID ").change(function () {
+        var GCId = this.value;
+        $.getJSON("@Url.Action("GetCompanyByGOCId", "Company")", { id: GCId },
+            function (data) {
+
+                var CompanyCodelist = $("#CompanyID");
+
+                CompanyCodelist.empty();
+                CompanyCodelist.append("<option value='0'>-- Select Company --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    CompanyCodelist.append($('<option />', { value: optionaldata.SysCompanyID }).html(optionaldata.CompanyName));
+                });
+
+                if ('@ViewBag.CompanyID') {
+                    $('#CompanyID').val(@ViewBag.CompanyID).trigger("change");
+                } else {
+                    $('#CompanyID').val(0).trigger("change");
+                }
+
+
+            });
+    });
+
+
+
+</script>

@@ -1,0 +1,441 @@
+﻿@model HospitalityManagement.Models.GiftVoucherBarcode
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("Create", "GiftVoucherBarcode", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                <!-- page content -->
+                <div class="right_col" role="main">
+                    <div class="">
+                        <div class="clearfix"></div>
+                        @if (@ViewBag.Message == "3")
+                        {
+                            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Gift Voucher Barcode</strong> @ViewBag.Gift Saved Successfully.
+                            </div>
+                        }
+                        else if (@ViewBag.Message == "0")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Gift Voucher Barcode</strong> @ViewBag.Gift Save Failed.
+                            </div>
+                        }
+                        <div class="row">
+                            <!-- form input mask -->
+
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Gift Voucher Barcode</h2>
+                                        <br />
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-12">
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Document No</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", @readonly = "readonly", MaxLength = 50, Placeholder = "" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Date</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.TransferDate, new
+                                                    {
+                                                        @id = "DocumentDate",
+                                                        @class = "form-control pull-left",
+                                                        Type = "date",
+                                                        @Style = "width:50%",
+                                                        Placeholder = "StartingDate",
+                                                        @Value = string.Format("{0:yyyy-MM-dd}", DateTime.Now),
+                                                    })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-12">
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Transaction</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.Transaction, new { @class = "form-control", MaxLength = 50, Placeholder = "" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-12">
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3"> Print Document No</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.PrintDocumentNo, new { @class = "form-control", MaxLength = 50, Placeholder = "" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-12">
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Remarks</label>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", MaxLength = 50, Placeholder = "" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-6">
+                                            <div class="form-group">
+                                                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="x_panel">
+                                        <div>
+                                            <table id="giftvoucherdetailstable" class="mstable">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="display:none">Gift Voucher Master ID</th>
+                                                        <th>Row</th>
+                                                        <th>Book Code</th>
+                                                        <th>Book Name</th>
+                                                        <th>Voucher Serial</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="x_content">
+                                        <br />
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-horizontal form-label-left col-md-6">
+                                                    @using (Html.BeginForm())
+                                                    {
+                                                        <span> Voucher </span>
+                                                        @Html.RadioButtonFor(model => model.VoucherType, "A", new { @checked = "checked", @value = "1" })
+                                                        <span> Coupon </span>
+                                                        @Html.RadioButtonFor(model => model.VoucherType, "D")
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher Group *</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        <select id="InvGiftVoucherGroupID" class="form-control" name="InvGiftVoucherGroupID"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Total Qty</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        @Html.TextBoxFor(model => model.TotQuantity, new { @class = "form-control", @type = "number", MaxLength = 50, Placeholder = "" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Book Code *</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        <select id="BookCode" class="form-control" name="BookCode"></select>
+                                                        @Html.HiddenFor(model => model.BookCode, new { id = "GiftVoucherGroupCode2" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6"></div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Based on *</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        <select id="Basedon" name="Basedon" class="form-control">
+                                                            <option value="1">Book Serial</option>
+                                                        </select>
+                                                        @*@Html.TextBoxFor(model => model.InvGiftVoucherGroupID, new { @class = "form-control", MaxLength = 50, Placeholder = "Book Serial*" })
+                                                            @Html.ValidationMessageFor(model => model.InvGiftVoucherBookCodeID, "", new { @class = "text-danger" })*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6"></div>
+                                        </div>
+
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Selection Criteria*</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        @Html.TextBoxFor(model => model.BookName, new { @class = "form-control", MaxLength = 50, Placeholder = "" })
+                                                        @Html.ValidationMessageFor(model => model.BookName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6"></div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Precentage of Coupon</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        <div id="D">
+
+                                                            @Html.TextBoxFor(model => model.GiftVoucherPercentage, new { @class = "form-control", @disabled = "disabled", id = "txtGiftVoucherPercentage", @readonly = "readonly" })
+
+                                                            @Html.ValidationMessageFor(model => model.GiftVoucherPercentage, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6"></div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">No of Vouchers on a Book</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        @Html.TextBoxFor(model => model.PageCount, new { @class = "form-control", @type = "number", MaxLength = 50, Placeholder = "0" })
+                                                        @Html.ValidationMessageFor(model => model.PageCount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Tag Setup</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        @Html.TextBoxFor(model => model.TagSetup, new { @class = "form-control", @type = "number", MaxLength = 50 })
+                                                        @Html.ValidationMessageFor(model => model.TagSetup, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal form-label-left col-md-12">
+                                            <div class="form-horizontal form-label-left col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">Gift Voucher Value</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        @Html.TextBoxFor(model => model.GiftVoucherValue, new { @class = "form-control", @type = "number", MaxLength = 50, Placeholder = "0.00" })
+                                                        @Html.ValidationMessageFor(model => model.GiftVoucherValue, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal form-label-left col-md-6">
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-3">TAG</label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                                                        <select id="Tag" name="Tag" >
+                                                            <option value="1">60 ST</option>
+                                                            <option value="2">3 Sticker</option>
+                                                            <option value="3">GlitzTAG A4 new</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        @*</div>*@
+                                        <br />
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            <div class="btn btn-primary pl_add btn-small pull-left">
+                                                @Html.ActionLink("Clear", "Create", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>
+                                            @*<div class="btn btn-info pl_add btn-small pull-left">
+                                                @Html.ActionLink("View All", "ViewBookCode", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                            </div>*@
+                                            <div class="clearfix">
+
+                                                    <button type="submit" formaction="PrintBarCode" class="btn btn-primary pl_add btn-small pull-left">Download</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        Giftvouchergroupload();
+        LoadLocation();
+        LoadLocationTo();
+        GVbookload();
+    });
+
+    $('#LocationA').click(function (e) {
+        e.preventDefault(); // Prevent form submission
+        $('#LocationA').change(function () {
+            var selectedValue = $(this).val();
+            $('#LocationAhidden1').val(selectedValue);//value assign to the hidden variable
+        });
+    });
+    $('#LocationB').click(function (e) {
+        e.preventDefault(); // Prevent form submission
+        $('#LocationB').change(function () {
+            var selectedValue = $(this).val();
+            $('#LocationAhidden2').val(selectedValue);//value assign to the hidden variable
+        });
+    });
+    $('#BookCode').click(function (e) {
+        e.preventDefault(); // Prevent form submission
+        $('#BookCode').change(function () {
+            var selectedValue = $(this).val();
+            $('#GiftVoucherGroupCode2').val(selectedValue);//value assign to the hidden variable when dropdown select
+        });
+    });
+     var GVbookload = function () {
+
+        $.getJSON("@Url.Action("GetGiftvoucherBook", "GiftVoucherMaster")", function (data) {
+            var BookCode = $("#BookCode");
+            BookCode.empty();
+            BookCode.append("<option value='0'>-- Select Book --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                BookCode.append($('<option />', { value: optionaldata.BookCode }).html(optionaldata.BookName));
+            });
+            if ('@ViewBag.BookCode') {
+                $('#BookCode').val(@ViewBag.BookCode).trigger("change");
+            } else {
+                $('#BookCode').val(0).trigger("change");
+            }
+        });
+    }
+    var LoadLocation = function () {
+
+        $.getJSON("@Url.Action("GetLocationAll", "GiftVoucherPurchaseOrder")", function (data) {
+            var LocationA = $("#LocationA");
+            LocationA.empty();
+            LocationA.append("<option value='0'>-- Select --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                LocationA.append($('<option />', { value: optionaldata.LocationCode }).html(optionaldata.LocationName));
+            });
+            if ('@ViewBag.LocationA') {
+
+                $('#SupplierID').val(@ViewBag.LocationA).trigger("change");
+
+            } else {
+                $('#SupplierID').val(0).trigger("change");
+
+            }
+
+        });
+    }
+    var LoadLocationTo = function () {
+
+        $.getJSON("@Url.Action("GetLocationAll", "GiftVoucherPurchaseOrder")", function (data) {
+            var LocationB = $("#LocationB");
+            LocationB.empty();
+            LocationB.append("<option value='0'>-- Select --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                LocationB.append($('<option />', { value: optionaldata.LocationCode }).html(optionaldata.LocationName));
+            });
+            if ('@ViewBag.LocationB') {
+
+                $('#SupplierID').val(@ViewBag.LocationB).trigger("change");
+
+            } else {
+                $('#SupplierID').val(0).trigger("change");
+
+            }
+
+        });
+    }
+    var Giftvouchergroupload = function () {
+        $.getJSON("@Url.Action("GetGiftvoucherGroup", "GiftVoucherGoodReceiveNote")", function (data) {
+            var GiftVoucherGroupCode = $("#InvGiftVoucherGroupID");
+            GiftVoucherGroupCode.empty();
+            GiftVoucherGroupCode.append("<option value='0'>-- Select Group --</option>");
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                GiftVoucherGroupCode.append($('<option />', { value: optionaldata.GiftVoucherGroupCode }).html(optionaldata.GiftVoucherGroupCode));
+            });
+            if ('@ViewBag.GiftVoucherGroupCode') {
+
+                $('#InvGiftVoucherGroupID').val(@ViewBag.GiftVoucherGroupCode).trigger("change");
+            } else {
+                $('#InvGiftVoucherGroupID').val(0).trigger("change");
+            }
+        });
+    }
+    $("input[type='radio']").change(function () {
+
+        if ($(this).val() == "other") {
+            $("#otherAnswer").show();
+        }
+        else {
+            $("#otherAnswer").hide();
+        }
+    });
+</script>
+<script type="text/javascript">
+    function EnableDisable() {
+        var others = document.getElementById();
+        var otherCoupen = document.getElementById(model.GiftVoucherPercentage);
+        otherCoupen.disabled = others.checked ? false : true;
+        otherCoupen.value = "";
+        if (!otherCoupen.disabled) {
+            otherCoupen.focus();
+        }
+    }
+
+    // Fire on radio button checked event
+    $('input[type="radio"]').change(function () {
+
+        // Get the value of currently clicked radio button
+        var value = $(this).val();
+
+        // Find the corresponding textbox inside the div that has the id same as radio button value and remove it disabled attribute
+        $('#' + $(this).val())
+            .children('input[type="text"]')
+            .removeAttr('disabled');
+
+        // Find all radio button and find its corresponding textbox and make it disable except the checked radio button.
+        $('input[type="radio"]').each(function () {
+            if (this.value != value) {
+                $('#' + this.value)
+                    .children('input[type="text"]')
+                    .attr('disabled', 'disabled');
+            }
+        })
+    });
+</script>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

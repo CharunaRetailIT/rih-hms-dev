@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"rit-hms-service","appId":"1:701155706679:android:d66a9872ee6edbcbcdfcb2","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"rit-hms-service","configurations":{"android":"1:701155706679:android:d66a9872ee6edbcbcdfcb2","ios":"1:701155706679:ios:79b8fa2fcdbb18c3cdfcb2"}}}}}}

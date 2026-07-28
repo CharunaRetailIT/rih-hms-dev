@@ -1,0 +1,427 @@
+﻿@model  IEnumerable<RIT.HMS.Domain.UnitConversion>
+@{
+    ViewBag.Title = "User Group Permissions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+                       
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            @*@using (Html.BeginForm("Create", "Department", FormMethod.Post, new { @class = "form-horizontal" }))
+                {*@
+            @*@Html.AntiForgeryToken()*@
+
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit Conversions</strong> saved successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Unit Conversions</strong> save failed.
+                                </div>
+                            }
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>Unit Conversions</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        @*<li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="#">Settings 1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Settings 2</a>
+                                                </li>
+                                            </ul>
+                                        </li>*@
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <div class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Unit Of Measure</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+
+                                                <select id="UnitOfMeasureId" name="UnitOfMeasureId" class="form-control"></select>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <br />
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @*@Html.TextBoxFor(model => model.DepartmentName, new { @class = "form-control", MaxLength = 50, Placeholder = "Department Name" })
+        @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })*@
+                                                @*<table id="tblUnitConversions" class="table table table-striped table-bordered bulk_action">*@
+
+                                                
+                                                <table id="tblUnitConversions" class="mstable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="display:none">CId</th>
+                                                            <th>Sub Unit</th>
+                                                            <th>Sub Unit Value</th>
+                                                            <th>Sub Unit Symbol</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="conversionrows">
+                                                        @if (Model != null)
+                                                        {
+                                                            foreach (var unitConversion in Model)
+                                                            {
+                                                                <tr>
+                                                                    <td style="display:none">@unitConversion.UnitConversionId</td>
+                                                                    <td>@unitConversion.SubUnit</td>
+                                                                    <td>@unitConversion.SubUnitValue</td>
+                                                                    <td>@unitConversion.SubUnitSymbol</td>
+                                                                    <td>
+                                                                        <input type="button" class="btn btn-round btn-info" value="-" onclick="Remove(this)" />
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            @*<td><input type="text" id="BaseUnitName" class="form-control" /></td>*@
+                                                            <td style="display:none"></td>
+                                                            <td>
+                                                                <select id="BaseUnitName" name="BaseUnitName" class="form-control"></select>
+                                                                <label class="text-danger" id="textTableError" style="padding:12px" ></label>
+
+                                                            </td>
+                                                            <td><input type="number" step="0.01" id="BaseUnitValue" class="form-control" min="0" /><label style="padding:12px"></label></td>
+                                                            <td><input type="text" id="BaseUnitSymbol" readonly class="form-control" style="display:none" /><label style="padding:12px"></label></td>
+                                                            <td><input type="button" id="btnAdd" class="btn btn-round btn-info" value="+" /><label style="padding:12px"></label></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <br />
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "Index", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                @*<div class="btn btn-info pl_add btn-small pull-left">
+                                                        @Html.ActionLink("View All", "ViewDepartments", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                    </div>*@
+                                                @*<button type="submit" class="btn btn-success">Submit</button>*@
+                                                <input type="button" id="btnSave" class="btn btn-success" value="Save Conversions" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @*}*@
+        </div>
+    </div>
+</body>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+@*<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>*@
+<script src="~/Scripts/json2.js"></script>
+
+<script>
+
+    loadbaseunits();
+    $.getJSON("@Url.Action("GetUnitOfMeasures", "UnitConversion")", function (data) {
+        var measurement = $("#UnitOfMeasureId");
+        measurement.empty();
+        measurement.append("<option value='0'>-- Select a Unit of Measure --</option>");
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            measurement.append($('<option />', { value: optionaldata.UnitOfMeasureId }).html(optionaldata.UnitOfMeasureName));
+        });
+
+        @*if ('@ViewBag.SysUserGroupId') {
+            $('#SysUserGroupId').val(@ViewBag.SysUserGroupId).trigger("change");
+        } else {
+            $('#SysUserGroupId').val(0).trigger("change");
+        }*@
+
+
+    });
+
+
+    function loadbaseunits(){
+
+        $.getJSON("@Url.Action("GetUnitOfMeasures", "UnitConversion")", function (data) {
+
+            var BaseUnitName = $("#BaseUnitName");
+
+            BaseUnitName.empty();
+            BaseUnitName.append("<option value='0'>-- Select a Unit of Measure --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                BaseUnitName.append($('<option />', { value: optionaldata.UnitOfMeasureId }).html(optionaldata.UnitOfMeasureName));
+            });
+
+        });
+    }
+  
+    $("#UnitOfMeasureId ").change(function () {
+        var measurementid = this.value;
+        $.getJSON("@Url.Action("GetUnitOfConversionsById", "UnitConversion")", { id: measurementid },
+            function (data) {
+
+              // alert('aaaa');
+                $("#conversionrows tr").remove();
+                $.each(JSON.parse(data), function (index, optionaldata)
+                {
+                    var conversionId = optionaldata.UnitConversionId;
+                    var baseUnitName = optionaldata.SubUnit;
+                    var baseUnitValue = optionaldata.SubUnitValue;
+                    var baseUnitSymbol = optionaldata.SubUnitSymbol;
+
+                    //Get the reference of the Table's TBODY element.
+                    var tBody = $("#tblUnitConversions > TBODY")[0];
+
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+
+                    var cell = $(row.insertCell(-1));
+                    cell.html(conversionId);
+                    cell.attr("style", "display:none");
+
+                    //Add Name cell.
+                    var cell = $(row.insertCell(-1));
+                    cell.html(baseUnitName);
+
+                    //Add Country cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(baseUnitValue);
+
+                    //Add Country cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(baseUnitSymbol);
+
+
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                    btnRemove.attr("type", "button");
+
+                    btnRemove.attr("onclick", "Remove(this);");
+                    btnRemove.val("-");
+                    cell.append(btnRemove);
+
+                    //Clear the TextBoxes.
+                    baseUnitName = "";
+                    baseUnitValue = "";
+                    baseUnitSymbol = "";
+                });
+            });
+    });
+</script>
+
+<script type="text/javascript">
+        $("body").on("click", "#btnAdd", function () {
+            //Reference the Name and Country TextBoxes.
+
+            $('#textTableError').html('');
+            if ($("#UnitOfMeasureId").val() == 0) {
+                alert("Select a unit of measure !");
+                return;
+            }
+
+            if ($("#BaseUnitName").val() == "") {
+                alert("Base Unit Name required!");
+                return;
+            }
+
+            if ($("#BaseUnitValue").val() == "") {
+                alert("Base Unit Value required!");
+                return;
+            }
+            //if ($("#BaseUnitSymbol").val() == "") {
+            //    alert("Base Unit Symbol required!");
+            //    return;
+            //}
+
+            var baseUnitName = $("#BaseUnitName");
+            var baseUnitValue = $("#BaseUnitValue");
+            var baseUnitSymbol = $("#BaseUnitSymbol");
+
+            var getValidationResult = IsValidateAddItem(baseUnitName.find(":selected").text(), baseUnitValue.val())
+            if (!getValidationResult) {
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblUnitConversions > TBODY")[0];
+
+                console.log(tBody);
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                var cell = $(row.insertCell(-1));
+                cell.html(0);
+                cell.attr("style", "display:none");
+
+                //Add Name cell.
+                var cell = $(row.insertCell(-1));
+                cell.html(baseUnitName.find(":selected").text());
+
+                //Add base unit value cell.
+                cell = $(row.insertCell(-1));
+                cell.html(baseUnitValue.val());
+
+                //Add sub unit simbole cell.
+                cell = $(row.insertCell(-1));
+                cell.html(baseUnitValue.val() + ' ' + baseUnitName.find(":selected").text());
+
+                //Add Button cell.
+                cell = $(row.insertCell(-1));
+                var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                btnRemove.attr("type", "button");
+
+                btnRemove.attr("onclick", "Remove(this);");
+                btnRemove.val("-");
+                cell.append(btnRemove);
+
+                //Clear the TextBoxes.
+                baseUnitName.val("");
+                baseUnitValue.val("");
+                baseUnitSymbol.val("");
+
+                loadbaseunits();
+            }
+            else {
+                $('#textTableError').html('Inserted Sub Unit is already existing list.');
+                $('#BaseUnitName').focus();
+            }
+        });
+
+
+    function IsValidateAddItem(baseUnitName, baseUnitValue, baseUnitSymbol) {
+        var result = false;
+
+        $("#tblUnitConversions TBODY TR").each(function () {
+            var row = $(this);
+            var UnitConversion = {};
+            if (row.find("TD").eq(1).html() === baseUnitName && row.find("TD").eq(2).html() === baseUnitValue) {
+                result = true;
+            }
+        });
+
+        return result;
+    }
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var cid = $("TD", row).eq(0).html();
+            var cname = $("TD", row).eq(1).html();
+            if (confirm("Do you want to delete: " + cname)) {
+                //Get the reference of the Table.
+                var table = $("#tblUnitConversions")[0];
+
+                
+                $.ajax({
+                    type: "GET",
+                    url: "/UnitConversion/CheckConversion",
+                    data: { id: cid },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        debugger
+                      //  alert(r);
+                        if (r == 0) {
+                            table.deleteRow(row[0].rowIndex);
+                            alert("Unit Conversion Removed !");
+                        } else
+                        {
+                            alert("Can not delete. "+ r +" Product(s) has this unit Conversion !");
+                        }
+                    }
+                });
+
+
+                
+            }
+        };
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+            var unitConversions = new Array();
+            $("#tblUnitConversions TBODY TR").each(function () {
+                var row = $(this);
+                var UnitConversion = {};
+                UnitConversion.UnitConversionId = row.find("TD").eq(0).html();
+                UnitConversion.SubUnit = row.find("TD").eq(1).html();
+                UnitConversion.SubUnitvalue = row.find("TD").eq(2).html();
+                UnitConversion.SubUnitSymbol = row.find("TD").eq(3).html();
+                UnitConversion.UnitOfMeasureId = $("#UnitOfMeasureId").val();
+                UnitConversion.BaseUnitValue = 1;
+                unitConversions.push(UnitConversion);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/UnitConversion/SaveConversions",
+                data: JSON.stringify(unitConversions),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    debugger
+                    // $("#CountryName").val(data.con);
+                    $("#tblUnitConversions TBODY TR").remove();
+                    alert("Unit Conversion saved !");
+                }
+            });
+        });
+</script>
+

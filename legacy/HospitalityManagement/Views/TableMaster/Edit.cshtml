@@ -1,0 +1,235 @@
+﻿@model RIT.HMS.Domain.TableMaster
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container body">
+    <div class="main_container">
+
+        @using (Html.BeginForm("Edit", "TableMaster", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.TableMasterID)
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            @if (@ViewBag.Message == "1")
+                            {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Table</strong> @ViewBag.TblCode modified successfully.
+                                </div>
+                            }
+                            else if (@ViewBag.Message == "2")
+                            {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Table</strong> @ViewBag.TblCode failed to modify.
+                                </div>
+                            }
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Table Master - Edit</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                      
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Table Code</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TableCode,
+                                               new
+                                               {
+                                                   @class = "form-control",
+                                                   MaxLength = 50,
+                                                   @ReadOnly =true
+                                               })
+                                                @Html.ValidationMessageFor(model => model.TableCode, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Table Name</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TableName, new { @class = "form-control", MaxLength = 50, Placeholder = "Table Name" })
+                                                @Html.ValidationMessageFor(model => model.TableName, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <select id="LocationId" class="form-control" name="LocationId"></select>
+                                                @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Inter-Department</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                <select id="InterDeptId" class="form-control" name="InterDeptId"></select>
+                                                @Html.ValidationMessageFor(model => model.InterDeptId, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">No Of Seats</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.NumberOfSeats, new { @class = "form-control", MaxLength = 50, @Type = "number", @Step = "1", @Min = "0" })
+                                                @Html.ValidationMessageFor(model => model.NumberOfSeats, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">X Position</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TablePositionX, new { @class = "form-control", MaxLength = 50, @readonly = true, @Value = "100" })
+                                                @Html.ValidationMessageFor(model => model.TablePositionX, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Y Position</label>
+                                            <div class="col-md-3 col-sm-9 col-xs-9">
+                                                @Html.TextBoxFor(model => model.TablePositionY, new { @class = "form-control", MaxLength = 50, @readonly = true, @Value = "100" })
+                                                @Html.ValidationMessageFor(model => model.TablePositionY, "", new { @class = "text-danger pull-left" })
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsDelete</label>
+                                            <div class="checkbox col-xs-1 pull-left ">
+                                                @Html.CheckBoxFor(model => model.IsDelete, new { @class = "flat" })
+                                            </div>
+                                        </div>
+
+
+                                        @*<div class="ln_solid"></div>*@ <br />
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Reset", "Edit", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <div class="btn btn-info pl_add btn-small pull-left">
+                                                    @Html.ActionLink("View All", "ViewTables", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Modify</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    @*$.getJSON("@Url.Action("GetUserGroup", "UserGroup")", function (data) {
+
+        var companyDropDown = $("#SysUserGroupID");
+
+        usergroupDropDown.empty();
+        usergroupDropDown.append("<option value='0'>-- Select the User Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            usergroupDropDown.append($('<option />', { value: optionaldata.SysUserGroupID }).html(optionaldata.UserGroupName));
+        });*@
+
+    if ('@ViewBag.SysUserGroupID') {
+        $('#SysGroupOfCompanyId').val(@ViewBag.SysUserGroupID).trigger("change");
+    } else {
+        $('#SysUserGroupID').val(0).trigger("change");
+    }
+
+
+    //});
+
+
+</script>
+
+
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#LocationId");
+
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.LocationId')
+        {
+            $('#LocationId').val(@ViewBag.LocationId).trigger("change");
+        } else
+        {
+            $('#LocationId').val(0).trigger("change");
+        }
+
+
+    });
+
+
+</script>
+
+<script>
+
+
+    $.getJSON("@Url.Action("GetActiveInterDepartments", "RequestNote")", function (data) {
+
+        var InterDeptId = $("#InterDeptId");
+
+        InterDeptId.empty();
+        InterDeptId.append("<option value='0'>-- Select a Department --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            InterDeptId.append($('<option />', { value: optionaldata.InterDepartmentId }).html(optionaldata.InterDepartmentName));
+
+        });
+
+        if ('@ViewBag.InterDeptId') {
+            $('#InterDeptId').val(@ViewBag.InterDeptId).trigger("change");
+        } else {
+            $('#InterDeptId').val(0).trigger("change");
+        }
+
+
+    });
+
+
+
+</script>
+
+
+

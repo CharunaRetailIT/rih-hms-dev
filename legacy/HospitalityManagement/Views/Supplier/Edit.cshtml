@@ -1,0 +1,889 @@
+﻿@model RIT.HMS.Domain.Supplier
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+@*<html lang="en">*@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+</head>
+
+<div class="container body">
+    <div class="main_container">
+        @using (Html.BeginForm("Edit", "Supplier", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.SupplierID);
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    @if (@ViewBag.Message == "1")
+                    {
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Supplier</strong> @ViewBag.SupplierCode modified successfully.
+                        </div>
+                    }
+                    else if (@ViewBag.Message == "2")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Supplier</strong> @ViewBag.SupplierCode failed to modify.
+                        </div>
+                    }
+
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Supplier - Edit</h2>
+                                    <br />
+
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+
+
+                                    @*------------------------tabs----------------------------------*@
+
+                                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                            <li role="presentation" class="active">
+                                                <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Profile 01</a>
+                                            </li>
+                                            <li role="presentation" class="">
+                                                <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Profile 02</a>
+                                            </li>
+                                            @*<li role="presentation" class="">
+                                                <a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Profile 03</a>
+                                            </li>*@
+                                        </ul>
+                                        <div id="myTabContent" class="tab-content">
+
+                                            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                                                @*tab content one //////////////////////////*@
+
+                                                <div class="form-horizontal form-label-left col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Supplier Code *</label>
+                                                        <div class="col-md-3 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.SupplierCode,
+                                                           new
+                                                           {
+                                                               @class = "form-control",
+                                                               MaxLength = 15,
+                                                               Placeholder = "Code",
+                                                               @readonly = true
+                                                           })
+                                                            @Html.ValidationMessageFor(model => model.SupplierCode, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Name *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", MaxLength = 100, Placeholder = "Name" })
+                                                            @Html.ValidationMessageFor(model => model.SupplierName, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <div class="col-md-9">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Male</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.RadioButtonFor(m => m.Gender, "Male")
+                                                            </div>
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Female</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.RadioButtonFor(m => m.Gender, "Female")
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Supplier Type *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            <select id="SupplierTypeID" name="SupplierTypeID" class="form-control"></select>
+                                                            @Html.ValidationMessageFor(model => model.SupplierTypeID, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Contact Person Name</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.ContactPersonName, new { @class = "form-control", MaxLength = 100, Placeholder = "Contact Person Name" })
+                                                            @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Billing Address 01 *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.BillingAddress1, new { @class = "form-control", MaxLength = 250, Placeholder = "Billing Address 01" })
+                                                            @Html.ValidationMessageFor(model => model.BillingAddress1, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Billing Address 02 </label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.BillingAddress2, new { @class = "form-control", MaxLength = 100, Placeholder = "Billing Address 02" })
+                                                            @Html.ValidationMessageFor(model => model.BillingAddress2, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Billing Address 03</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.BillingAddress3, new { @class = "form-control", MaxLength = 100, Placeholder = "Billing Address 03" })
+                                                            @Html.ValidationMessageFor(model => model.BillingAddress3, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Telephone *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.BillingTelephone, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Billing Telephone",
+                                                           type = "text",
+                                                           MaxLength = 10,
+                                                           onkeypress = "validateInputForNumbers(event)"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.BillingTelephone, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Mobile</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.BillingMobile, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Billing Mobile",
+                                                           type = "text",
+                                                           MaxLength = 10,
+                                                           onkeypress = "validateInputForNumbers(event)"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.BillingMobile, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Fax</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.BillingFax, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Billing Fax",
+                                                           type = "text",
+                                                           MaxLength = 10,
+                                                           onkeypress = "validateInputForNumbers(event)"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.BillingFax, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">E Mail</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", MininumLength = 50, type = "email", Placeholder = "E Mail" })
+                                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Supplier Group *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            <select id="SupplierGroupID" name="SupplierGroupID" class="form-control"></select>
+                                                            @Html.ValidationMessageFor(model => model.SupplierGroupID, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+                                                    <br />
+
+                                                </div>
+
+                                                <div class="form-horizontal form-label-left col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Title</label>
+                                                        <div class="col-md-3 col-sm-9 col-xs-9">
+                                                            <select id="SupplierTitle" name="SupplierTitle" class="form-control">
+                                                                <option value="0">-Title-</option>
+                                                                <option value="Mr" selected>Mr.</option>
+                                                                <option value="Mrs">Mrs.</option>
+                                                                <option value="Ms">Ms.</option>
+                                                                <option value="Miss">Miss.</option>
+                                                                <option value="Dr">Dr.</option>
+                                                                <option value="Rev">Rev.</option>
+                                                                <option value="Company">Company</option>
+                                                            </select>
+                                                            @Html.ValidationMessageFor(model => model.SupplierTitle, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Representative Name</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.RepresentativeName, new { @class = "form-control", MininumLength = 100, Placeholder = "Representative Name" })
+                                                            @Html.ValidationMessageFor(model => model.RepresentativeName, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Representative NIC</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.RepresentativeNICNo, new { @class = "form-control", MininumLength = 50, pattern = "^([0-9]{9}[x|X|v|V]|[0-9]{12})$", Placeholder = "Representative NIC No" })
+                                                            @Html.ValidationMessageFor(model => model.RepresentativeNICNo, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Payee Name</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.PayeeName, new { @class = "form-control", MininumLength = 100, Placeholder = "Payee Name" })
+                                                            @Html.ValidationMessageFor(model => model.PayeeName, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 01</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DeliveryAddress1, new { @class = "form-control", MininumLength = 50, Placeholder = "Address 01" })
+                                                            @Html.ValidationMessageFor(model => model.DeliveryAddress1, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 02</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DeliveryAddress2, new { @class = "form-control", MininumLength = 50, Placeholder = "Address 02" })
+                                                            @Html.ValidationMessageFor(model => model.DeliveryAddress2, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Address 03</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DeliveryAddress3, new { @class = "form-control", MininumLength = 50, Placeholder = "Address 03" })
+                                                            @Html.ValidationMessageFor(model => model.DeliveryAddress3, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Delivery Telephone</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DeliveryTelephone, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Delivery Telephone",
+                                                           type = "number",
+                                                           MaxLength = 50,
+                                                           oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.DeliveryTelephone, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Delivery Mobile</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DeliveryMobile, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Delivery Mobile",
+                                                           type = "number",
+                                                           MaxLength = 50,
+                                                           oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.DeliveryMobile, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Delivery Fax</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DeliveryFax, new
+                                                       {
+                                                           @class = "form-control",
+                                                           Placeholder = "Delivery Fax",
+                                                           type = "number",
+                                                           MaxLength = 50,
+                                                           oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.DeliveryFax, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">BR number</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.ReferenceNo, new { @class = "form-control", MininumLength = 20, Placeholder = "BR number" })
+                                                            @Html.ValidationMessageFor(model => model.ReferenceNo, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Nature of the business</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.ProductBusinessType, new { @class = "form-control", Placeholder = "Nature of the business" })
+                                                            @Html.ValidationMessageFor(model => model.ProductBusinessType, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Payment Method*</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            <select id="PaymentMethod" name="PaymentMethod" class="form-control"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Credit Limit *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @*@Html.TextBoxFor(model => model.CreditLimit, new { @class = "form-control", MininumLength = 20, type = "number",min = 0, Placeholder = "Credit Limit" })
+                                                                @Html.ValidationMessageFor(model => model.CreditLimit, "", new { @class = "text-danger" })*@
+
+                                                            @Html.TextBoxFor(model => model.CreditLimit, new
+                                                       {
+                                                           @class = "form-control",
+                                                           min = 0,
+                                                           Type = "text",
+                                                           Placeholder = "Credit Limit",
+                                                           MaxLength = 20,
+                                                           onkeypress = "validateInputForNumbers(event)"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.CreditLimit, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Cheque Limit *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @*@Html.TextBoxFor(model => model.ChequeLimit, new { @class = "form-control", MininumLength = 20, type = "number", min = 0, Placeholder = "Cheque Limit" })
+                                                                @Html.ValidationMessageFor(model => model.ChequeLimit, "", new { @class = "text-danger" })*@
+
+                                                            @Html.TextBoxFor(model => model.ChequeLimit, new
+                                                       {
+                                                           @class = "form-control",
+                                                           min = 0,
+                                                           Type = "text",
+                                                           Placeholder = "Cheque Limit",
+                                                           MaxLength = 20,
+                                                           onkeypress = "validateInputForNumbers(event)"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.ChequeLimit, "", new { @class = "text-danger pull-left" })
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Cheque Period *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.ChequePeriod, new { @class = "form-control", MininumLength = 20, Placeholder = "Cheque Period" })
+                                                            @Html.ValidationMessageFor(model => model.ChequePeriod, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Payment Term *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            <select id="PaymentTermID" name="PaymentTermID" class="form-control"></select>
+                                                            @Html.ValidationMessageFor(model => model.PaymentTermID, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Credit Period *</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.CreditPeriod, new { @class = "form-control", MininumLength = 20, Placeholder = "Credit Period",
+                                                           Type = "text",
+                                                           onkeypress = "validateInputForNumbers(event)"
+                                                       })
+                                                            @Html.ValidationMessageFor(model => model.CreditPeriod, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Photograph</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            <input type="file" id="Photograph" name="Photograph" class="flat pull-left" />
+                                                            @ViewBag.FileName
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+
+                                                </div>
+
+                                                @*///////////////////////////////////////*@
+                                            </div>
+
+                                            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+
+                                                <div class="form-horizontal form-label-left col-md-6">
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Reference Serial</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.ReferenceSerial, new { @class = "form-control", MininumLength = 20, Placeholder = "Reference Serial" })
+                                                            @Html.ValidationMessageFor(model => model.ReferenceSerial, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Postal Code</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                            @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control", MininumLength = 20, Placeholder = "Postal Code" })
+                                                            @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 01</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                            @Html.TextBoxFor(model => model.TaxID1, new { @class = "form-control", MaxLength = 20, Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxID1, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax No 01</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxNo1, new { @class = "form-control", MaxLength = 25, Placeholder = "Tax No 01" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxNo1, "", new { @class = "text-danger" })*@
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 02</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxID2, new { @class = "form-control", MaxLength = 20, Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxID2, "", new { @class = "text-danger" })*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax No 02</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxNo2, new { @class = "form-control", MininumLength = 25, Placeholder = "Tax No 02" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxNo2, "", new { @class = "text-danger" })*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 03</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxID3, new { @class = "form-control", MininumLength = 20, Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxID3, "", new { @class = "text-danger" })*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax No 03</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxNo3, new { @class = "form-control", MininumLength = 25, Placeholder = "Tax No 03" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxNo3, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 04</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxID4, new { @class = "form-control", MininumLength = 20, Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxID4, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax No 04</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxNo4, new { @class = "form-control", MininumLength = 25, Placeholder = "Tax No 04" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxNo4, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID 05</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxID5, new { @class = "form-control", MininumLength = 20, Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxID5, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax No 05</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxNo5, new { @class = "form-control", MininumLength = 25, Placeholder = "Tax No 05" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxNo5, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-9">
+                                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3" id="lblUpload">IsUpload</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.CheckBoxFor(model => model.IsUpload)
+                                                            </div>
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3" id="lblSuspended">IsSuspended</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.CheckBoxFor(model => model.IsSuspended)
+                                                            </div>*@
+                                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3" id="lblPOMail">IsPOMail</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.CheckBoxFor(model => model.IsPOMail)
+                                                            </div>*@
+                                                        </div>
+                                                        <br />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-9">
+
+                                                            @*<label class="control-label col-md-3 col-sm-3 col-xs-3" id="lblDelete">IsDelete</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.CheckBoxFor(model => model.IsDelete)
+                                                            </div>*@
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">IsBlocked</label>
+                                                            <div class="checkbox col-xs-1">
+                                                                @Html.CheckBoxFor(model => model.IsBlocked)
+                                                            </div>
+                                                        </div>
+                                                        <br />
+                                                    </div>
+                                                    <br />
+                                                </div>
+
+                                                <div class="form-horizontal form-label-left col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax Registration No</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxRegistrationNo, new { @class = "form-control", MininumLength = 20, Placeholder = "Tax Registration No" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxRegistrationNo, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax Registration Name</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxRegistrationName, new { @class = "form-control", MininumLength = 100, Placeholder = "Tax Registration Name" })
+                                                            @*@Html.ValidationMessageFor(model => model.TaxRegistrationName, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+                                                </div>
+
+
+                                                @*///////////////////////////////////////*@
+                                            </div>
+
+                                            <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+
+
+                                                <div class="form-horizontal form-label-left col-md-6">
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Supplied Products</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.SuppliedProducts, new { @class = "form-control", Placeholder = "Supplied Products" })
+                                                            @Html.ValidationMessageFor(model => model.SuppliedProducts, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Order Circle</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+
+                                                            @Html.TextBoxFor(model => model.OrderCircle, new { @class = "form-control", type = "number", Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.OrderCircle, "", new { @class = "text-danger" })*@
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Ledger ID</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.LedgerID, new { @class = "form-control", MaxLength = 20, Placeholder = "Ledger ID" })
+                                                            @Html.ValidationMessageFor(model => model.LedgerID, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Other Ledger ID</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.OtherLedgerID, new { @class = "form-control", MaxLength = 20, Placeholder = "Other Ledger ID" })
+                                                            @Html.ValidationMessageFor(model => model.OtherLedgerID, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <br />
+
+                                                </div>
+
+                                                <div class="form-horizontal form-label-left col-md-6">
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Tax ID No</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.TaxIdNo, new { @class = "form-control", Placeholder = "Tax ID No" })
+                                                            @Html.ValidationMessageFor(model => model.TaxIdNo, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Deposite Amount</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.DepositeAmount, new { @class = "form-control", Value = "0" })
+                                                            @*@Html.ValidationMessageFor(model => model.DepositeAmount, "", new { @class = "text-danger" })*@
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Email Subject</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.EmailSubject, new { @class = "form-control", Placeholder = "Email Subject" })
+                                                            @Html.ValidationMessageFor(model => model.EmailSubject, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Email Body</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextAreaFor(model => model.EmailBoday, new { @class = "form-control", MaxLength = "150", Placeholder = "Email Body" })
+                                                            @Html.ValidationMessageFor(model => model.EmailBoday, "", new { @class = "text-danger pull-left" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="display: none;">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Remark</label>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBoxFor(model => model.Remark, new { @class = "form-control", Placeholder = "Remark" })
+                                                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger pull-left" })
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*--------------------------------------------------------------------------------*@
+
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="actionBar">
+                                        <div class="msgBox">
+
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-primary" value="Clear" onclick="location.href='@Url.Action("Edit", null, new { })'" />
+                                            </div>
+                                            <div class="pull-left">
+                                                <input type="button" class="btn btn-info" value="View All" onclick="location.href='@Url.Action("ViewSuppliers", null, new { })'" />
+                                            </div>
+                                            <button type="submit" class="btn btn-success">Modify</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    function validateInputForNumbers(evt) {
+        debugger;
+        var theEvent = evt || window.event;
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveSupplierGroups", "SupplierGroup")", function (data) {
+
+        var supplierGroupDropDown = $("#SupplierGroupID");
+        //var CompanyCodelist = $("#CompanyID");
+
+        supplierGroupDropDown.empty();
+        supplierGroupDropDown.append("<option value='0'>-- Select a Supplier Group --</option>");
+        //CompanyCodelist.append("<option value='0'>-- Select a Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            supplierGroupDropDown.append($('<option />', { value: optionaldata.SupplierGroupID }).html(optionaldata.SupplierGroupName));
+
+        });
+
+        if ('@ViewBag.SupplierGroupID ') {
+            $('#SupplierGroupID').val(@ViewBag.SupplierGroupID ).trigger("change");
+        } else {
+            $('#SupplierGroupID').val(0).trigger("change");
+        }
+    });
+    
+    $.getJSON("@Url.Action("GetActiveSupplierTypes", "Supplier")", function (data) {
+
+        var supplierTypeDropDown = $("#SupplierTypeID");
+        //var CompanyCodelist = $("#CompanyID");
+
+        supplierTypeDropDown.empty();
+        supplierTypeDropDown.append("<option value='0'>-- Select a Supplier Type --</option>");
+        //CompanyCodelist.append("<option value='0'>-- Select a Company --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            supplierTypeDropDown.append($('<option />', { value: optionaldata.SupplierTypeID }).html(optionaldata.SupplierTypeName));
+
+        });
+
+        if ('@ViewBag.SupplierTypeID') {
+            $('#SupplierTypeID').val(@ViewBag.SupplierTypeID).trigger("change");
+        } else {
+            $('#SupplierTypeID').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActivePaytmentTerms", "PO")", function (data) {
+
+        var paymentTermId = $("#PaymentTermID");
+        
+        paymentTermId.empty();
+        paymentTermId.append("<option value='0'>-- Select a Payment Term --</option>");
+        
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            paymentTermId.append($('<option />', { value: optionaldata.PaymenttermId }).html(optionaldata.PaymentTermName));
+
+        });
+
+        if ('@ViewBag.PaymenttermId') {
+            $('#PaymentTermID').val(@ViewBag.PaymenttermId).trigger("change");
+        } else {
+            $('#PaymentTermID').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActivePaytmentMethods", "PO")", function (data) {
+
+        var PaymentMethodId = $("#PaymentMethod");
+        
+        PaymentMethodId.empty();
+        PaymentMethodId.append("<option value='0'>-- Select a Payment Method --</option>");
+        
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            PaymentMethodId.append($('<option />', { value: optionaldata.PaymentMethodId }).html(optionaldata.PaymentMethodName));
+
+        });
+
+        if ('@ViewBag.PaymentMethodId') {
+            $('#PaymentMethod').val(@ViewBag.PaymentMethodId).trigger("change");
+        } else {
+            $('#PaymentMethod').val(0).trigger("change");
+        }
+    });
+    document.getElementById("SupplierTitle").selectedIndex = @ViewBag.sel;
+
+</script>
+
+<script>
+    window.onload = function () {
+        var chkIsBlocked = document.getElementById("IsBlocked");
+        chkIsBlocked.addEventListener('click', function () {
+            if (chkIsBlocked.checked) {
+                //$('#IsUpload').hide();
+                //$('#IsSuspended').hide();
+                //$('#IsPOMail').hide();
+                //$('#IsDelete').hide();
+
+                //$('#lblUpload').hide();
+                //$('#lblSuspended').hide();
+                //$('#lblPOMail').hide();
+                //$('#lblDelete').hide();
+
+                $("#IsUpload").prop("checked", false);
+                $("#IsSuspended").prop("checked", false);
+                $("#IsPOMail").prop("checked", false);
+                $("#IsDelete").prop("checked", false);
+            } else {
+                //$('#IsUpload').show();
+                //$('#IsSuspended').show();
+                //$('#IsPOMail').show();
+                //$('#IsDelete').show();
+                
+                //$('#lblUpload').show();
+                //$('#lblSuspended').show();
+                //$('#lblPOMail').show();
+                //$('#lblDelete').show();
+            }
+        });
+
+        if (chkIsBlocked.checked) {
+            $('#IsUpload').hide();
+            $('#IsSuspended').hide();
+            $('#IsPOMail').hide();
+            $('#IsDelete').hide();
+
+            $('#lblUpload').hide();
+            $('#lblSuspended').hide();
+            $('#lblPOMail').hide();
+            $('#lblDelete').hide();
+
+            $("#IsUpload").prop("checked", false);
+            $("#IsSuspended").prop("checked", false);
+            $("#IsPOMail").prop("checked", false);
+            $("#IsDelete").prop("checked", false);
+        }
+    }
+</script>

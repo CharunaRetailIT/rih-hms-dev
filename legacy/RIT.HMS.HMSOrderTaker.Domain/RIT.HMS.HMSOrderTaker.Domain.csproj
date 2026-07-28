@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C4C005FB-F167-4686-9A55-AD4A29B80C05}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RIT.HMS.HMSOrderTaker.Domain</RootNamespace>
+    <AssemblyName>RIT.HMS.HMSOrderTaker.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\HospitalityManagement\bin\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Addon.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AddonCategoryMaster.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoGenerateInfo.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CashierFunction.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CashierGroup.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CashierPermission.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CateringModeTax.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CateringMood.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChairMaster.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Enums\enumTabOrderDetails.cs" />
+    <Compile Include="Common\Enums\enumTabOrderHead.cs" />
+    <Compile Include="Configuration.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Currency.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCategory.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerDiscount.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomoerPreviousVisit.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryPerson.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentNumber.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentNumbers_17112020.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DTOs\DTO_Category.cs" />
+    <Compile Include="DTOs\DTO_Department.cs" />
+    <Compile Include="DTOs\DTO_Product.cs" />
+    <Compile Include="Employee.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeGroup.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HMSSTOS.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HMSSTOS.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HMSSTOS.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HMSSTOS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HMSSTOS.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="InterDepartment.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KitchenMaster.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KOTBOTDescription.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LocationTax.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoyaltyCustomer.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="POSUserGroup.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PrinterType.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductInstruction.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductServingUnit.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductServingUnits_18112020.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductStockMaster.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductTax.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receipe.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Receipes_30112020.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RstCategory.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RstDepartment.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RstKotCategory.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RstMealType.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RstSubCategory.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ServingUnit.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StewardsMaster.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="STOS_TabOrderConfirmationDetail.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="STOS_TabOrderConfirmationHeader.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="STOS_TabOrderDetail.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="STOS_TabOrderHeader.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SuspendDet.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SuspendHed.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SysCompany.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SysGroupOfCompany.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SysLocation.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TableMaster.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionDet.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UnitOfMeasure.cs">
+      <DependentUpon>HMSSTOS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\vmAccount.cs" />
+    <Compile Include="ViewModels\vmTableMaster.cs" />
+    <Compile Include="ViewModels\vmTabOrderDetail.cs" />
+    <Compile Include="ViewModels\vmTabOrderHeader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="HMSSTOS.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>HMSSTOS.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="HMSSTOS.edmx.diagram">
+      <DependentUpon>HMSSTOS.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HMSSTOS.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HMSSTOS.edmx</DependentUpon>
+      <LastGenOutput>HMSSTOS.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="HMSSTOS.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HMSSTOS.edmx</DependentUpon>
+      <LastGenOutput>HMSSTOS.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

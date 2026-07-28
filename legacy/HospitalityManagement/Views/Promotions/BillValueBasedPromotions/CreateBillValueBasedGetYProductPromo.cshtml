@@ -1,0 +1,571 @@
+﻿
+@{
+    ViewBag.Title = "Create Bill Value Based Get Y Product Promotions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Promotions.css" rel="stylesheet" />
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+
+<div class="right_col" role="main">
+
+
+    <div class="clearfix"></div>
+    <div class="container body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Bill Value Based Get Y Product Promotions <small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+
+                        <div class="form-horizontal form-group col-md-2">
+
+                            <label class="control-label">Promotion Name</label>
+
+                        </div>
+                        <div class="form-horizontal form-group col-md-4">
+                            <select class="form-control select2 promoid" id="PromotionMasterID" name="PromotionMasterID"> </select>
+                        </div>
+                        
+                        <div class="col-md-6 text-left" style="background-color:#ddd">
+                            <h4>Promotion Details:</h4>
+                            <label id="promotiondetails" style="font-weight:normal">
+                                Get selected Y product for selected bill value range.
+                            </label>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <hr />
+                        <br />
+                        <div class="clearfix"></div>
+                        <div class="col-md-6">
+                            <h4>Bill Value Range</h4>
+
+                            <br />
+
+                            <div class="form-horizontal form-label-left input_mask">
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">From Value</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="number" min="1" value="0" class="form-control " id="FromValue" placeholder="From Value">
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">To Value</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="number" min="1" value="0" class="form-control " id="ToValue" placeholder="From Value">
+                                    </div>
+                                </div>
+
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    @*<label class="control-label col-md-3 col-sm-3 col-xs-12">To Value</label>*@
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        @*<select class="form-control" id="ServingUnitId" name="ServingUnitId"> </select>*@
+                                        @*<input type="text" class="form-control " id="ToValue" placeholder="To Value">*@
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    @*<button type="button" id="addpromotionitem" class="btn btn-primary col-md-6 col-sm-6 col-xs-12 pull-right">Add Item</button>*@
+                                </div>
+                                <div class="clearfix"></div>
+                                <br />
+
+                                @*<table class="table table-bordered" id="promotiontable">
+                                    <thead>
+                                        <tr>
+                                            <th style="display:none">Item Id</th>
+                                            <th>Item Code</th>
+                                            <th>Desc</th>
+                                            <th style="display:none">Serving Unit Id</th>
+                                            <th>Serving Unit</th>
+                                            <th style="display:none">UOMId</th>
+                                            <th>UOM</th>
+                                            <th>Selling Price</th>
+                                            <th>Qty</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>*@
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4>Free Item(s)</h4>
+                            <div class="form-horizontal form-label-left input_mask">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Free Item </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control select2" id="YProductId" name="YProductId"> </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Serving Unit</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" id="YServingUnitId" name="YServingUnitId"> </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    Selling Price
+                                    <input type="text" class="form-control has-feedback-left text-right" disabled="disabled"
+                                           id="freesellingprice" placeholder="Selling Price">
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    Quantity
+                                    <input type="number" min="1" value="0" class="form-control text-right" id="freequantity" placeholder="Quantity">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <button type="button" id="addfreeitem" class="btn btn-primary col-md-6 col-sm-6 col-xs-12 pull-right">Add Item</button>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                @*<table class="table table-bordered" id="freeitem">
+                                    <thead>
+                                        <tr>
+                                            <th style="display:none">Item Id</th>
+                                            <th>Item Code</th>
+                                            <th>Desc</th>
+                                            <th style="display:none">Serving Unit Id</th>
+                                            <th>Serving Unit</th>
+                                            <th style="display:none">UOMId</th>
+                                            <th>UOM</th>
+                                            <th>Selling Price</th>
+                                            <th>Qty</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div>
+                        @*<table class="table table-bordered" id="freeitem">*@
+                        <table id="freeitem" class="mstable col-md-6 col-sm-6 col-xs-12">
+                            <thead>
+                                <tr>
+                                    <th style="display:none">Item Id</th>
+                                    <th>Item Code</th>
+                                    <th>Desc</th>
+                                    <th style="display:none">Serving Unit Id</th>
+                                    <th>Serving Unit</th>
+                                    <th style="display:none">UOMId</th>
+                                    <th>UOM</th>
+                                    <th>Selling Price</th>
+                                    <th>Qty</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+
+
+
+
+
+                    <div class="clearfix"></div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                            <button class="btn btn-primary pull-right" id="btnReset" onclick='Reset();' type="reset">Reset</button>
+                            <button type="submit" id="btnSave" class="btn btn-success pull-right" 
+                                    @*class="btn btn-success"*@
+                                    >Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+
+
+
+<script>
+    $.getJSON("@Url.Action("GetActivePromos", "Promotion")", function (data) {
+
+        var promotionMasterID = $("#PromotionMasterID");
+
+        promotionMasterID.empty();
+        promotionMasterID.append("<option value='0'>Select a Promotion</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            promotionMasterID.append($('<option />', { value: optionaldata.InvPromotionMasterID }).html(optionaldata.PromotionName+ " LocationID " + optionaldata.LocationID));
+
+        });
+
+        if ('@ViewBag.promotionMasterID') {
+            $('#PromotionMasterID').val(@ViewBag.promotionMasterID).trigger("change");
+        } else {
+            $('#PromotionMasterID').val(0).trigger("change");
+        }
+
+    });
+</script>
+
+<script>
+    $.getJSON("@Url.Action("GetPromotionItems", "ProductXYPromotions")", function (data) {
+
+        var ProductId = $("#ProductId");
+
+        ProductId.empty();
+        ProductId.append("<option value='0'>-- Select a Product --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            ProductId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+        });
+    });
+
+
+    $.getJSON("@Url.Action("GetPromotionItems", "ProductXYPromotions")", function (data) {
+
+        var YProductId = $("#YProductId");
+
+        YProductId.empty();
+        YProductId.append("<option value='0'>-- Select a Product --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            YProductId.append($('<option />', { value: optionaldata.ProductId }).html(optionaldata.ProductName));
+        });
+    });
+
+
+
+
+    $(document).ready(function () {
+
+        $("#ProductId").change(function () {
+
+            $.getJSON("@Url.Action("GetServingUnits", "ProductXYPromotions")", { id: $("#ProductId").val() },
+               function (data) {
+                   var ServingUnitId = $("#ServingUnitId");
+
+                   ServingUnitId.empty();
+                   ServingUnitId.append("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+
+                   $.each(JSON.parse(data), function (index, optionaldata) {
+                       ServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                   });
+               });
+
+        });
+
+
+        $("#YProductId").change(function () {
+            $.getJSON("@Url.Action("GetServingUnits", "ProductXYPromotions")", { id: $("#YProductId").val() },
+               function (data) {
+                   var YServingUnitId = $("#YServingUnitId");
+
+                   YServingUnitId.empty();
+                   YServingUnitId.append("<option value='0'>-- Select a Serving Unit / UOM --</option>");
+
+
+                   var ln = JSON.parse(data).length;
+
+                   if (ln > 1)
+                   {
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           YServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                       });
+
+                   }
+                   else
+                   {
+                       $.each(JSON.parse(data), function (index, optionaldata) {
+                           YServingUnitId.append($('<option />', { value: optionaldata.ProductServingUnitId }).html(optionaldata.ServingUnit));
+                           YServingUnitId.val(optionaldata.ProductServingUnitId).trigger("change");
+                       });
+
+                   }
+                 
+               });
+        });
+
+
+        $("#ServingUnitId").change(function ()
+        {
+
+            $.getJSON("@Url.Action("GetProductDetails", "ProductXYPromotions")", { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val() },
+            function (data)
+            {
+                   document.getElementById("sellingprice").value = data.SellingPrice;
+            });
+        });
+
+        $("#YServingUnitId").change(function ()
+        {
+            $.getJSON("@Url.Action("GetProductDetails", "ProductXYPromotions")", { id: $("#YProductId").val(), servingunitid: $("#YServingUnitId").val() },
+            function (data)
+            {
+                document.getElementById("freesellingprice").value = data.SellingPrice;
+            });
+        });
+
+    });
+
+
+
+
+
+</script>
+
+
+@*HTML Tables Handling*@
+@*Promotion Table*@
+<script type="text/javascript">
+    $("body").on("click",
+        "#addpromotionitem",
+        function () {
+            debugger;
+
+
+            if ($("#ProductId").val() == 0 || $("#ProductId").val() == null) {
+                alert("Select an Item !");
+                return;
+            }
+
+            if ($("#ServingUnitId").val() == 0 || $("#ServingUnitId").val() == null) {
+                alert("Select a Serving Unit !");
+                return;
+            }
+            if ($("#promotionqty").val() == 0 || $("#promotionqty").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+
+            var itemId = $("#ProductId").val();
+
+            $.ajax({
+                url: "@Url.Action("GetProductDetails", "ProductXYPromotions")",
+                data: { id: $("#ProductId").val(), servingunitid: $("#ServingUnitId").val() },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    var table = document.getElementById("promotiontable");
+                    $(table).find('tbody').append("<tr><td style='display:none'>" + data.ProductId + "</td><td>" + data.ProductCode + "</td><td>" + data.ProductName + "</td><td style='display:none'>" + data.ServingUnitId + "</td><td>" + data.ServingUnit + "</td><td style='display:none'>" + data.UOMId + "</td><td>" + data.UOM + "</td><td>" + data.SellingPrice + "</td><td>" + $("#promotionqty").val() + "</td><td><button type='button' id='promotionrow' onclick='RemovePromotion(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                    document.getElementById("promotionqty").value = "";
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+
+
+
+    function RemovePromotion(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(2).html();
+        if (confirm("Do you want to delete: " + name+" ?")) {
+            //Get the reference of the Table.
+            var table = $("#promotiontable")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+
+</script>
+
+@*Free Item  Table*@
+<script type="text/javascript">
+    $("body").on("click",
+        "#addfreeitem",
+        function () {
+            debugger;
+
+
+            if ($("#YProductId").val() == 0 || $("#YProductId").val() == null) {
+                alert("Select an Item !");
+                return;
+            }
+
+            if ($("#YServingUnitId").val() == 0 || $("#YServingUnitId").val() == null) {
+                alert("Select a Serving Unit !");
+                return;
+            }
+            if ($("#freequantity").val() == 0 || $("#freequantity").val() == null) {
+                alert("Invalid Quantity!");
+                return;
+            }
+
+
+
+            var itemId = $("#YProductId").val();
+
+            $.ajax({
+                url: "@Url.Action("GetProductDetails", "ProductXYPromotions")",
+                data: {
+                    id: $("#YProductId").val(), servingunitid: $("#YServingUnitId").val()
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    data = resp;
+
+                    var table = document.getElementById("freeitem");
+                    $(table).find('tbody').append("<tr><td style='display:none'>" + data.ProductId + "</td><td>" + data.ProductCode + "</td><td>" + data.ProductName + "</td><td style='display:none'>" + data.ServingUnitId + "</td><td>" + data.ServingUnit + "</td><td style='display:none'>" + data.UOMId + "</td><td>" + data.UOM + "</td><td>" + data.SellingPrice + "</td><td>" + $("#freequantity").val() + "</td><td><button type='button' id='freeitemrowrow' onclick='RemoveFreeItem(this);' class='btn btn-danger btn-xs'> Remove </button></td></tr>");
+                    document.getElementById("promotionqty").value = "";
+                },
+                error: function (error) {
+                    alert("Item data mapping error");
+                }
+            });
+        });
+
+
+    function RemoveFreeItem(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(2).html();
+        if (confirm("Do you want to delete: " + name+" ?")) {
+            var table = $("#freeitem")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>
+
+@*Submit*@
+
+<script>
+
+    $(document).ready(function ()
+    {
+        $("body").on("click", "#btnSave", function ()
+        {
+
+            if ($('#promotiontable tr').length == 1 || $('#freeitem tr').length == 1)
+            {
+                return;
+            }
+
+                    debugger;
+                    swal({
+                        title: "Bill Value Based Get Product Promotion",
+                        text: "Confirm?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                       function (isConfirm)
+                       {
+                           if (isConfirm)
+                           {
+
+                               var promotions = new Array();
+                               
+
+                               $("#freeitem TBODY TR").each(function ()
+                               {
+                                   var row = $(this);
+                                   var free = {};
+                                   free.ProductId = row.find("TD").eq(0).html();
+                                   free.ProductCode = row.find("TD").eq(1).html();
+                                   free.ProductName = row.find("TD").eq(2).html();
+                                   free.ServingUnitId = row.find("TD").eq(3).html();
+                                   free.ServingUnit = row.find("TD").eq(4).html();
+                                   free.SellingPrice = row.find("TD").eq(7).html();
+                                   free.Quantity = row.find("TD").eq(8).html();
+                                   free.UOM = row.find("TD").eq(6).html();
+                                   free.UOMId = row.find("TD").eq(5).html();
+                                  // free.PromotionItemType = 2;
+                                   free.InvPromotionMasterID = $("#PromotionMasterID").val();
+                                   free.ValueFrom = $("#ValueFrom").val();
+                                   free.ValueTo = $("#ValueTo").val();
+                                   promotions.push(free);
+                               });
+
+
+
+                               $.ajax({
+                                   type: "POST",
+                                   url: "@Url.Action("SubmitPromotions", "BillValueBasedPromotions")",
+                                   data: JSON.stringify(promotions),
+                                   contentType: "application/json; charset=utf-8",
+                                   dataType: "json",
+                                   success: function (res)
+                                   {
+                                       if (res != 0)
+                                       {
+
+                                           swal({
+                                               title: "",
+                                               text: "Promotion Saved Successfully!",
+                                               type: "success",
+                                               showCancelButton: false,
+                                               confirmButtonClass: "btn-success",
+                                               confirmButtonText: "Ok",
+                                               closeOnConfirm: true
+                                           },
+                                            function () {
+                                                window.location.href = "/BillValueBasedPromotions/CreateBillValueBasedGetYProductPromo";
+                                            });
+
+                                       }
+                                       else
+                                       {
+
+                                           swal("Error", "Promotion save failed!", "error");
+                                       }
+
+                                   }
+                           });
+                           }
+                       });
+                });
+    });
+</script>
+
+
+@*Reset*@
+
+<script>
+    function Reset() {
+
+        window.location.href = "/BillValueBasedPromotions/CreateBillValueBasedGetYProductPromo";
+    };
+</script>

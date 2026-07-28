@@ -1,0 +1,287 @@
+﻿
+@model RIT.HMS.Domain.ViewModels.VMInvRequestNotePOTransactionsHead
+@{
+    ViewBag.Title = "Print Merged PO";
+    Layout = null;
+    // Layout =null;
+}
+
+
+<body>
+
+    @using (Html.BeginForm("CreatePO", "PO", FormMethod.Get, new { @class = "form-horizontal", }))
+    {
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+            <div class="modal-header col-md-12">
+               
+                <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">...</h4>
+            </div>
+
+
+            <div class="x_panel">
+
+                <div id="printcontent">
+                    <div class="title" style="text-align:center">
+                        @if (Model.PrintStatus == 1)
+                        {
+                        <div class="small text-right" style="text-align:right">Original | @Model.DocState</div>
+                        }
+                        else
+                        {
+                        <div class="small text-right" style="text-align:right">Duplicate | @Model.DocState</div>
+                        }
+                        <div class="small text-left" style="text-align:right">@DateTime.Now</div>
+                        <div style="font-size:large">@Model.SysCompany.CompanyName</div>
+                        <div style="font-size:medium">@Model.SysCompany.Address1,@Model.SysCompany.Address2,@Model.SysCompany.Address3</div><br />                     
+                        <div style="font-size:large">Merged Purchase Order Breakdown</div>                       
+                        <br />
+                        <hr />
+                        
+                    </div>
+
+                    <div class="x_content">
+                        <div>
+                            
+                            <table align="center" style="width:100%">
+                                <tr>
+                                    <td style="text-align:left"> 
+                                        <label class="control-label">PO Location: @Model.Location </label>          
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">   
+                                        <label class="control-label">Address: @Model.POLocationAddress </label>                                   
+                                       
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">
+                                        <label class="control-label">Doc #: @Model.DocumentNo </label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">                                       
+                                        <label class="control-label">PO Date: @Model.PODate.ToShortDateString()</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left">                                     
+                                        <label class="control-label">Supplier: @Model.Supplier.SupplierName </label>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">Expected Delivery Date: @Model.ExpectedDate.ToShortDateString()</label>
+                                    </td>
+                                </tr>
+                                <tr>                                  
+                                    <td style="text-align:left">
+                                        <label class="control-label">Payment Term: @Model.PaymentTerm </label>
+                                    </td>
+                                    <td width="10%"> </td>
+                                    <td style="text-align:right">
+                                        <label class="control-label">Create User: @Model.CreatedUser </label>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <br />
+                        <div class="clearfix"></div>
+
+
+                        <br />
+                        <div class="table-responsive">
+                            @if (Model.POTransactionsDetails != null)
+                            {
+                                <table id="tblstock" border="1" style="width:100%;border:none" class="table table-striped jambo_table bulk_action">
+                                    <thead>
+                                        <tr class="headings">
+
+                                            <th>Request Note Date</th>
+                                            <th>Request Note No</th>
+                                            <th>Request Location </th>
+                                            <th>Item </th>
+                                            <th>Requested Qty </th>
+                                            <th>Issued Qty </th>
+                                            <th>Baance Qty </th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.POTransactionsDetails)
+                                        {
+                                        <tr class="even pointer">
+
+                                            <td>@item.RequestNoteDate.ToShortDateString()</td>
+                                            <td>@item.RequestNoteNo</td>
+                                            <td>@item.ReqLocationName</td>
+                                            <td>@item.ProductDesp</td>
+
+                                            
+                                            <td style="text-align:right">@item.RequestedQty</td>
+                                          
+                                            <td style="text-align:right">@item.IssueQtY</td>
+                                            <td style="text-align:right">@item.BalanceQtY</td>
+                                           
+
+
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                   
+                                </table>
+                                <br />
+
+                                @*<table id="tblNet" style="width:50%" align="right">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Total Tax: </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.TotalTaxAmount </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">
+                                            <label class="control-label">Other Chargers:  </label>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <label class="control-label">@Model.OtherCharges </label>
+                                        </td>
+                                    </tr>
+                                  
+                                </table>*@
+
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <table id="signature" style="width:100%">
+                                    <tr style="width:100%">
+                                        <td style="text-align:center">
+                                            ..................................<br />
+                                                        Entered By
+                                        </td>
+                                        <td style="text-align:center">
+                                            ..................................<br />
+                                                        Checked By
+                                        </td>
+                                        <td style="text-align:center">
+                                            ..................................<br />
+                                                        Approved By
+                                        </td>
+                                    </tr>
+                                </table><div class="clearfix"></div>
+                                <br /><hr />
+                                @*<div style="font-size:small; text-align:left">
+                                    Delivery Details:<br /> @Model.DeliveryDetail
+                                </div>*@
+                            <br />
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actionBar">
+                <div class="msgBox">
+                    <button type="submit" class="btn btn-primary pull-right">Back</button>
+                    <div class="btn-group">
+                        <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i>Export Data</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" onclick="$('#tblstock').tableExport({ type: 'excel', escape: 'false' });">
+                                    <img src='~/Content/Images/icons/xls.png' width="10" />XLS
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="btnPrint" onclick="PrintDiv();">
+                                    <img src='~/Content/Images/icons/pdf.png' width="10" />
+                                    Print/PDF
+                                </a>                                
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+</body>
+
+
+@*<script>
+        $(window).load(function() {
+            $(".se-pre-con").fadeOut("slow");;
+        });
+    </script>*@
+
+
+<script type="text/javascript">
+
+    //$(function () {
+    //    $("#btnPrint").click(function () {
+    //        debugger;
+
+    //        var contents = $("#printcontent").html();
+    //        var frame1 = $('<iframe />');
+    //        frame1[0].name = "frame1";
+    //        frame1.css({ "position": "absolute", "top": "-1000000px" });
+    //        $("body").append(frame1);
+    //        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    //        frameDoc.document.open();
+          
+           
+    //        var toprint = '<html><head><title>.</title></head><body><link href="style.css" rel="stylesheet" type="text/css" />' + contents + '</body></html>';
+          
+    //        frameDoc.document.write(toprint.toString());
+    //        frameDoc.document.close();
+    //        setTimeout(function () {
+    //            window.frames["frame1"].focus();
+    //            window.frames["frame1"].print();
+    //            frame1.remove();
+    //        }, 500);
+    //    });
+    //});
+
+
+    function PrintDiv() {
+
+        //var divContents = document.getElementById("printcontent").outerHTML;
+        //var printWindow = window.open('', '', 'height=200,width=400');
+
+        //printWindow.document.write('<html><head><title></title>');
+        //printWindow.document.write('</head><body >');
+        //printWindow.document.write(divContents);
+        //printWindow.document.write('</body></html>');
+        //printWindow.document.close();
+        //printWindow.print();
+
+        //$(document).ready(function () {
+        //    $('#printcontent').DataTable();
+        //});
+
+
+        var divToPrint = document.getElementById("printcontent");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+
+    }
+
+    
+</script>
+
+
+

@@ -1,0 +1,527 @@
+﻿@model IEnumerable<RIT.HMS.Domain.Promotions.BankBin>
+@{
+    ViewBag.Title = "Card Promotions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Transactions.css" rel="stylesheet" />
+<link href="~/Scripts/SweetAlets/sweetalert.css" rel="stylesheet" />
+<link href="~/Scripts/ClockPicker/jquery-clockpicker.css" rel="stylesheet" />
+<link href="~/Scripts/ClockPicker/jquery-clockpicker.min.css" rel="stylesheet" />
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospitality Management System!</title>
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <form method="post">
+
+
+            <div class="main_container">
+                @using (Html.BeginForm("CreateCardPrommotions", "CardPromotionController", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                    @Html.AntiForgeryToken()
+                    <div class="right_col" role="main">
+                        <div class="">
+
+                            <div class="clearfix"></div>
+                            @if (@ViewBag.Message == "1")
+                        {
+                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Product Instructions </strong> saved successfully.
+                                </div>
+                        }
+                        else if (@ViewBag.Message == "2")
+                        {
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Product Instructions</strong> save failed.
+                                </div>
+                        }
+
+
+                            <div class="row">
+
+                                <!-- form input mask -->
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="x_panel">
+
+                                        <div class="x_title">
+                                            <h2>Card Promotions</h2>
+                                            <br />
+                                            <ul class="nav navbar-right panel_toolbox">
+                                                <li>
+                                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                </li>
+                                                <li>
+                                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                        <div class="x_content">
+                                            <br />
+                                            <form class="form-horizontal form-label-left">
+                                                <div class="form-group">
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-horizontal form-label-left col-md-6">
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Location</label>
+                                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                    <select id="LocationIds" multiple class="form-control select2" name="LocationIds"></select>
+                                                                </div>
+                                                            </div>
+                                                            <br /><div class="clearfix"></div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Bank</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <select id="BankID" class="form-control" name="BankID"></select>
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">Card Prefix</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="text" class="form-control" value="" placeholder="Prefix" id="CardPfx" name="CardPfx" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Card Type</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <select id="CardID" class="form-control" name="CardID"></select>
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">Card Name</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="text" class="form-control" value="" placeholder="Card Name" id="CardName" name="CardName" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From </label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="date" class="form-control" style="font-size:smaller" id="DateFrom" name="DateFrom" />
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1"> To</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="date" class="form-control" style="font-size:smaller" id="DateTo" name="DateTo" />
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                        </div>
+
+                                                        <div class="form-horizontal form-label-left col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                    <br />
+                                                                    @*<select id="Department" class="form-control" name="Department"></select>*@
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                            <br />
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Discount Prc</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="number" step="0.01" class="form-control text-right" value="0" id="DiscountPercentage"
+                                                                           name="DiscountPercentage" onkeyup="CheckDiscountPrc()" min="0" required />
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">Value From</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="number" step="0.01" class="form-control text-right" value="0" id="ValueFrom" name="ValueFrom" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Discount Amt</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="number" step="0.01" class="form-control text-right" value="0" id="DiscountAmount" name="DiscountAmount"
+                                                                           onkeyup="CheckDiscountAmt()" min="0" required />
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">Value To</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <input type="number" step="0.01" class="form-control text-right" value="1" id="ValueTo" name="ValueTo" />
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3">Time From</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                                                                        <input type="text" class="form-control" id="StartTime" name="StartTime">
+                                                                        <span class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-time"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">To</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                                                                        <input type="text" class="form-control" id="EndTime" name="EndTime">
+                                                                        <span class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-time"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    @*<input type="number" step="0.01" class="form-control text-right" value="0" id="Rate" name="Rate" />*@
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-1">@*Date To*@</label>
+                                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                    <button type="button" class="btn btn-success pull-right" id="btnSubmit" name="btnSubmit">Submit</button>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="clearfix"></div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+
+                                                    <br /><hr />
+
+
+                                                    <div class="text-info"><b>Existing Card Promotions</b></div>
+                                                    <table id="datatable" class="mstable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display:none">idx</th>
+                                                                <th>Bank</th>
+                                                                <th>Card Name</th>
+                                                                <th>Card Prefix</th>
+                                                                <th>Card Type</th>
+                                                                <th>Discount (Amt)</th>
+                                                                <th>Discpunt (Prc)</th>
+                                                                <th>Date From</th>
+                                                                <th>Date To</th>
+                                                                <th>Time From</th>
+                                                                <th>Time To</th>
+                                                                <th>Value From</th>
+                                                                <th>Value To</th>
+                                                                <th>Location</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="cardpromotions">
+                                                            @if (Model != null)
+                                                        {
+                                                            foreach (var m in Model)
+                                                            {
+                                                                    <tr>
+                                                                        <td style="display:none">@m.BankBinId</td>
+                                                                        <td>@m.BankName</td>
+                                                                        <td>@m.CardName</td>
+                                                                        <td>@m.CardPfx</td>
+                                                                        <td>@m.CardType</td>
+                                                                        <td style="text-align:right">@m.DiscountAmount</td>
+                                                                        <td style="text-align:right">@m.DiscountPercentage</td>
+                                                                        <td>@m.DateFrom.ToShortDateString()</td>
+                                                                        <td>@m.DateTo.ToShortDateString()</td>
+                                                                        <td>@m.StartTime</td>
+                                                                        <td>@m.EndTime</td>
+                                                                        <td style="text-align:right">@m.ValueFrom</td>
+                                                                        <td style="text-align:right">@m.ValueTo</td>
+                                                                        <td style="text-align:right">@m.Location</td>
+                                                                        <td><button type='button' id='cardpromotionrow' onclick='RemoveItem(this);' class='btn btn-danger btn-xs'> Remove </button></td>
+                                                                    </tr>
+
+                                                            }
+
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="actionBar">
+                                                    <div class="msgBox">
+                                                        @*<div class="btn btn-info pl_add btn-small pull-left">
+                                                            @Html.ActionLink("View Product Instructions", "Vieww", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                        </div>*@
+                                                        @*<button type="submit" class="btn btn-success">Submit</button>*@
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+            }
+            </div>
+        </form>
+    </div>
+
+
+</body>
+</html>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/SweetAlets/sweetalert.js"></script>
+<script src="~/Scripts/ClockPicker/jquery-clockpicker.js"></script>
+<script src="~/Scripts/ClockPicker/jquery-clockpicker.min.js"></script>
+
+<script type="text/javascript">
+$('.clockpicker').clockpicker();
+</script>
+
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var LocationId = $("#LocationIds");
+
+        LocationId.empty();
+      //  LocationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            LocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+        });
+    });
+
+    $.getJSON("@Url.Action("GetActiveBanks", "CardPromotions")", function (data) {
+
+        var BankID = $("#BankID");
+
+        BankID.empty();
+        BankID.append("<option value='0'>-- Select --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            BankID.append($('<option />', { value: optionaldata.BankId }).html(optionaldata.BankName));
+        });
+    });
+
+
+    $.getJSON("@Url.Action("GetActiveCardTypes", "CardPromotions")", function (data) {
+
+        var CardID = $("#CardID");
+
+        CardID.empty();
+        CardID.append("<option value='0'>-- Select --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            CardID.append($('<option />', { value: optionaldata.CardTypeId }).html(optionaldata.CardTypeName));
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnSubmit",
+        function () {
+
+            debugger;
+            if ($("#LocationIds").val() == 0 || $("#LocationIds").val() == null)
+            {
+                alert("Select a Location !");
+                return;
+            }
+            if ($("#BankID").val() == 0 || $("#BankID").val() == null) {
+                alert("Select a Bank !");
+                return;
+            }
+            if ($("#CardID").val() == 0 || $("#CardID").val() == null) {
+                alert("Select a Card Type !");
+                return;
+            }
+            if ($("#DateFrom").val() == "" || $("#DateTo").val() == "") {
+                alert("Select a date range!");
+                return;
+            }
+            if ($("#StartTime").val() == "" || $("#EndTime").val() == "") {
+                alert("Select a time range!");
+                return;
+            }
+
+            if ($("#DiscountPercentage").val() == "") {
+                alert("Discount Prc required!");
+                return;
+            }
+
+            if ($("#DiscountAmount").val() == "") {
+                alert("Discount Amt required!");
+                return;
+            }
+
+            if ($("#ValueFrom").val() == "") {
+                alert("Value From required!");
+                return;
+            }
+
+            if ($("#ValueTo").val() == "") {
+                alert("Value To required!");
+                return;
+            }
+
+            if ($("#ValueTo").val() == "0") {
+                alert("Value To can not be 0!");
+                return;
+            }
+
+            if ($("#CardPfx").val() != "")
+            {
+                if ($("#CardPfx").val().length < 6) {
+                    alert("Card Prefix can not be less than 6 digits!");
+                    return;
+                }
+            }
+            
+            debugger;
+            // var locations = [];  
+            var locations = new Array();
+            locations.push($("#LocationIds").val());
+
+
+            
+
+
+
+            swal({
+                title: "Card Promotion",
+                text: "Confirm?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+                       function (isConfirm)
+                       {
+                           if (isConfirm)
+                           {
+
+
+
+                                    $.ajax({
+                                        url: "@Url.Action("SubmitCardPromotion", "CardPromotions")",
+                                        data: {
+                                            locid:JSON.stringify(locations), bankid: $("#BankID").val(), cardid: $("#CardID").val(), cardprefix: $("#CardPfx").val().trim(), cardname: $("#CardName").val().trim(),
+                                            discountamt: $("#DiscountAmount").val(), discountprc: $("#DiscountPercentage").val(), valuefrom: $("#ValueFrom").val(), valueto: $("#ValueTo").val(),
+                                            datefrom: $("#DateFrom").val(), dateto: $("#DateTo").val(), starttime: $("#StartTime").val(), endtime: $("#EndTime").val()
+                                            
+                                            },
+                                        contentType: 'application/json; charset=utf-8',
+                                        type: "GET",
+                                        dataType: "json",
+                                        success: function (data)
+                                        {
+
+                                            if (data != 0)
+                                            {
+
+                                                swal({
+                                                    title: "",
+                                                    text: "Promotion Saved Successfully!",
+                                                    type: "success",
+                                                    showCancelButton: false,
+                                                    confirmButtonClass: "btn-success",
+                                                    confirmButtonText: "Ok",
+                                                    closeOnConfirm: true
+                                                },
+                                            function () {
+                                                window.location.href = "/CardPromotions/CreateCardPromotions";
+                                            });
+
+
+                                            }
+
+
+                                        }
+
+                                    });
+                           }
+                       });
+        });
+
+
+</script>
+
+<script>
+
+    function RemoveItem(button)
+    {
+
+        var row = $(button).closest("TR");
+     //   var name = $("TD", row).eq(3).html();
+
+        var rowid = $("TD", row).eq(0).html();
+        var cardname = $("TD", row).eq(2).text();
+        var bankname = $("TD", row).eq(1).html();
+
+       
+
+        if (confirm("Do you want to delete: " + cardname.trim() +" of "+bankname.trim() +" ?"))
+        {
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("RemoveCardPromotion", "CardPromotions")",
+                data: { rowid:rowid},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res)
+                {
+
+                    var table = $("#datatable")[0];
+                    table.deleteRow(row[0].rowIndex);
+
+                }
+        });
+    }
+    };
+
+</script>
+
+<script>
+    function CheckDiscountPrc()
+    {
+        debugger;
+        var prc = $("#DiscountPercentage").val();
+        var amt = $("#DiscountAmount").val();
+        if (amt != 0)
+        {
+            alert("Can not add both discount amounts and precentages");
+            $("#DiscountPercentage").val(0);
+        }
+        if (prc > 100)
+        {
+            alert("Discount Precentage can not exceed 100%");
+            $("#DiscountPercentage").val(0);
+        }
+        
+    }
+    function CheckDiscountAmt() {
+        debugger;
+        var prc = $("#DiscountPercentage").val();
+        var amt = $("#DiscountAmount").val();
+        if (prc != 0) {
+            alert("Can not add botd discount amounts and precentages");
+            $("#DiscountAmount").val(0);
+        }
+
+    }
+
+    //function SetDefault(val)
+    //{
+    //    debugger;
+    //    alert(val.value);
+    //}
+</script>

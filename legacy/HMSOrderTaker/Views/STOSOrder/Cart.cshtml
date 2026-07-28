@@ -1,0 +1,553 @@
+﻿@model RIT.HMS.HMSOrderTaker.Domain.ViewModels.vmTabOrderHeader
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible"  content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="~/Content/STOS/img/express-favicon.png" type="image/x-icon" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Smart Order Management System</title>
+    <!-- Icon css link -->
+    <link href="~/Content/STOS/vendors/material-icon/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/linears-icon/style.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="~/Content/STOS/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Extra plugin css -->
+    <link href="~/Content/STOS/vendors/bootstrap-selector/bootstrap-select.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/bootatrap-date-time/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="~/Content/STOS/vendors/owl-carousel/assets/owl.carousel.css" rel="stylesheet">
+
+    <link href="~/Content/STOS/css/style.css" rel="stylesheet">
+    <link href="~/Content/STOS/css/responsive.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="~/Content/STOS/Cart/Cart.css" rel="stylesheet" />
+
+
+
+    <style>
+        .service_item {
+            border-radius: 10px;
+            height: 350px;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        /*//////////BACK SIDE BTN/////////*/
+        .icon-bar {
+            position: fixed;
+            top: 80%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+            .icon-bar a {
+                display: block;
+                text-align: center;
+                padding: 10px;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 15px;
+                font-style: italic;
+            }
+
+                .icon-bar a:hover {
+                    background-color: #000;
+                }
+
+        .backsidebtn {
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            width: 100px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader absolute-center">
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+            <div class="loader__box"><b class="top"></b></div>
+        </div>
+    </div>
+
+    <!--================ Frist hader Area =================-->
+    <div class="first_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="text-align:center;" class="header_contact_details">
+
+                        @*<button style="float:left;margin-top:10px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon glyphicon-chevron-left"></i></button>*@
+
+                    </div>
+                </div>
+                <div style="text-align:center" class="col-md-4">
+                    <div class="s_black_title">
+                        <h3>Cart</h3>
+
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="header_social">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================End Footer Area =================-->
+    <!--================Banner Area =================-->
+    <!--================End Banner Area =================-->
+    <!--================End Our feature Area =================-->
+    <!--================Service Area =================-->
+
+
+    <div class="container-fluid">
+        <div class="row">
+            @*<aside class="col-lg-1"></aside>*@
+            <aside class="col-lg-9">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="carttbl" class="table table-borderless table-shopping-cart" style="">
+                            <thead class="text-muted" style="background-color:#e5e5e5">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Item</th>
+                                    <th scope="col" width="120" style="text-align:center;">Price (Rs)</th>
+                                    <th scope="col" width="120" style="text-align:center;">Quantity</th>
+                                    <th scope="col" class="text-right d-none d-md-block" width="120" style="text-align:center;">Sub Total (Rs)</th>
+                                    <th scope="col" class="text-right d-none d-md-block" width="60" style="text-align:center;"></th>
+                                </tr>
+                            </thead>
+                            @if (Model != null)
+                            {
+                             var count = 0;
+                             decimal? allitemsubtotal = 0;
+                            <tbody>
+
+                                @if (Model.TabOrderDetailsList != null)
+                                {
+                                    foreach (var item in Model.TabOrderDetailsList)
+                                    {
+                                        count = count + 1;
+                                        var uniid = item.LocationId + item.OrderSeqNumber + count;
+                                        var locationid = item.LocationId;
+                                        var ordernum = item.OrderSeqNumber;
+                                        var itemnum = item.ItemId;
+                                        var subtotal = item.ItemSellingPrice * item.ItemQty;
+                                        allitemsubtotal = allitemsubtotal + subtotal;
+
+                                        <tr id="rowid_@uniid">
+                                            <td>
+                                                <figure class="itemside align-items-center">
+                                                    @*<div class="aside"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574342017/rTVSl.jpg" class="img-sm"></div>*@
+                                                    <figcaption class="info">
+                                                        <a href="#" class="title text-dark" data-abc="true" style="font-size:15px;color:#656768;font-weight: bold;">@item.ItemName</a>
+                                                        @*<p class="text-muted small">SIZE: L </p>*@
+                                                    </figcaption>
+                                                </figure>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                <div class="price-wrap"> <var class="price" id="itemprice_@uniid">@item.ItemSellingPrice</var> </div>
+                                            </td>
+                                            <td>
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <button onclick="MinusItem(@uniid,@locationid,@ordernum,@itemnum)" type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[@count]">
+                                                            <span class="glyphicon glyphicon-minus"></span>
+                                                        </button>
+                                                    </span>
+                                                    <input style="width:50px;text-align:center;" type="text" name="quant[@count]" class="form-control input-number" value="@item.ItemQty" min="1" max="100" readonly>
+                                                    <span class="input-group-btn">
+                                                        <button onclick="PlusItem(@uniid,@locationid,@ordernum,@itemnum)" type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[@count]">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td style="text-align:right;">
+                                                <div class="price-wrap"> <var class="price" id="itemsubtotal_@uniid"> @subtotal </var>  </div>
+                                            </td>
+                                            <td class="text-right d-none d-md-block">
+                                                <button onclick="removecartitem(@uniid,@locationid,@ordernum,@itemnum)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-right">Sub Total</td>
+                                    <td colspan="1" class="hidden-xs text-right"><h5>Rs.<strong id="allitemsubtotal"> @allitemsubtotal </strong></h5></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-right">Discount Amount</td>
+                                    <td colspan="1" class="hidden-xs text-right"><h5>Rs. <strong>00.00 </strong></h5></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-right">Service Charge</td>
+                                    <td colspan="1" class="hidden-xs text-right"><h5>Rs.<strong> 00.00 </strong></h5></td>
+                                    <td></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Total Amount </strong> </td>
+                                    <td colspan="1" class="hidden-xs text-right"><h4>Rs.<strong style="font-size:15px;" id="totalamount"> @allitemsubtotal</strong></h4></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </aside>
+            <aside class="col-lg-3">
+                @*<div class="card mb-3">
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label>Have coupon?</label>
+                                    <div class="input-group"> <input type="text" class="form-control coupon" name="" placeholder="Coupon code"> <span class="input-group-append"> <button class="btn btn-primary btn-apply coupon">Apply</button> </span> </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>*@
+                <div class="card">
+                    <table class="table table-borderless table-shopping-cart" style="border:none">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Sub total
+                                </td>
+                                <td id="sidesubtotal"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Discount amount
+                                </td>
+                                <td>
+                                    00.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Discounted total
+                                </td>
+                                <td>
+                                    00.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Service charge (5.00%)
+                                </td>
+                                <td>
+                                    00.00
+                                </td>
+                            </tr>
+                            <tr style="text-align:right;">
+                                <td colspan="2" style="padding-top:1px;">
+                                    <div class="price-wrap"> <var class="text-muted"> Next Total</var> <small class="price" style="font-size:25px;padding-top:20px;"> Rs. <span id="sidetotalamount"></span></small> </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <a id="checkoutbtn" href="javascript:CheckOut();"
+                                        class="btn btn-out btn-primary btn-square btn-main" 
+                                       data-abc="true"> Continue </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+            @*<aside class="col-lg-1"></aside>*@
+        </div>
+    </div>
+
+    <!--================End Our feature Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================End Recent Blog Area =================-->
+    <!--================Back Btn =================-->
+    <div class="icon-bar">
+        <!-- <a href="/FingerScan/Index" class="backsidebtn"><i class="fa fa-angle-double-left"></i></a>       -->
+        <a href="/STOSOrder/ProductDepartment" class="backsidebtn">Back</a>
+    </div>
+    <!--================End Back Btn =================-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="~/Content/STOS/js/jquery-2.1.4.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="~/Content/STOS/js/bootstrap.min.js"></script>
+    <!-- Extra plugin js -->
+    <script src="~/Content/STOS/vendors/bootstrap-selector/bootstrap-select.js"></script>
+    <script src="~/Content/STOS/vendors/bootatrap-date-time/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/STOS/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="~/Content/STOS/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="~/Content/STOS/vendors/isotope/isotope.pkgd.min.js"></script>
+    <script src="~/Content/STOS/vendors/countdown/jquery.countdown.js"></script>
+    <script src="~/Content/STOS/vendors/js-calender/zabuto_calendar.min.js"></script>
+
+    <script src="~/Content/STOS/js/theme.js"></script>
+</body>
+</html>
+
+<script>
+    $('.btn-number').click(function (e) {
+
+    debugger
+        e.preventDefault();
+
+        fieldName = $(this).attr('data-field');
+        type = $(this).attr('data-type');
+        var input = $("input[name='" + fieldName + "']");
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if (type == 'minus') {
+
+                if (currentVal > input.attr('min')) {
+                    input.val(currentVal - 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if (type == 'plus') {
+
+                if (currentVal < input.attr('max')) {
+                    input.val(currentVal + 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(0);
+        }
+    });
+    $('.input-number').focusin(function () {
+        $(this).data('oldValue', $(this).val());
+    });
+    $('.input-number').change(function () {
+
+        minValue = parseInt($(this).attr('min'));
+        maxValue = parseInt($(this).attr('max'));
+        valueCurrent = parseInt($(this).val());
+
+        name = $(this).attr('name');
+        if (valueCurrent >= minValue) {
+            $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+        } else {
+            alert('Sorry, the minimum value was reached');
+            $(this).val($(this).data('oldValue'));
+        }
+        if (valueCurrent <= maxValue) {
+            $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+        } else {
+            alert('Sorry, the maximum value was reached');
+            $(this).val($(this).data('oldValue'));
+        }
+
+
+    });
+    $(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $(window).on("load", function () {
+
+            $('#sidetotalamount').text($('#totalamount').text());
+            $('#sidesubtotal').text($('#totalamount').text());
+
+            var rowCount = $('#carttbl tbody tr').length;
+
+            if (rowCount == 0) {
+
+                $("#checkoutbtn").attr("disabled","disabled");
+
+            }
+
+        });
+    });
+
+    function MinusItem(uniid,locationid,orderid,itemnum) {
+
+        $.ajax({
+
+            url: "/STOSOrder/UpdateSession",
+            type: "POST",
+            //contentType: "application/json;charset=utf-8",
+            //dataType: "json",
+            data: { locationid: locationid, ordernumber: orderid, itemnumber: itemnum,addormin:false },
+            success: function (data) {
+
+
+
+                if (data.isRedirect) {
+                    window.location.href = data.redirectUrl;
+                }
+
+                else {
+
+                    var itemprice = parseFloat($('#itemprice_' + uniid).text());
+                    var itemsubtotal = parseFloat($('#itemsubtotal_' + uniid).text());
+                    var result = itemsubtotal - itemprice;
+                    $('#itemsubtotal_' + uniid).text(parseFloat(result).toFixed(2));
+
+
+                    var allitemsubtotal = parseFloat($('#allitemsubtotal').text());
+                    allitemsubtotal = allitemsubtotal - itemprice;
+                    //alert(allitemsubtotal);
+                    $('#allitemsubtotal').text(allitemsubtotal.toFixed(2));
+
+                    $('#totalamount').text(allitemsubtotal.toFixed(2));
+                    $('#sidetotalamount').text(allitemsubtotal.toFixed(2));
+                    $('#sidesubtotal').text(allitemsubtotal.toFixed(2));
+                }
+
+
+            }
+
+        });
+
+
+    }
+
+    function PlusItem(uniid, locationid, orderid, itemnum) 
+    {
+        $.ajax({
+
+            url: "/STOSOrder/UpdateSession",
+            type: "POST",
+            //contentType: "application/json;charset=utf-8",
+            //dataType: "json",
+            data: { locationid: locationid, ordernumber: orderid, itemnumber: itemnum, addormin: true },
+            success: function (data)
+            {
+                if (data.isRedirect) {
+                    window.location.href = data.redirectUrl;
+                }
+                else
+                {
+
+                    var itemprice = parseFloat($('#itemprice_' + uniid).text());
+                    var itemsubtotal = parseFloat($('#itemsubtotal_' + uniid).text());
+                    var result = itemsubtotal + itemprice;
+                    $('#itemsubtotal_' + uniid).text(parseFloat(result).toFixed(2));
+                    var allitemsubtotal = parseFloat($('#allitemsubtotal').text());
+                    allitemsubtotal = allitemsubtotal + itemprice;
+                    //alert(allitemsubtotal);
+                    $('#allitemsubtotal').text(allitemsubtotal.toFixed(2));
+                    $('#totalamount').text(allitemsubtotal.toFixed(2));
+                    $('#sidetotalamount').text(allitemsubtotal.toFixed(2));
+                    $('#sidesubtotal').text(allitemsubtotal.toFixed(2));
+                }
+            }
+        });
+    }
+
+    function CheckOut() {
+
+        $.ajax({
+
+            url: "/STOSOrder/SaveTabOrderDetails",
+            type: "POST",
+            //contentType: "application/json;charset=utf-8",
+            //dataType: "json",
+            data: { },
+            success: function (data)
+            {
+                if (data.isRedirect)
+                {
+                    window.location.href = data.redirectUrl;
+                }
+                else
+                {
+
+                }
+            }
+        });
+    }
+
+    function removecartitem(uniid, locationid, orderid, itemnum)
+    {
+
+        $.ajax({
+            url: "/STOSOrder/RemoveCartItem",
+            type: "POST",
+            //contentType: "application/json;charset=utf-8",
+            //dataType: "json",
+            data: { locationid: locationid, ordernumber: orderid, itemid: itemnum },
+            success: function (data) {
+
+                if (data.isRedirect) {
+                    window.location.href = data.redirectUrl;
+                }
+                else {
+
+                    var itemsubtotal = parseFloat($('#itemsubtotal_' + uniid).text());
+                    var allitemsubtotal = parseFloat($('#allitemsubtotal').text());
+                    var result = allitemsubtotal - itemsubtotal;
+
+                    $('#allitemsubtotal').text(parseFloat(result).toFixed(2));
+                    $('#totalamount').text(parseFloat(result).toFixed(2));
+                    $('#sidetotalamount').text(parseFloat(result).toFixed(2));
+                    $('#sidesubtotal').text(parseFloat(result).toFixed(2));
+                    //$("#rowid_" + uniid).css("display", "none");
+                    $("#rowid_" + uniid).remove()
+                    var rowCount = $('#carttbl tbody tr').length;
+                    if (rowCount == 0) {
+                        $("#checkoutbtn").attr("disabled","disabled");
+                    }
+                }
+            }
+
+        });
+    }
+</script>

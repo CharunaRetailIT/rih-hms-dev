@@ -1,0 +1,302 @@
+﻿@model IEnumerable<RIT.HMS.Domain.CashierGroup>
+@{
+    ViewBag.Title = "Cashier Group Permissions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+                <div class="">
+
+                    <div class="row">
+
+                        <!-- form input mask -->
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_title">
+                                    <h2>Cashier Group Permissions</h2>
+                                    <br />
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        <li>
+                                            <a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <br />
+                                    <div class="form-horizontal form-label-left">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Cashier Group</label>
+                                            <div class="col-md-5 col-sm-9 col-xs-9">
+                                                <select id="POSUserGroupId" name="POSUserGroupId" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <br />
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3"></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                <table id="tblPosUsers" class="mstable col-xs-9 col-lg-9 col-md-9 col-sm-9">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Function Name</th>
+                                                            <th>Function Description</th>
+                                                            <th style="display:none">TypeId</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="permissionrows">
+                                                        @if (Model != null)
+                                                        {
+                                                            foreach (var permissions in Model)
+                                                            {
+
+                                                                <tr>
+                                                                    <td>@permissions.FunctionName</td>
+                                                                    <td>@permissions.FunctionDescription</td>
+                                                                    <td style="display:none">@permissions.TypeId</td>
+                                                                    <td>
+                                                                        <input type="button" class="btn btn-round btn-info"
+                                                                               value="-" onclick="Remove(this)" />
+                                                                    </td>
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><select id="FunctionId" name="FunctionId" class="form-control select2" style="width:100%"></select></td>
+                                                            <td><input type="button" id="btnAdd" class="btn btn-round btn-info" value="+" /></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <br />
+                                            </div>
+                                        </div>
+                                        <div class="actionBar">
+                                            <div class="msgBox">
+                                                <div class="btn btn-primary pl_add btn-small pull-left">
+                                                    @Html.ActionLink("Clear", "CashierGroupPermission", null, new { @style = "font-size: 12px;color:white;font-family: 'Lucida Sans Unicode', 'Lucida Grande', Sans-Serif;text-decoration: none" })
+                                                </div>
+                                                <input type="button" id="btnSave" class="savebt" value="Save All" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*}*@
+        </div>
+    </div>
+</body>
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/Scripts/json2.js"></script>
+
+<script>
+
+    $.getJSON("@Url.Action("GetActivePOSFunctions", "CashierMaster")", function (data) {
+
+        var FunctionId = $("#FunctionId");
+
+        FunctionId.empty();
+        FunctionId.append("<option value='0'>-- Select a Permission --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            FunctionId.append($('<option />', { value: optionaldata.CashierFunctionId }).html(optionaldata.FunctionName + '-' + optionaldata.FunctionDescription));
+        });
+
+        if ('@ViewBag.FunctionId') {
+            $('#FunctionId').val(@ViewBag.FunctionId).trigger("change");
+        } else {
+            $('#FunctionId').val(0).trigger("change");
+        }
+    });
+
+    $.getJSON("@Url.Action("GetActivePOSUserGroupes", "UserGroup")", function (data) {
+
+        var POSUserGroupId = $("#POSUserGroupId");
+
+        POSUserGroupId.empty();
+        POSUserGroupId.append("<option value='0'>-- Select a Group --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            POSUserGroupId.append($('<option />', { value: optionaldata.POSUserGroupId }).html(optionaldata.POSUserGroupName));
+        });
+
+        if ('@ViewBag.POSUserGroupId') {
+            $('#SysUserGroupId').val(@ViewBag.POSUserGroupId).trigger("change");
+        } else {
+            $('#SysUserGroupId').val(0).trigger("change");
+        }
+    }
+    );
+
+    $("#POSUserGroupId ").change(function () {
+        var groupid = this.value;
+        $.getJSON("@Url.Action("GetPermissions", "CashierMaster")", { id: groupid },
+            function (data) {
+
+                $("#permissionrows tr").remove();
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+
+                    var FunctionName = optionaldata.FunctionName;
+                    var FunctionDescription = optionaldata.FunctionDescription;
+                    var TypeId = optionaldata.TypeId;
+
+                    var tBody = $("#tblPosUsers > TBODY")[0];
+
+                    var row = tBody.insertRow(-1);
+
+                    var cell = $(row.insertCell(-1));
+                    cell.html(FunctionName);
+
+                    cell = $(row.insertCell(-1));
+                    cell.html(FunctionDescription);
+
+                    cell = $(row.insertCell(-1));
+                    cell.html(TypeId);
+                    cell.attr("style", "display:none;");
+
+                    cell = $(row.insertCell(-1));
+                    var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                    btnRemove.attr("type", "button");
+
+                    btnRemove.attr("onclick", "Remove(this);");
+                    btnRemove.val("-");
+                    cell.append(btnRemove);
+                 
+                    FunctionName = "";
+                    FunctionDescription = "";
+                    TypeId = "";
+                }
+                );
+            });
+    });
+</script>
+
+<script type="text/javascript">
+    $("body").on("click", "#btnAdd", function () {
+
+        if ($("#POSUserGroupId").val() == 0) {
+            alert("Select a cashier group !");
+            return;
+        }
+
+
+        if ($("#FunctionId").val() == "") {
+            alert("Select a function!");
+            return;
+        }
+
+      
+        var FunctionName;
+        var FunctionDescription;
+        var TypeId;
+
+        $.ajax({
+            type: "GET",
+            url: "/CashierMaster/GetCashierFunctionById",
+            data: { id: $("#FunctionId").val() },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+            
+                debugger;
+                var hasFunction;
+                $("#tblPosUsers TBODY TR").each(function () {
+                    var row = $(this);
+                    if (row.find("TD").eq(0).html() == r.FunctionName) {
+                        alert("The Permission " + r.FunctionName + " has already added!");
+                        hasFunction = true;
+                    }
+
+                });
+
+                if (hasFunction) {
+                    return;
+                }
+
+                FunctionName = r.FunctionName;
+                FunctionDescription = r.FunctionDescription;
+                TypeId = r.TypeId;
+
+                var tBody = $("#tblPosUsers > TBODY")[0];
+                var row = tBody.insertRow(-1);
+                var cell = $(row.insertCell(-1));
+                cell.html(FunctionName);
+
+                cell = $(row.insertCell(-1));
+                cell.html(FunctionDescription);
+
+                cell = $(row.insertCell(-1));
+                cell.html(TypeId);
+                cell.attr("style", "display:none;");
+
+                cell = $(row.insertCell(-1));
+                var btnRemove = $("<input class='btn btn-round btn-info'/>");
+                btnRemove.attr("type", "button");
+
+                btnRemove.attr("onclick", "Remove(this);");
+                btnRemove.val("-");
+                cell.append(btnRemove);
+
+                FunctionName="";
+                FunctionDescription="";
+
+            }
+        });
+    });
+
+    function Remove(button) {
+
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete: " + name)) {
+            var table = $("#tblPosUsers")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+    $("body").on("click", "#btnSave", function () {
+        var SysUserGroupPermissions = new Array();
+        $("#tblPosUsers TBODY TR").each(function () {
+            var row = $(this);
+            var SysUserGroupPermission = {};
+            SysUserGroupPermission.FunctionName = row.find("TD").eq(0).html();
+            SysUserGroupPermission.FunctionDescription = row.find("TD").eq(1).html();
+            SysUserGroupPermission.TypeID = row.find("TD").eq(2).html();
+            SysUserGroupPermission.EmployeeGroupId = $("#POSUserGroupId").val();
+            SysUserGroupPermissions.push(SysUserGroupPermission);
+        });
+
+
+        $.ajax({
+            type: "POST",
+            url: "/CashierMaster/CreatePOSUserPermission",
+            data: JSON.stringify(SysUserGroupPermissions),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                alert("POS Function(s) modified for user group - " + $("#POSUserGroupId option:selected").text());
+            }
+        });
+    });
+</script>
+

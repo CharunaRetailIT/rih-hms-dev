@@ -1,0 +1,192 @@
+﻿@model IEnumerable<RIT.HMS.Domain.ViewModels.Reports.POSummaryViewModel>
+    @{
+        ViewBag.Title = "RPTPOSummary";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+<link href="~/Content/Report.css" rel="stylesheet" />  
+    @using (Html.BeginForm("RPTPOSummary", "PO", FormMethod.Post, new { @class = "" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container body">
+            <div class="main_container">
+                <div class="right_col" role="main">
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Purchase Order Summary Report<small></small></h2>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <br />
+
+                                <div class="col-md-12">
+                                    <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Date From </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <input type="date" class="form-control" value="@ViewBag.DateFrom.ToString("yyyy-MM-dd")" id="DateFrom" name="DateFrom" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Date To </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <input type="date" class="form-control" value="@ViewBag.DateTo.ToString("yyyy-MM-dd")" id="DateTo" name="DateTo" />
+                                            </div>
+                                        </div>                                                                         
+                                    </div>
+                                    <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Location </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select id="LocationId" name="LocationId" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-3">Doc No </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select id="DocumentId" name="DocumentId" class="form-control select2"></select>
+                                            </div>
+                                        </div>
+                                    </div>            
+                                    <div class="clearfix"></div>
+                                    <div class="actionBar">
+                                            <div class="msgBox">
+                                                <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-danger dropdown-toggle pull-right" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                                <img src='~/Content/Images/icons/xls.png' width="10" /> XLS
+                                                            </a>
+                                                        </li>
+                                                        <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" /> PDF</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <div class="clearfix"></div>
+                                <br />
+                                <div class="table-responsive">
+                                    @if (Model != null)
+                                    {
+                                        <div id="printcontent">
+                                            <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                                <thead>
+                                                    <tr class="headings">
+                                                        <th></th>
+                                                        <th class="column-title">Location</th>
+                                                        <th class="column-title">Document No </th>
+                                                        <th class="column-title">Document Satus </th>
+                                                        <th class="column-title">PO Date</th>
+                                                        <th class="column-title">Delivery Date</th>
+                                                        <th class="column-title">Net Amount </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <tr class="even pointer">
+                                                            <td>@(Model.ToList().IndexOf(item)+1)</td>
+                                                            <td class="">@item.Location</td>
+                                                            <td class="">@item.DocumentNo</td>
+                                                            <td class="">@item.Status</td>
+                                                            <td class="">@item.PODate.ToShortDateString()</td>
+                                                            <td class="">@item.DeliveryDate.ToShortDateString()</td>
+                                                            <td style="text-align:right">@item.NetAmount.ToString("n2")</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+
+    }
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#datatable-responsive').dataTable({
+            "bPaginate": false
+        });
+    });
+</script>
+                   
+
+    <script>
+        $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+            var poLocationId = $("#LocationId");
+
+            poLocationId.empty();
+            poLocationId.append("<option value='0'>-- All Locations --</option>");
+
+            $.each(JSON.parse(data), function (index, optionaldata) {
+                poLocationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+            });
+
+            if ('@ViewBag.POLocationId') {
+                $('#LocationId').val(@ViewBag.POLocationId).trigger("change");
+            } else {
+                $('#LocationId').val(0).trigger("change");
+            }
+
+
+        });
+
+        $("#LocationId").change(
+          function ()
+          {
+              var loc = this.value;
+              $.getJSON("@Url.Action("GetDocNoByLocId", "PO")", { locid: loc, from: $("#DateFrom").val(), to: $("#DateTo").val() },
+
+               function (data) {
+                   var DocNo = $("#DocumentId");
+                   DocNo.empty();
+                   DocNo.append("<option value='0'>-- Select a Document --</option>");
+
+                   $.each(JSON.parse(data), function (index, optionaldata) {
+                       DocNo.append($('<option />', { value: optionaldata.PurchaseOrderHeaderId }).html(optionaldata.DocumentNo));
+                   });
+
+                   if ('@ViewBag.DocumentId') {
+                       $('#DocumentId').val(@ViewBag.DocumentId).trigger("change");
+                   } else {
+                       $('#DocumentId').val(0).trigger("change");
+                   }
+               });
+          });
+     </script>
+
+
+     <script type="text/javascript">
+         function PrintDiv()
+         {
+               var divToPrint = document.getElementById("datatable-responsive");
+             newWin = window.open("");
+             newWin.document.write(divToPrint.outerHTML);
+             newWin.print();
+             newWin.close();
+          }
+    </script>

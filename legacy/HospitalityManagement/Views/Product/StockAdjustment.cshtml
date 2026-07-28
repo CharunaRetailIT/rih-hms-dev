@@ -1,0 +1,255 @@
+﻿@model RIT.HMS.Domain.ViewModels.DataUpload.DataUploadViewModel
+@{
+    ViewBag.Title = "StockAdjustment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/MasterFile.css" rel="stylesheet" />
+
+<h2></h2>
+
+<body class="nav-md">
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="clearfix"></div>
+
+            @using (Html.BeginForm("UploadProductsPriceChnageFromExcel", "Product", FormMethod.Post, new
+            {
+                enctype = "multipart/form-data"
+            }))
+            {
+                <div class="row">
+                    <!-- form input mask -->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+
+                            <div class="x_content">
+                                <br />
+
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>
+                                            Stock Adjustment
+                                            @*<small>
+                                                    @Html.ActionLink("Download excel file from here.", "DownloadFile", new { fileName = "HMSProductUpload.xlsx", })
+                                                </small>*@
+                                        </h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <div id="statuszone">
+                                            @if (@ViewBag.statuscode == 0)
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong>@ViewBag.status</strong>
+                                                </div>
+                                            }
+                                            else if (@ViewBag.statuscode == 1)
+                                            {
+                                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong>@ViewBag.status </strong>
+                                                </div>
+                                            }
+                                            @if (@ViewBag.Message == "3")
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong> </strong>  Please Select Correct execel format.
+                                                </div>
+                                            }
+
+                                            @if (@ViewBag.Message == "4")
+                                            {
+                                                <div class="alert alert-success alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong> </strong>  Stock Adjustment have been successfully inserted from the uploaded Excel file..
+                                                </div>
+                                            }
+
+
+                                            @if (@ViewBag.Message == "5")
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong> </strong> This supplier code does not exist. @ViewBag.Item1
+                                                </div>
+                                            }
+
+                                            @if (@ViewBag.Message == "6")
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong> </strong> This product code already exists in the products and stock master table. @ViewBag.Item1
+                                                </div>
+                                            }
+                                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessages as string))
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <strong></strong> @Html.Raw(ViewBag.ErrorMessages)
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="clearfix"></div><br /><br />
+                                        <div id="productsZone">
+                                            <div class="form-group">
+                                                <div class="checkbox col-md-3">
+                                                    @Html.CheckBoxFor(model => model.WithData, new { @class = "flat", id = "withDataCheckbox" })
+                                                    <span id="checkboxLabel">Download format(s) with data</span>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-6">
+                                                    Location <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <select id="StockLocationId" class="form-control" name="StockLocationId"></select>
+                                                    @*@Html.ValidationMessageFor(model => model.StockLocationId, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+                                                <div class="col-md-4" style="margin-left:25%">
+                                                    <input type="submit" id="btnAddAdjustment" formaction="StockAdjustmentExcel" class="form-control btn btn-primary" value="1. Download Product Qty Chnage Upload Format" />
+                                                </div>
+
+
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+
+                                            </div>
+                                            <div class="clearfix"></div><br />
+                                            <div class="form-group">
+
+                                            </div>
+                                            <div class="clearfix"></div><br /><br /><br />
+                                            <div class="form-group">
+                                                <div class="row alignleft">
+                                                    <!-- Label -->
+                                                    <div class="col-md-3 col-lg-2">
+                                                        <label for="ProductUploadFile" class="form-label">Browse complete excel</label>
+                                                    </div>
+                                                    <!-- File Input -->
+                                                    <div class="col-md-9 col-lg-7">
+                                                        <input type="file" id="ProductUploadFile" name="ProductUploadFile" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                                    </div>
+                                                    <!-- Clear Button -->
+                                                    <div class="col-md-2 col-lg-1">
+                                                        <button type="button" id="clearFileButton" class="btn btn-default w-100">Clear</button>
+                                                    </div>
+                                                    <!-- Upload Button with added space -->
+                                                    <div class="col-md-11 col-lg-1">
+                                                        <input type="submit" id="uploadButton" formaction="VerifyStockAdjustmentExcel" class="btn btn-info w-100 ms-md-3 ms-lg-3" name="Submit" value="Upload Products" disabled />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <script>
+    document.getElementById("clearFileButton").addEventListener("click", function() {
+        document.getElementById("ProductUploadFile").value = "";
+    });
+
+    document.getElementById('ProductUploadFile').addEventListener('change', function() {
+        var fileInput = document.getElementById('ProductUploadFile');
+        var uploadButton = document.getElementById('uploadButton');
+
+        if (fileInput.files.length > 0) {
+            uploadButton.disabled = false;
+        } else {
+            uploadButton.disabled = true;
+        }
+    });
+                                            </script>
+
+                                            <div class="clerfix"></div>
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $("body").on("click",
+        "#btnAddAdjustment",
+        function (e) {
+            debugger;
+            if ($("#StockLocationId").val() == 0 || $("#StockLocationId").val() == null) {
+                alert("Select a  location!");
+                e.preventDefault();
+            }
+        });
+</script>
+<script>
+           @*var typeId = this.value
+            debugger;
+            $.ajax({
+                url: "@Url.Action("GetAdjustmentTypesByBaseType", "StockAdjustment")",
+                data: {
+                BType: "Add"
+                },
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                var TypeId = $("#TypeId");
+                TypeId.empty();
+                TypeId.append("<option value='0'>-- Reason --</option>");
+
+                $.each(JSON.parse(data), function (index, optionaldata) {
+                    TypeId.append($('<option />', { value: optionaldata.AdjustmentTypeId }).html(optionaldata.Type));
+
+                });
+            }
+        });*@
+
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var locationId = $("#StockLocationId");
+        locationId.empty();
+        locationId.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            locationId.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@ViewBag.StockLocationId') {
+            $('#StockLocationId').val(@ViewBag.StockLocationId).trigger("change");
+        } else {
+            $('#StockLocationId').val(0).trigger("change");
+        }
+    });
+</script>

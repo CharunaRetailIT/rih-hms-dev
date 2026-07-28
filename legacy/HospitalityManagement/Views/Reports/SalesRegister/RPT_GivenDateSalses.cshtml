@@ -1,0 +1,255 @@
+﻿@model RIT.HMS.Domain.ViewModels.Reports.DailySalesViewMdel
+
+@{
+    ViewBag.Title = "Given Date Sales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Report.css" rel="stylesheet" />
+@*<h2>RPTSalesRegister</h2>*@
+
+
+s
+@using (Html.BeginForm("RPTGivenDateSales", "Report", FormMethod.Post, new { @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container body">
+        <div class="main_container">
+            <div class="right_col" role="main">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Given Date Sales Report<small></small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="x_content">
+                            <br />
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-2">Date From</label>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        @Html.TextBoxFor(model => model.Date, new
+                                   {
+                                       @class = "form-control",
+                                       @Type = "date",
+                                       @Value = Model.Date.ToString("yyyy-MM-dd"),
+                                       Placeholder = "From Date"
+                                   })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal form-label-left col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-2">Date To</label>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        @Html.TextBoxFor(model => model.DateTo, new
+                                   {
+                                       @class = "form-control",
+                                       @Type = "date",
+                                       @Value = Model.DateTo.ToString("yyyy-MM-dd"),
+                                       Placeholder = "From Date"
+                                   })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-2">Location(s)</label>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        <select id="Locations" name="Locations" multiple class="form-control select2"></select>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="actionBar">
+                                <div class="msgBox">
+                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
+                                        <ul class="dropdown-menu">
+
+                                            <li>
+                                                <a href="#" onclick="$('#datatable-responsive').tableExport({ type: 'excel', escape: 'false' });">
+                                                    <img src='~/Content/Images/icons/xls.png' width="10" /> XLS
+                                                </a>
+                                            </li>
+                                            <li><a href="#" onclick="PrintDiv();"><img src='~/Content/Images/icons/pdf.png' width="10" /> PDF</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div id="printcontent">
+                        <div class="table-responsive">
+
+                            @if (Model.SalesDataList != null)
+                            {
+                                <table id="datatable-responsive" class="table table-striped jambo_table bulk_action">
+                                    <thead>
+                                        <tr class="headings">
+                                           
+                                            <th>Bill No</th>
+                                            @*<th>Customer Name </th>*@
+                                            <th>ZNo</th>
+                                            @*<th>Reference No</th>*@
+                                            <th>Foods</th>
+                                            <th>Beverages</th>
+                                            <th>None</th>
+                                            <th>Cash</th>
+                                            <th>Card</th>
+                                            <th>Credit</th>
+                                            <th>Other</th>
+                                            <th>Online</th>
+                                            <th>Uber</th>
+                                            <th>Pickme</th>
+                                            <th>Service Charges</th>
+                                            <th>VAT</th>
+                                            <th>NBT</th>
+                                            <th>TDL</th>
+                                            <th>Gross Amount</th>
+                                            <th>Net Amount</th>
+                                            <th>Discounts</th>
+                                            <th>AC Charges</th>
+                                            <th>Discount Remark</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.SalesDataList)
+                                        {
+
+                                            <tr class="even pointer">
+                                                <td>@Html.DisplayFor(k => item.Receipt)</td>
+                                                @*<td>@Html.DisplayFor(k => item.CustomeName)</td>*@
+                                                <td>@Html.DisplayFor(k => item.ZNo)</td>
+                                                @*<td>@Html.DisplayFor(k => item.ReferenceNo)</td>*@
+                                                <td>@item.FoodSale.ToString("n2")</td>
+                                                <td>@item.BevSale.ToString("n2")</td>
+                                                @*<td>@item.DESSERTSales.ToString("n2")</td>*@
+                                                <td>@item.NonSale.ToString("n2")</td>
+                                                <td>@item.Cash.ToString("n2")</td>
+                                                <td>@item.Card.ToString("n2")</td>
+                                                <td>@item.Credit.ToString("n2")</td>
+                                                <td>@item.Others.ToString("n2")</td>
+                                                <td>@item.Online.ToString("n2")</td>
+                                                <td>@item.Uber.ToString("n2")</td>
+                                                <td>@item.Pickme.ToString("n2")</td>
+                                                @*<td style="text-align:right">@item.Online</td>
+                                                <td style="text-align:right">@item.Uber</td>
+                                                <td style="text-align:right">@item.Pickme</td>*@
+                                                <td>@item.ServCharge.ToString("n2")</td>
+                                                <td>@item.VAT.ToString("n2")</td>
+                                                <td>@item.NBT.ToString("n2")</td>
+                                                <td>@item.TDL.ToString("n2")</td>
+                                                <td>@item.Gross.ToString("n2")</td>
+                                                <td>@item.TNet.ToString("n2")</td>
+                                                <td>@item.Discount.ToString("n2")</td>
+                                                <td>@item.ACCharge.ToString("n2")</td>
+                                                <td>@item.DiscRem</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    @*<tfoot>*@
+                                        <tr style="background-color:lightgray;font-weight:bold">
+                                            <td>Total:</td>
+                                            <td></td>          
+                                            <td>@Model.SalesDataList.Sum(i => i.FoodSale).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.BevSale).ToString("n2")</td>
+                                            @*<td>@Model.SalesDataList.Sum(i => i.DESSERTSales).ToString("n2")</td>*@
+
+                                            <td>@Model.SalesDataList.Sum(i => i.NonSale).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Cash).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Card).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Credit).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Others).ToString("n2")</td>
+
+                                            <td>@Model.SalesDataList.Sum(i => i.Online).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Uber).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Pickme).ToString("n2")</td>
+
+                                            <td>@Model.SalesDataList.Sum(i => i.ServCharge).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.VAT).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.NBT).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.TDL).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Gross).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.TNet).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.Discount).ToString("n2")</td>
+                                            <td>@Model.SalesDataList.Sum(i => i.ACCharge).ToString("n2")</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    @*</tfoot>*@
+                                </table>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON("@Url.Action("GetActiveLocations", "Location")", function (data) {
+
+        var Locations = $("#Locations");
+
+        Locations.empty();
+        //Locations.append("<option value='0'>-- Select a Location --</option>");
+
+        $.each(JSON.parse(data), function (index, optionaldata) {
+            Locations.append($('<option />', { value: optionaldata.SysLocationID }).html(optionaldata.LocationName));
+
+        });
+
+        if ('@Model.Locations') {
+            $('#Locations').val(@ViewBag.locations).trigger("change");
+        } else {
+            $('#Locations').val(0).trigger("change");
+        }
+
+
+    });
+
+
+    document.getElementById('Date').Value=@ViewBag.Date;
+
+
+    function PrintDiv() {
+        var divContents = document.getElementById("datatable-responsive").innerHTML;
+        var printWindow = window.open('', '', 'height=200,width=400');
+        printWindow.document.write('<html><head><title></title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(divContents);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+
+        $(document).ready(function () {
+            $('#printcontent').DataTable();
+        });
+    }
+
+
+</script>
+
+
+
+
+
+
+
