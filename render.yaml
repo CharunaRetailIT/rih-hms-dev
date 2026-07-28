@@ -1,0 +1,40 @@
+# Render Blueprint for the RIT HMS API.
+# Deploy: Render dashboard → New → Blueprint → point at this repo.
+# Docs:   apps/api/Dockerfile (build context MUST be repo root — set below),
+#         docs/deploy.md (env var reference).
+#
+# NOTE: Postgres is external (Supabase), not a Render-managed database — see
+# docs/deploy.md for the Supabase CREATE DATABASE-per-tenant caveat. Fill in
+# the `sync: false` values in the Render dashboard after the first deploy.
+
+services:
+  - type: web
+    name: hms-api
+    runtime: docker
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
+    plan: starter
+    region: singapore
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__ControlDb
+        sync: false
+      - key: ConnectionStrings__TenantTemplateDb
+        sync: false
+      - key: Jwt__Issuer
+        sync: false
+      - key: Jwt__Audience
+        value: rit-hms-api
+      - key: Jwt__SigningKey
+        generateValue: true
+      - key: Secrets__MasterKey
+        sync: false   # must be valid base64 of 32 bytes — `openssl rand -base64 32`; Render's
+                       # auto-generated value isn't guaranteed valid base64 padding, so set manually
+      - key: Platform__AdminEmails__0
+        sync: false
+      - key: App__WebBaseUrl
+        sync: false
+      - key: Aggregators__PickMe__PollingEnabled
+        value: "false"
