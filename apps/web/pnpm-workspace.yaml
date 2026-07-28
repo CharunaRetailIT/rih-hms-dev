@@ -1,7 +1,0 @@
-# pnpm 11+ stores pnpm settings here, not in package.json.
-# This is NOT a workspace — there's no `packages:` field — just a settings host.
-allowBuilds:
-  sharp: true
-  unrs-resolver: true
-  "@tailwindcss/oxide": true
-  esbuild: true
