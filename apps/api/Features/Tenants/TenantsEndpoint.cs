@@ -42,8 +42,10 @@ public static class TenantsEndpoint
             Hms.Api.Features.Billing.SubscriptionService billing, ILogger<Tenant> logger, CancellationToken ct) =>
         {
             var slug = req.Slug.Trim().ToLowerInvariant();
-            if (!System.Text.RegularExpressions.Regex.IsMatch(slug, "^[a-z][a-z0-9]{1,39}$"))
-                return Results.BadRequest(new { error = "slug must be 2–40 chars, lowercase letters/digits, starting with a letter" });
+            // Matches the frontend's autoSlug()/validation (apps/web/app/signup/page.tsx,
+            // lib/validation.ts) which produces hyphenated slugs like "spice-garden".
+            if (!System.Text.RegularExpressions.Regex.IsMatch(slug, "^[a-z0-9][a-z0-9-]{1,58}[a-z0-9]$"))
+                return Results.BadRequest(new { error = "slug must be 3–60 chars, lowercase letters/digits/hyphens, starting and ending with a letter or digit" });
             if (await db.Tenants.AnyAsync(t => t.Slug == slug, ct))
                 return Results.Conflict(new { error = "slug already taken" });
 
@@ -51,7 +53,9 @@ public static class TenantsEndpoint
             {
                 Slug = slug,
                 DisplayName = req.DisplayName,
-                DatabaseName = $"hms_tenant_{slug}",
+                // Underscore, not hyphen: ProvisioningService.CreateDatabaseIfMissing guards
+                // the database name against "^[a-z0-9_]+$" before it ever reaches raw SQL.
+                DatabaseName = $"hms_tenant_{slug.Replace('-', '_')}",
                 DatabaseHost = "localhost",          // dev default — provisioning pipeline picks the server
                 Status = TenantStatus.Pending,
                 Plan = req.Plan ?? "starter",
