@@ -22,14 +22,16 @@ INSERT INTO units_of_measure (tenant_id, code, name, symbol, is_base_unit, dimen
   ('{{TENANT_ID}}','PLT','Plate','plt',false,'count',1)
 ON CONFLICT (tenant_id, code) DO NOTHING;
 
--- Consumption tax, named for the signup country (VAT / GST / Sales Tax), default rate 18% — owner edits in Settings.
-INSERT INTO taxes (tenant_id, code, name, rate_percent, is_inclusive, apply_on) VALUES
-  ('{{TENANT_ID}}','VAT','{{TAX_LABEL}} (18%)',18.0000,false,'line')
+-- Consumption tax, named for the signup country (VAT / GST / Sales Tax), default rate 18% —
+-- owner edits in Settings. Migration 0088 replaced the old taxes/tax_charges tables with the
+-- unified charge_types + charges model; this seeds the tenant-wide (not per-product) VAT charge.
+INSERT INTO charge_types (tenant_id, code, name, applies_per_product, sort_order) VALUES
+  ('{{TENANT_ID}}','VAT','{{TAX_LABEL}}',false,1)
 ON CONFLICT (tenant_id, code) DO NOTHING;
 
--- Bill-level tax charge (the tenant can add service charge / levies in Settings). charge_type 'vat' stays a stable internal code.
-INSERT INTO tax_charges (tenant_id, code, name, charge_type, rate_percent, sequence, compound_on_previous, applies_to_takeaway, applies_to_delivery) VALUES
-  ('{{TENANT_ID}}','VAT','{{TAX_LABEL}}','vat',18.0000,1,false,true,true)
+INSERT INTO charges (tenant_id, charge_type_id, code, description, percentage)
+SELECT '{{TENANT_ID}}', ct.id, 'VAT', '{{TAX_LABEL}} (18%)', 18.0000
+FROM charge_types ct WHERE ct.tenant_id = '{{TENANT_ID}}' AND ct.code = 'VAT'
 ON CONFLICT (tenant_id, code) DO NOTHING;
 
 -- Org settings: seed the business base currency + tax label chosen at signup (UAE → AED, India → GST, etc.).
